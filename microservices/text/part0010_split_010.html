@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Monitoring</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 8. Monitoring">
+<div class="preface" id="monitoring-chapter">
+<section data-type="sect1" data-pdf-bookmark="The Cascade"><div class="preface" id="idp11420848">
+<h1 class="calibre7" id="calibre_pb_10">The Cascade</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="monitoring" data-secondary="cascading failures" id="idp11438144" class="calibre3"></a><a data-type="indexterm" data-primary="cascading failures" id="idp11439120" class="calibre3"></a><a data-type="indexterm" data-primary="failures" data-secondary="cascading" data-seealso="monitoring" id="idp11439792" class="calibre3"></a>Cascading failures can be especially perilous. Imagine a situation where the network connection between our music shop website and the catalog service goes down. The services themselves appear healthy, but they can’t talk to each other. If we just looked at the health of the individual service, we wouldn’t know there is a problem. Using synthetic monitoring — for example, to mimic a customer searching for a song — would pick up the problem. But we’d also need to report on the fact that one service cannot see another in order to determine the cause of the problem.</p>
+
+<p class="author">Therefore, monitoring the integration points between systems is key. Each service instance should track and expose the health of its downstream dependencies, from the database to other collaborating services. You should also allow this information to be aggregated to give you a rolled-up picture. You’ll want to see the response time of the downstream calls, and also detect if it is erroring.</p>
+
+<p class="author">As we’ll discuss more in <a data-type="xref" href="part0013_split_000.html#at-scale-chapter" class="calibre3">Chapter 11</a>, you can use libraries to implement a circuit breaker around network calls to help you handle cascading failures in a more elegant fashion, allowing you to more gracefully degrade your system. Some of these libraries, such as Hystrix for the JVM, also do a good job of providing these monitoring capabilities for you.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

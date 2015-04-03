@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="Scaling Databases">
+<div class="preface" id="idp12036272">
+<section data-type="sect2" data-pdf-bookmark="Availability of Service Versus Durability of Data"><div class="preface" id="idp12040048">
+<h2 class="calibre15" id="calibre_pb_19">Availability of Service Versus Durability of Data</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="database scaling" data-secondary="service availability vs. data durability" id="idp12041184" class="calibre3"></a>Straight off, it is important to separate the concept of availability of the service from the durability of the data itself. You need to understand that these are two different things, and as such they will have different solutions.</p>
+
+<p class="author">For example, I could store a copy of all data written to my database in a resilient filesystem. If the database goes down, my data isn’t lost, as I have a copy, but the database itself isn’t available, which may make my microservice unavailable too. A more common model would be using a standby. All data written to the primary database gets copied to the standby replica database. If the primary goes down, my data is safe, but without a mechanism to either bring it back up or promote the replica to the primary, we don’t have an available database, even though our data is safe.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

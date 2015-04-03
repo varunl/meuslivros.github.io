@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 1. Microservices">
+<div class="preface" id="why-services-chapter">
+<section data-type="sect1" data-pdf-bookmark="Other Decompositional Techniques">
+<div class="preface" id="idp4089824">
+<section data-type="sect2" data-pdf-bookmark="Modules"><div class="preface" id="idp3796176">
+<h2 class="calibre15" id="calibre_pb_15">Modules</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="decompositional techniques" data-secondary="modules" id="idp3797456" class="calibre3"></a><a data-type="indexterm" data-primary="modular decomposition" id="idp3798448" class="calibre3"></a><a data-type="indexterm" data-primary="microservices" data-secondary="vs. modules" id="idp3799120" class="calibre3"></a>Some languages provide their own modular decomposition techniques that go beyond simple libraries. They allow some lifecycle management of the modules, such that they can be deployed into a running process, allowing you to make changes without taking the whole process down.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="OSGI (Open Source Gateway Initiative)" id="idp3800736" class="calibre3"></a>The Open Source Gateway Initiative (OSGI) is worth calling out as one technology-specific approach to modular decomposition. Java itself doesn’t have a true concept of modules, and we’ll have to wait at least until Java 9 to see this added to the language. OSGI, which emerged as a framework to allow plug-ins to be installed in the Eclipse Java IDE, is now used as a way to retrofit a module concept in Java via a library.</p>
+
+<p class="author">The problem with OSGI is that it is trying to enforce things like module lifecycle management without enough support in the language itself. This results in more work having to be done by module authors to deliver on proper module isolation. Within a process boundary, it is also much easier to fall into the trap of making modules overly coupled to each other, causing all sorts of problems. My own experience with OSGI, which is matched by that of colleagues in the industry, is that even with good teams it is easy for OSGI to become a much bigger source of complexity than its benefits warrant.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="Erlang modules" id="idp3803312" class="calibre3"></a>Erlang follows a different approach, in which modules are baked into the language runtime. Thus, Erlang is a very mature approach to modular decomposition. Erlang modules can be stopped, restarted, and upgraded without issue. Erlang even supports running more than one version of the module at a given time, allowing for more graceful module upgrading.</p>
+
+<p class="author">The capabilities of Erlang’s modules are impressive indeed, but even if we are lucky enough to use a platform with these capabilities, we still have the same shortcomings as we do with normal shared libraries. We are strictly limited in our ability to use new technologies, limited in how we can scale independently, can drift toward integration techniques that are overly coupling, and lack seams for architectural safety measures.</p>
+
+<p class="author">There is one final observation worth sharing. Technically, it should be possible to create well-factored, independent modules within a single monolithic process. And yet we rarely see this happen. The modules themselves soon become tightly coupled with the rest of the code, surrendering one of their key benefits. Having a process boundary separation does enforce clean hygiene in this respect (or at least makes it harder to do the wrong thing!). I wouldn’t suggest that this should be the main driver for process separation, of course, but it is interesting that the promises of modular separation within process boundaries rarely deliver in the real world.</p>
+
+<p class="author">So while modular decomposition within a process boundary may be something you want to do as well as decomposing your system into services, by itself it won’t help solve everything. If you are a pure Erlang shop, the quality of Erlang’s module implementation may get you a very long way, but I suspect many of you are not in that situation. For the rest of us, we should see modules as offering the same sorts of benefits as shared libraries.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

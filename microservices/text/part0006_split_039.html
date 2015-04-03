@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="User Interfaces">
+<div class="preface" id="idp10048528">
+<section data-type="sect2" data-pdf-bookmark="UI Fragment Composition"><div class="preface" id="idp10074352">
+<h2 class="calibre15" id="calibre_pb_39">UI Fragment Composition</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="user interfaces" data-secondary="fragment composition" id="idp10075952" class="calibre3"></a>Rather than having our UI make API calls and map everything back to UI controls, we could have our services provide parts of the UI directly, and then just pull these fragments in to create a UI, as in <a data-type="xref" href="part0006_split_039.html#a50-ui-fragments" class="calibre3">Figure 4-8</a>. Imagine, for example, that the recommendation service provides a recommendation widget that is combined with other controls or UI fragments to create an overall UI. It might get rendered as a box on a web page along with other content.</p>
+
+<p class="author">A variation of this approach that can work well is to assemble a series of coarser-grained parts of a UI. So rather than creating small widgets, you are assembling entire panes of a thick client application, or perhaps a set of pages for a website.</p>
+
+<p class="author">These coarser-grained fragments are served up from server-side apps that are in turn making the appropriate API calls. This model works best when the fragments align well to team ownership. For example, perhaps the team that looks after order management in the music shop serves up all the pages associated with order management.</p>
+
+<figure class="calibre16"><div id="a50-ui-fragments" class="figure">
+<img src="../images/00017.jpeg" alt="Services directly serving up UI components for assembly" hisrc="assets/bdms_0408.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 4-8. </span>Services directly serving up UI components for assembly</h6>
+</div></figure>
+
+<p class="author">You still need some sort of assembly layer to pull these parts together. This could be as simple as some server-side templating, or, where each set of pages comes from a different app, perhaps you’ll need some smart URI routing.</p>
+
+<p class="author">One of the key advantages of this approach is that the same team that makes changes to the services can also be in charge of making changes to those parts of the UI. It allows us to get changes out faster. But there are some problems with this approach.</p>
+
+<p class="author">First, ensuring consistency of the user experience is something we need to address. Users want to have a seamless experience, not to feel that different parts of the interface work in different ways, or present a different design language. There are techniques to avoid this problem, though, such as living style guides, where assets like HTML components, CSS, and images can be shared to help give some level of consistency.</p>
+
+<p class="author">Another probem is harder to deal with. What happens with native applications or thick clients? We can’t serve up UI components. We could use a hybrid approach and use native applications to serve up HTML components, but this approach has been shown time and again to have downsides. So if you need a native experience, we will have to fall back to an approach where the frontend application makes API calls and handles the UI itself. But even if we consider web-only UIs, we still may want very different treatments for different types of devices. Building responsive components can help, of course.</p>
+
+<p class="author">There is one key problem with this approach that I’m not sure can be solved. Sometimes the capabilities offered by a service do not fit neatly into a widget or a page. Sure, I might want to surface recommendations in a box on a page on our website, but what if I want to weave in dynamic recommendations elsewhere? When I search, I want the type ahead to automatically trigger fresh recommendations, for example. The more cross-cutting a form of interaction is, the less likely this model will fit and the more likely it is that we’ll fall back to just making API calls.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

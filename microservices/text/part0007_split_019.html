@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Splitting the Monolith</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Splitting the Monolith">
+<div class="preface" id="splitting-chapter">
+<section data-type="sect1" data-pdf-bookmark="Transactional Boundaries">
+<div class="preface" id="idp10358080">
+<section data-type="sect2" data-pdf-bookmark="Abort the Entire Operation"><div class="preface" id="idp10377440">
+<h2 class="calibre15" id="calibre_pb_20">Abort the Entire Operation</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="compensating transactions" id="idp10378624" class="calibre3"></a><a data-type="indexterm" data-primary="transactions" data-secondary="compensating" id="idp10379392" class="calibre3"></a>Another option is to reject the entire operation. In this case, we have to put the system back into a consistent state. The picking table is easy, as that insert failed, but we have a committed transaction in the order table. We need to unwind this. What we have to do is issue a <em class="calibre4">compensating transaction</em>, kicking off a new transaction to wind back what just happened. For us, that could be something as simple as issuing a <code class="calibre9">DELETE</code> statement to remove the order from the database. Then we’d also need to report back via the UI that the operation failed. Our application could handle both aspects within a monolithic system, but we’d have to consider what we could do when we split up the application code. Does the logic to handle the compensating transaction live in the customer service, the order service, or somewhere else?</p>
+
+<p class="author">But what happens if our compensating transaction fails? It’s certainly possible. Then we’d have an order in the order table with no matching pick instruction. In this situation, you’d either need to retry the compensating transaction, or allow some backend process to clean up the inconsistency later on. This could be something as simple as a maintenance screen that admin staff had access to, or an automated process.</p>
+
+<p class="author">Now think about what happens if we have not one or two operations we want to be consistent, but three, four, or five. Handling compensating transactions for each failure mode becomes quite challenging to comprehend, let alone implement.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

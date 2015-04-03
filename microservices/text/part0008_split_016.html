@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="Service-to-Host Mapping">
+<div class="preface" id="idp10631472">
+<section data-type="sect2" data-pdf-bookmark="Single Service Per Host"><div class="preface" id="idp10665088">
+<h2 class="calibre15" id="calibre_pb_16">Single Service Per Host</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="service-to-host mapping" data-secondary="single service per host" id="idp10666464" class="calibre3"></a>With a single-service-per-host model shown in <a data-type="xref" href="part0008_split_016.html#a61-single-service-per-host" class="calibre3">Figure 6-8</a>, we avoid side effects of multiple hosts living on a single host, making monitoring and remediation much simpler. We have potentially reduced our single points of failure. An outage to one host should impact only a single service, although that isn’t always clear when you’re using a virtualized platform. We’ll cover designing for scale and failure more in <a data-type="xref" href="part0013_split_000.html#at-scale-chapter" class="calibre3">Chapter 11</a>. We also can more easily scale one service independent from others, and deal with security concerns more easily by focusing our attention only on the service and host that requires it.</p>
+
+<figure class="calibre16"><div id="a61-single-service-per-host" class="figure">
+<img src="../images/00044.gif" alt="A single microservice per host" hisrc="assets/bdms_0608.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 6-8. </span>A single microservice per host</h6>
+</div></figure>
+
+<p class="author">Just as important is that we have opened up the potential to use alternative deployment techniques such as image-based deployments or the immutable server pattern, which we discussed earlier.</p>
+
+<p class="author">We’ve added a lot of complexity in adopting a microservice architecture. The last thing we want to do is go looking for more sources of complexity. In my opinion, if you don’t have a viable PaaS available, then this model does a very good job of reducing a system’s overall complexity.  Having a single-service-per-host model is significantly easier to reason about and can help reduce complexity. If you can’t embrace this model yet, I won’t say microservices aren’t for you. But I would suggest that you look to move toward this model over time as a way of reducing the complexity that a microservice architecture can bring.</p>
+
+<p class="author">Having an increased number of hosts has potential downsides, though. We have more servers to manage, and there might also be a cost implication of running more distinct hosts. Despite these problems, this is still the model I prefer for microservice architectures. And we’ll talk about a few things we can do to reduce the overhead of handling large numbers of hosts shortly.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

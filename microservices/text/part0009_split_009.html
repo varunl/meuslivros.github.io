@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Implementing Service Tests">
+<div class="preface" id="idp11051936">
+<section data-type="sect2" data-pdf-bookmark="Mocking or Stubbing"><div class="preface" id="idp11138448">
+<h2 class="calibre15" id="calibre_pb_9">Mocking or Stubbing</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="service tests" data-secondary="mocking vs. stubbing" id="idp11139888" class="calibre3"></a><a data-type="indexterm" data-primary="stubbing vs. mocking" id="idp11140864" class="calibre3"></a><a data-type="indexterm" data-primary="mocking vs. stubbing" id="idp11141536" class="calibre3"></a>When I talk about stubbing downstream collaborators, I mean that we create a stub service that responds with canned responses to known requests from the service under test. For example, I might tell my stub points bank that when asked for the balance of customer 123, it should return 15,000. The test doesn’t care if the stub is called 0, 1, or 100 times. A variation on this is to use a mock instead of a stub.</p>
+
+<p class="author">When using a mock, I actually go further and make sure the call was made. If the expected call is not made, the test fails. Implementing this approach requires more smarts in the fake collaborators that we create, and if overused can cause tests to become brittle. As noted, however, a stub doesn’t care if it is called 0, 1, or many times.</p>
+
+<p class="author">Sometimes, though, mocks can be very useful to ensure that the expected side effects happen. For example, I might want to check that when I create a customer, a new points balance is set up for that customer. The balance between stubbing and mocking calls is a delicate one, and is just as fraught in service tests as in unit tests. In general, though, I use stubs far more than mocks for service tests. For a more in-depth discussion of this trade-off, take a look at <em class="calibre4">Growing Object-Oriented Software, Guided by Tests</em>, by Steve Freeman and Nat Pryce (Addison-Wesley).</p>
+
+<p class="author">In general, I rarely use mocks for this sort of testing. But having a tool that can do both is useful.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="test doubles" id="idp11145600" class="calibre3"></a><a data-type="indexterm" data-primary="fakes" id="idp11146496" class="calibre3"></a><a data-type="indexterm" data-primary="spies" id="idp11161664" class="calibre3"></a><a data-type="indexterm" data-primary="dummies" id="idp11162272" class="calibre3"></a>While I feel that stubs and mocks are actually fairly well differentiated, I know the distinction can be confusing to some, especially when some people throw in other terms like <em class="calibre4">fakes</em>, <em class="calibre4">spies</em>, and <em class="calibre4">dummies</em>. Martin Fowler calls all of these things, including stubs and mocks, <a href="http://bit.ly/1C7atPb" class="calibre3">test doubles</a>.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

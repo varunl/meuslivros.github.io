@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="Remote Procedure Calls">
+<div class="preface" id="idp4394032">
+<section data-type="sect2" data-pdf-bookmark="Local Calls Are Not Like Remote Calls"><div class="preface" id="idp4436192">
+<h2 class="calibre15" id="calibre_pb_12">Local Calls Are Not Like Remote Calls</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="remote procedure calls" data-secondary="vs. local calls" id="idp4437360" class="calibre3"></a><a data-type="indexterm" data-primary="local calls" id="idp4438336" class="calibre3"></a>The core idea of RPC is to hide the complexity of a remote call. Many implementations of RPC, though, hide too much. The drive in some forms of RPC to make remote method calls look like local method calls hides the fact that these two things are very different. I can make large numbers of local, in-process calls without worrying overly about the performance. With RPC, though, the cost of marshalling and un-marshalling payloads can be significant, not to mention the time taken to send things over the network. This means you need to think differently about API design for remote interfaces versus local interfaces. Just taking a local API and trying to make it a service boundary without any more thought is likely to get you in trouble. In some of the worst examples, developers may be using remote calls without knowing it if the abstraction is overly opaque.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="distributed systems" data-secondary="fallacies of" id="idp4440272" class="calibre3"></a>You need to think about the network itself. Famously, the first of the fallacies of distributed computing is <a href="http://bit.ly/1LbdCzY" class="calibre3">“The network is reliable”</a>. Networks aren’t reliable. They can and will fail, even if your client and the server you are speaking to are fine. They can fail fast, they can fail slow, and they can even malform your packets. You should assume that your networks are plagued with malevolent entities ready to unleash their ire on a whim. Therefore, the failure modes you can expect are different. A failure could be caused by the remote server returning an error, or by you making a bad call. Can you tell the difference, and if so, can you do anything about it? And what do you do when the remote server just starts responding slowly? We’ll cover this topic when we talk about resiliency in <a data-type="xref" href="part0013_split_000.html#at-scale-chapter" class="calibre3">Chapter 11</a>.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="The Antifragile Organization">
+<div class="preface" id="idp11900720">
+<section data-type="sect2" data-pdf-bookmark="Timeouts"><div class="preface" id="idp11936656">
+<h2 class="calibre15" id="calibre_pb_6">Timeouts</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="antifragile systems" data-secondary="timeouts" id="idp11937856" class="calibre3"></a><a data-type="indexterm" data-primary="timeouts" id="idp11938832" class="calibre3"></a>Timeouts are something it is easy to overlook, but in a downstream system they are important to get right. How long can I wait before I can consider a downstream system to actually be down?</p>
+
+<p class="author">Wait too long to decide that a call has failed, and you can slow the whole system down. Time out too quickly, and you’ll consider a call that might have worked as failed. Have no timeouts at all, and a downstream system being down could hang your whole system.</p>
+
+<p class="author">Put timeouts on all out-of-process calls, and pick a default timeout for everything. Log when timeouts occur, look at what happens, and change them accordingly.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Consumer-Driven Tests to the Rescue">
+<div class="preface" id="idp11229216">
+<section data-type="sect2" data-pdf-bookmark="Pact"><div class="preface" id="idp11244128">
+<h2 class="calibre15" id="calibre_pb_20">Pact</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="Pact" id="idp11245504" class="calibre3"></a><a href="http://bit.ly/1GZwceN" class="calibre3">Pact</a> is a consumer-driven testing tool that was originally developed in-house at RealEstate.com.au, but is now open source, with Beth Skurrie driving most of the development. Originally just for Ruby, Pact now includes JVM and .NET ports.</p>
+
+<p class="author">Pact works in a very interesting way, as summarized in <a data-type="xref" href="part0009_split_020.html#a63-pact-overview" class="calibre3">Figure 7-11</a>. The consumer starts by defining the expectations of the producer using a Ruby DSL. Then, you launch a local mock server, and run this expectation against it to create the Pact specification file. The Pact file is just a formal JSON specification; you could obviously handcode these, but using the language API is much easier. This also gives you a running mock server that can be used for further isolated tests of the consumer.</p>
+
+<figure class="calibre16"><div id="a63-pact-overview" class="figure">
+<img src="../images/00058.gif" alt="An overview of how Pact does Consumer Driven Testing" hisrc="assets/bdms_0711.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 7-11. </span>An overview of how Pact does consumer-driven testing</h6>
+</div></figure>
+
+<p class="author">On the producer side, you then verify that this consumer specification is met by using the JSON Pact specification to drive calls against your API and verify responses.  For this to work, the producer codebase needs access to the Pact file. As we discussed earlier in <a data-type="xref" href="part0008_split_000.html#deployment-chapter" class="calibre3">Chapter 6</a>, we expect both the consumer and producer to be in different builds. The use of a language-agnostic JSON specification is an especially nice touch. It means that you can generate the consumer’s specification using a Ruby client, but use it to verify a Java producer by using the JVM port of Pact.</p>
+
+<p class="author">As the JSON Pact specification is created by the consumer, this needs to become an artifact that the producer build has access to. You could store this in your CI/CD tool’s artifact repository, or else use the Pact Broker, which allows you to store multiple versions of your Pact specifications. This could let you run your consumer-driven contract tests against multiple different versions of the consumers, if you wanted to test against, say, the version of the consumer in production and the version of the consumer that was most recently built.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="Pacto" id="idp11254000" class="calibre3"></a>Confusingly, there is a ThoughtWorks open source project called <a href="http://bit.ly/1ylH0t8" class="calibre3">Pacto</a>, which is also a Ruby tool used for consumer-driven testing. It has the ability to record interactions between client and server to generate the expectations. This makes writing consumer-driven contracts for existing services fairly easy. With Pacto, once generated these expectations are more or less static, whereas with Pact you regenerate the expectations in the consumer with every build. The fact that you can define expectations for capabilities the producer may not even have yet also better fits into a workflow where the producing service is still being (or has yet to be) developed.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

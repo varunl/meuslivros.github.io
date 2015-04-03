@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Monitoring</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 8. Monitoring">
+<div class="preface" id="monitoring-chapter">
+<section data-type="sect1" data-pdf-bookmark="Standardization"><div class="preface" id="idp11444368">
+<h1 class="calibre7" id="calibre_pb_11">Standardization</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="monitoring" data-secondary="standardization of" id="idp11445536" class="calibre3"></a>As we’ve covered previously, one of the ongoing balancing acts you’ll need to pull off is where to allow for decisions to be made narrowly for a single service versus where you need to standardize across your system. In my opinion, monitoring is one area where standardization is incredibly important. With services collaborating in lots of different ways to provide capabilities to users using multiple interfaces, you need to view the system in a holistic way.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="logs" data-secondary="standardization of" id="idp11447376" class="calibre3"></a>You should try to write your logs out in a standard format. You definitely want to have all your metrics in one place, and you may want to have a list of standard names for your metrics too; it would be very annoying for one service to have a metric called <code class="calibre9">ResponseTime</code>, and another to have one called <code class="calibre9">RspTimeSecs</code>, when they mean the same thing.</p>
+
+<p class="author">As always with standardization, tools can help. As I’ve said before, the key is making it easy to do the right thing — so why not provide preconfigured virtual machine images with logstash and collectd ready to go, along with application libraries that let you talk to Graphite really easily?</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

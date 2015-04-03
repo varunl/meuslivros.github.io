@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="Service Configuration"><div class="preface" id="idp10622800">
+<h1 class="calibre7" id="calibre_pb_12">Service Configuration</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="deployment" data-secondary="service configuration" id="idp10624112" class="calibre3"></a><a data-type="indexterm" data-primary="service configuration" id="idp10625088" class="calibre3"></a><a data-type="indexterm" data-primary="configuration, service" id="idp10625760" class="calibre3"></a>Our services need some configuration. Ideally, this should be a small amount, and limited to those features that change from one environment to another, such as <em class="calibre4">what username and password should I use to connect to my database?</em> Configuration that changes from one environment to another should be kept to an absolute minimum. The more your configuration changes fundamental service behavior, and the more that configuration varies from one environment to another, the more you will find problems only in certain environments, which is painful in the extreme.</p>
+
+<p class="author">So if we have some configuration for our service that does change from one environment to another, how should we handle this as part of our deployment process? One option is to build one artifact per environment, with configuration inside the artifact itself. Initially this seems sensible. The configuration is built right in; just deploy it and everything should work fine, right? This is problematic. Remember the concept of continuous delivery. We want to create an artifact that represents our release candidate, and move it through our pipeline, confirming that it is good enough to go into production. Let’s imagine I build a Customer-Service-Test and Customer-Service-Prod artifacts. If my Customer-Service-Test artifact passes the tests, but it’s the Customer-Service-Prod artifact that I actually deploy, can I be sure that I have verified the software that actually ends up in production?</p>
+
+<p class="author">There are other challenges as well. First, there is the additional time taken to build these artifacts. Next, the fact that you need to know at build time what environments exist. And how do you handle sensitive configuration data? I don’t want information about production passwords checked in with my source code, but if it is needed at build time to create all those artifacts, this is often difficult to avoid.</p>
+
+<p class="author">A better approach is to create one single artifact, and manage configuration separately. This could be a properties file that exists for each environment, or different parameters passed in to an install process. Another popular option, especially when dealing with a larger number of microservices, is to use a dedicated system for providing configuration, which we’ll explore more in <a data-type="xref" href="part0013_split_000.html#at-scale-chapter" class="calibre3">Chapter 11</a>.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

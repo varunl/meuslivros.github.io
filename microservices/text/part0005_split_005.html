@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>How to Model Services</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 3. How to Model Services">
+<div class="preface" id="modelling-services-chapter">
+<section data-type="sect1" data-pdf-bookmark="The Bounded Context"><div class="preface" id="idp4214928">
+<h1 class="calibre7" id="calibre_pb_5">The Bounded Context</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="modeling services" data-secondary="bounded contexts" id="idp4216208" class="calibre3"></a><a data-type="indexterm" data-primary="bounded contexts" data-secondary="concept of" id="idp4217408" class="calibre3"></a>Eric Evans’s book <em class="calibre4">Domain-Driven Design</em> (Addison-Wesley) focuses on how to create systems that model real-world domains. The book is full of great ideas like using ubiquitous language, repository abstractions, and the like, but there is one very important concept Evans introduces that completely passed me by at first: <em class="calibre4">bounded context</em>. The idea is that any given domain consists of multiple bounded contexts, and residing within each are things (Eric uses the word <em class="calibre4">model</em> a lot, which is probably better than <em class="calibre4">things</em>) that do not need to be communicated outside as well as things that are shared externally with other bounded contexts. Each bounded context has an explicit interface, where it decides what models to share with other contexts.</p>
+
+<p class="author">Another definition of bounded contexts I like is “a specific responsibility enforced by explicit boundaries.”<a xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:svg="http://www.w3.org/2000/svg" data-type="noteref" id="idp4221248-marker" href="part0005_split_013.html#idp4221248" class="calibre3"><sup class="calibre22">1</sup></a> If you want information from a bounded context, or want to make requests of functionality within a bounded context, you communicate with its explicit boundary using models. In his book, Evans uses the analogy of cells, where “[c]ells can exist because their membranes define what is in and out and determine what can pass.”</p>
+
+<p class="author">Let’s return for a moment to the MusicCorp business. Our domain is the whole business in which we are operating. It covers everything from the warehouse to the reception desk, from finance to ordering. We may or may not model all of that in our software, but that is nonetheless the domain in which we are operating. Let’s think about parts of that domain that look like the bounded contexts that Evans refers to. At MusicCorp, our warehouse is a hive of activity — managing orders being shipped out (and the odd return), taking delivery of new stock, having forklift truck races, and so on. Elsewhere, the finance department is perhaps less fun-loving, but still has a very important function inside our organization. These employees manage payroll, keep the company accounts, and produce important reports. Lots of reports. They probably also have interesting desk toys.</p>
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

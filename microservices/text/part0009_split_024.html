@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Testing After Production">
+<div class="preface" id="idp11269504">
+<section data-type="sect2" data-pdf-bookmark="Separating Deployment from Release"><div class="preface" id="idp11273312">
+<h2 class="calibre15" id="calibre_pb_24">Separating Deployment from Release</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="testing" data-secondary="separating deployment from release" id="idp11274704" class="calibre3"></a><a data-type="indexterm" data-primary="smoke test suites" id="idp11275744" class="calibre3"></a><a data-type="indexterm" data-primary="deployment" data-secondary="separating from release" id="idp11276416" class="calibre3"></a>One way in which we can catch more problems before they occur is to extend where we run our tests beyond the traditional predeployment steps. Instead, if we can deploy our software, and test it in situ prior to directing production loads against it, we can detect issues specific to a given environment. A common example of this is the <em class="calibre4">smoke test suite</em>, a collection of tests designed to be run against newly deployed software to confirm that the deployment worked. These tests help you pick up any local environmental issues. If you’re using a single command-line command to deploy any given microservice (and you should), this command should run the smoke tests automatically.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="blue/green deployment" id="idp11278864" class="calibre3"></a><a data-type="indexterm" data-primary="deployment" data-secondary="blue/green deployment" id="idp11279568" class="calibre3"></a>Another example of this is what is called <em class="calibre4">blue/green deployment</em>. With blue/green, we have two copies of our software deployed at a time, but only one version of it is receiving real requests.</p>
+
+<p class="author">Let’s consider a simple example, seen in <a data-type="xref" href="part0009_split_024.html#a61-blue-green" class="calibre3">Figure 7-12</a>. In production, we have v123 of the customer service live. We want to deploy a new version, v456. We deploy this alongside v123, but do not direct any traffic to it. Instead, we perform some testing in situ against the newly deployed version. Once the tests have worked, we direct the production load to the new v456 version of the customer service. It is common to keep the old version around for a short period of time, allowing for a fast fallback if you detect any errors.</p>
+
+<figure class="calibre16"><div id="a61-blue-green" class="figure">
+<img src="../images/00059.jpeg" alt="Using blue/green deployments to separate deployment from release" hisrc="assets/bdms_0712.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 7-12. </span>Using blue/green deployments to separate deployment from release</h6>
+</div></figure>
+
+<p class="author">Implementing blue/green deployment requires a few things. First, you need to be able to direct production traffic to different hosts (or collections of hosts). You could do this by changing DNS entries, or updating load-balancing configuration. You also need to be able to provision enough hosts to have both versions of the microservice running at once. If you’re using an elastic cloud provider, this could be straightforward. Using blue/green deployments allows you to reduce the risk of deployment, as well as gives you the chance to revert should you encounter a problem. If you get good at this, the entire process can be completely automated, with either the full roll-out or revert happening without any human intervention.</p>
+
+<p class="author">Quite aside from the benefit of allowing us to test our services in situ prior to sending them production traffic, by keeping the old version running while we perform our release we greatly reduce the downtime associated with releasing our software. Depending on what mechanism is used to implement the traffic redirection, the switchover between versions can be completely invisible to the customer, giving us zero-downtime deployments.</p>
+
+<p class="author">There is another technique worth discussing briefly here too, which is sometimes confused with blue/green deployments, as it can use some of the same technical implementations. It is known as <em class="calibre4">canary releasing</em>.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

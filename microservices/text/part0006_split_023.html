@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="Implementing Asynchronous Event-Based Collaboration">
+<div class="preface" id="idp6277008">
+<section data-type="sect2" data-pdf-bookmark="Complexities of Asynchronous Architectures"><div class="preface" id="idp6805088">
+<h2 class="calibre15" id="calibre_pb_23">Complexities of Asynchronous Architectures</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="asynchronous collaboration" data-secondary="complexities of" id="idp6851488" class="calibre3"></a>Some of this asynchronous stuff seems fun, right? Event-driven architectures seem to lead to significantly more decoupled, scalable systems. And they can. But these programming styles do lead to an increase in complexity. This isn’t just the complexity required to manage publishing and subscribing to messages as we just discussed, but also in the other problems we might face. For example, when considering long-running async request/response, we have to think about what to do when the response comes back. Does it come back to the same node that initiated the request? If so, what if that node is down? If not, do I need to store information somewhere so I can react accordingly? Short-lived async can be easier to manage if you’ve got the right APIs, but even so, it is a different way of thinking for programmers who are accustomed to intra-process synchronous message calls.</p>
+
+<p class="author">Time for a cautionary tale. Back in 2006, I was working on building a pricing system for a bank. We would look at market events, and work out which items in a portfolio needed to be repriced. Once we determined the list of things to work through, we put these all onto a message queue. We were making use of a grid to create a pool of pricing workers, allowing us to scale up and down the pricing farm on request. These workers used the competing consumer pattern, each one gobbling messages as fast as possible until there was nothing left to process.</p>
+
+<p class="author">The system was up and running, and we were feeling rather smug. One day, though, just after we pushed a release out, we hit a nasty problem. Our workers kept dying. And dying. And dying.</p>
+
+<p class="author">Eventually, we tracked down the problem. A bug had crept in whereby a certain type of pricing request would cause a worker to crash. We were using a transacted queue: as the worker died, its lock on the request timed out, and the pricing request was put back on the queue — only for another worker to pick it up and die. This was a classic example of what Martin Fowler calls a <a href="http://bit.ly/1EmZMss" class="calibre3">catastrophic failover</a>.</p>
+
+<p class="author">Aside from the bug itself, we’d failed to specify a maximum retry limit for the job on the queue. We fixed the bug itself, and also configured a maximum retry. But we also realized we needed a way to view, and potentially replay, these bad messages. We ended up having to implement a message hospital (or dead letter queue), where messages got sent if they failed. We also created a UI to view those messages and retry them if needed. These sorts of problems aren’t immediately obvious if you are only familiar with synchronous point-to-point communication.</p>
+
+<p class="author">The associated complexity with event-driven architectures and asynchronous programming in general leads me to believe that you should be cautious in how eagerly you start adopting these ideas. Ensure you have good monitoring in place, and strongly consider the use of correlation IDs, which allow you to trace requests across process boundaries, as we’ll cover in depth in <a data-type="xref" href="part0010_split_000.html#monitoring-chapter" class="calibre3">Chapter 8</a>.</p>
+
+<p class="author">I also strongly recommend <em class="calibre4">Enterprise Integration Patterns</em> (Addison-Wesley), which contains a lot more detail on the different programming patterns that you may need to consider in this space.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

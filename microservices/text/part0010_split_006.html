@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Monitoring</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 8. Monitoring">
+<div class="preface" id="monitoring-chapter">
+<section data-type="sect1" data-pdf-bookmark="Service Metrics"><div class="preface" id="idp11391568">
+<h1 class="calibre7" id="calibre_pb_6">Service Metrics</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="monitoring" data-secondary="service metrics" id="idp11392944" class="calibre3"></a><a data-type="indexterm" data-primary="metrics" data-secondary="service metrics" id="idp11393920" class="calibre3"></a>The operating systems we run on generate a large number of metrics for us, as you’ll find the moment you install collectd on a Linux box and point it at Graphite. Likewise, supporting subsystems like Nginx or Varnish exposes useful information like response times or cache hit rates. But what about your own service?</p>
+
+<p class="author">I would strongly suggest having your services expose basic metrics themselves. At a bare minimum, for a web service you should probably expose metrics like response times and error rates — vital if your server isn’t fronted by a web server that is doing this for you. But you should really go further. For example, our accounts service may want to expose the number of times customers view their past orders, or your web shop might want to capture how much money has been made during the last day.</p>
+
+<p class="author">Why do we care about this? Well, for a number of reasons. First, there is an old adage that 80% of software features are never used. Now I can’t comment on how accurate that figure is, but as someone who has been developing software for nearly 20 years, I <em class="calibre4">know</em> that I have spent a lot of time on features that never actually get used. Wouldn’t it be nice to know what they are?</p>
+
+<p class="author">Second, we are getting better than ever at reacting to how our users are using our system to work out how to improve it. Metrics that inform us of how our systems behave can only help us here. We push out a new version of the website, and find that the number of searches by genre has gone up significantly on the catalog service. Is that a problem, or expected?</p>
+
+<p class="author">Finally, we can never know what data will be useful! More times than I can count I’ve wanted to capture data to help me understand something only after the chance to do so has long passed. I tend to err toward exposing everything and relying on my metrics system to handle this later.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="metrics" data-secondary="libraries for" id="idp11399264" class="calibre3"></a><a data-type="indexterm" data-primary="libraries" data-secondary="service metrics" id="idp11400240" class="calibre3"></a>Libraries exist for a number of different platforms that allow our services to send metrics to standard systems. Codahale’s <a href="http://metrics.codahale.com/" class="calibre3">Metrics library</a> is one such example library for the JVM. It allows you to store metrics as counters, timers, or gauges; supports time-boxing metrics (so you can specify metrics like “number of orders in the last five minutes”); and also comes out of the box with support for sending data to Graphite and other aggregating and reporting systems.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

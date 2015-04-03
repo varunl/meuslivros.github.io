@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="Versioning">
+<div class="preface" id="a50-versioning">
+<section data-type="sect2" data-pdf-bookmark="Defer It for as Long as Possible"><div class="preface" id="idp9990880">
+<h2 class="calibre15" id="calibre_pb_30">Defer It for as Long as Possible</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="versioning" data-secondary="deferring breaking changes" id="idp9992128" class="calibre3"></a><a data-type="indexterm" data-primary="breaking changes" data-secondary="deferring" id="idp9993024" class="calibre3"></a>The best way to reduce the impact of making breaking changes is to avoid making them in the first place. You can achieve much of this by picking the right integration technology, as we’ve discussed throughout this chapter. Database integration is a great example of technology that can make it very hard to avoid breaking changes. REST, on the other hand, helps because changes to internal implementation detail are less likely to result in a change to the service interface.</p>
+
+<p class="author">Another key to deferring a breaking change is to encourage good behavior in your clients, and avoid them binding too tightly to your services in the first place. Let’s consider our email service, whose job it is to send out emails to our customers from time to time. It gets asked to send an order shipped email to customer with the ID 1234. It goes off and retrieves the customer with that ID, and gets back something like the response shown in <a data-type="xref" href="part0006_split_030.html#exampleresponse-4-3" class="calibre3">Example 4-3</a>.</p>
+<div id="exampleresponse-4-3" data-type="example" class="calibre24">
+<h5 class="calibre25"><span class="firstname">Example 4-3. </span>Sample response from the customer service</h5>
+
+<pre data-type="programlisting" data-code-language="xml" class="calibre26"><code class="nt">&lt;customer&gt;</code>
+  <code class="nt">&lt;firstname&gt;</code>Sam<code class="nt">&lt;/firstname&gt;</code>
+  <code class="nt">&lt;lastname&gt;</code>Newman<code class="nt">&lt;/lastname&gt;</code>
+  <code class="nt">&lt;email&gt;</code>sam@magpiebrain.com<code class="nt">&lt;/email&gt;</code>
+  <code class="nt">&lt;telephoneNumber&gt;</code>555-1234-5678<code class="nt">&lt;/telephoneNumber&gt;</code>
+<code class="nt">&lt;/customer&gt;</code></pre></div>
+
+<p class="author">Now to send the email, we need only the <code class="calibre9">firstname</code>, <code class="calibre9">lastname</code>, and <code class="calibre9">email</code> fields. We don’t need to know the <code class="calibre9">telephoneNumber</code>. We want to simply pull out those fields we care about, and ignore the rest. Some binding technology, especially that used by strongly typed languages, can attempt to bind <em class="calibre4">all</em> fields whether the consumer wants them or not. What happens if we realize that no one is using the <code class="calibre9">telephoneNumber</code> and we decide to remove it? This could cause consumers to break needlessly.</p>
+
+<p class="author">Likewise, what if we wanted to restructure our <code class="calibre9">Customer</code> object to support more details, perhaps adding some further structure as in <a data-type="xref" href="part0006_split_030.html#a50-restructured-customer" class="calibre3">Example 4-4</a>? The data our email service wants is still there, and still with the same name, but if our code makes very explicit assumptions as to where the <code class="calibre9">firstname</code> and <code class="calibre9">lastname</code> fields will be stored, then it could break again. In this instance, we could instead use XPath to pull out the fields we care about, allowing us to be ambivalent about where the fields are, as long as we can find them. This pattern — of implementing a reader able to ignore changes we don’t care about — is what Martin Fowler calls a <a href="http://bit.ly/1yISOdQ" class="calibre3">Tolerant Reader</a>.</p>
+<div id="a50-restructured-customer" data-type="example" class="calibre24">
+<h5 class="calibre25"><span class="firstname">Example 4-4. </span>A restructured Customer resource: the data is all still there, but can our consumers find it?</h5>
+
+<pre data-type="programlisting" data-code-language="xml" class="calibre26"><code class="nt">&lt;customer&gt;</code>
+  <code class="nt">&lt;naming&gt;</code>
+    <code class="nt">&lt;firstname&gt;</code>Sam<code class="nt">&lt;/firstname&gt;</code>
+    <code class="nt">&lt;lastname&gt;</code>Newman<code class="nt">&lt;/lastname&gt;</code>
+    <code class="nt">&lt;nickname&gt;</code>Magpiebrain<code class="nt">&lt;/nickname&gt;</code>
+    <code class="nt">&lt;fullname&gt;</code>Sam "Magpiebrain" Newman<code class="nt">&lt;/fullname&gt;</code>
+  <code class="nt">&lt;/naming&gt;</code>
+  <code class="nt">&lt;email&gt;</code>sam@magpiebrain.com<code class="nt">&lt;/email&gt;</code>
+<code class="nt">&lt;/customer&gt;</code></pre></div>
+
+<p class="author"><a data-type="indexterm" data-primary="Postel's Law" id="idp10021520" class="calibre3"></a><a data-type="indexterm" data-primary="Robustness principle" id="idp10032144" class="calibre3"></a>The example of a client trying to be as flexible as possible in consuming a service demonstrates <a href="http://bit.ly/1Cs7dfR" class="calibre3">Postel’s Law</a> (otherwise known as the <em class="calibre4">robustness principle</em>), which states: “Be conservative in what you do, be liberal in what you accept from others.” The original context for this piece of wisdom was the interaction of devices over networks, where you should expect all sorts of odd things to happen. In the context of our request/response interaction, it can lead us to try our best to allow the service being consumed to change without requiring us to change.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

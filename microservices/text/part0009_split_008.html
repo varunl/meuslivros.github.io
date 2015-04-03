@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Implementing Service Tests"><div class="preface" id="idp11051936">
+<h1 class="calibre7" id="calibre_pb_8">Implementing Service Tests</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="testing" data-secondary="service test implementation" id="idp11132944" class="calibre3"></a><a data-type="indexterm" data-primary="service tests" data-secondary="implementation of" id="idp11133936" class="calibre3"></a>Implementing unit tests is a fairly simple affair in the grand scheme of things, and there is plenty of documentation out there explaining how to write them. The service and end-to-end tests are the ones that are more interesting.</p>
+
+<p class="author">Our service tests want to test a slice of functionality across the whole service, but to isolate ourselves from other services we need to find some way to stub out all of our collaborators. So, if we wanted to write a test like this for the customer service from <a data-type="xref" href="part0009_split_002.html#a60-example-overview" class="calibre3">Figure 7-3</a>, we would deploy an instance of the customer service, and as discussed earlier we would want to stub out any downstream services.</p>
+
+<p class="author">One of the first things our continuous integration build will do is create a binary artifact for our service, so deploying that is pretty straightforward. But how do we handle faking the downstream collaborators?</p>
+
+<p class="author">Our service test suite needs to launch stub services for any downstream collaborators (or ensure they are running), and configure the service under test to connect to the stub services. We then need to configure the stubs to send responses back to mimic the real-world services. For example, we might configure the stub for the loyalty points bank to return known points balances for certain customers.</p>
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

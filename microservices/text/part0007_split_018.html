@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Splitting the Monolith</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Splitting the Monolith">
+<div class="preface" id="splitting-chapter">
+<section data-type="sect1" data-pdf-bookmark="Transactional Boundaries">
+<div class="preface" id="idp10358080">
+<section data-type="sect2" data-pdf-bookmark="Try Again Later"><div class="preface" id="idp10372688">
+<h2 class="calibre15" id="calibre_pb_19">Try Again Later</h2>
+
+<p class="author">The fact that the order was captured and placed might be enough for us, and we may decide to retry the insertion into the warehouse’s picking table at a later date. We could queue up this part of the operation in a queue or logfile, and try again later. For some sorts of operations this makes sense, but we have to assume that a retry would fix it.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="eventual consistency" id="idp10374752" class="calibre3"></a>In many ways, this is another form of what is called <em class="calibre4">eventual consistency</em>. Rather than using a transactional boundary to ensure that the system is in a consistent state when the transaction completes, instead we accept that the system will get itself into a consistent state at some point in the future. This approach is especially useful with business operations that might be long-lived. We’ll discuss this idea in more depth in <a data-type="xref" href="part0013_split_000.html#at-scale-chapter" class="calibre3">Chapter 11</a> when we cover scaling patterns.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

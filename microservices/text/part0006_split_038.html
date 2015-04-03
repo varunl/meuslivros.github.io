@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="User Interfaces">
+<div class="preface" id="idp10048528">
+<section data-type="sect2" data-pdf-bookmark="API Composition"><div class="preface" id="idp10065760">
+<h2 class="calibre15" id="calibre_pb_38">API Composition</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="user interfaces" data-secondary="API composition" id="idp10067200" class="calibre3"></a>Assuming that our services already speak XML or JSON to each other via HTTP, an obvious option available to us is to have our user interface interact directly with these APIs, as in <a data-type="xref" href="part0006_split_038.html#a50-api-composition" class="calibre3">Figure 4-7</a>. A web-based UI could use JavaScript GET requests to retrieve data, or POST requests to change it. Even for native mobile applications, initiating HTTP communications is fairly straightforward. The UI would then need to create the various components that make up the interface, handling synchronization of state and the like with the server. If we were using a binary protocol for service-to-service communication, this would be more difficult for web-based clients, but could be fine for native mobile devices.</p>
+
+<p class="author">There are a couple of downsides with this approach. First, we have little ability to tailor the responses for different sorts of devices. For example, when I retrieve a customer record, do I need to pull back all the same data for a mobile shop as I do for a helpdesk application? One solution to this approach is to allow consumers to specify what fields to pull back when they make a request, but this assumes that each service supports this form of interaction.</p>
+
+<p class="author">Another key question: who creates the user interface? The people who look after the services are removed from how their services are surfaced to the users — for example, if another team is creating the UI, we could be drifting back into the bad old days of layered architecture where making even small changes requires change requests to multiple teams.</p>
+
+<figure class="calibre16"><div id="a50-api-composition" class="figure">
+<img src="../images/00016.jpeg" alt="Using multiple APIs to present a user interface" hisrc="assets/bdms_0407.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 4-7. </span>Using multiple APIs to present a user interface</h6>
+</div></figure>
+
+<p class="author">This communication could also be fairly chatty. Opening lots of calls directly to services can be quite intensive for mobile devices, and could be a very inefficient use of a customer’s mobile plan! Having an API gateway can help here, as you could expose calls that aggregate multiple underlying calls, although that itself can have some downsides that we’ll explore shortly.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

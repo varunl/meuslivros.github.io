@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="A Brief Introduction to Continuous Integration"><div class="preface" id="idp10502016">
+<h1 class="calibre7" id="calibre_pb_1">A Brief Introduction to Continuous Integration</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="deployment" data-secondary="continuous integration basics" id="idp10503360" class="calibre3"></a><a data-type="indexterm" data-primary="continuous integration (CI)" data-secondary="basics" id="idp10504352" class="calibre3"></a><em class="calibre4">Continuous integration (CI)</em> has been around for a number of years at this point. It’s worth spending a bit of time going over the basics, however, as especially when we think about the mapping between microservices, builds, and version control repositories, there are some different options to consider.</p>
+
+<p class="author">With CI, the core goal is to keep everyone in sync with each other, which we achieve by making sure that newly checked-in code properly integrates with existing code. To do this, a CI server detects that the code has been committed, checks it out, and carries out some verification like making sure the code compiles and that tests pass.</p>
+
+<p class="author">As part of this process, we often create artifact(s) that are used for further validation, such as deploying a running service to run tests against it. Ideally, we want to build these artifacts once and once only, and use them for all deployments of that version of the code. This is in order to avoid doing the same thing over and over again, and so that we can confirm that the artifact we deployed is the one we tested. To enable these artifacts to be reused, we place them in a repository of some sort, either provided by the CI tool itself or on a separate system.</p>
+
+<p class="author">We’ll be looking at what sorts of artifacts we can use for microservices shortly, and we’ll look in depth at testing in <a data-type="xref" href="part0009_split_000.html#testing-chapter" class="calibre3">Chapter 7</a>.</p>
+
+<p class="author">CI has a number of benefits. We get some level of fast feedback as to the quality of our code. It allows us to automate the creation of our binary artifacts. All the code required to build the artifact is itself version controlled, so we can re-create the artifact if needed. We also get some level of traceability from a deployed artifact back to the code, and depending on the capabilities of the CI tool itself, can see what tests were run on the code and artifact too. It’s for these reasons that CI has been so successful.</p>
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

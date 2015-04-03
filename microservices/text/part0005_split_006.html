@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>How to Model Services</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 3. How to Model Services">
+<div class="preface" id="modelling-services-chapter">
+<section data-type="sect1" data-pdf-bookmark="The Bounded Context">
+<div class="preface" id="idp4214928">
+<section data-type="sect2" data-pdf-bookmark="Shared and Hidden Models"><div class="preface" id="idp4224624">
+<h2 class="calibre15" id="calibre_pb_6">Shared and Hidden Models</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="bounded contexts" data-secondary="shared vs. hidden models" id="idp4226016" class="calibre3"></a><a data-type="indexterm" data-primary="shared models" id="idp4227056" class="calibre3"></a><a data-type="indexterm" data-primary="hidden models" id="idp4227728" class="calibre3"></a><a data-type="indexterm" data-primary="modeling services" data-secondary="shared vs. hidden models" id="idp4228400" class="calibre3"></a>For MusicCorp, we can then consider the finance department and the warehouse to be two separate bounded contexts. They both have an explicit interface to the outside world (in terms of inventory reports, pay slips, etc.), and they have details that only they need to know about (forklift trucks, calculators).</p>
+
+<p class="author">Now the finance department doesn’t need to know about the detailed inner workings of the warehouse. It does need to know some things, though — for example it needs to know about stock levels to keep the accounts up to date. <a data-type="xref" href="part0005_split_006.html#a30-context-diagram" class="calibre3">Figure 3-1</a> shows an example context diagram. We see concepts that are internal to the warehouse, like Picker (people who pick orders), shelves that represent stock locations, and so on. Likewise, the company’s general ledger is integral to finance but is not shared externally here.</p>
+
+<figure class="calibre16"><div id="a30-context-diagram" class="figure">
+<img src="../images/00004.jpeg" alt="A context diagram showing a shared model between Finance and Warehouse" hisrc="assets/bdms_0301.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 3-1. </span>A shared model between the finance department and the warehouse</h6>
+</div></figure>
+
+<p class="author">To be able to work out the valuation of the company, though, the finance employees need information about the stock we hold. The stock item then becomes a shared model between the two contexts. However, note that we don’t need to blindly expose everything about the stock item from the warehouse context. For example, although internally we keep a record on a stock item as to where it should live within the warehouse, that doesn’t need to be exposed in the shared model. So there is the internal-only representation, and the external representation we expose. In many ways, this foreshadows the discussion around REST in <a data-type="xref" href="part0006_split_000.html#integration-chapter" class="calibre3">Chapter 4</a>.</p>
+
+<p class="author">Sometimes we may encounter models with the same name that have very different meanings in different contexts too. For example, we might have the concept of a return, which represents a customer sending something back. Within the context of the customer, a return is all about printing a shipping label, dispatching a package, and waiting for a refund. For the warehouse, this could represent a package that is about to arrive, and a stock item that needs to be restocked. It follows that within the warehouse we store additional information associated with the return that relates to the tasks to be carried out; for example, we may generate a restock request. The shared model of the return becomes associated with different processes and supporting entities within each bounded context, but that is very much an internal concern within the context itself.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

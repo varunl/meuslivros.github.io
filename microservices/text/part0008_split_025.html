@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="A Deployment Interface"><div class="preface" id="idp10748304">
+<h1 class="calibre7" id="calibre_pb_25">A Deployment Interface</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="deployment" data-secondary="interfaces" id="idp10749840" class="calibre3"></a><a data-type="indexterm" data-primary="interfaces" data-secondary="deployment" id="idp10750816" class="calibre3"></a>Whatever underlying platform or artifacts you use, having a uniform interface to deploy a given service is vital. We’ll want to trigger deployment of a microservice on demand in a variety of different situations, from deployments locally for dev and test to production deployments. We’ll also want to keep our deployment mechanisms as similar as possible from dev to production, as the last thing we want is to find ourselves hitting problems in production because deployment uses a completely different process!</p>
+
+<p class="author">After many years of working in this space, I am convinced that the most sensible way to trigger any deployment is via a single, parameterizable command-line call. This can be triggered by scripts, launched by your CI tool, or typed in by hand. I’ve built wrapper scripts in a variety of technology stacks to make this work, from Windows batch, to bash, to Python Fabric scripts, and more, but all of the command lines share the same basic format.</p>
+
+<p class="author">We need to know what we are deploying, so we need to provide the name of a known entity, or in our case a microservice. We also need to know what version of the entity we want. The answer to <em class="calibre4">what version</em> tends to be one of three possibilities. When you’re working locally, it’ll be whatever version is on your local machine. When testing, you’ll want the latest <em class="calibre4">green</em> build, which could just be the most recent blessed artifact in our artifact repository. Or when testing/diagnosing issues, we may want to deploy an exact build.</p>
+
+<p class="author">The third and final thing we’ll need to know is what environment we want the microservice deployed into. As we discussed earlier, our microservice’s topology may differ from one environment to the next, but that should be hidden from us here.</p>
+
+<p class="author">So, imagine we create a simple <code class="calibre9">deploy</code> script that takes these three parameters. Say we’re developing locally and want to deploy our catalog service into our local environment. I might type:</p>
+
+<pre data-type="programlisting" class="calibre27">$ deploy artifact=catalog environment=local version=local</pre>
+
+<p class="author">Once I’ve checked in, our CI build service picks up the change and creates a new build artifact, giving it the build number <code class="calibre9">b456</code>. As is standard in most CI tools, this value gets passed along the pipeline. When our test stage gets triggered, the CI stage will run:</p>
+
+<pre data-type="programlisting" class="calibre27">$ deploy artifact=catalog environment=ci version=b456</pre>
+
+<p class="author">Meanwhile, our QA wants to pull the latest version of the catalog service into an integrated test environment to do some exploratory testing, and to help with a showcase. That team runs:</p>
+
+<pre data-type="programlisting" class="calibre27">$ deploy artifact=catalog environment=integrated_qa version=latest</pre>
+
+<p class="author">The tool I’ve used the most for this is Fabric, a Python library designed to map command-line calls to functions, along with good support for handling tasks like SSH into remote machines. Pair it with an AWS client library like Boto, and you have everything you need to fully automate very large AWS environments. For Ruby, Capistrano is similar in some ways to Fabric, and on Windows you could go a long way using PowerShell.</p>
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Monitoring</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 8. Monitoring">
+<div class="preface" id="monitoring-chapter">
+<section data-type="sect1" data-pdf-bookmark="Synthetic Monitoring"><div class="preface" id="idp11402560">
+<h1 class="calibre7" id="calibre_pb_7">Synthetic Monitoring</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="monitoring" data-secondary="synthetic" id="idp11403936" class="calibre3"></a><a data-type="indexterm" data-primary="synthetic monitoring" id="idp11404912" class="calibre3"></a>We can try to work out if a service is <em class="calibre4">healthy</em> by, for example, deciding what a good CPU level is, or what makes for an acceptable response time. If our monitoring system detects that the actual values fall outside this safe level, we can trigger an alert — something that a tool like Nagios is more than capable of.</p>
+
+<p class="author">However, in many ways, these values are one step removed from what we actually want to track — namely, <em class="calibre4">is the system working?</em> The more complex the interactions between the services, the further removed we are from actually answering that question. So what if our monitoring systems were programmed to act a bit like our users, and could report back if something goes wrong?</p>
+
+<p class="author">I first did this back in 2005. I was part of a small ThoughtWorks team that was building a system for an investment bank. Throughout the trading day, lots of events came in representing changes in the market. Our job was to react to these changes, and look at the impact on the bank’s portfolio. We were working under some fairly tight deadlines, as the goal was to have done all our calculations in less than 10 seconds after the event arrived. The system itself consisted of around five discrete services, at least one of which was running on a computing grid that, among other things, was scavenging unused CPU cycles on around 250 desktop hosts in the bank’s disaster recovery center.</p>
+
+<p class="author">The number of moving parts in the system meant a lot of noise was being generated from many of the lower-level metrics we were gathering. We didn’t have the benefit of scaling gradually or having the system run for a few months to understand what <em class="calibre4">good</em> looked like for metrics like our CPU rate or even the latencies of some of the individual components. Our approach was to generate fake events to price part of the portfolio that was not booked into the downstream systems. Every minute or so, we had Nagios run a command-line job that inserted a fake event into one of our queues. Our system picked it up and ran all the various calculations just like any other job, except the results appeared in the <em class="calibre4">junk</em> book, which was used only for testing. If a re-pricing wasn’t seen within a given time, Nagios reported this as an issue.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="semantic monitoring" id="idp11411136" class="calibre3"></a>This fake event we created is an example of <em class="calibre4">synthetic transaction</em>. We used this synthetic transaction to ensure the system was behaving semantically, which is why this technique is often called <em class="calibre4">semantic monitoring</em>.</p>
+
+<p class="author">In practice, I’ve found the use of synthetic transactions to perform semantic monitoring like this to be a far better indicator of issues in systems than alerting on the lower-level metrics. They don’t replace the need for the lower-level metrics, though — we’ll still want that detail when we need to find out <em class="calibre4">why</em> our semantic monitoring is reporting a problem.</p>
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Conventions</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Conventions"><div class="titlepage"><div><div><h1 class="title"><a id="ch00lvl1sec05"/>Conventions</h1></div></div></div><p>In this book, you will find a number of styles of text that distinguish between different kinds of information. Here are some examples of these styles, and an explanation of their meaning.</p><p>Code words in text are shown as follows: "We can include other contexts through the use of the <code class="literal">include</code> directive."</p><p>A block of code is set as follows:</p><div class="informalexample"><pre class="programlisting">String messageStr = new String("Hello from Java Producer");
+KeyedMessage&lt;Integer, String&gt; data = new KeyedMessage&lt;Integer, String&gt;(topic, messageStr);
+producer.send(data);</pre></div><p>When we wish to draw your attention to a particular part of a code block, the relevant lines or items are set in bold:</p><div class="informalexample"><pre class="programlisting">Properties props = new Properties();
+props.put("metadata.broker.list","localhost:9092");
+<span class="strong"><strong>props.put("serializer.class","kafka.serializer.StringEncoder");</strong></span>
+props.put("request.required.acks", "1");
+ProducerConfig config = new ProducerConfig(props); 
+Producer&lt;Integer, String&gt; producer = new Producer&lt;Integer, String&gt;(config);</pre></div><p>Any command-line input or output is written as follows:</p><div class="informalexample"><pre class="programlisting">[root@localhost kafka-0.8]# java SimpleProducer kafkatopic Hello_There</pre></div><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note02"/>Note</h3><p>Warnings or important notes appear in a box like this.</p></div></div><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="tip02"/>Tip</h3><p>Tips and tricks appear like this.</p></div></div></div></body></html>

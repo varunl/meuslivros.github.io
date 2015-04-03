@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>How to Model Services</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 3. How to Model Services">
+<div class="preface" id="modelling-services-chapter">
+<section data-type="sect1" data-pdf-bookmark="The Bounded Context">
+<div class="preface" id="idp4214928">
+<section data-type="sect2" data-pdf-bookmark="Modules and Services"><div class="preface" id="idp4236928">
+<h2 class="calibre15" id="calibre_pb_7">Modules and Services</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="bounded contexts" data-secondary="modules and services" id="idp4238208" class="calibre3"></a><a data-type="indexterm" data-primary="modeling services" data-secondary="modules and services" id="idp4239184" class="calibre3"></a><a data-type="indexterm" data-primary="modules" id="idp4240128" class="calibre3"></a>By thinking clearly about what models should be shared, and not sharing our internal representations, we avoid one of the potential pitfalls that can result in tight coupling (the opposite of what we want). We have also identified a boundary within our domain where all like-minded business capabilities should live, giving us the high cohesion we want. These bounded contexts, then, lend themselves extremely well to being compositional boundaries.</p>
+
+<p class="author">As we discussed in <a data-type="xref" href="part0003_split_000.html#why-services-chapter" class="calibre3">Chapter 1</a>, we have the option of using modules within a process boundary to keep related code together and attempt to reduce the coupling to other modules in the system. When you’re starting out on a new codebase, this is probably a good place to begin. So once you have found your bounded contexts in your domain, make sure they are modeled within your codebase as modules, with shared and hidden models.</p>
+
+<p class="author">These modular boundaries then become excellent candidates for microservices. In general, microservices should cleanly align to bounded contexts. Once you become very proficient, you may decide to skip the step of keeping the bounded context modeled as a module within a more monolithic system, and jump straight for a separate service. When starting out, however, keep a new system on the more monolithic side; getting service boundaries wrong can be costly, so waiting for things to stabilize as you get to grips with a new domain is sensible. We’ll discuss this more in <a data-type="xref" href="part0007_split_000.html#splitting-chapter" class="calibre3">Chapter 5</a>, along with techniques to help break apart existing systems into microservices.</p>
+
+<p class="author">So, if our service boundaries align to the bounded contexts in our domain, and our microservices represent those bounded contexts, we are off to an excellent start in ensuring that our microservices are loosely coupled and strongly cohesive.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

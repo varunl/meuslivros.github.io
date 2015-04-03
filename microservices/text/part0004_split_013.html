@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>The Evolutionary Architect</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 2. The Evolutionary Architect">
+<div class="preface" id="architect-chapter">
+<section data-type="sect1" data-pdf-bookmark="The Required Standard">
+<div class="preface" id="idp4128032">
+<section data-type="sect2" data-pdf-bookmark="Architectural Safety"><div class="preface" id="idp4600656">
+<h2 class="calibre15" id="calibre_pb_13">Architectural Safety</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="standards establishment" data-secondary="architectural safety" id="idp4601824" class="calibre3"></a><a data-type="indexterm" data-primary="architectural safety" id="idp4602800" class="calibre3"></a>We cannot afford for one badly behaved service to ruin the party for everyone. We have to ensure that our services shield themselves accordingly from unhealthy, downstream calls. The more services we have that do not properly handle the potential failure of downstream calls, the more fragile our systems will be. This means you will probably want to mandate as a minimum that each downstream service gets its own connection pool, and you may even go as far as to say that each also uses a circuit breaker. This will get covered in more depth when we discuss microservices at scale in <a data-type="xref" href="part0013_split_000.html#at-scale-chapter" class="calibre3">Chapter 11</a>.</p>
+
+<p class="author">Playing by the rules is important when it comes to response codes, too. If your circuit breakers rely on HTTP codes, and one service decides to send back 2XX codes for errors, or confuses 4XX codes with 5XX codes, then these safety measures can fall apart. Similar concerns would apply even if you’re not using HTTP; knowing the difference between a request that was OK and processed correctly, a request that was bad and thus prevented the service from doing anything with it, and a request that might be OK but we can’t tell because the server was down is key to ensuring we can fail fast and track down issues. If our services play fast and loose with these rules, we end up with a more vulnerable system.<a data-type="indexterm" data-startref="ix_stndestab" id="idp4606160" class="calibre3"></a></p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

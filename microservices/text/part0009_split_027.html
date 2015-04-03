@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Cross-Functional Testing"><div class="preface" id="idp11306928">
+<h1 class="calibre7" id="calibre_pb_27">Cross-Functional Testing</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="testing" data-secondary="cross-functional" id="idp11308272" class="calibre3"></a><a data-type="indexterm" data-primary="cross-functional requirements (CFR)" id="idp11309248" class="calibre3"></a><a data-type="indexterm" data-primary="nonfunctional requirements" id="idp11309936" class="calibre3"></a>The bulk of this chapter has been focused on testing specific pieces of functionality, and how this differs when you are testing a microservice-based system. However, there is another category of testing that is important to discuss. <em class="calibre4">Nonfunctional requirements</em> is an umbrella term used to describe those characteristics your system exhibits that cannot simply be implemented like a normal feature. They include aspects like the acceptable latency of a web page, the number of users a system should support, how accessible your user interface should be to people with disabilities, or how secure your customer data should be.</p>
+
+<p class="author">The term <em class="calibre4">nonfunctional</em> never sat well with me. Some of the things that get covered by this term seem very functional in nature! One of my colleagues, Sarah Taraporewalla, coined the phrase <em class="calibre4">cross-functional requirements (CFR)</em> instead, which I greatly prefer. It speaks more to the fact that these system behaviors really only emerge as the result of lots of cross-cutting work.</p>
+
+<p class="author">Many, if not most, CFRs can really only be met in production. That said, we can define test strategies to help us see if we are at least moving toward meeting these goals. These sorts of tests fall into the <em class="calibre4">Property Testing</em> quadrant. A great example of this is the performance test, which we’ll discuss in more depth shortly.</p>
+
+<p class="author">For some CFRs, you may want to track them at an individual service level. For example, you may decide that the durability of service you require from your payment service is significantly higher, but you are happy with more downtime for your music recommendation service, knowing that your core business can survive if you are unable to recommend artists similar to Metallica for 10 minutes or so. These trade-offs will end up having a large impact on how you design and evolve your system, and once again the fine-grained nature of a microservice-based system gives you many more chances to make these trade-offs.</p>
+
+<p class="author">Tests around CFRs should follow the pyramid too. Some tests will have to be end-to-end, like load tests, but others won’t. For example, once you’ve found a performance bottleneck in an end-to-end load test, write a smaller-scoped test to help you catch the problem in the future. Other CFRs fit faster tests quite easily. I remember working on a project where we had insisted on ensuring our HTML markup was using proper accessibility features to help people with disabilities use our website. Checking the generated markup to make sure that the appropriate controls were there could be done very quickly without the need for any networking roundtrips.</p>
+
+<p class="author">All too often, considerations about CFRs come far too late. I strongly suggest looking at your CFRs as early as possible, and reviewing them regularly.</p>
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

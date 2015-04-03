@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="Scaling">
+<div class="preface" id="idp11977920">
+<section data-type="sect2" data-pdf-bookmark="Worker-Based Systems"><div class="preface" id="idp12020960">
+<h2 class="calibre15" id="calibre_pb_16">Worker-Based Systems</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="scaling" data-secondary="worker-based systems" id="idp12022400" class="calibre3"></a><a data-type="indexterm" data-primary="worker-based systems" id="idp12023376" class="calibre3"></a>Load balancing isn’t the only way to have multiple instances of your service share load and reduce fragility. Depending on the nature of the operations, a worker-based system could be just as effective. Here, a collection of instances all work on some shared backlog of work. This could be a number of Hadoop processes, or perhaps a number of listeners to a shared queue of work. These types of operations are well suited to batch work or asynchronous jobs. Think of tasks like image thumbnail processing, sending email, or generating reports.</p>
+
+<p class="author">The model also works well for <em class="calibre4">peaky</em> load, where you can spin up additional instances on demand to match the load coming in. As long as the work queue itself is resilient, this model can be used to scale both for improved throughput of work, but also for improved resiliency — the impact of a worker failing (or not being there) is easy to deal with. Work will take longer, but nothing gets lost.</p>
+
+<p class="author">I’ve seen this work well in organizations where there is lots of unused compute capacity at certain times of day. For example, overnight you might not need as many machines to run your ecommerce system, so you can temporarily use them to run workers for a reporting job instead.</p>
+
+<p class="author">With worker-based systems, although the workers themselves don’t need to be that reliable, the system that contains the work to be done does. You could handle this by running a persistent message broker, for example, or perhaps a system like Zookeeper. The benefit here is that if we use existing software for this purpose, someone has done much of the hard work for us. However, we still need to know how to set up and maintain these systems in a resilient fashion.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="Build Pipelines and Continuous Delivery">
+<div class="preface" id="idp10521024">
+<section data-type="sect2" data-pdf-bookmark="And the Inevitable Exceptions"><div class="preface" id="idp10556272">
+<h2 class="calibre15" id="calibre_pb_5">And the Inevitable Exceptions</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="deployment" data-secondary="bundled service release" id="idp10557488" class="calibre3"></a><a data-type="indexterm" data-primary="bundled service release" id="idp10558464" class="calibre3"></a>As with all good rules, there are exceptions we need to consider too. The “one microservice per build” approach is absolutely something you should aim for, but are there times when something else makes sense? When a team is starting out with a new project, especially a greenfield one where they are working with a blank sheet of paper, it is quite likely that there will be  a large amount of churn in terms of working out where the service boundaries lie. This is a good reason, in fact, for keeping your initial services on the larger side until your understanding of the domain stabilizes.</p>
+
+<p class="author">During this time of churn, changes across service boundaries are more likely, and what is in or not in a given service is likely to change frequently. During this period, having all services in a single build to reduce the cost of cross-service changes may make sense.</p>
+
+<p class="author">It does follow, though, that in this case you need to buy into releasing all the services as a bundle. It also absolutely needs to be a transitionary step. As service APIs stabilize, start moving them out into their own builds. If after a few weeks (or a very small number of months) you are unable to get stability in service boundaries in order to properly separate them, merge them back into a more monolithic service (albeit retaining modular separation within the boundary) and give yourself time to get to grips with the domain. This reflects the experiences of our own SnapCI team, as we discussed in <a data-type="xref" href="part0005_split_000.html#modelling-services-chapter" class="calibre3">Chapter 3</a>.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

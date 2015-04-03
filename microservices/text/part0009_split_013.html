@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Flaky and Brittle Tests"><div class="preface" id="idp11187328">
+<h1 class="calibre7" id="calibre_pb_13">Flaky and Brittle Tests</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="end-to-end tests" data-secondary="drawbacks of" id="idp11188784" class="calibre3"></a><a data-type="indexterm" data-primary="flaky tests" id="idp11189760" class="calibre3"></a><a data-type="indexterm" data-primary="brittle tests" id="idp11190432" class="calibre3"></a>As test scope increases, so too do the number of moving parts. These moving parts can introduce test failures that do not show that the functionality under test is broken, but that some other problem has occurred. As an example, if we have a test to verify that we can place an order for a single CD, but we are running that test against four or five services, if any of them is down we could get a failure that has nothing to do with the nature of the test itself. Likewise, a temporary network glitch could cause a test to fail without saying anything about the functionality under test.</p>
+
+<p class="author">The more moving parts, the more brittle our tests may be, and the less deterministic they are. If you have tests that <em class="calibre4">sometimes</em> fail, but everyone just re-runs them because they may pass again later, then you have flaky tests. It isn’t only tests covering lots of different process that are the culprit here. Tests that cover functionality being exercised on multiple threads are often problematic, where a failure could mean a race condition, a timeout, or that the functionality is actually broken. Flaky tests are the enemy. When they fail, they don’t tell us much. We re-run our CI builds in the hope that they will pass again later, only to see check-ins pile up, and suddenly we find ourselves with a load of broken functionality.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="normalization of deviance" id="idp11193680" class="calibre3"></a>When we detect flaky tests, it is essential that we do our best to remove them. Otherwise, we start to lose faith in a test suite that “always fails like that.” A test suite with flaky tests can become a victim of what Diane Vaughan calls the <em class="calibre4">normalization of deviance</em> — the idea that over time we can become so accustomed to things being wrong that we start to accept them as being normal and not a problem.<a xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:svg="http://www.w3.org/2000/svg" data-type="noteref" id="idp11195280-marker" href="part0009_split_029.html#idp11195280" class="calibre3"><sup class="calibre22">2</sup></a> This very human tendency means we need to find and eliminate these tests as soon as we can before we start to assume that failing tests are OK.</p>
+
+<p class="author">In <a href="http://bit.ly/1Daos3Q" class="calibre3">“Eradicating Non-Determinism in Tests”</a>, Martin Fowler advocates the approach that if you have flaky tests, you should track them down and if you can’t immediately fix them, remove them from the suite so you can treat them. See if you can rewrite them to avoid testing code running on multiple threads. See if you can make the underlying environment more stable. Better yet, see if you can replace the flaky test with a smaller-scoped test that is less likely to exhibit problems. In some cases, changing the software under test to make it easier to test can also be the right way forward.</p>
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

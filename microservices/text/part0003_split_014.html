@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 1. Microservices">
+<div class="preface" id="why-services-chapter">
+<section data-type="sect1" data-pdf-bookmark="Other Decompositional Techniques">
+<div class="preface" id="idp4089824">
+<section data-type="sect2" data-pdf-bookmark="Shared Libraries"><div class="preface" id="idp4091504">
+<h2 class="calibre15" id="calibre_pb_14">Shared Libraries</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="microservices" data-secondary="vs. shared libraries" id="idp3786528" class="calibre3"></a><a data-type="indexterm" data-primary="libraries" data-secondary="shared" id="idp3787504" class="calibre3"></a><a data-type="indexterm" data-primary="shared libraries" id="idp3788448" class="calibre3"></a><a data-type="indexterm" data-primary="decompositional techniques" data-secondary="shared libraries" id="idp3789120" class="calibre3"></a>A very standard decompositional technique that is built into virtually any language is breaking down a codebase into multiple libraries. These libraries may be provided by third parties, or created in your own organization.</p>
+
+<p class="author">Libraries give you a way to share functionality between teams and services. I might create a set of useful collection utilities, for example, or perhaps a statistics library that can be reused.</p>
+
+<p class="author">Teams can organize themselves around these libraries, and the libraries themselves can be reused. But there are some drawbacks.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="heterogeneity" data-secondary="shared libraries and" id="idp3791888" class="calibre3"></a>First, you lose true technology heterogeneity. The library typically has to be in the same language, or at the very least run on the same platform. Second, the ease with which you can scale parts of your system independently from each other is curtailed. Next, unless you’re using dynamically linked libraries, you cannot deploy a new library without redeploying the entire process, so your ability to deploy changes in isolation is reduced. And perhaps the kicker is that you lack the obvious seams around which to erect architectural safety measures to ensure system resiliency.</p>
+
+<p class="author">Shared libraries do have their place. You’ll find yourself creating code for common tasks that aren’t specific to your business domain that you want to reuse across the organization, which is an obvious candidate for becoming a reusable library. You do need to be careful, though. Shared code used to communicate between services can become a point of coupling, something we’ll discuss in <a data-type="xref" href="part0006_split_000.html#integration-chapter" class="calibre3">Chapter 4</a>.</p>
+
+<p class="author">Services can and should make heavy use of third-party libraries to reuse common code. But they don’t get us all the way there.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

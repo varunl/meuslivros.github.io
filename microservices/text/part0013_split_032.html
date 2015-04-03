@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="Autoscaling"><div class="preface" id="idp12149840">
+<h1 class="calibre7" id="calibre_pb_32">Autoscaling</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="microservices at scale" data-secondary="autoscaling" id="idp12213248" class="calibre3"></a><a data-type="indexterm" data-primary="autoscaling" id="idp12214224" class="calibre3"></a><a data-type="indexterm" data-primary="scaling" data-secondary="autoscaling" id="idp12214896" class="calibre3"></a><a data-type="indexterm" data-primary="predictive scaling" id="idp12215840" class="calibre3"></a><a data-type="indexterm" data-primary="reactive scaling" id="idp12216512" class="calibre3"></a>If you are lucky enough to have fully automatable provisioning of virtual hosts, and can fully automate the deployment of your microservice instances, then you have the building blocks to allow you to automatically scale your microservices.</p>
+
+<p class="author">For example, you could also have the scaling triggered by well-known trends. You might know that your system’s peak load is between 9 a.m. and 5 p.m., so you bring up additional instances at 8:45 a.m., and turn them off at 5:15 p.m.. If you’re using something like AWS (which has very good support for autoscaling built in), turning off instances you don’t need any longer will help save money. You’ll need data to understand how your load changes over time, from day to day, week to week. Some businesses have obvious seasonal cycles too, so you may need data going back a fair way to make proper judgment calls.</p>
+
+<p class="author">On the other hand, you could be reactive, bringing up additional instances when you see an increase in load or an instance failure, and remove instances when you no longer needed them. Knowing how fast you can scale up once you spot an upward trend is key. If you know you’ll only get a couple of minutes’ notice about an increase in load, but scaling up will take you at least 10 minutes, you know you’ll need to keep extra capacity around to bridge this gap. Having a good suite of load tests is almost essential here. You can use them to test your autoscaling rules. If you don’t have tests that can reproduce different loads that will trigger scaling, then you’re only going to find out in production if you got the rules wrong. And the consequences of failure aren’t great!</p>
+
+<p class="author">A news site is a great example of a type of business where you may want a mix of predictive and reactive scaling. On the last news site I worked on, we saw very clear daily trends, with views climbing from the morning to lunchtime and then starting to decline. This pattern was repeated day in, day out, with traffic less pronounced at the weekend. That gave you a fairly clear trend that could drive proactive scaling up (and down) of resources. On the other hand, a big news story would cause an unexpected spike, requiring more capacity at often short notice.</p>
+
+<p class="author">I actually see autoscaling used much more for handling failure of instances than for reacting to load conditions. AWS lets you specify rules like “There should be at least 5 instances in this group,” so if one goes down a new one is automatically launched. I’ve seen this approach lead to a fun game of whack-a-mole when someone forgets to turn off the rule and then tries to take down the instances for maintenance, only to see them keep spinning up!</p>
+
+<p class="author">Both reactive and predictive scaling are very useful, and can help you be much more cost effective if you’re using a platform that allows you to pay only for the computing resources you use. But they also require careful observation of the data available to you. I’d suggest using autoscaling for failure conditions first while you collect the data. Once you want to start scaling for load, make sure you are very cautious about scaling down too quickly. In most situations, having more computing power at your hands than you need is much better than not having enough!</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

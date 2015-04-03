@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Test Scope"><div class="preface" id="idp11051312">
+<h1 class="calibre7" id="calibre_pb_2">Test Scope</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="Test Pyramid" id="idp11052784" class="calibre3"></a><a data-type="indexterm" data-primary="unit tests" data-secondary="Cohn's Test Pyramid" id="idp11081840" class="calibre3"></a><a data-type="indexterm" data-primary="service tests" data-secondary="Cohn's Test Pyramid" id="idp11082784" class="calibre3"></a><a data-type="indexterm" data-primary="user interfaces" data-secondary="Cohn's Test Pyramid" data-seealso="end-to-end tests" id="idp11083728" class="calibre3"></a><a data-type="indexterm" data-primary="end-to-end tests" data-secondary="Cohn's Test Pyramid" id="idp11084944" class="calibre3"></a><a data-type="indexterm" data-primary="Cohn's Test Pyramid" id="idp11085888" class="calibre3"></a><a data-type="indexterm" data-primary="testing" data-secondary="scope of" id="idp11086560" class="calibre3"></a>In his book <em class="calibre4">Succeeding with Agile</em> (Addison-Wesley), Mike Cohn outlines a model called the Test Pyramid to help explain what types of automated tests you need. The pyramid helps us think about the scopes the tests should cover, but also the proportions of different types of tests we should aim for. Cohn’s original model split automated tests into Unit, Service, and UI, which you can see in <a data-type="xref" href="part0009_split_002.html#a60-test-pyramid" class="calibre3">Figure 7-2</a>.</p>
+
+<figure class="calibre16"><div id="a60-test-pyramid" class="figure">
+<img src="../images/00049.gif" alt="Mike Cohn's Test Pyramid" hisrc="assets/bdms_0702.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 7-2. </span>Mike Cohn’s Test Pyramid. Cohn, Mike, Succeeding with Agile: Software Development Using Scrum, 1st Edition, © 2010. Adapted by permission of Pearson Education, Inc., Upper Saddle River, NJ.</h6>
+</div></figure>
+
+<p class="author">The problem with this model is that all these terms mean different things to different people. “Service” is especially overloaded, and there are many definitions of a unit test out there. Is a test a unit test if I only test one line of code? I’d say yes. Is it still a unit test if I test multiple functions or classes? I’d say no, but many would disagree! I tend to stick with the Unit and Service names despite their ambiguity, but much prefer calling <em class="calibre4">UI</em> tests <em class="calibre4">end-to-end</em> tests, which we’ll do from now on.</p>
+
+<p class="author">Given the confusion, it’s worth us looking at what these different layers mean.</p>
+
+<p class="author">Let’s look at a worked example. In <a data-type="xref" href="part0009_split_002.html#a60-example-overview" class="calibre3">Figure 7-3</a>, we have our helpdesk application and our main website, both of which are interacting with our customer service to retrieve, review, and edit customer details. Our customer service in turn is talking to our loyalty points bank, where our customers accrue points by buying Justin Bieber CDs. Probably. This is obviously a sliver of our overall music shop system, but it is a good enough slice for us to dive into a few different scenarios we may want to test.</p>
+
+<figure class="calibre16"><div id="a60-example-overview" class="figure">
+<img src="../images/00050.gif" alt="Part of our music shop under test" hisrc="assets/bdms_0703.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 7-3. </span>Part of our music shop under test</h6>
+</div></figure>
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

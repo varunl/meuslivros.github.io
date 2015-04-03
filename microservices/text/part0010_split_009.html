@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Monitoring</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 8. Monitoring">
+<div class="preface" id="monitoring-chapter">
+<section data-type="sect1" data-pdf-bookmark="Correlation IDs"><div class="preface" id="idp11420256">
+<h1 class="calibre7" id="calibre_pb_9">Correlation IDs</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="correlation IDs" id="idp11421792" class="calibre3"></a><a data-type="indexterm" data-primary="monitoring" data-secondary="correlation IDs" id="idp11422496" class="calibre3"></a>With a large number of services interacting to provide any given end-user capability, a single initiating call can end up generating multiple more downstream service calls. For example, consider the example of a customer being registered. The customer fills in all her details in a form and clicks submit. Behind the scenes, we check validity of the credit card details with our payment service, talk to our postal service to send out a welcome pack in the post, and send a welcome email using our email service. Now what happens if the call to the payment service ends up generating an odd error? We’ll talk at length about handling the failure in <a data-type="xref" href="part0013_split_000.html#at-scale-chapter" class="calibre3">Chapter 11</a>, but consider the difficulty of diagnosing what happened.</p>
+
+<p class="author">If we look at the logs, the only service registering an error is our payment service. If we are lucky, we can work out what request caused the problem, and we may even be able to look at the parameters of the call.  Now consider that this is a simple example, and that one initiating request could generate a chain of downstream calls and maybe events being fired off that are handled in an asynchronous manner. How can we reconstruct the flow of calls in order to reproduce and fix the problem? Often what we need is to see that error in the wider context of the initiating call; in other words, we’d like to trace the call chain upstream, just like we do with a stack trace.</p>
+
+<p class="author">One approach that can be useful here is to use correlation IDs. When the first call is made, you generate a GUID for the call. This is then passed along to all subsequent calls, as seen in <a data-type="xref" href="part0010_split_009.html#a70-correlation-ids" class="calibre3">Figure 8-5</a>, and can be put into your logs in a structured way, much as you’ll already do with components like the log level or date. With the right log aggregation tooling, you’ll then be able to trace that event all the way through your system:</p>
+
+<pre data-type="programlisting" class="calibre27">15-02-2014 16:01:01 Web-Frontend INFO [abc-123] Register
+15-02-2014 16:01:02 RegisterService INFO [abc-123] RegisterCustomer ...
+15-02-2014 16:01:03 PostalSystem INFO [abc-123] SendWelcomePack ...
+15-02-2014 16:01:03 EmailSystem INFO [abc-123] SendWelcomeEmail ...
+15-02-2014 16:01:03 PaymentGateway ERROR [abc-123] ValidatePayment ...</pre>
+
+<figure class="calibre16"><div id="a70-correlation-ids" class="figure">
+<img src="../images/00064.jpeg" alt="Using correlation IDs to track call chains across multiple services" hisrc="assets/bdms_0805.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 8-5. </span>Using correlation IDs to track call chains across multiple services</h6>
+</div></figure>
+
+<p class="author">You will, of course, need to ensure that each service knows to pass on the correlation ID. This is where you need to standardize and be stronger in enforcing this across your system. But once you have done this, you can actually create tooling to track all sorts of interactions. Such tooling can be useful in tracking down event storms, odd corner cases, or even identifying especially costly transactions, as you can picture the whole cascade of calls.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="Zipkin" id="idp11432096" class="calibre3"></a>Software such as <a href="http://twitter.github.io/zipkin/" class="calibre3">Zipkin</a> can also trace calls across multiple system boundaries. Based on the ideas from Google’s own tracing system, Dapper, Zipkin can provide very detailed tracing of interservice calls, along with a UI to help present the data. Personally, I’ve found the requirements of Zipkin to be somewhat heavyweight, requiring custom clients and supporting collection systems. Given that you’ll already want log aggregation for other purposes, it feels much simpler to instead make use of data you’re already collecting than have to plumb in additional sources of data. That said, if you find that you need a more advanced tool to track interservice calls like this, you might want to give them a look.</p>
+
+<p class="author">One of the real problems with correlation IDs is that you often don’t know you need one until <em class="calibre4">after</em> you already have a problem that could be diagnosed only if you had the ID at the beginning! This is especially problematic, as retrofitting correlation IDs in is very difficult; you need to handle them in a standardized way to be able to easily reconsititute call chains. Although it might seem like additional work up front, I would strongly suggest you consider putting them in as soon as you can, especially if your system will make use of event-drive architecture patterns, which can lead to some odd emergent behavior.</p>
+
+<p class="author">Needing to handle tasks like consistently passing through correlation IDs can be a strong argument for the use of thin shared client wrapper libraries. At a certain scale, it becomes difficult to ensure that everyone is calling downstream services in the right way and collecting the right sort of data. It only takes one service partway through the chain to forget to do this for you to lose critical information. If you do decide to create an in-house client library to make things like this work out of the box, do make sure you keep it very thin and not tied to any particular producing service. For example, if you are using HTTP as the underlying protocol for communication, just wrap a standard HTTP client library, adding in code to make sure you propogate the correlation IDs in the headers.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

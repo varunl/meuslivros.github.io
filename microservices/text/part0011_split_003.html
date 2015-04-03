@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Security</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 9. Security">
+<div class="preface" id="security-chapter">
+<section data-type="sect1" data-pdf-bookmark="Authentication and Authorization">
+<div class="preface" id="idp11496480">
+<section data-type="sect2" data-pdf-bookmark="Single Sign-On Gateway"><div class="preface" id="idp11519072">
+<h2 class="calibre15" id="calibre_pb_3">Single Sign-On Gateway</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="authentication/authorization" data-secondary="single sign-on gateway" id="idp11520352" class="calibre3"></a>Within a microservice setup, each service could decide to handle the redirection to, and handshaking with, the identity provider. Obviously, this could mean a lot of duplicated work. A shared library could help, but we’d have to be careful to avoid the coupling that can come from shared code. This also wouldn’t help if you had multiple different technology stacks.</p>
+
+<p class="author">Rather than having each service manage handshaking with your identity provider, you can use a gateway to act as a proxy, sitting between your services and the outside world (as shown in <a data-type="xref" href="part0011_split_003.html#a75-saml-gateway" class="calibre3">Figure 9-1</a>). The idea is that we can centralize the behavior for redirecting the user and perform the handshake in only one place.</p>
+
+<figure class="calibre16"><div id="a75-saml-gateway" class="figure">
+<img src="../images/00065.jpeg" alt="Using a Gateway to handle Single Sign-on" hisrc="assets/bdms_0901.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 9-1. </span>Using a gateway to handle SSO</h6>
+</div></figure>
+
+<p class="author">However, we still need to solve the problem of how the downstream service receives information about principals, such as their username or what roles they play. If you’re using HTTP, it could populate headers with this information. Shibboleth is one tool that can do this for you, and I’ve seen it used with Apache to great effect to handle integration with SAML-based identity providers.</p>
+
+<p class="author">Another problem is that if we have decided to offload responsibility for authentication to a gateway, it can be harder to reason about how a microservice behaves when looking at it in isolation. Remember in <a data-type="xref" href="part0009_split_000.html#testing-chapter" class="calibre3">Chapter 7</a> where we explored some of the challenges in reproducing production-like environments? If you go the gateway route, make sure your developers can launch their services behind one without too much work.</p>
+
+<p class="author">One final problem with this approach is that it can lull you into a false sense of security. I like the idea of defense in depth — from network perimeter, to subnet, to firewall, to machine, to operating system, to the underlying hardware. You have the ability to implement security measures at all of these points, some of which we’ll get into shortly. I have seen some people put all their eggs in one basket, relying on the gateway to handle every step for them. And we all know what happens when we have a single point of failure…</p>
+
+<p class="author">Obviously you could use this gateway to do other things. If using a layer of Apache instances running Shibboleth, for example, you could also decide to terminate HTTPS at this level, run intrusion detection, and so on. Do be careful, though. Gateway layers tend to take on more and more functionality, which itself can end up being a giant coupling point. And the more functionality something has, the greater the attack surface.<a data-type="indexterm" data-startref="SSO" id="idp11529888" class="calibre3"></a></p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

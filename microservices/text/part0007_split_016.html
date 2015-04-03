@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Splitting the Monolith</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Splitting the Monolith">
+<div class="preface" id="splitting-chapter">
+<section data-type="sect1" data-pdf-bookmark="Refactoring Databases">
+<div class="preface" id="idp10346464">
+<section data-type="sect2" data-pdf-bookmark="Staging the Break"><div class="preface" id="idp10348640">
+<h2 class="calibre15" id="calibre_pb_17">Staging the Break</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="database decomposition" data-secondary="refactoring databases" id="idp10349920" class="calibre3"></a><a data-type="indexterm" data-primary="refactoring databases" id="idp10350896" class="calibre3"></a><a data-type="indexterm" data-primary="service separation, staging" data-seealso="database decomposition" id="idp10351568" class="calibre3"></a>So we’ve found seams in our application code, grouping it around bounded contexts. We’ve used this to identify seams in the database, and we’ve done our best to split those out. What next? Do you do a big-bang release, going from one monolithic service with a single schema to two services, each with its own schema? I would actually recommend that you split out the schema but keep the service together before splitting the application code out into separate microservices, as shown in <a data-type="xref" href="part0007_split_016.html#a58-staging-the-break" class="calibre3">Figure 5-9</a>.</p>
+
+<figure class="calibre16"><div id="a58-staging-the-break" class="figure">
+<img src="../images/00030.jpeg" alt="Staging a service separation" hisrc="assets/bdms_0509.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 5-9. </span>Staging a service separation</h6>
+</div></figure>
+
+<p class="author">With a separate schema, we’ll be potentially increasing the number of database calls to perform a single action. Where before we might have been able to have all the data we wanted in a single <code class="calibre9">SELECT</code> statement, now we may need to pull the data back from two locations and join in memory. Also, we end up breaking transactional integrity when we move to two schemas, which could have significant impact on our applications; we’ll be discussing this next. By splitting the schemas out but keeping the application code together, we give ourselves the ability to revert our changes or continue to tweak things without impacting any consumers of our service. Once we are satisfied that the DB separation makes sense, we can then think about splitting out the application code into two services.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

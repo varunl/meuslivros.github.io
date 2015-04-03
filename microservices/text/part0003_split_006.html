@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 1. Microservices">
+<div class="preface" id="why-services-chapter">
+<section data-type="sect1" data-pdf-bookmark="Key Benefits">
+<div class="preface" id="idp4019920">
+<section data-type="sect2" data-pdf-bookmark="Resilience"><div class="preface" id="idp4035984">
+<h2 class="calibre15" id="calibre_pb_6">Resilience</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="microservices" data-secondary="resilience of" id="idp4037040" class="calibre3"></a><a data-type="indexterm" data-primary="resilience engineering" id="idp4038016" class="calibre3"></a>A key concept in resilience engineering is the bulkhead. If one component of a system fails, but that failure doesn’t cascade, you can isolate the problem and the rest of the system can carry on working. Service boundaries become your obvious bulkheads. In a monolithic service, if the service fails, everything stops working. With a monolithic system, we can run on multiple machines to reduce our chance of failure, but with microservices, we can build systems that handle the total failure of services and degrade functionality accordingly.</p>
+
+<p class="author">We do need to be careful, however. To ensure our microservice systems can properly embrace this improved resilience, we need to understand the new sources of failure that distributed systems have to deal with. Networks can and will fail, as will machines. We need to know how to handle this, and what impact (if any) it should have on the end user of our software.</p>
+
+<p class="author">We’ll talk more about better handling resilience, and how to handle failure modes, in <a data-type="xref" href="part0013_split_000.html#at-scale-chapter" class="calibre3">Chapter 11</a>.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

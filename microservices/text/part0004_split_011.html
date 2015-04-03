@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>The Evolutionary Architect</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 2. The Evolutionary Architect">
+<div class="preface" id="architect-chapter">
+<section data-type="sect1" data-pdf-bookmark="The Required Standard">
+<div class="preface" id="idp4128032">
+<section data-type="sect2" data-pdf-bookmark="Monitoring"><div class="preface" id="idp4133840">
+<h2 class="calibre15" id="calibre_pb_11">Monitoring</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="standards establishment" data-secondary="monitoring" id="idp4135008" class="calibre3"></a><a data-type="indexterm" data-primary="monitoring" data-secondary="standards establishment and" id="idp4135984" class="calibre3"></a>It is essential that we are able to draw up coherent, cross-service views of our system health. This has to be a system-wide view, not a service-specific view. As we’ll discuss in <a data-type="xref" href="part0010_split_000.html#monitoring-chapter" class="calibre3">Chapter 8</a>, knowing the health of an individual service is useful, but often only when you’re trying to diagnose a wider problem or understand a larger trend. To make this as easy as possible, I would suggest ensuring that all services emit health and general monitoring-related metrics in the same way.</p>
+
+<p class="author">You might choose to adopt a push mechanism, where each service needs to push this data into a central location. For your metrics this might be Graphite, and for your health it might be Nagios. Or you might decide to use polling systems that scrape data from the nodes themselves. But whatever you pick, try to keep it standardized. Make the technology inside the box opaque, and don’t require that your monitoring systems change in order to support it. Logging falls into the same category here: we need it in one place.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

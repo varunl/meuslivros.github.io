@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Test Journeys, Not Stories"><div class="preface" id="idp11223136">
+<h1 class="calibre7" id="calibre_pb_18">Test Journeys, Not Stories</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="end-to-end tests" data-secondary="appropriate uses for" id="idp11224480" class="calibre3"></a>Despite the disadvantages just outlined, for many users end-to-end tests can still be manageable with one or two services, and in these situations still make a lot of sense. But what happens with 3, 4, 10, or 20 services? Very quickly these test suites become hugely bloated, and in the worst case can result in Cartesian-like explosion in the scenarios under test.</p>
+
+<p class="author">This situation worsens if we fall into the trap of adding a new end-to-end test for every piece of functionality we add. Show me a codebase where every new story results in a new end-to-end test, and I’ll show you a bloated test suite that has poor feedback cycles and huge overlaps in test coverage.</p>
+
+<p class="author">The best way to counter this is to focus on a <em class="calibre4">small</em> number of core journeys to test for the whole system. Any functionality not covered in these core journeys needs to be covered in tests that analyze services in isolation from each other. These journeys need to be mutually agreed upon, and jointly owned. For our music shop, we might focus on actions like ordering a CD, returning a product, or perhaps creating a new customer — high-value interactions and very few in number.</p>
+
+<p class="author">By focusing on a small number (and I mean <em class="calibre4">small</em>: very low double digits even for complex systems) of tests we can reduce the downsides of integration tests, but we cannot avoid all of them. Is there a better way?</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

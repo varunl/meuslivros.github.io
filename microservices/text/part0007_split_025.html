@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Splitting the Monolith</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Splitting the Monolith">
+<div class="preface" id="splitting-chapter">
+<section data-type="sect1" data-pdf-bookmark="Data Pumps"><div class="preface" id="idp10434640">
+<h1 class="calibre7" id="calibre_pb_26">Data Pumps</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="reporting databases" data-secondary="data pump guidelines" id="idp10435952" class="calibre3"></a><a data-type="indexterm" data-primary="data pumps" data-secondary="data retrieval via" id="idp10436928" class="calibre3"></a>Rather than have the reporting system pull the data, we could instead have the data pushed to the reporting system. One of the downsides of retrieving the data by standard HTTP calls is the overhead of HTTP when we’re making a large number of calls, together with the overhead of having to create APIs that may exist only for reporting purposes. An alternative option is to have a standalone program that directly accesses the database of the service that is the source of data, and pumps it into a reporting database, as shown in <a data-type="xref" href="part0007_split_025.html#a56-data-pump" class="calibre3">Figure 5-13</a>.</p>
+
+<figure class="calibre16"><div id="a56-data-pump" class="figure">
+<img src="../images/00034.jpeg" alt="A data pump used to push data into a reporting database" hisrc="assets/bdms_0513.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 5-13. </span>Using a data pump to periodically push data to a central reporting <span class="firstname">database</span></h6>
+</div></figure>
+
+<p class="author">At this point you’ll be saying, “But Sam, you said having lots of programs integrating on the same database is a bad idea!” At least I <em class="calibre4">hope</em> you’ll be saying that, given how firmly I made the point earlier! This approach, if implemented properly, is a notable exception, where the downsides of the coupling are more than mitigated by making the reporting easier.</p>
+
+<p class="author">To start with, the data pump should be built and managed by the same team that manages the service. This can be something as simple as a command-line program triggered via <code class="calibre9">Cron</code>. This program needs to have intimate knowledge of both the internal database for the service, and also the reporting schema. The pump’s job is to map one from the other. We try to reduce the problems with coupling to the service’s schema by having the same team that manages the service also manage the pump. I would suggest, in fact, that you version-control these together, and have builds of the data pump created as an additional artifact as part of the build of the service itself, with the assumption that whenever you deploy one of them, you deploy them both. As we explicitly state that we deploy these together, and don’t open up access to the schema to anyone outside of the service team, many of the traditional DB integration challenges are largely mitigated.</p>
+
+<p class="author">The coupling on the reporting schema itself remains, but we have to treat it as a published API that is hard to change. Some databases give us techniques where we could further mitigate this cost. <a data-type="xref" href="part0007_split_025.html#a59-segmented-schemas" class="calibre3">Figure 5-14</a> shows an example of this for relational databases, where we could have one schema in the reporting database for each service, using things like materialized views to create the aggregated view. That way, we expose only the reporting schema for the customer data to the customer data pump. Whether this is something that you can do in a performant manner, however, will depend on the capabilities of the database you picked for reporting.</p>
+
+<figure class="calibre16"><div id="a59-segmented-schemas" class="figure">
+<img src="../images/00035.jpeg" alt="Using per-service schemas to mitigate DB coupling" hisrc="assets/bdms_0514.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 5-14. </span>Utilizing materialized views to form a single monolithic reporting schema</h6>
+</div></figure>
+
+<p class="author">Here, of course, the complexity of integration is pushed deeper into the schema, and will rely on capabilities in the database to make such a setup performant. While I think data pumps in general are a sensible and workable suggestion, I am less convinced that the complexity of a segmented schema is worthwhile, especially given the challenges in managing change in the database.</p>
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

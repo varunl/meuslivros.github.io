@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="CAP Theorem">
+<div class="preface" id="idp12222832">
+<section data-type="sect2" data-pdf-bookmark="Sacrificing Consistency"><div class="preface" id="idp12238544">
+<h2 class="calibre15" id="calibre_pb_34">Sacrificing Consistency</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="CAP theorem" data-secondary="sacrificing consistency" id="idp12239824" class="calibre3"></a><a data-type="indexterm" data-primary="consistency" data-secondary="sacrificing" id="idp12241024" class="calibre3"></a><a data-type="indexterm" data-primary="AP system" data-secondary="definition of term" id="idp12241968" class="calibre3"></a>Let’s assume that we don’t shut the inventory service down entirely.  If I make a change now to the data in DC1, the database in DC2 doesn’t see it. This means any requests made to our inventory node in DC2 see potentially stale data. In other words, our system is still <em class="calibre4">available</em> in that both nodes are able to serve requests, and we have kept the system running despite the <em class="calibre4">partition</em>, but we have lost <em class="calibre4">consistency</em>. This is often called a <em class="calibre4">AP</em> system. We don’t get to keep all three.</p>
+
+<p class="author">During this partition, if we keep accepting writes then we accept the fact that at some point in the future they have to be resynchronized. The longer the partition lasts, the more difficult this resynchronization can become.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="eventual consistency" id="idp12245984" class="calibre3"></a>The reality is that even if we don’t have a network failure between our database nodes, replication of data is not instantaneous. As touched on earlier, systems that are happy to cede consistency to keep partition tolerance and availability are said to be <em class="calibre4">eventually consistent</em>; that is, we expect at some point in the future that all nodes will see the updated data, but it won’t happen at once so we have to live with the possibility that users see old data.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

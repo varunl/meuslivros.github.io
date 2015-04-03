@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Splitting the Monolith</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Splitting the Monolith">
+<div class="preface" id="splitting-chapter">
+<section data-type="sect1" data-pdf-bookmark="Example: Shared Tables"><div class="preface" id="idp10335216">
+<h1 class="calibre7" id="calibre_pb_15">Example: Shared Tables</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="database decomposition" data-secondary="shared tables" id="idp10336592" class="calibre3"></a><a data-type="indexterm" data-primary="shared tables" id="idp10337568" class="calibre3"></a><a data-type="indexterm" data-primary="tables, shared" id="idp10338240" class="calibre3"></a><a data-type="xref" href="part0007_split_014.html#a58-shared-table-before" class="calibre3">Figure 5-7</a> shows our last example. Our catalog needs to store the name and price of the records we sell, and the warehouse needs to keep an electronic record of inventory. We decide to keep these two things in the same place in a generic line item table. Before, with all the code merged in together, it wasn’t clear that we are actually <span class="firstname">conflating</span> concerns, but now we can see that in fact we have two separate concepts that could be stored differently.</p>
+
+<figure class="calibre16"><div id="a58-shared-table-before" class="figure">
+<img src="../images/00028.gif" alt="Tables being shared between different contexts" hisrc="assets/bdms_0507.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 5-7. </span>Tables being shared between different contexts</h6>
+</div></figure>
+
+<p class="author">The answer here is to split the table in two as we have in <a data-type="xref" href="part0007_split_014.html#a58-shared-table-after" class="calibre3">Figure 5-8</a>, perhaps creating a stock list table for the warehouse, and a catalog entry table for the catalog details.</p>
+
+<figure class="calibre16"><div id="a58-shared-table-after" class="figure">
+<img src="../images/00029.gif" alt="Pulling apart the shared table" hisrc="assets/bdms_0508.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 5-8. </span>Pulling apart the shared table</h6>
+</div></figure>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

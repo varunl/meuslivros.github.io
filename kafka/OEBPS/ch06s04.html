@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Kafka consumer property list</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Kafka consumer property list"><div class="titlepage"><div><div><h1 class="title"><a id="ch06lvl1sec31"/>Kafka consumer property list</h1></div></div></div><p>The following is<a id="id173" class="indexterm"/> the list of a few important properties that can be configured for high-level consumer-API-based Kafka consumers. For the complete list, <a id="id174" class="indexterm"/>visit <a class="ulink" href="http://kafka.apache.org/08/configuration.html">http://kafka.apache.org/08/configuration.html</a>.</p><div class="informaltable"><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>Property name</p>
+</th><th style="text-align: left" valign="bottom">
+<p>Description</p>
+</th><th style="text-align: left" valign="bottom">
+<p>Default value</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p>
+<code class="literal">group.id</code>
+<a id="id194" class="indexterm"/>
+</p>
+</td><td style="text-align: left" valign="top">
+<p>This <a id="id195" class="indexterm"/>property defines a unique identity for the set of consumers within the same consumer group.</p>
+</td><td style="text-align: left" valign="top">&#xA0;</td></tr><tr><td style="text-align: left" valign="top">
+<p>
+<code class="literal">zookeeper.connect</code>
+<a id="id196" class="indexterm"/>
+</p>
+</td><td style="text-align: left" valign="top">
+<p>This <a id="id197" class="indexterm"/>property specifies the ZooKeeper connection string, <code class="literal">&lt; hostname:port/chroot&gt;</code>. Kafka uses ZooKeeper to store offsets of messages consumed for a specific topic and partition by the consumer group.</p>
+</td><td style="text-align: left" valign="top">&#xA0;</td></tr><tr><td style="text-align: left" valign="top">
+<p>
+<code class="literal">client.id</code>
+<a id="id198" class="indexterm"/>
+</p>
+</td><td style="text-align: left" valign="top">
+<p>The <code class="literal">Client.id</code> value is specified <a id="id199" class="indexterm"/>by the Kafka consumer client and is used to distinguish between different clients.</p>
+</td><td style="text-align: left" valign="top">
+<p>
+<code class="literal">${group.id}</code>
+</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>
+<code class="literal">zookeeper.session.timeout.ms</code>
+<a id="id200" class="indexterm"/>
+</p>
+</td><td style="text-align: left" valign="top">
+<p>This <a id="id201" class="indexterm"/>property defines the time (in milliseconds) for Kafka to wait for ZooKeeper to respond to any read/write request before closing a session.</p>
+</td><td style="text-align: left" valign="top">
+<p>
+<code class="literal">6000</code>
+</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>
+<code class="literal">zookeeper.connection.timeout.ms</code>
+<a id="id202" class="indexterm"/>
+</p>
+</td><td style="text-align: left" valign="top">
+<p>This value<a id="id203" class="indexterm"/> defines the maximum waiting time (in milliseconds) for the client to establish a connection with ZooKeeper.</p>
+</td><td style="text-align: left" valign="top">
+<p>
+<code class="literal">6000</code>
+</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>
+<code class="literal">zookeeper.sync.time.ms</code>
+<a id="id204" class="indexterm"/>
+<code class="literal">&#xA0;</code>
+</p>
+</td><td style="text-align: left" valign="top">
+<p>This <a id="id205" class="indexterm"/>property defines the time it takes to sync ZooKeeper with ZooKeeper leader (in milliseconds).</p>
+</td><td style="text-align: left" valign="top">
+<p>
+<code class="literal">2000</code>
+</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>
+<code class="literal">auto.commit.interval.ms</code>
+<a id="id206" class="indexterm"/>
+</p>
+</td><td style="text-align: left" valign="top">
+<p>This <a id="id207" class="indexterm"/>property defines the frequency (in milliseconds) for the consumed offsets to get committed to ZooKeeper.</p>
+</td><td style="text-align: left" valign="top">
+<p>
+<code class="literal">60 * 1000</code>
+</p>
+</td></tr></tbody></table></div></div></body></html>

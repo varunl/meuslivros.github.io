@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="Remote Procedure Calls"><div class="preface" id="idp4394032">
+<h1 class="calibre7" id="calibre_pb_10">Remote Procedure Calls</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="integration" data-secondary="remote procedure calls" id="idp4424960" class="calibre3"></a><a data-type="indexterm" data-primary="remote procedure calls" id="ix_remotepc" class="calibre3"></a><a data-type="indexterm" data-primary="remote procedure calls" data-secondary="definition of term" id="idp4426880" class="calibre3"></a><a data-type="indexterm" data-primary="remote procedure calls" data-secondary="technologies available" id="idp4427824" class="calibre3"></a><em class="calibre4">Remote procedure call</em> refers to the technique of making a local call and having it execute on a remote service somewhere. There are a number of different types of RPC technology out there. Some of this technology relies on having an interface definition (SOAP, Thrift, protocol buffers). The use of a separate interface definition can make it easier to generate client and server stubs for different technology stacks, so, for example, I could have a Java server exposing a SOAP interface, and a .NET client generated from the Web Service Definition Language (WSDL) definition of the interface. Other technology, like Java RMI, calls for a tighter coupling between the client and server, requiring that both use the same underlying technology but avoid the need for a shared interface definition. All these technologies, however, have the same, core characteristic in that they make a local call look like a remote call.</p>
+
+<p class="author">Many of these technologies are binary in nature, like Java RMI, Thrift, or protocol buffers, while SOAP uses XML for its message formats. Some implementations are tied to a specific networking protocol (like SOAP, which makes nominal use of HTTP), whereas others might allow you to use different types of networking protocols, which themselves can provide additional features. For example, TCP offers guarantees about delivery, whereas UDP doesn’t but has a much lower overhead. This can allow you to use different networking technology for different use cases.</p>
+
+<p class="author">Those RPC implementations that allow you to generate client and server stubs help you get started very, very fast. I can be sending content over a network boundary in no time at all. This is often one of the main selling points of RPC: its ease of use. The fact that I can just make a normal method call and theoretically ignore the rest is a huge boon.</p>
+
+<p class="author">Some RPC implementations, though, do come with some downsides that can cause issues. These issues aren’t always apparent initially, but nonetheless they can be severe enough to outweigh the benefits of being so easy to get up and running quickly.</p>
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Bringing It All Together</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 12. Bringing It All Together">
+<div class="preface" id="bring-together-chapter">
+<section data-type="sect1" data-pdf-bookmark="Principles of Microservices">
+<div class="preface" id="idp12371424">
+<section data-type="sect2" data-pdf-bookmark="Hide Internal Implementation Details"><div class="preface" id="idp12386896">
+<h2 class="calibre15" id="calibre_pb_4">Hide Internal Implementation Details</h2>
+
+<p class="author">To maximize the ability of one service to evolve independently of any others, it is vital that we hide implementation details. Modeling <em class="calibre4">bounded contexts</em> can help, as this helps us focus on those models that should be shared, and those that should be hidden. Services should also <em class="calibre4">hide their databases</em> to avoid falling into one of the most common sorts of coupling that can appear in traditional service-oriented architectures, and use <em class="calibre4">data pumps</em> or <em class="calibre4">event data pumps</em> to consolidate data across multiple services for reporting purposes.</p>
+
+<p class="author">Where possible, pick <em class="calibre4">technology-agnostic APIs</em> to give you freedom to use different technology stacks.  Consider using <em class="calibre4">REST</em>, which formalizes the separation of internal and external implementation details, although even if using remote procedure calls (RPCs), you can still embrace these ideas.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

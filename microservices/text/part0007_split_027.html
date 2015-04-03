@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Splitting the Monolith</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Splitting the Monolith">
+<div class="preface" id="splitting-chapter">
+<section data-type="sect1" data-pdf-bookmark="Event Data Pump"><div class="preface" id="idp10452864">
+<h1 class="calibre7" id="calibre_pb_28">Event Data Pump</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="reporting databases" data-secondary="event data pumps" id="idp10454176" class="calibre3"></a><a data-type="indexterm" data-primary="event data pumps" id="idp10455152" class="calibre3"></a><a data-type="indexterm" data-primary="data pumps" data-secondary="event" id="idp10455824" class="calibre3"></a>In <a data-type="xref" href="part0006_split_000.html#integration-chapter" class="calibre3">Chapter 4</a>, we touched on the idea of microservices emitting events based on the state change of entities that they manage. For example, our customer service may emit an event when a given customer is created, or updated, or deleted. For those microservices that expose such event feeds, we have the option of writing our own event subscriber that pumps data into the reporting database, as shown in <a data-type="xref" href="part0007_split_027.html#a59-event-mapper-image" class="calibre3">Figure 5-15</a>.</p>
+
+<figure class="calibre16"><div id="a59-event-mapper-image" class="figure">
+<img src="../images/00036.jpeg" alt="An example of an Event Data Pump" hisrc="assets/bdms_0515.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 5-15. </span>An event data pump using state change events to populate a reporting <span class="firstname">database</span></h6>
+</div></figure>
+
+<p class="author">The coupling on the underlying database of the source microservice is now avoided. Instead, we are just binding to the events emitted by the service, which are designed to be exposed to external consumers. Given that events are temporal in nature, it also makes it easier for us to be smarter in what data we sent to our central reporting store; we can send data to the reporting system as we see an event, allowing data to flow faster to our reporting system, rather than relying on a regular schedule as with the data pump.</p>
+
+<p class="author">Also, if we store which events have already been processed, we can just process the new events as they arrive, assuming the old events have already been mapped into the reporting system. This means our insertion will be more efficient, as we only need to send deltas. We can do similar things with a data pump, but we have to manage this ourselves, whereas the fundamentally temporal nature of the stream of events (<em class="calibre4">x</em> happens at timestamp <em class="calibre4">y</em>) helps us greatly.</p>
+
+<p class="author">As our event data pump is less coupled to the internals of the service, it is also easier to consider this being managed by a separate group from the team looking after the microservice itself. As long as the nature of our event stream doesn’t overly couple subscribers to changes in the service, this event mapper can evolve independently of the service it subscribes to.</p>
+
+<p class="author">The main downsides to this approach are that all the required information must be broadcast as events, and it may not scale as well as a data pump for larger volumes of data that has the benefit of operating directly at the database level. Nonetheless, the looser coupling and fresher data available via such an approach makes it strongly worth considering if you are already exposing the appropriate events.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

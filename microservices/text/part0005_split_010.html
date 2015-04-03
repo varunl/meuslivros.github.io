@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>How to Model Services</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 3. How to Model Services">
+<div class="preface" id="modelling-services-chapter">
+<section data-type="sect1" data-pdf-bookmark="Turtles All the Way Down"><div class="preface" id="idp4257408">
+<h1 class="calibre7" id="calibre_pb_10">Turtles All the Way Down</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="modeling services" data-secondary="nested bounded contexts" id="idp4258816" class="calibre3"></a><a data-type="indexterm" data-primary="bounded contexts" data-secondary="nested" id="idp4259792" class="calibre3"></a><a data-type="indexterm" data-primary="nested bounded contexts" id="idp4260736" class="calibre3"></a>At the start, you will probably identify a number of coarse-grained bounded contexts. But these bounded contexts can in turn contain further bounded contexts. For example, you could decompose the warehouse into capabilities associated with order fulfillment, inventory management, or goods receiving. When considering the boundaries of your microservices, first think in terms of the larger, coarser-grained contexts, and then subdivide along these nested contexts when you’re looking for the benefits of splitting out these seams.</p>
+
+<p class="author">I have seen these nested contexts remaining hidden to other, collaborating microservices to great effect. To the outside world, they are still making use of business capabilities in the warehouse, but they are unaware that their requests are actually being mapped transparently to two or more separate services, as you can see in <a data-type="xref" href="part0005_split_010.html#a30-nested" class="calibre3">Figure 3-2</a>.  Sometimes, you will decide it makes more sense for the higher-level bounded context to not be explicitly modeled as a service boundary, as in <a data-type="xref" href="part0005_split_010.html#a30-non-nested" class="calibre3">Figure 3-3</a>, so rather than a single warehouse boundary, you might instead split out inventory, order fulfillment, and goods receiving.</p>
+
+<figure class="calibre16"><div id="a30-nested" class="figure">
+<img src="../images/00005.gif" alt="Microservices representing nested bounded-contexts 'hidden' inside the warehouse" hisrc="assets/bdms_0302.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 3-2. </span>Microservices representing nested bounded contexts <em class="calibre4">hidden</em> inside the <span class="firstname">warehouse</span></h6>
+</div></figure>
+
+<figure class="calibre16"><div id="a30-non-nested" class="figure">
+<img src="../images/00006.gif" alt="The bounded-contexts inside the warehouse being 'popped up' into their own, top-level contexts" hisrc="assets/bdms_0303.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 3-3. </span>The bounded contexts inside the warehouse being <em class="calibre4">popped up</em> into their own top-level contexts</h6>
+</div></figure>
+
+<p class="author">In general, there isn’t a hard-and-fast rule as to what approach makes the most sense. However, whether you choose the nested approach over the full separation approach should be based on your organizational structure. If order fulfillment, inventory management, and goods receiving are managed by different teams, they probably deserve their status as <em class="calibre4">top-level</em> microservices. If, on the other hand, all of them are managed by one team, then the nested model makes more sense. This is because of the interplay of organizational structures and software architecture, which we will discuss toward the end of the book in <a data-type="xref" href="part0012_split_000.html#conways-chapter" class="calibre3">Chapter 10</a>.</p>
+
+<p class="author">Another reason to prefer the nested approach could be to chunk up your architecture to simplify testing. For example, when testing services that consume the warehouse, I don’t have to stub each service inside the warehouse context, just the more coarse-grained API. This can also give you a unit of isolation when considering larger-scoped tests. I may, for example, decide to have end-to-end tests where I launch all services inside the warehouse context, but for all other collaborators I might stub them out. We’ll explore more about testing and isolation in <a data-type="xref" href="part0009_split_000.html#testing-chapter" class="calibre3">Chapter 7</a>.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

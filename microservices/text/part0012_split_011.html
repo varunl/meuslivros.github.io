@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Conway’s Law and System Design</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 10. Conway’s Law and System Design">
+<div class="preface" id="conways-chapter">
+<section data-type="sect1" data-pdf-bookmark="Drivers for Shared Services">
+<div class="preface" id="idp11776976">
+<section data-type="sect2" data-pdf-bookmark="Delivery Bottlenecks"><div class="preface" id="idp11791440">
+<h2 class="calibre15" id="calibre_pb_11">Delivery Bottlenecks</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="system design" data-secondary="delivery bottlenecks" id="idp11792688" class="calibre3"></a><a data-type="indexterm" data-primary="delivery bottlenecks" id="idp11793600" class="calibre3"></a><a data-type="indexterm" data-primary="bottlenecks" id="idp11794272" class="calibre3"></a>One key reason people move toward shared services is to avoid delivery bottlenecks. What if there is a large backlog of changes that need to be made in a single service? Let’s imagine that we are rolling out the ability for a customer to see the genre of a track across our products, as well as adding a a brand new type of stock: virtual musical ringtones for the mobile phone. The website team needs to make a change to surface the genre information, with the mobile app team working to allow users to browse, preview, and buy the ringtones. Both changes need to be made to the catalog service, but unfortunately half the team is out with the flu, and the other half is stuck diagnosing a production failure.</p>
+
+<p class="author">We have a couple of options that don’t involve shared services to avoid this situation. The first is to just wait. The website and mobile application teams move on to something else. Depending on how important the feature is, or how long the delay is likely to be, this may be fine or it may be a major problem.</p>
+
+<p class="author">You could instead add people to the catalog team to help them move through their work faster. The more standardized the technology stack and programming idioms in use across your system, the easier it is for other people to make changes in your services. The flipside, of course, as we discussed earlier, is that standardization tends to reduce a team’s ability to adopt the right solution for the job, and can lead to different sorts of inefficiencies. If the team is on the other side of the planet, this might be impossible, however.</p>
+
+<p class="author">Another option could be to split the catalog into a separate general music catalog and a ringtone catalog. If the change being made to support ringtones is fairly small, and the likelihood of this being an area in which we will develop heavily in the future is also quite low, this may well be premature. On the other hand, if there are 10 weeks of ringtone-related features stacked up, splitting out the service could make sense, with the mobile team taking ownership.</p>
+
+<p class="author">There is another model that could work well for us, though.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

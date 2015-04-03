@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="Build Pipelines and Continuous Delivery"><div class="preface" id="idp10521024">
+<h1 class="calibre7" id="calibre_pb_4">Build Pipelines and Continuous Delivery</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="deployment" data-secondary="build pipeline" id="idp10544112" class="calibre3"></a><a data-type="indexterm" data-primary="continuous delivery (CD)" id="idp10545088" class="calibre3"></a><a data-type="indexterm" data-primary="build pipelines" id="idp10545776" class="calibre3"></a>Very early on in using continuous integration, we realized the value in sometimes having multiple stages inside a build. Tests are a very common case where this comes into play. I may have a lot of fast, small-scoped tests, and a small number of large-scoped, slow tests. If we run all the tests together, we may not be able to get fast feedback when our fast tests fail if we’re waiting for our long-scoped slow tests to finally finish. And if the fast tests fail, there probably isn’t much sense in running the slower tests anyway! A solution to this problem is to have different stages in our build, creating what is known as a <em class="calibre4">build pipeline</em>. One stage for the faster tests, one for the slower tests.</p>
+
+<p class="author">This build pipeline concept gives us a nice way of tracking the progress of our software as it clears each stage, helping give us insight into the quality of our software. We build our artifact, and that artifact is used throughout the pipeline. As our artifact moves through these stages, we feel more and more confident that the software will work in production.</p>
+
+<p class="author"><em class="calibre4">Continuous delivery (CD)</em> builds on this concept, and then some. As outlined in Jez Humble and Dave Farley’s book of the same name, continuous delivery is the approach whereby we get constant feedback on the production readiness of each and every check-in, and furthermore treat each and every check-in as a release candidate.</p>
+
+<p class="author">To fully embrace this concept, we need to model all the processes involved in getting our software from check-in to production, and know where any given version of the software is in terms of being cleared for release. In CD, we do this by extending the idea of the multistage build pipeline to model each and every stage our software has to go through, both manual and automated. In <a data-type="xref" href="part0008_split_004.html#a61-sample-pipeline" class="calibre3">Figure 6-4</a>, we see a sample pipeline that may be familiar.</p>
+
+<figure class="calibre16"><div id="a61-sample-pipeline" class="figure">
+<img src="../images/00040.gif" alt="An example of a standard release process modelled as a build pipeline" hisrc="assets/bdms_0604.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 6-4. </span>A standard release process modeled as a build pipeline</h6>
+</div></figure>
+
+<p class="author">Here we really want a tool that embraces CD as a first-class concept. I have seen many people try to hack and extend CI tools to make them do CD, often resulting in complex systems that are nowhere as easy to use as tools that build in CD from the beginning. Tools that fully support CD allow you to define and visualize these pipelines, modeling the entire path to production for your software. As a version of our code moves through the pipeline, if it passes one of these automated verification steps it moves to the next stage. Other stages may be manual. For example, if we have a manual user acceptance testing (UAT) process I should be able to use a CD tool to model it. I can see the next available build ready to be deployed into our UAT environment, deploy it, and if it passes our manual checks, mark that stage as being successful so it can move to the next.</p>
+
+<p class="author">By modeling the entire path to production for our software, we greatly improve visibility of the quality of our software, and can also greatly reduce the time taken between releases, as we have one place to observe our build and release process, and an obvious focal point for introducing improvements.</p>
+
+<p class="author">In a microservices world, where we want to ensure we can release our services independently of each other, it follows that as with CI, we’ll want one pipeline per service. In our pipelines, it is an artifact that we want to create and move through our path to production. As always, it turns out our artifacts can come in lots of sizes and shapes. We’ll look at some of the most common options available to us in a moment.</p>
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

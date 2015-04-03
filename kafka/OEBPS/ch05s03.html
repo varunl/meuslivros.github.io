@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Creating a simple Java producer with message partitioning</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Creating a simple Java producer with message partitioning"><div class="titlepage"><div><div><h1 class="title"><a id="ch05lvl1sec25"/>Creating a simple Java producer with message partitioning</h1></div></div></div><p>The previous example<a id="id120" class="indexterm"/> is a very basic example of a <code class="literal">Producer</code> class and only uses a single broker with no explicit partitioning of messages. Let's jump to the next level and write another program that connects to multiple brokers and uses message partitioning.</p><div class="section" title="Importing classes"><div class="titlepage"><div><div><h2 class="title"><a id="ch05lvl2sec22"/>Importing classes</h2></div></div></div><p>This step remains <a id="id121" class="indexterm"/>the same for this program.</p></div><div class="section" title="Defining properties"><div class="titlepage"><div><div><h2 class="title"><a id="ch05lvl2sec23"/>Defining properties</h2></div></div></div><p>As the next <a id="id122" class="indexterm"/>step, we need to define properties for making a connection with the Kafka broker, as shown in the following code, and pass these properties to the Kafka producer:</p><div class="informalexample"><pre class="programlisting">Properties props = new Properties();
+props.put("metadata.broker.list","localhost:9092, localhost:9093");
+props.put("serializer.class","kafka.serializer.StringEncoder"); 
+props.put("partitioner.class", "test.kafka.SimplePartitioner");
+props.put("request.required.acks", "1");
+ProducerConfig config = new ProducerConfig(props); 
+Producer&lt;Integer, String&gt; producer = new Producer&lt;Integer, String&gt;(config);</pre></div><p>The only change in the previous property list is in <code class="literal">metadata.broker.list</code> and <code class="literal">partitioner.class</code>.</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">metadata.broker.list</code>: This <a id="id123" class="indexterm"/>property specifies the list of brokers (in the <code class="literal">[&lt;node:port&gt;, &lt;node:port&gt;]</code> format) that the producer needs to connect to. Kafka producers automatically find out the lead broker for the topic as well as partition it by raising a request for the metadata before it sends any message to the the broker.</li><li class="listitem" style="list-style-type: disc"><code class="literal">partitioner.class</code>: This <a id="id124" class="indexterm"/>property defines the class to be used for determining the partitioning in the topic where the message<a id="id125" class="indexterm"/> needs to be sent. If the key is null, Kafka uses random partitioning for message assignment.</li></ul></div></div><div class="section" title="Implementing the Partitioner class"><div class="titlepage"><div><div><h2 class="title"><a id="ch05lvl2sec24"/>Implementing the Partitioner class</h2></div></div></div><p>Next, we need to <a id="id126" class="indexterm"/>implement <a id="id127" class="indexterm"/>the <code class="literal">Partitioner</code> class as shown in the following code:</p><div class="informalexample"><pre class="programlisting">package test.kafka;
+import kafka.producer.Partitioner;
+public class SimplePartitioner implements Partitioner&lt;Integer&gt; {
+    public int partition(Integer key, int numPartitions) {
+        int partition = 0;
+        int iKey = key;
+        if (iKey &gt; 0) {
+           partition = iKey % numPartitions;
+        }
+       return partition;
+  }
+}</pre></div></div><div class="section" title="Building the message and sending it"><div class="titlepage"><div><div><h2 class="title"><a id="ch05lvl2sec25"/>Building the message and sending it</h2></div></div></div><p>As the final step, we need to<a id="id128" class="indexterm"/> build the <a id="id129" class="indexterm"/>message and send it to the broker. The following is the complete listing of the program:</p><div class="informalexample"><pre class="programlisting">package test.kafka;
+
+import java.util.Properties;
+import java.util.Random;
+import kafka.javaapi.producer.Producer;
+import kafka.producer.KeyedMessage;
+import kafka.producer.ProducerConfig;
+
+public class MultiBrokerProducer {
+    private static Producer&lt;Integer, String&gt; producer;
+    private final Properties props = new Properties();
+
+      public MultiBrokerProducer()
+    {
+    props.put("metadata.broker.list","localhost:9092, localhost:9093");
+      props.put("serializer.class","kafka.serializer.StringEncoder"); 
+
+      props.put("partitioner.class", "test.kafka.SimplePartitioner");
+
+      props.put("request.required.acks", "1");
+
+      ProducerConfig config = new ProducerConfig(props); 
+      producer = new Producer&lt;Integer, String&gt;(config);
+    }
+  public static void main(String[] args) {
+    MultiBrokerProducer sp = new MultiBrokerProducer();
+        Random rnd = new Random();
+
+        String topic = (String) args[0];
+        for (long messCount = 0; messCount &lt; 10; messCount++) { 
+               Integer key = rnd.nextInt(255); 
+               String msg = "This message is for key - " + key; 
+               KeyedMessage&lt;Integer, String&gt; data1 = new KeyedMessage&lt;Integer, String&gt;(topic, key, msg);
+               producer.send(data1);
+        }
+    producer.close();
+  }
+}</pre></div><p>Compile the <a id="id130" class="indexterm"/>previous <a id="id131" class="indexterm"/>program. Before running it, read the following information box.</p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note13"/>Note</h3><p>Before we run this program, we need to make sure our cluster is running as a multibroker cluster (either single or multiple nodes). For more information on how to set up a single node &#x2013; multibroker cluster, refer to <a class="link" href="ch03.html" title="Chapter&#xA0;3.&#xA0;Setting up the Kafka Cluster">Chapter 3</a>, <span class="emphasis"><em>Setting up the Kafka Cluster</em></span>.</p></div></div><p>Once your multibroker cluster is up, create a topic with five partitions and set the replication factor as <code class="literal">2</code> before running this program using the following command:</p><div class="informalexample"><pre class="programlisting">[root@localhost kafka-0.8]# bin/kafka-topics.sh --zookeeper localhost:2181 --create --topic kafkatopic --partitions 5 --replication-factor 2</pre></div><p>Now run the <a id="id132" class="indexterm"/>preceding program using the following command:</p><div class="informalexample"><pre class="programlisting">[root@localhost kafka-0.8]# java MultiBrokerProducer kafkatopic </pre></div><p>For verifying the data that is<a id="id133" class="indexterm"/> getting published to the Kafka broker, the Kafka console consumer can be used as follows:</p><div class="informalexample"><pre class="programlisting">[root@localhost kafka-0.8]# bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic kafkatopic --from-beginning</pre></div></div></div></body></html>

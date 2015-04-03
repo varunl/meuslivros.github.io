@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Security</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 9. Security">
+<div class="preface" id="security-chapter">
+<section data-type="sect1" data-pdf-bookmark="Defense in Depth">
+<div class="preface" id="idp11642608">
+<section data-type="sect2" data-pdf-bookmark="Operating System"><div class="preface" id="idp11665696">
+<h2 class="calibre15" id="calibre_pb_24">Operating System</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="operating systems security" id="idp11667072" class="calibre3"></a><a data-type="indexterm" data-primary="security" data-secondary="operating systems" id="idp11667840" class="calibre3"></a>Our systems rely on a large amount of software that we didn’t write, and may have security vulnerabilities that could expose our application, namely our operating systems and the other supporting tools we run on them. Here, basic advice can get you a long way. Start with only running services as OS users that have as few permissions as possible, to ensure that if such an account is compromised it will do minimal damage.</p>
+
+<p class="author">Next, patch your software. Regularly. This needs to be automated, and you need to know if your machines are out of sync with the latest patch levels. Tools like Microsoft’s SCCM or RedHat’s Spacewalk can be beneficial here, as they can help you see if machines are up to date with the latest patches and initiate updates if required. If you are using tools like Ansible, Puppet, or Chef, chances are you are already fairly happy with pushing out changes automatically — these tools can get you a long way too, but won’t do everything for you.</p>
+
+<p class="author">This really is basic stuff, but it is surprising how often I see critical software running on unpatched, old operating systems. You can have the most well-defined and protected application-level security in the world, but if you have an old version of a web server running on your machine as root that has an unpatched buffer overflow vulnerability, then your system could still be extremely vulnerable.</p>
+
+<p class="author">Another thing to look at if you are using Linux is the emergence of security modules for the operating system itself. AppArmour, for example, allows you to define how your application is expected to behave, with the kernel keeping an eye on it. If it starts doing something it shouldn’t, the kernel steps in. AppArmour has been around for a while, as has SeLinux. Although technically either of them should work on any modern Linux system, in practice some distributions support one better than the other. AppArmour is used by default in Ubuntu and SuSE, for example, whereas SELinux has traditionally been well supported by RedHat. A newer option is <span class="firstname">GrSSecurity</span>, which aims to be simpler to use than either AppArmour or GrSecurity while also trying to expand on their capabilities, but it requires a custom kernel to work. I’d suggest taking a look at all three to see which fits your use cases best, but I like the idea of having another layer of protection and prevention at work.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

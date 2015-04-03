@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="Dynamic Service Registries">
+<div class="preface" id="idp12299680">
+<section data-type="sect2" data-pdf-bookmark="Eureka"><div class="preface" id="idp12319968">
+<h2 class="calibre15" id="calibre_pb_45">Eureka</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="dynamic service registries" data-secondary="Eureka" id="idp12321168" class="calibre3"></a><a data-type="indexterm" data-primary="Eureka" id="idp12322112" class="calibre3"></a>Netflix’s open source <a href="http://bit.ly/15Co2I7" class="calibre3">Eureka system</a> bucks the trend of systems like Consul and Zookeeper in that it doesn’t also try to be a general-purpose configuration store. It is actually very targeted in its use case.</p>
+
+<p class="author">Eureka also provides basic load-balancing capabilities in that it can support basic round-robin lookup of service instances.
+It provides a REST-based endpoint so you can write your own clients, or you can use its own Java client. The Java client provides additional capabilities, such as health checking of instances. Obviously if you bypass Eureka’s own client and go directly to the REST endpoint, you’re on your own there.</p>
+
+<p class="author">By having the clients deal with service discovery directly, we avoid the need for a separate process. However, you do require that every client implement service discovery. Netflix, which standardizes on the JVM, achieves this by having all clients use Eureka. If you’re in a more polyglot environment, this may be more of a challenge.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

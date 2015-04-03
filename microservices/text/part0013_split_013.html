@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="Scaling">
+<div class="preface" id="idp11977920">
+<section data-type="sect2" data-pdf-bookmark="Splitting Workloads"><div class="preface" id="idp12107360">
+<h2 class="calibre15" id="calibre_pb_13">Splitting Workloads</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="scaling" data-secondary="splitting workloads" id="idp12108560" class="calibre3"></a>As outlined in <a data-type="xref" href="part0008_split_000.html#deployment-chapter" class="calibre3">Chapter 6</a>, having a single microservice per host is certainly preferable to a multiservice-per-host model. Initially, however, many people decide to coexist multiple microservices on one box to keep costs down or to simplify host management (although that is an arguable reason). As the microservices are independent processes that communicate over the network, it should be an easy task to then move them onto their own hosts to improve throughput and scaling. This can also increase the resiliency of the system, as a single host outage will impact a reduced number of microservices.</p>
+
+<p class="author">Of course, we could also use the need for increased scale to split an existing microservice into parts to better handle the load. As a simplistic example, let’s imagine that our accounts service provides the ability to create and manage individual customers’ financial accounts, but also exposes an API for running queries to generate reports. This query capability places a significant load on the system. The query capacity is considered noncritical, as it isn’t needed to keep orders flowing in during the day. The ability to manage the financial records for our customers <em class="calibre4">is</em> critical, though, and we can’t afford for it to be down. By splitting these two capabilities into separate services, we reduce the load on the critical accounts service, and introduce a new accounts reporting service that is designed not only with querying in mind (perhaps using some of the techniques we outlined in <a data-type="xref" href="part0006_split_000.html#integration-chapter" class="calibre3">Chapter 4</a>, but also as a noncritical system doesn’t need to be deployed in as resilient a way as the core accounts service.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

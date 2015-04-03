@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="The Antifragile Organization">
+<div class="preface" id="idp11900720">
+<section data-type="sect2" data-pdf-bookmark="Circuit Breakers"><div class="preface" id="idp11941344">
+<h2 class="calibre15" id="calibre_pb_7">Circuit Breakers</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="circuit breakers" id="idp11943152" class="calibre3"></a><a data-type="indexterm" data-primary="antifragile systems" data-secondary="circuit breakers" id="idp11943856" class="calibre3"></a>In your own home, circuit breakers exist to protect your electrical devices from spikes in the power. If a spike occurs, the circuit breaker gets blown, protecting your expensive home appliances. You can also manually disable a circuit breaker to cut the power to part of your home, allowing you to work safely on the electrics. Michael Nygard’s book <em class="calibre4">Release It!</em> (Pragmatic Programmers) shows how the same idea can work wonders as a protection mechanism for our software.</p>
+
+<p class="author">Consider the story I shared just a moment ago. The downstream legacy ad application was responding very slowly, before eventually returning an error. Even if we’d got the timeouts right, we’d be waiting a long time before we got the error. And then we’d try it again the next time a request came in, and wait. It’s bad enough that the downstream service is malfunctioning, but it’s making us go slow too.</p>
+
+<p class="author">With a circuit breaker, after a certain number of requests to the downstream resource have failed, the circuit breaker is blown. All further requests fail fast while the circuit breaker is in its blown state. After a certain period of time, the client sends a few requests through to see if the downstream service has recovered, and if it gets enough healthy responses it resets the circuit breaker. You can see an overview of this process in <a data-type="xref" href="part0013_split_007.html#a115-circuit-breakers" class="calibre3">Figure 11-2</a>.</p>
+
+<p class="author">How you implement a circuit breaker depends on what a <em class="calibre4">failed</em> request means, but when I’ve implemented them for HTTP connections I’ve taken failure to mean either a timeout or a 5XX HTTP return code. In this way, when a downstream resource is down, or timing out, or returning errors, after a certain threshold is reached we automatically stop sending traffic and start failing fast. And we can automatically start again when things are healthy.</p>
+
+<p class="author">Getting the settings right can be a little tricky. You don’t want to blow the circuit breaker too readily, nor do you want to take too long to blow it. Likewise, you really want to make sure that the downstream service is healthy again before sending traffic. As with timeouts, I’d pick some sensible defaults and stick with them everywhere, then change them for specific cases.</p>
+
+<p class="author">While the circuit breaker is blown, you have some options. One is to queue up the requests and retry them later on. For some use cases, this might be appropriate, especially if you’re carrying out some work as part of a asynchronous job. If this call is being made as part of a synchronous call chain, however, it is probably better to fail fast. This could mean propagating an error up the call chain, or a more subtle degrading of functionality.</p>
+
+<p class="author">If we have this mechanism in place (as with the circuit breakers in our home), we could use them manually to make it safer to do our work. For example, if we wanted to take a microservice down as part of routine maintenance, we could manually blow all the circuit breakers of the dependent systems so they fail fast while the microservice is offline. Once it’s back, we can reset the circuit breakers and everything should go back to normal.</p>
+
+<figure class="calibre16"><div id="a115-circuit-breakers" class="figure">
+<img src="../images/00072.jpeg" alt="An overview of circuit breakers" hisrc="assets/bdms_1102.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 11-2. </span>An overview of circuit breakers</h6>
+</div></figure>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 1. Microservices">
+<div class="preface" id="why-services-chapter">
+<section data-type="sect1" data-pdf-bookmark="What Are Microservices?">
+<div class="preface" id="idp3781104">
+<section data-type="sect2" data-pdf-bookmark="Autonomous"><div class="preface" id="idp4011072">
+<h2 class="calibre15" id="calibre_pb_3">Autonomous</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="microservices" data-secondary="autonomy and" id="idp4012352" class="calibre3"></a><a data-type="indexterm" data-primary="autonomy" data-secondary="microservices and" id="idp4013328" class="calibre3"></a>Our microservice is a separate entity. It might be deployed as an isolated service on a platform as a service (PAAS), or it might be its own operating system process. We try to avoid packing multiple services onto the same machine, although the definition of <em class="calibre4">machine</em> in today’s world is pretty hazy! As we’ll discuss later, although this isolation can add some overhead, the resulting simplicity makes our distributed system much easier to reason about, and newer technologies are able to mitigate many of the challenges associated with this form of deployment.</p>
+
+<p class="author">All communication between the services themselves are via network calls, to enforce separation between the services and avoid the perils of tight coupling.</p>
+
+<p class="author">These services need to be able to change independently of each other, and be deployed by themselves without requiring consumers to change. We need to think about what our services should expose, and what they should allow to be hidden. If there is too much sharing, our consuming services become coupled to our internal representations. This decreases our autonomy, as it requires additional coordination with consumers when making changes.</p>
+
+<p class="author">Our service exposes an application programming interface (API), and collaborating services communicate with us via those APIs. We also need to think about what technology is appropriate to ensure that this itself doesn’t couple consumers. This may mean picking technology-agnostic APIs to ensure that we don’t constrain technology choices. We’ll come back time and again to the importance of good, decoupled APIs throughout this book.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="decoupling" id="idp4018016" class="calibre3"></a>Without decoupling, everything breaks down for us. The golden rule: can you make a change to a service and deploy it by itself without changing anything else? If the answer is no, then many of the advantages we discuss throughout this book will be hard for you to achieve.</p>
+
+<p class="author">To do decoupling well, you’ll need to model your services right and get the APIs right. I’ll be talking about that a lot.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

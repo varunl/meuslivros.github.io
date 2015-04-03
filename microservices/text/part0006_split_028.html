@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="Access by Reference"><div class="preface" id="idp6923424">
+<h1 class="calibre7" id="calibre_pb_28">Access by Reference</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="integration" data-secondary="access by reference" id="idp6924704" class="calibre3"></a><a data-type="indexterm" data-primary="access by reference" id="idp6925568" class="calibre3"></a>One consideration I want to touch on is how we pass around information about our domain entities. We need to embrace the idea that a microservice will encompass the lifecycle of our core domain entities, like the <code class="calibre9">Customer</code>. We’ve already talked about the importance of the logic associated with changing this <code class="calibre9">Customer</code> being held in the customer service, and that if we want to change it we have to issue a request to the customer service. But it also follows that we should consider the customer service as being the source of truth for <code class="calibre9">Customer</code>s.</p>
+
+<p class="author">When we retrieve a given <code class="calibre9">Customer</code> resource from the customer service, we get to see what that resource looked like when we made the request. It is possible that after we requested that <code class="calibre9">Customer</code> resource, something else has changed it. What we have in effect is a memory of what the <code class="calibre9">Customer</code> resource once looked like. The longer we hold on to this memory, the higher the chance that this memory will be false. Of course, if we avoid requesting data more than we need to, our systems can become much more efficient.</p>
+
+<p class="author">Sometimes this memory is good enough. Other times you need to know if it has changed. So whether you decide to pass around a memory of what an entity once looked like, make sure you also include a reference to the original resource so that the new state can be retrieved.</p>
+
+<p class="author">Let’s consider the example where we ask the email service to send an email when an order has been shipped. Now we could send in the request to the email service with the customer’s email address, name, and order details. However, if the email service is actually queuing up these requests, or pulling them from a queue, things could change in the meantime. It might make more sense to just send a URI for the <span class="firstname"><code class="calibre9">Customer</code></span> and <code class="calibre9">Order</code> resources, and let the email server go look them up when it is time to send the email.</p>
+
+<p class="author">A great counterpoint to this emerges when we consider event-based collaboration. With events, we’re saying <em class="calibre4">this happened</em>, but we need to know <em class="calibre4">what</em> happened. If we’re receiving updates due to a <code class="calibre9">Customer</code> resource changing, for example, it could be valuable to us to know what the <code class="calibre9">Customer</code> looked like when the event occurred. As long as we also get a reference to the entity itself so we can look up its current state, then we can get the best of both worlds.</p>
+
+<p class="author">There are other trade-offs to be made here, of course, when we’re accessing by reference. If we always go to the customer service to look at the information associated with a given <code class="calibre9">Customer</code>, the load on the customer service can be too great. If we provide additional information when the resource is retrieved, letting us know at what time the resource was in the given state and perhaps how long we can consider this information to be <em class="calibre4">fresh</em>, then we can do a lot with caching to reduce load. HTTP gives us much of this support out of the box with a wide variety of cache controls, some of which we’ll discuss in more detail in <a data-type="xref" href="part0013_split_000.html#at-scale-chapter" class="calibre3">Chapter 11</a>.</p>
+
+<p class="author">Another problem is that some of our services might not need to know about the whole <code class="calibre9">Customer</code> resource, and by insisting that they go look it up we are potentially increasing coupling. It could be argued, for example, that our email service should be more dumb, and that we should just send it the email address and name of the customer. There isn’t a hard-and-fast rule here, but be very wary of passing around data in requests when you don’t know its freshness.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

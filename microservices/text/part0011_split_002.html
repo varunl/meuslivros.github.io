@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Security</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 9. Security">
+<div class="preface" id="security-chapter">
+<section data-type="sect1" data-pdf-bookmark="Authentication and Authorization">
+<div class="preface" id="idp11496480">
+<section data-type="sect2" data-pdf-bookmark="Common Single Sign-On Implementations"><div class="preface" id="idp11505104">
+<h2 class="calibre15" id="calibre_pb_2">Common Single Sign-On Implementations</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="authentication/authorization" data-secondary="single sign-on (SSO)" id="idp11506448" class="calibre3"></a><a data-type="indexterm" data-primary="OpenID Connect" id="idp11507440" class="calibre3"></a><a data-type="indexterm" data-primary="SAML" id="idp11508112" class="calibre3"></a><a data-type="indexterm" data-primary="single sign-on (SSO)" id="SSO" class="calibre3"></a>A common approach to authentication and authorization is to use some sort of <em class="calibre4">single sign-on (SSO)</em> solution. SAML, which is the reigning implementation in the enterprise space, and OpenID Connect both provide capabilities in this area. More or less they use the same core concepts, although the terminology differs slightly. The terms used here are from SAML.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="identity provider" id="idp11510800" class="calibre3"></a><a data-type="indexterm" data-primary="service provider" id="idp11511504" class="calibre3"></a><a data-type="indexterm" data-primary="authentication/authorization" data-secondary="terminology" id="idp11512176" class="calibre3"></a>When a principal tries to access a resource (like a web-based interface), she is directed to authenticate with an <em class="calibre4">identity provider</em>. This may ask her to provide a username and password, or might use something more advanced like two-factor authentication. Once the identity provider is satisfied that the principal has been authenticated, it gives information to the <em class="calibre4">service provider</em>, allowing it to decide whether to grant her access to the resource.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="directory service" id="idp11514816" class="calibre3"></a>This identity provider could be an externally hosted system, or something inside your own organization. Google, for example, provides an OpenID Connect identity provider. For enterprises, though, it is common to have your own identity provider, which may be linked to your company’s <em class="calibre4">directory service</em>. A directory service could be something like the Lightweight Directory Access Protocol (LDAP) or Active Directory. These systems allow you to store information about principals, such as what roles they play in the organization. Often, the directory service and the identity provider are one and the same, while sometimes they are separate but linked. Okta, for example, is a hosted SAML identity provider that handles tasks like two-factor authentication, but can link to your company’s directory services as the source of truth.</p>
+
+<p class="author">SAML is a SOAP-based standard, and is known for being fairly complex to work with despite the libraries and tooling available to support it. OpenID Connect is a standard that has emerged as a specific implementation of OAuth 2.0, based on the way Google and others handle SSO. It uses simpler REST calls, and in my opinion is likely to make inroads into enterprises due to its improved ease of use. Its biggest stumbling block right now is the lack of identity providers that support it. For a public-facing website, you might be OK using Google as your provider, but for internal systems or systems where you want more control over and visibility into how and where your data is installed, you’ll want your own in-house identity provider. At the time of writing, OpenAM and Gluu are two of the very few options available in this space, compared to a wealth of options for SAML (including Active Directory, which seems to be everywhere). Until and unless existing identity providers start supporting OpenID Connect, its growth may be limited to those situations where people are happy using a public identity provider.</p>
+
+<p class="author">So while I think OpenID Connect is the future, it’s quite possible it’ll take a while to reach widespread adoption.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

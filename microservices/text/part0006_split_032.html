@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="Versioning">
+<div class="preface" id="a50-versioning">
+<section data-type="sect2" data-pdf-bookmark="Use Semantic Versioning"><div class="preface" id="idp10134336">
+<h2 class="calibre15" id="calibre_pb_32">Use Semantic Versioning</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="versioning" data-secondary="semantic" id="idp10135808" class="calibre3"></a><a data-type="indexterm" data-primary="semantic versioning" id="idp10137008" class="calibre3"></a>Wouldn’t it be great if as a client you could look just at the version number of a service and know if you can integrate with it?  <a href="http://semver.org/" class="calibre3"><em class="calibre4">Semantic versioning</em></a> is a specification that allows just that. With semantic versioning, each version number is in the form <code class="calibre9">MAJOR.MINOR.PATCH</code>. When the <code class="calibre9">MAJOR</code> number increments, it means that backward incompatible changes have been made. When <code class="calibre9">MINOR</code> increments, new functionality has been added that should be backward compatible. Finally, a change to <code class="calibre9">PATCH</code> states that bug fixes have been made to existing functionality.</p>
+
+<p class="author">To see how useful semantic versioning can be, let’s look at a simple use case. Our helpdesk application is built to work against version 1.2.0 of the customer service. If a new feature is added, causing the customer service to change to 1.3.0, our helpdesk application should see no change in behavior and shouldn’t be expected to make any changes. We couldn’t guarantee that we could work against version 1.1.0 of the customer service, though, as we may rely on functionality added in the 1.2.0 release. We could also expect to have to make changes to our application if a new 2.0.0 release of the customer service comes out.</p>
+
+<p class="author">You may decide to have a semantic version for the service, or even for an individual endpoint on a service if you are coexisting them as detailed in the next section.</p>
+
+<p class="author">This versioning scheme allows us to pack a lot of information and expectations into just three fields. The full specification outlines in very simple terms the expectations clients can have of changes to these numbers, and can simplify the process of communicating about whether changes should impact consumers. Unfortunately, I haven’t see this approach used enough in the context of distributed systems.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="Environments"><div class="preface" id="idp10580944">
+<h1 class="calibre7" id="calibre_pb_11">Environments</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="deployment" data-secondary="environments to consider" id="idp10612752" class="calibre3"></a><a data-type="indexterm" data-primary="environments" data-secondary="deployment considerations" id="idp10613792" class="calibre3"></a>As our software moves through our CD pipeline stages, it will also be deployed into different types of environments. If we think of the example build pipeline in <a data-type="xref" href="part0008_split_004.html#a61-sample-pipeline" class="calibre3">Figure 6-4</a>, we probably have to consider at least four distinct environments: one environment where we run our slow tests, another for UAT, another for performance, and a final one for production. Our microservice should be the same throughout, but the environment will be different. At the very least, they’ll be separate, distinct collections of configuration and hosts. But often they can vary much more than that. For example, our production environment for our service might consist of multiple load-balanced hosts spread across two data centers, whereas our test environment might just have everything running on a single host. These differences in environments can introduce a few problems.</p>
+
+<p class="author">I was bitten by this personally many years ago. We were deploying a Java web service into a clustered WebLogic application container in production. This WebLogic cluster replicated session state between multiple nodes, giving us some level of resilience if a single node failed. However, the WebLogic licenses were expensive, as were the machines our software was deployed onto. This meant that in our test environment, our software was deployed on a single machine, in a nonclustered configuration.</p>
+
+<p class="author">This hurt us badly during one release. For WebLogic to be able to copy session state between nodes, the session data needs to be properly serializable. Unfortunately, one of our commits broke this, so when we deployed into production our session replication failed. We ended up resolving this by pushing hard to replicate a clustered setup in our test environment.</p>
+
+<p class="author">The service we want to deploy is the same in all these different environments, but each of the environments serves a different purpose. On my developer laptop I want to quickly deploy the service, potentially against stubbed collaborators, to run tests or carry out some manual validation of behavior, whereas when I deploy into a production environment I may want to deploy multiple copies of my service in a load-balanced fashion, perhaps split across one or more data centers for durability reasons.</p>
+
+<p class="author">As you move from your laptop to build server to UAT environment all the way to production, you’ll want to ensure that your environments are more and more production-like to catch any problems associated with these environmental differences sooner. This will be a constant balance. Sometimes the time and cost to reproduce production-like environments can be prohibitive, so you have to make compromises. Additionally, sometimes using a production-like environment can slow down feedback loops; waiting for 25 machines to install your software in AWS might be much slower than simply deploying your service into a local Vagrant instance, for example.</p>
+
+<p class="author">This balance, between production-like environments and fast feedback, won’t be static. Keep an eye on the bugs you find further downstream and your feedback times, and adjust this balance as required.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="environments" data-secondary="managing" id="idp10621200" class="calibre3"></a>Managing environments for single-artfact monolithic systems can be challenging, especially if you don’t have access to systems that are easily automatable. When you think about multiple environments per microservice, this can be even more daunting. We’ll look shortly at some different deployment platforms that can make this much easier for us.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

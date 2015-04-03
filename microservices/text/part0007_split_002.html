@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Splitting the Monolith</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Splitting the Monolith">
+<div class="preface" id="splitting-chapter">
+<section data-type="sect1" data-pdf-bookmark="Breaking Apart MusicCorp">
+<div class="preface" id="idp10252288">
+<h1 class="calibre7" id="calibre_pb_3">Breaking Apart MusicCorp</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="decompositional techniques" data-secondary="identifying/packaging contexts" id="idp10253632" class="calibre3"></a>Imagine we have a large backend monolithic service that represents a substantial amount of the behavior of MusicCorp’s online systems. To start, we should identify the high-level bounded contexts that we think exist in our organization, as we discussed in <a data-type="xref" href="part0005_split_000.html#modelling-services-chapter" class="calibre3">Chapter 3</a>. Then we want to try to understand what bounded contexts the monolith maps to. Let’s imagine that initially we identify four contexts we think our monolithic backend covers:</p>
+
+<div class="variable_list_term">Catalog</div>
+<blockquote class="variable_list_definition">
+<div class="calibre8">Everything to do with metadata about the items we offer for sale</div>
+</blockquote>
+<div class="variable_list_term">Finance</div>
+<blockquote class="variable_list_definition">
+<div class="calibre8">Reporting for accounts, payments, refunds, etc.</div>
+</blockquote>
+<div class="variable_list_term">Warehouse</div>
+<blockquote class="variable_list_definition">
+<div class="calibre8">Dispatching and returning of customer orders, managing inventory levels, etc.</div>
+</blockquote>
+<div class="variable_list_term">Recommendation</div>
+<blockquote class="variable_list_definition">
+<div class="calibre8">Our patent-pending, revolutionary recommendation system, which is highly complex code written by a team with more PhDs than the average science lab</div>
+</blockquote>
+
+
+<p class="author">The first thing to do is to create packages representing these contexts, and then move the existing code into them. With modern IDEs, code movement can be done automatically via refactorings, and can be done incrementally while we are doing other things. You’ll still need tests to catch any breakages made by moving code, however, especially if you’re using a dynamically typed language where the IDEs have a harder time of performing refactoring. Over time, we start to see what code fits well, and what code is <em class="calibre4">left over</em> and doesn’t really fit anywhere. This remaining code will often identify bounded contexts we might have missed!</p>
+
+<p class="author">During this process we can use code to analyze the dependencies between these packages too. Our code should represent our organization, so our packages representing the bounded contexts in our organization should interact in the same way the real-life organizational groups in our domain interact. For example, tools like Structure 101 allow us to see the dependencies between packages graphically. If we spot things that look wrong — for example, the warehouse package depends on code in the finance package when no such dependency exists in the real organization — then we can investigate this problem and try to resolve it.</p>
+
+<p class="author">This process could take an afternoon on a small codebase, or several weeks or months when you’re dealing with millions of lines of code. You may not need to sort all code into domain-oriented packages before splitting out your first service, and indeed it can be more valuable to concentrate your effort in one place. There is no need for this to be a big-bang approach. It is something that can be done bit by bit, day by day, and we have a lot of tools at our disposal to track our progress.</p>
+
+<p class="author">So now that we have our codebase organized around these seams, what next?</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

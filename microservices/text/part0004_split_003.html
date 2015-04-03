@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>The Evolutionary Architect</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 2. The Evolutionary Architect">
+<div class="preface" id="architect-chapter">
+<section data-type="sect1" data-pdf-bookmark="Zoning"><div class="preface" id="idp4305168">
+<h1 class="calibre7" id="calibre_pb_3">Zoning</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="systems architects" data-secondary="service boundaries and" id="idp4306608" class="calibre3"></a><a data-type="indexterm" data-primary="service boundaries" data-seealso="modeling services" id="idp4307584" class="calibre3"></a>So, to continue the metaphor of the architect as town planner for a moment, what are our zones? These are our service boundaries, or perhaps coarse-grained groups of services. As architects, we need to worry much less about what happens <em class="calibre4">inside</em> the zone than what happens <em class="calibre4">between</em> the zones. That means we need to spend time thinking about how our services talk to each other, or ensuring that we can properly monitor the overall health of our system. How involved we get inside the zone will vary somewhat. Many organizations have adopted microservices in order to maximize for autonomy of teams, something we’ll expand on in <a data-type="xref" href="part0012_split_000.html#conways-chapter" class="calibre3">Chapter 10</a>. If you are in such an organization, you will rely more on the team to make the right local decision.</p>
+
+<p class="author">But between the zones, or the boxes on our traditional architecture diagram, we need to be careful; getting things wrong here leads to all sorts of problems and can be very hard to correct.</p>
+
+<p class="author">Within each service, you may be OK with the team who owns that zone picking a different technology stack or data store. Other concerns may kick in here, of course. Your inclination to let teams pick the right tool for the job may be tempered by the fact that it becomes harder to hire people or move them between teams if you have 10 different technology stacks to support. Similarly, if each team picks a completely different data store, you may find yourself lacking enough experience to run any of them at scale. Netflix, for example, has mostly standardized on Cassandra as a data-store technology. Although it may not be the best fit for all of its cases, Netflix feels that the value gained by building tooling and expertise around Cassandra is more important than having to support and operate at scale multiple other platforms that may be a better fit for certain tasks. Netflix is an extreme example, where scale is likely the strongest overriding factor, but you get the idea.</p>
+
+<p class="author">Between services is where things can get messy, however. If one service decides to expose REST over HTTP, another makes use of protocol buffers, and a third uses Java RMI, then integration can become a nightmare as consuming services have to understand and support multiple styles of interchange. This is why I try to stick to the guideline that we should “be worried about what happens between the boxes, and be liberal in what happens inside.”</p>
+<aside data-type="sidebar" epub:type="sidebar" class="calibre20"><div class="preface"><hr class="calibre13"/></div><div class="sidebar" id="idp4314096">
+<h5 class="calibre21">The Coding Architect</h5>
+<p class="author"><a data-type="indexterm" data-primary="coding architect" id="idp4315296" class="calibre3"></a><a data-type="indexterm" data-primary="systems architects" data-secondary="team participation by" id="idp4316000" class="calibre3"></a>If we are to ensure that the systems we create are habitable for our developers, then our architects need to understand the impact of their decisions. At the very least, this means spending time with the team, and ideally it should mean that these developers actually spend time coding with the team too. For those of you who practice pair programming, it becomes a simple matter for an architect to join a team for a short period as one member of the pair. Ideally, you should work on normal stories, to really understand what <em class="calibre4">normal</em> work is like. I cannot emphasize how important it is for the architect to actually sit with the team! This is significantly more effective than having a call or just looking at her code.</p>
+
+<p class="author">As for how often you should do this, that depends greatly on the size of the team(s) you are working with. But the key is that it should be a routine activity. If you are working with four teams, for example, spending half a day with each team every four weeks ensures you build an awareness and improved communications with the teams you are working with.</p>
+</div><div class="preface"><hr class="calibre13"/></div></aside>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

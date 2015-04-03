@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="A Deployment Interface">
+<div class="preface" id="idp10748304">
+<section data-type="sect2" data-pdf-bookmark="Environment Definition"><div class="preface" id="idp10761712">
+<h2 class="calibre15" id="calibre_pb_26">Environment Definition</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="deployment" data-secondary="environment definition" id="idp10763360" class="calibre3"></a><a data-type="indexterm" data-primary="environments" data-secondary="definition during deployment" id="idp10764336" class="calibre3"></a>Clearly, for this to work, we need to have some way of defining what our environments look like, and what our service looks like in a given environment. You can think of an environment definition as a mapping from a microservice to compute, network, and storage resources. I’ve done this with YAML files before, and used my scripts to pull this data in. <a data-type="xref" href="part0008_split_026.html#a61-1-customer-java-rmi" class="calibre3">Example 6-1</a> is a simplified version of some work I did a couple of years ago for a project that used AWS.</p>
+<div data-type="example" id="a61-1-customer-java-rmi" class="calibre24">
+<h5 class="calibre25"><span class="firstname">Example 6-1. </span>An example environment definition</h5>
+<pre data-type="programlisting" data-code-language="yaml" class="calibre26">
+<code class="calibre9">development</code><code class="calibre9">:</code>
+  <code class="calibre9">nodes</code><code class="calibre9">:</code>
+  <code class="calibre9">-</code> <code class="calibre9">ami_id</code><code class="calibre9">:</code> <code class="calibre9">ami-e1e1234</code>
+    <code class="calibre9">size</code><code class="calibre9">:</code>   <code class="calibre9">t1.micro</code> <a class="calibre3" id="pass_co_1" href="part0008_split_026.html#pass_co_list_1"><img alt="1" src="../images/00012.gif" hisrc="assets/1.png" class="calibre17"/></a>
+    <code class="calibre9">credentials_name</code><code class="calibre9">:</code> <code class="calibre9">eu-west-ssh</code> <a class="calibre3" id="pass_co_2" href="part0008_split_026.html#pass_co_list_2"><img alt="2" src="../images/00013.gif" hisrc="assets/2.png" class="calibre17"/></a>
+    <code class="calibre9">services</code><code class="calibre9">:</code> <code class="calibre9">[</code><code class="calibre9">catalog-service</code><code class="calibre9">]</code>
+    <code class="calibre9">region</code><code class="calibre9">:</code> <code class="calibre9">eu-west-1</code>
+
+<code class="calibre9">production</code><code class="calibre9">:</code>
+  <code class="calibre9">nodes</code><code class="calibre9">:</code>
+  <code class="calibre9">-</code> <code class="calibre9">ami_id</code><code class="calibre9">:</code> <code class="calibre9">ami-e1e1234</code>
+    <code class="calibre9">size</code><code class="calibre9">:</code>   <code class="calibre9">m3.xlarge</code> <a class="calibre3" href="part0008_split_026.html#pass_co_list_1"><img alt="1" src="../images/00012.gif" hisrc="assets/1.png" class="calibre17"/></a>
+    <code class="calibre9">credentials_name</code><code class="calibre9">:</code> <code class="calibre9">prod-credentials</code> <a class="calibre3" href="part0008_split_026.html#pass_co_list_2"><img alt="2" src="../images/00013.gif" hisrc="assets/2.png" class="calibre17"/></a>
+    <code class="calibre9">services</code><code class="calibre9">:</code> <code class="calibre9">[</code><code class="calibre9">catalog-service</code><code class="calibre9">]</code>
+    <code class="calibre9">number</code><code class="calibre9">:</code> <code class="calibre9">5</code>  <a class="calibre3" id="pass_co_3" href="part0008_split_026.html#pass_co_list_3"><img alt="3" src="../images/00047.gif" hisrc="assets/3.png" class="calibre17"/></a></pre>
+
+
+
+   <div class="variable_list_term"><a class="calibre3" id="pass_co_list_1" href="part0008_split_026.html#pass_co_1"><img alt="1" src="../images/00012.gif" hisrc="assets/1.png" class="calibre17"/></a></div>
+   <blockquote class="variable_list_definition">We varied the size of the instances we used to be more cost effective. You don’t need a 16-core box with 64GB of RAM for exploratory testing!</blockquote>
+
+   <div class="variable_list_term"><a class="calibre3" id="pass_co_list_2" href="part0008_split_026.html#pass_co_2"><img alt="2" src="../images/00013.gif" hisrc="assets/2.png" class="calibre17"/></a></div>
+   <blockquote class="variable_list_definition">Being able to specify different credentials for different environments is key. Credentials for sensitive environments were stored in different source code repos that only select people would have access to.</blockquote>
+
+   <div class="variable_list_term"><a class="calibre3" id="pass_co_list_3" href="part0008_split_026.html#pass_co_3"><img alt="3" src="../images/00047.gif" hisrc="assets/3.png" class="calibre17"/></a></div>
+   <blockquote class="variable_list_definition">We decided that by default if a service had more than one node configured, we would automatically create a load balancer for it.</blockquote>
+
+   
+   </div>
+
+<p class="author">I have removed some detail for the sake of brevity.</p>
+
+<p class="author">The <code class="calibre9">catalog-service</code> information was stored elsewhere. It didn’t differ from one environment to the next, as you can see in <a data-type="xref" href="part0008_split_026.html#a61-2-customer-java-rmi" class="calibre3">Example 6-2</a>.</p>
+<div id="a61-2-customer-java-rmi" data-type="example" class="calibre24">
+<h5 class="calibre25"><span class="firstname">Example 6-2. </span>An example environment definition</h5>
+
+<pre data-type="programlisting" data-code-language="yaml" class="calibre26"><code class="calibre9">catalog-service</code><code class="calibre9">:</code>
+  <code class="calibre9">puppet_manifest</code> <code class="calibre9">:</code> <code class="calibre9">catalog.pp</code> <a class="calibre3" id="co_deployment_CO1-1" href="part0008_split_026.html#callout_deployment_CO1-1"><img src="../images/00012.gif" alt="1" hisrc="assets/1.png" class="calibre17"/></a>
+  <code class="calibre9">connectivity</code><code class="calibre9">:</code>
+    <code class="calibre9">-</code> <code class="calibre9">protocol</code><code class="calibre9">:</code> <code class="calibre9">tcp</code>
+      <code class="calibre9">ports</code><code class="calibre9">:</code> <code class="calibre9">[</code> <code class="calibre9">8080</code><code class="calibre9">,</code> <code class="calibre9">8081</code> <code class="calibre9">]</code>
+      <code class="calibre9">allowed</code><code class="calibre9">:</code> <code class="calibre9">[</code> <code class="calibre9">WORLD</code> <code class="calibre9">]</code></pre>
+
+<div class="variable_list_term"><a class="calibre3" id="callout_deployment_CO1-1" href="part0008_split_026.html#co_deployment_CO1-1"><img src="../images/00012.gif" alt="1" hisrc="assets/1.png" class="calibre17"/></a></div>
+<blockquote class="variable_list_definition"><div class="calibre8">This was the name of the Puppet file to run — we happened to use Puppet solo in this situation, but theoretically could have supported alternative configuration systems.</div></blockquote>
+</div>
+
+<p class="author">Obviously, a lot of the behavior here was convention based. For example, we decided to normalize which ports services used wherever they ran, and automatically configured load balancers if a service had more than one instance (something that AWS’s ELBs make fairly easy).</p>
+
+<p class="author">Building a system like this required a significant amount of work. The effort is often front-loaded, but can be essential to manage the deployment complexity you have. I hope in the future you won’t have to do this yourself. Terraform is a very new tool from Hashicorp, which works in this space. I’d generally shy away from mentioning such a new tool in a book that is more about ideas than technology, but it is attempting to create an open source tool along these lines. It’s early days yet, but already its capabilities seem really interesting. With the ability to target deployments on a number of different platforms, in the future it could be just the tool for the job.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

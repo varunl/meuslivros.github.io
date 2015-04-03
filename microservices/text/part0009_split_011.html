@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Those Tricky End-to-End Tests"><div class="preface" id="idp11171120">
+<h1 class="calibre7" id="calibre_pb_11">Those Tricky End-to-End Tests</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="end-to-end tests" data-secondary="implementation of" id="idp11172624" class="calibre3"></a><a data-type="indexterm" data-primary="testing" data-secondary="end-to-end tests" id="idp11173600" class="calibre3"></a>In a microservice system, the capabilities we expose via our user interfaces are delivered by a number of services. The point of the end-to-end tests as outlined in Mike Cohn’s pyramid is to drive functionality through these user interfaces against everything underneath to give us an overview of a large amount of our system.</p>
+
+<p class="author">So, to implement an end-to-end test we need to deploy multiple services together, then run a test against all of them. Obviously, this test has much more scope, resulting in more confidence that our system works! On the other hand, these tests are liable to be slower and make it harder to diagnose failure. Let’s dig into them a bit more using our previous example to see how these tests can fit in.</p>
+
+<p class="author">Imagine we want to push out a new version of the customer service. We want to deploy our changes into production as soon as possible, but are concerned that we may have introduced a change that could break either the helpdesk or the web shop. No problem — let’s deploy all of our services together, and run some tests against the helpdesk and web shop to see if we’ve introduced a bug. Now a naive approach would be to just add these tests onto the end of our customer service pipeline, as in <a data-type="xref" href="part0009_split_011.html#a60-single-integration-tests" class="calibre3">Figure 7-7</a>.</p>
+
+<figure class="calibre16"><div id="a60-single-integration-tests" class="figure">
+<img src="../images/00054.jpeg" alt="Adding our End-To-End Tests stage - the right approach?" hisrc="assets/bdms_0707.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 7-7. </span>Adding our end-to-end tests stage: the right approach?</h6>
+</div></figure>
+
+<p class="author">So far, so good. But the first question we have to ask ourselves is which version of the other services should we use? Should we run our tests against the versions of helpdesk and web shop that are in production? It’s a sensible assumption, but what if there is a new version of either the helpdesk or web shop queued up to go live; what should we do then?</p>
+
+<p class="author">Another problem: if we have a set of customer service tests that deploy lots of services and run tests against them, what about the end-to-end tests that the other services run? If they are testing the same thing, we may find ourselves covering lots of the same ground, and may duplicate a lot of the effort to deploy all those services in the first place.</p>
+
+<p class="author">We can deal with both of these problems elegantly by having multiple pipelines <em class="calibre4">fan in</em> to a single, end-to-end test stage. Here, whenever a new build of one of our services is triggered, we run our end-to-end tests, an example of which we can see in <a data-type="xref" href="part0009_split_011.html#a60-fan-in" class="calibre3">Figure 7-8</a>. Some CI tools with better build pipeline support will enable fan-in models like this out of the box.</p>
+
+<figure class="calibre16"><div id="a60-fan-in" class="figure">
+<img src="../images/00055.jpeg" alt="A standard way to handle end-to-end tests across services" hisrc="assets/bdms_0708.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 7-8. </span>A standard way to handle end-to-end tests across services</h6>
+</div></figure>
+
+<p class="author">So any time any of our services changes, we run the tests local to that service. If those tests pass, we trigger our integration tests. Great, eh? Well, there are a few problems.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

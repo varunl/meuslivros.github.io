@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="Mapping Continuous Integration to Microservices"><div class="preface" id="idp10520432">
+<h1 class="calibre7" id="calibre_pb_3">Mapping Continuous Integration to Microservices</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="deployment" data-secondary="continuous integration in microservices" id="idp10522000" class="calibre3"></a><a data-type="indexterm" data-primary="continuous integration (CI)" data-secondary="mapping to microservices" id="idp10522944" class="calibre3"></a>When thinking about microservices and continuous integration, we need to think about how our CI builds map to individual microservices. As I have said many times, we want to ensure that we can make a change to a single service and deploy it independently of the rest. With this in mind, how should we map individual microservices to CI builds and source code?</p>
+
+<p class="author">If we start with the simplest option, we could lump everything in together. We have a single, giant repository storing all our code, and have one single build, as we see in <a data-type="xref" href="part0008_split_003.html#a61-one-build-for-all-ms" class="calibre3">Figure 6-1</a>. Any check-in to this source code repository will cause our build to trigger, where we will run all the verification steps associated with all our microservices, and produce multiple artifacts, all tied back to the same build.</p>
+
+<figure class="calibre16"><div id="a61-one-build-for-all-ms" class="figure">
+<img src="../images/00037.jpeg" alt="Using a single source code repository and CI build for all microservice" hisrc="assets/bdms_0601.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 6-1. </span>Using a single source code repository and CI build for all microservices</h6>
+</div></figure>
+
+<p class="author">This seems much simpler on the surface than other approaches: fewer repositories to worry about, and a conceptually simpler build. From a developer point of view, things are pretty straightforward too. I just check code in. If I have to work on multiple services at once, I just have to worry about one commit.</p>
+
+<p class="author">This model can work perfectly well if you buy into the idea of lock-step releases, where you don’t mind deploying multiple services at once. In general, this is absolutely a pattern to avoid, but very early on in a project, especially if only one team is working on everything, this might make sense for short periods of time.</p>
+
+<p class="author">However, there are some significant downsides. If I make a one-line change to a single service — for example, changing the behavior in the user service in <a data-type="xref" href="part0008_split_003.html#a61-one-build-for-all-ms" class="calibre3">Figure 6-1</a> — <em class="calibre4">all</em> the other services get verified and built. This could take more time than needed — I’m waiting for things that probably don’t need to be tested. This impacts our cycle time, the speed at which we can move a single change from development to live. More troubling, though, is knowing what artifacts should or shouldn’t be deployed. Do I now need to deploy all the build services to push my small change into production? It can be hard to tell; trying to guess which services <em class="calibre4">really</em> changed just by reading the commit messages is difficult. Organizations using this approach often fall back to just deploying everything together, which we really want to avoid.</p>
+
+<p class="author">Furthermore, if my one-line change to the user service breaks the build, no other changes can be made to the other services until that break is fixed. And think about a scenario where you have multiple teams all sharing this giant build. Who is in charge?</p>
+
+<p class="author">A variation of this approach is to have one single source tree with all of the code in it, with multiple CI builds mapping to parts of this source tree, as we see in <a data-type="xref" href="part0008_split_003.html#a61-single-repo-multi-builds" class="calibre3">Figure 6-2</a>. With well-defined structure, you can easily map the builds to certain parts of the source tree. In general, I am not a fan of this approach, as this model can be a mixed blessing. On the one hand, my check-in/check-out process can be simpler as I have only one repository to worry about. On the other hand, it becomes very easy to get into the habit of checking in source code for multiple services at once, which can make it equally easy to slip into making changes that couple services together. I would greatly prefer this approach, however, over having a single build for multiple services.</p>
+
+<figure class="calibre16"><div id="a61-single-repo-multi-builds" class="figure">
+<img src="../images/00038.jpeg" alt="A single source repo with subdirectories mapped to independent builds" hisrc="assets/bdms_0602.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 6-2. </span>A single source repo with subdirectories mapped to independent builds</h6>
+</div></figure>
+
+<p class="author">So is there another alternative? The approach I prefer is to have a single CI build per microservice, to allow us to quickly make and validate a change prior to deployment into production, as shown in <a data-type="xref" href="part0008_split_003.html#a61-single-ci-per-ms" class="calibre3">Figure 6-3</a>. Here each microservice has its own source code repository, mapped to its own CI build. When making a change, I run only the build and tests I need to. I get a single artifact to deploy. Alignment to team ownership is more clear too. If you own the service, you own the repository and the build. Making changes across repositories can be more difficult in this world, but I’d maintain this is easier to resolve (e.g., by using command-line scripts) than the downside of the monolithic source control and build process.</p>
+
+<figure class="calibre16"><div id="a61-single-ci-per-ms" class="figure">
+<img src="../images/00039.jpeg" alt="Using one source code repository and CI build per microservice" hisrc="assets/bdms_0603.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 6-3. </span>Using one source code repository and CI build per microservice</h6>
+</div></figure>
+
+<p class="author">The tests for a given microservice should live in source control with the microservice’s source code too, to ensure we always know what tests should be run against a given service.</p>
+
+<p class="author">So, each microservice will live in its own source code repository, and its own CI build process. We’ll use the CI build process to create our deployable artifacts too in a fully automated fashion. Now lets look beyond CI to see how continuous delivery fits in.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

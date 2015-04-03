@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="Remote Procedure Calls">
+<div class="preface" id="idp4394032">
+<section data-type="sect2" data-pdf-bookmark="Is RPC Terrible?"><div class="preface" id="idp4444528">
+<h2 class="calibre15" id="calibre_pb_14">Is RPC Terrible?</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="remote procedure calls" data-secondary="benefits and drawbacks of" id="idp6272240" class="calibre3"></a>Despite its shortcomings, I wouldn’t go so far as to call RPC terrible. Some of the common implementations that I have encountered can lead to the sorts of problems I have outlined here. Due to the challenges of using RMI, I would certainly give that technology a wide berth. Many operations fall quite nicely into the RPC-based model, and more modern mechanisms like protocol buffers or Thrift mitigate some of sins of the past by avoiding the need for lock-step releases of client and server code.</p>
+
+<p class="author">Just be aware of some of the potential pitfalls associated with RPC if you’re going to pick this model. Don’t abstract your remote calls to the point where the network is completely hidden, and ensure that you can evolve the server interface without having to insist on lock-step upgrades for clients. Finding the right balance for your client code is important, for example. Make sure your clients aren’t oblivious to the fact that a network call is going to be made. Client libraries are often used in the context of RPC, and if not structured right they can be problematic. We’ll talk more about them shortly.</p>
+
+<p class="author">Compared to database integration, RPC is certainly an improvement when we think about options for request/response collaboration. But there’s another option to consider.<a data-type="indexterm" data-startref="ix_remotepc" id="idp6275456" class="calibre3"></a></p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

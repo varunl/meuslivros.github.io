@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Splitting the Monolith</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Splitting the Monolith">
+<div class="preface" id="splitting-chapter">
+<section data-type="sect1" data-pdf-bookmark="Getting to Grips with the Problem"><div class="preface" id="idp10286048">
+<h1 class="calibre7" id="calibre_pb_11">Getting to Grips with the Problem</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="database decomposition" data-secondary="selecting separation points" id="idp10287360" class="calibre3"></a>The first step is to take a look at the code itself and see which parts of it read to and write from the database.  A common practice is to have a repository layer, backed by some sort of framework like Hibernate, to bind your code to the database, making it easy to map objects or data structures to and from the database. If you have been following along so far, you’ll have grouped our code into packages representing our bounded contexts; we want to do the same for our database access code. This may require splitting up the repository layer into several parts, as shown in <a data-type="xref" href="part0007_split_010.html#a58-separate-repos" class="calibre3">Figure 5-1</a>.</p>
+
+<figure class="calibre16"><div id="a58-separate-repos" class="figure">
+<img src="../images/00022.jpeg" alt="Spliting out our respository layers" hisrc="assets/bdms_0501.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 5-1. </span>Splitting out our repository layers</h6>
+</div></figure>
+
+<p class="author">Having the database mapping code colocated inside the code for a given context can help us understand what parts of the database are used by what bits of code. Hibernate, for example, can make this very clear if you are using something like a mapping file per bounded context.</p>
+
+<p class="author">This doesn’t give us the whole story, however. For example, we may be able to tell that the finance code uses the ledger table, and that the catalog code uses the line item table, but it might not be clear that the database enforces a foreign key relationship from the ledger table to the line item table. To see these database-level constraints, which may be a stumbling block, we need to use another tool to visualize the data. A great place to start is to use a tool like the freely available <a href="http://schemaspy.sourceforge.net" class="calibre3">SchemaSpy</a>, which can generate graphical representations of the relationships between tables.</p>
+
+<p class="author">All this helps you understand the coupling between tables that may span what will eventually become service boundaries. But how do you cut those ties? And what about cases where the same tables are used from multiple different bounded contexts? Handling problems like these is not easy, and there are many answers, but it is doable.</p>
+
+<p class="author">Coming back to some concrete examples, let’s consider our music shop again. We have identified four bounded contexts, and want to move forward with making them four distinct, collaborating services. We’re going to look at a few concrete examples of problems we might face, and their potential solutions. And while some of these examples talk specifically about challenges encountered in standard relational databases, you will find similar problems in other alternative NOSQL stores.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

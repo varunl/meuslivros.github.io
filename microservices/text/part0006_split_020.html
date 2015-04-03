@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="REST">
+<div class="preface" id="idp6276416">
+<section data-type="sect2" data-pdf-bookmark="Downsides to REST Over HTTP"><div class="preface" id="idp6959504">
+<h2 class="calibre15" id="calibre_pb_20">Downsides to REST Over HTTP</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="REST (Representational State Transfer)" data-secondary="HTTP over REST drawbacks" id="idp6960912" class="calibre3"></a><a data-type="indexterm" data-primary="HTTP (Hypertext Transfer Protocol)" data-secondary="HTTP over REST drawbacks" id="idp6961968" class="calibre3"></a>In terms of ease of consumption, you cannot easily generate a client stub for your REST over HTTP application protocol like you can with RPC. Sure, the fact that HTTP is being used means that you get to take advantage of all the excellent HTTP client libraries out there, but if you want to implement and use hypermedia controls as a client you are pretty much on your own. Personally, I think client libraries could do much better at this than they do, and they are certainly better now than in the past, but I have seen this apparent increased complexity result in people backsliding into smuggling RPC over HTTP or building shared client libraries. Shared code between client and server can be very dangerous, as we’ll discuss in <a data-type="xref" href="part0006_split_026.html#a50-dry" class="calibre3">“DRY and the Perils of Code Reuse in a Microservice World”</a>.</p>
+
+<p class="author">A more minor point is that some web server frameworks don’t actually support all the HTTP verbs well. That means that it might be easy for you to create a handler for GET or POST requests, but you may have to jump through hoops to get PUT or DELETE requests to work. Proper REST frameworks like Jersey don’t have this problem, and you can normally work around this, but if you are locked into certain framework choices this might limit what style of REST you can use.</p>
+
+<p class="author">Performance may also be an issue. REST over HTTP payloads can actually be more compact than SOAP because it supports alternative formats like JSON or even binary, but it will still be nowhere near as lean a binary protocol as Thrift might be. The overhead of HTTP for each request may also be a concern for low-latency requirements.</p>
+
+<p class="author">HTTP, while it can be suited well to large volumes of traffic, isn’t great for low-latency communications when compared to alternative protocols that are built on top of Transmission Control Protocol (TCP) or other networking technology. Despite the name, WebSockets, for example, has very little to do with the Web. After the initial HTTP handshake, it’s just a TCP connection between client and server, but it can be a much more efficient way for you to stream data for a browser. If this is something you’re interested in, note that you aren’t really using much of HTTP, let alone anything to do with REST.</p>
+
+<p class="author">For server-to-server communications, if extremely low latency or small message size is important, HTTP communications in general may not be a good idea. You may need to pick different underlying protocols, like User Datagram Protocol (UDP), to achieve the performance you want, and many RPC frameworks will quite happily run on top of networking protocols other than TCP.</p>
+
+<p class="author">Consumption of the payloads themselves requires more work than is provided by some RPC implementations that support advanced serialization and deserialization mechanisms. These can become a coupling point in their own right between client and server, as implementing tolerant readers is a nontrivial activity (we’ll discuss this shortly), but from the point of view of getting up and running, they can be very attractive.</p>
+
+<p class="author">Despite these disadvantages, REST over HTTP is a sensible default choice for service-to-service interactions. If you want to know more, I recommend <a class="calibre3" href="http://shop.oreilly.com/product/9780596805838.do"><em class="calibre4">REST in Practice</em></a> (O’Reilly), which covers the topic of REST over HTTP in depth.<a data-type="indexterm" data-startref="ix_rest" id="idp6800768" class="calibre3"></a></p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

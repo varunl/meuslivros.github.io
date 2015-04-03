@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Security</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 9. Security">
+<div class="preface" id="security-chapter">
+<section data-type="sect1" data-pdf-bookmark="Service-to-Service Authentication and Authorization">
+<div class="preface" id="idp11536688">
+<section data-type="sect2" data-pdf-bookmark="Use SAML or OpenID Connect"><div class="preface" id="idp11557280">
+<h2 class="calibre15" id="calibre_pb_8">Use SAML or OpenID Connect</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="service-to-service authentication/authorization" data-secondary="SAML/OpenID Connect" id="idp11558624" class="calibre3"></a><a data-type="indexterm" data-primary="OpenID Connect" id="idp11559632" class="calibre3"></a><a data-type="indexterm" data-primary="SAML" id="idp11560304" class="calibre3"></a>If you are already using SAML or OpenID Connect as your authentication and authorization scheme, you could just use that for service-to-service interactions too. If you’re using a gateway, you’ll need to route all in-network traffic via the gateway too, but if each service is handling the integration itself, this approach should just work out of the box. The advantage here is that you’re making use of existing infrastructure, and get to centralize all your service access controls in a central directory server. We’d still need to route this over HTTPS if we wanted to avoid man-in-the-middle attacks.</p>
+
+<p class="author">Clients have a set of credentials they use to authenticate themselves with the identity provider, and the service gets the information it needs to decide on any fine-grained authentication.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="service accounts" id="idp11562608" class="calibre3"></a>This does mean you’ll need an account for your clients, sometimes referred to as a <em class="calibre4">service account</em>. Many organizations use this approach quite commonly. A word of warning, though: if you are going to create service accounts, try to keep their use narrow. So consider each microservice having its own set of credentials. This makes revoking/changing access easier if the credentials become compromised, as you only need to revoke the set of credentials that have been affected.</p>
+
+<p class="author">There are a couple of other downsides, though. First, just as with Basic Auth, we need to securely store our credentials: where do the username and password live? The client will need to find some secure way to store this data. The other problem is that some of the technology in this space to do the authentication is fairly tedious to code for. SAML, in particular, makes implementing a client a painful affair. OpenID Connect has a simpler workflow, but as we discussed earlier it isn’t that well supported yet.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

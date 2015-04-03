@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="How Much Is Too Much?"><div class="preface" id="idp11875072">
+<h1 class="calibre7" id="calibre_pb_2">How Much Is Too Much?</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="microservices at scale" data-secondary="cross-functional requirements (CFR)" id="idp11876448" class="calibre3"></a><a data-type="indexterm" data-primary="cross-functional requirements (CFR)" id="idp11877392" class="calibre3"></a>We touched on the topic of cross-functional requirements in <a data-type="xref" href="part0009_split_000.html#testing-chapter" class="calibre3">Chapter 7</a>. Understanding cross-functional requirements is all about considering aspects like durability of data, availability of services, throughput, and acceptable latency of services. Many of the techniques covered in this chapter and elsewhere talk about approaches to implement these requirements, but only you know exactly what the requirements themselves might be.</p>
+
+<p class="author">Having an autoscaling system capable of reacting to increased load or failure of individual nodes might be fantastic, but could be overkill for a reporting system that only needs to run twice a month, where being down for a day or two isn’t that big of a deal. Likewise, figuring out how to do blue/green deployments to eliminate downtime of a service might make sense for your online ecommerce system, but for your corporate intranet knowledge base it’s probably a step too far.</p>
+
+<p class="author">Knowing how much failure you can tolerate, or how fast your system needs to be, is driven by the users of your system. That in turn will help you understand which techniques will make the most sense for you. That said, your users won’t always be able to articulate what the exact requirements are. So you need to ask questions to help extract the right information, and help them understand the relative costs of providing different levels of service.</p>
+
+<p class="author">As I mentioned previously, these cross-functional requirements can vary from service to service, but I would suggest defining some general cross-functionals and then overriding them for particular use cases. When it comes to considering if and how to scale out your system to better handle load or failure, start by trying to understand the following requirements:</p>
+
+<div class="variable_list_term"><a data-type="indexterm" data-primary="response time" id="idp11882832" class="calibre3"></a><a data-type="indexterm" data-primary="latency" id="idp11883536" class="calibre3"></a><a data-type="indexterm" data-primary="availability" data-secondary="key microservices principle of" id="idp11884208" class="calibre3"></a><a data-type="indexterm" data-primary="durability" id="idp11885168" class="calibre3"></a><a data-type="indexterm" data-primary="data" data-secondary="durability of" id="idp11885840" class="calibre3"></a>Response time/latency</div>
+<blockquote class="variable_list_definition">
+<div class="calibre8">How long should various operations take? It can be useful here to measure this with different numbers of users to understand how increasing load will impact the response time. Given the nature of networks, you’ll always have outliers, so setting targets for a given percentile of the responses monitored can be useful. The target should also include the number of concurrent connections/users you will expect your software to handle. So you might say, “We expect the website to have a 90th-percentile response time of 2 seconds when handling 200 concurrent connections per second.”</div>
+</blockquote>
+<div class="variable_list_term">Availability</div>
+<blockquote class="variable_list_definition">
+<div class="calibre8">Can you expect a service to be down? Is this considered a 24/7 service? Some people like to look at periods of acceptable downtime when measuring availability, but how useful is this to someone calling your service? I should either be able to rely on your service responding or not. Measuring periods of downtime is really more useful from a historical reporting angle.</div>
+</blockquote>
+<div class="variable_list_term">Durability of data</div>
+<blockquote class="variable_list_definition">
+<div class="calibre8">How much data loss is acceptable? How long should data be kept for? This is highly likely to change on a case-by-case basis. For example, you might choose to keep user session logs for a year or less to save space, but your financial transaction records might need to be kept for many years.</div>
+</blockquote>
+
+
+<p class="author">Once you have these requirements in place, you’ll want a way to systematically measure them on an ongoing basis. You may decide to make use of performance tests, for example, to ensure your system meets acceptable performance targets, but you’ll want to make sure you are monitoring these stats in production as well!</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Security</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 9. Security">
+<div class="preface" id="security-chapter">
+<section data-type="sect1" data-pdf-bookmark="Summary"><div class="preface" id="idp11717760">
+<h1 class="calibre7" id="calibre_pb_31">Summary</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="security" data-secondary="overview of" id="idp11719136" class="calibre3"></a>So again we return to a core theme of the book — that having a system decomposed into finer-grained services gives us many more options as to how to solve a problem. Not only can having microservices potentially reduce the impact of any given breach, but it also gives us more ability to trade off the overhead of more complex and secure approaches where data is sensitive, and a lighter-weight approach when the risks are lower.</p>
+
+<p class="author">Once you understand the threat levels of different parts of your system, you should start to get a sense of when to consider security during transit, at rest, or not at all.</p>
+
+<p class="author">Finally, understand the importance of defense in depth, make sure you patch your operating systems, and even if you consider yourself a rock star, don’t try to implement your own cryptography!</p>
+
+<p class="author">If you want a general overview of security for browser-based applications, a great place to start is the excellent <a href="https://www.owasp.org/" class="calibre3">Open Web Application Security Project (OWASP) nonprofit</a>, whose regularly updated <em class="calibre4">Top 10 Security Risk</em> document should be considered essential reading for any developer. Finally, if you want a more general discussion of cryptography, check out the book <em class="calibre4">Cryptography Engineering</em> by Niels Ferguson, Bruce Schneier, and Tadayoshi Kohno (Wiley).</p>
+
+<p class="author">Getting to grips with security is often about understanding people and how they work with our systems. One human-related aspect we haven’t yet discussed in terms of microservices is the interplay between organizational structures and the architectures themselves. But as with security, we’ll see that ignoring the human element can be a grave mistake.<a data-type="indexterm" data-startref="ix_security" id="idp11724960" class="calibre3"></a></p>
+</div></section>
+
+
+
+
+
+
+
+<div data-type="footnotes" class="preface"><p xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:svg="http://www.w3.org/2000/svg" data-type="footnote" id="idp11621056" class="author"><a href="part0011_split_014.html#idp11621056-marker" class="calibre3"><sup class="calibre22">3</sup></a> In general, key length increases the amount of work required to brute-force-break a key. Therefore you can assume the longer the key, the more secure your data. However, some minor concerns have been raised about the implementation of AES-256 for certain types of keys by respected security expert <a href="http://bit.ly/1tgAx7j" class="calibre3">Bruce Schneier</a>. This is one of those areas where you need to do more research on what the current advice is at the time of reading!</p></div></div></section></body></html>

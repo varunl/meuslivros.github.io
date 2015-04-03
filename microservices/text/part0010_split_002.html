@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Monitoring</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 8. Monitoring">
+<div class="preface" id="monitoring-chapter">
+<section data-type="sect1" data-pdf-bookmark="Single Service, Multiple Servers"><div class="preface" id="idp11354608">
+<h1 class="calibre7" id="calibre_pb_2">Single Service, Multiple Servers</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="monitoring" data-secondary="single service/multiple servers" id="idp11356032" class="calibre3"></a>Now we have multiple copies of the service running on separate hosts, as shown in <a data-type="xref" href="part0010_split_002.html#a70-single-service-multiple-services" class="calibre3">Figure 8-2</a>, with requests to the different service instances distributed via a load balancer. Things start to get a bit trickier now. We still want to monitor all the same things as before, but need to do so in such a way that we can isolate the problem. When the CPU is high, is it a problem we are seeing on all hosts, which would point to an issue with the service itself, or is it isolated to a single host, implying that the host itself has the problem — perhaps a rogue OS process?</p>
+
+<figure class="calibre16"><div id="a70-single-service-multiple-services" class="figure">
+<img src="../images/00061.gif" alt="A Single service distributed across multiple hosts" hisrc="assets/bdms_0802.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 8-2. </span>A single service distributed across multiple hosts</h6>
+</div></figure>
+
+<p class="author">So at this point, we still want to track the host-level metrics, and alert on them. But now we want to see what they are across all hosts, as well as individual hosts. In other words, we want to aggregate them up, and still be able to drill down. Nagios lets us group our hosts like this — so far, so good. A similar approach will probably suffice for our application.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="SSH-multiplexing" id="idp11361744" class="calibre3"></a>Then we have our logs. With our service running on more than one server, we’ll probably get tired of logging into each box to look at it. With just a few hosts, though, we can use tools like ssh-multiplexers, which allow us to run the same commands on multiple hosts. A big monitor and a <code class="calibre9">grep "Error" app.log</code> later, and we can find our culprit.</p>
+
+<p class="author">For tasks like response time tracking, we can get some of the aggregation for free by tracking at the load balancer itself. But we need to track the load balancer as well, of course; if that misbehaves, we have a problem. At this point, we also probably care a lot more about what a healthy service looks like, as we’ll configure our load balancer to remove unhealthy nodes from our application. Hopefully by the time we get here we have at least some idea of that…</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

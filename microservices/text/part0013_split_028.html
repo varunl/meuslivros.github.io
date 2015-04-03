@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="Caching">
+<div class="preface" id="idp12149248">
+<section data-type="sect2" data-pdf-bookmark="Caching for Resilience"><div class="preface" id="idp12188288">
+<h2 class="calibre15" id="calibre_pb_28">Caching for Resilience</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="resilience engineering" id="idp12189488" class="calibre3"></a><a data-type="indexterm" data-primary="write-behind caches" id="idp12190192" class="calibre3"></a>Caching can be used to implement resiliency in case of failure. With client-side caching, if the downstream service is unavailable, the client could decide to simply use cached but potentially stale data. We could also use something like a reverse proxy to serve up stale data. For some systems, being available even with stale data is better than not returning a result at all, but that is a judgment call you’ll have to make. Obviously, if we don’t have the requested data in the cache, then we can’t do much to help, but there are ways to mitigate this.</p>
+
+<p class="author">A technique I saw used at the <em class="calibre4">Guardian</em>, and subsequently elsewhere, was to crawl the existing <em class="calibre4">live</em> site periodically to generate a static version of the website that could be served in the event of an outage. Although this crawled version wasn’t as fresh as the cached content served from the live system, in a pinch it could ensure that a version of the site would get displayed.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

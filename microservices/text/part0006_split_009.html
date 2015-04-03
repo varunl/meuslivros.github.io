@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="Orchestration Versus Choreography"><div class="preface" id="idp4393408">
+<h1 class="calibre7" id="calibre_pb_9">Orchestration Versus Choreography</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="integration" data-secondary="orchestration vs. choreography" id="idp4394976" class="calibre3"></a><a data-type="indexterm" data-primary="customers, interfacing with" data-secondary="enrolling new customers" id="idp4395968" class="calibre3"></a>As we start to model more and more complex logic, we have to deal with the problem of managing business processes that stretch across the boundary of individual services. And with microservices, we’ll hit this limit sooner than usual. Let’s take an example from MusicCorp, and look at what happens when we create a customer:</p>
+<ol class="calibre23">
+<li value="1" class="calibre5">
+A new record is created in the loyalty points bank for the customer.
+</li>
+<li value="2" class="calibre5">
+Our postal system sends out a welcome pack.
+</li>
+<li value="3" class="calibre5">
+We send a welcome email to the customer.
+</li>
+
+</ol>
+
+<p class="author">This is very easy to model conceptually as a flowchart, as we do in <a data-type="xref" href="part0006_split_009.html#a50-customer-creation-flowchart" class="calibre3">Figure 4-2</a>.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="orchestration architecture" id="idp4402128" class="calibre3"></a>When it comes to actually implementing this flow, there are two styles of architecture we could follow. With orchestration, we rely on a central brain to guide and drive the process, much like the conductor in an orchestra. With choreography, we inform each part of the system of its job, and let it work out the details, like dancers all finding their way and reacting to others around them in a ballet.</p>
+
+<figure class="calibre16"><div id="a50-customer-creation-flowchart" class="figure">
+<img src="../images/00009.gif" alt="The process we want to follow for creating a new Customer" hisrc="assets/bdms_0402.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 4-2. </span>The process for creating a new customer</h6>
+</div></figure>
+
+<p class="author">Let’s think about what an orchestration solution would look like for this flow. Here, probably the simplest thing to do would be to have our customer service act as the central brain. On creation, it talks to the loyalty points bank, email service, and postal service as we see in <a data-type="xref" href="part0006_split_009.html#a50-customer-creation-orchestration" class="calibre3">Figure 4-3</a>, through a series of request/response calls. The customer service itself can then track where a customer is in this process. It can check to see if the customer’s account has been set up, or the email sent, or the post delivered. We get to take the flowchart in <a data-type="xref" href="part0006_split_009.html#a50-customer-creation-flowchart" class="calibre3">Figure 4-2</a> and model it directly into code. We could even use tooling that implements this for us, perhaps using an appropriate rules engine. Commercial tools exist for this very purpose in the form of business process modeling software. Assuming we use synchronous request/response, we could even know if each stage has worked.</p>
+
+<figure class="calibre16"><div id="a50-customer-creation-orchestration" class="figure">
+<img src="../images/00010.gif" alt="Handling Customer creation via Orchestration" hisrc="assets/bdms_0403.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 4-3. </span>Handling customer creation via orchestration</h6>
+</div></figure>
+
+<p class="author">The downside to this orchestration approach is that the customer service can become too much of a central governing authority. It can become the hub in the middle of a web, and a central point where logic starts to live. I have seen this approach result in a small number of smart “god” services telling anemic CRUD-based services what to do.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="choreographed architecture" id="idp4411568" class="calibre3"></a><a data-type="indexterm" data-primary="decoupling" id="idp4412288" class="calibre3"></a>With a choreographed approach, we could instead just have the customer service emit an event in an asynchronous manner, saying <em class="calibre4">Customer created</em>. The email service, postal service, and loyalty points bank then just subscribe to these events and react accordingly, as in <a data-type="xref" href="part0006_split_009.html#a50-customer-creation-choreographed" class="calibre3">Figure 4-4</a>. This approach is significantly more decoupled. If some other service needed to reach to the creation of a customer, it just needs to subscribe to the events and do its job when needed. The downside is that the explicit view of the business process we see in <a data-type="xref" href="part0006_split_009.html#a50-customer-creation-flowchart" class="calibre3">Figure 4-2</a> is now only implicitly reflected in our system.</p>
+
+<figure class="calibre16"><div id="a50-customer-creation-choreographed" class="figure">
+<img src="../images/00011.gif" alt="Handling Customer creation via Choreography" hisrc="assets/bdms_0404.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 4-4. </span>Handling customer creation via choreography</h6>
+</div></figure>
+
+<p class="author">This means additional work is needed to ensure that you can monitor and track that the right things have happened. For example, would you know if the loyalty points bank had a bug and for some reason didn’t set up the correct account? One approach I like for dealing with this is to build a monitoring system that explicitly matches the view of the business process in <a data-type="xref" href="part0006_split_009.html#a50-customer-creation-flowchart" class="calibre3">Figure 4-2</a>, but then tracks what each of the services does as independent entities, letting you see odd exceptions mapped onto the more explicit process flow. The flowchart we saw earlier isn’t the driving force, but just one lens through which we can see how the system is behaving.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="loose coupling" id="idp4420000" class="calibre3"></a>In general, I have found that systems that tend more toward the choreographed approach are more loosely coupled, and are more flexible and amenable to change. You do need to do extra work to monitor and track the processes across system boundaries, however. I have found most heavily orchestrated implementations to be extremely brittle, with a higher cost of change. With that in mind, I strongly prefer aiming for a choreographed system, where each service is smart enough to understand its role in the whole dance.</p>
+
+<p class="author">There are quite a few factors to unpack here. Synchronous calls are simpler, and we get to know if things worked straightaway. If we like the semantics of request/response but are dealing with longer-lived processes, we could just initiate asynchronous requests and wait for callbacks. On the other hand, asynchronous event collaboration helps us adopt a choreographed approach, which can yield significantly more decoupled services — something we want to strive for to ensure our services are independently releasable.</p>
+
+<p class="author">We are, of course, free to mix and match. Some technologies will fit more naturally into one style or another. We do, however, need to appreciate some of the different technical implementation details that will further help us make the right call.</p>
+
+<p class="author">To start with, let’s look at two technologies that fit well when we are considering request/response: remote procedure call (RPC) and REpresentational State Transfer (REST).</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

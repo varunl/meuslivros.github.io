@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="Caching">
+<div class="preface" id="idp12149248">
+<section data-type="sect2" data-pdf-bookmark="Client-Side, Proxy, and Server-Side Caching"><div class="preface" id="idp12154192">
+<h2 class="calibre15" id="calibre_pb_25">Client-Side, Proxy, and Server-Side Caching</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="caching" data-secondary="client-side" id="idp12155536" class="calibre3"></a><a data-type="indexterm" data-primary="caching" data-secondary="proxy" id="idp12156512" class="calibre3"></a><a data-type="indexterm" data-primary="caching" data-secondary="server-side" id="idp12157456" class="calibre3"></a><a data-type="indexterm" data-primary="reverse proxy" id="idp12158400" class="calibre3"></a><a data-type="indexterm" data-primary="content delivery network (CDN)" id="idp12159072" class="calibre3"></a><a data-type="indexterm" data-primary="client-side caching" id="idp12159712" class="calibre3"></a><a data-type="indexterm" data-primary="proxy caching" id="idp12160384" class="calibre3"></a><a data-type="indexterm" data-primary="server-side caching" id="idp12161056" class="calibre3"></a>In client-side caching, the client stores the cached result. The client gets to decide when (and if) it goes and retrieves a fresh copy. Ideally, the downstream service will provide hints to help the client understand what to do with the response, so it knows when and if to make a new request. With proxy caching, a proxy is placed between the client and the server. A great example of this is using a reverse proxy or content delivery network (CDN). With server-side caching, the server handles caching responsibility, perhaps making use of a system like Redis or Memcache, or even a simple in-memory cache.</p>
+
+<p class="author">Which one makes the most sense depends on what you are trying to optimize. Client-side caching can help reduce network calls drastically, and can be one of the fastest ways of reducing load on a downstream service. In this case, the client is in charge of the caching behavior, and if you want to make changes to how caching is done, rolling out changes to a number of consumers could be difficult. Invalidation of stale data can also be trickier, although we’ll discuss some coping mechanisms for this in a moment.</p>
+
+<p class="author">With proxy caching, everything is opaque to both the client and server. This is often a very simple way to add caching to an existing system. If the proxy is designed to cache generic traffic, it can also cache more than one service; a common example is a reverse proxy like Squid or Varnish, which can cache any HTTP traffic. Having a proxy between the client and server does introduce additional network hops, although in my experience it is very rare that this causes problems, as the performance optimizations resulting from the caching itself outweigh any additional network costs.</p>
+
+<p class="author">With server-side caching, everything is opaque to the clients; they don’t need to worry about anything. With a cache near or inside a service boundary, it can be easier to reason about things like invalidation of data, or track and optimize cache hits. In a situation where you have multiple types of clients, a server-side cache could be the fastest way to improve performance.</p>
+
+<p class="author">For every public-facing website I’ve worked on, we’ve ended up doing a mix of all three approaches. But for more than one distributed system, I’ve gotten away with no caching at all. But it all comes down to knowing what load you need to handle, how fresh your data needs to be, and what your system can do right now. Knowing that you have a number of different tools at your disposal is just the beginning.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

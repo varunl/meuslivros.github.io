@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="Scaling">
+<div class="preface" id="idp11977920">
+<section data-type="sect2" data-pdf-bookmark="Spreading Your Risk"><div class="preface" id="idp12114032">
+<h2 class="calibre15" id="calibre_pb_14">Spreading Your Risk</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="scaling" data-secondary="spreading risk" id="idp12115440" class="calibre3"></a><a data-type="indexterm" data-primary="risk, spreading" id="idp12116416" class="calibre3"></a>One way to scale for resilience is to ensure that you don’t put all your eggs in one basket. A simplistic example of this is making sure that you don’t have multiple services on one host, where an outage would impact multiple services. But let’s consider what <em class="calibre4">host</em> means. In most situations nowadays, a <em class="calibre4">host</em> is actually a virtual concept. So what if I have all of my services on different hosts, but all those hosts are actually virtual hosts, running on the same physical box? If that box goes down, I could lose multiple services. Some virtualization platforms enable you to ensure that your hosts are distributed across multiple different physical boxes to reduce this chance.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="SAN (storage area networks)" id="idp12118976" class="calibre3"></a><a data-type="indexterm" data-primary="virtualization platforms" data-secondary="storage area networks in" id="idp12119648" class="calibre3"></a>For internal virtualization platforms, it is a common practice to have the virtual machine’s root partition mapped to a single SAN (storage area network). If that SAN goes down, it can take down all connected VMs. SANs are big, expensive, and designed not to fail. That said, I have had big expensive SANs fail on me at least twice in the last 10 years, and each time the results were fairly serious.</p>
+
+<p class="author">Another common form of separation to reduce failure is to ensure that not all your services are running in a single rack in the data center, or that your services are distributed across more than one data center. If you’re using an underlying service provider, it is important to know if a service-level agreement (SLA) is offered and plan accordingly. If you need to ensure your services are down for no more than four hours every quarter, but your hosting provider can only guarantee a downtime of eight hours per quarter, you have to either change the SLA, or come up with an alternative solution.</p>
+
+<p class="author">AWS, for example, is split into regions, which you can think of as distinct clouds. Each region is in turn split into two or more availability zones (AZs). AZs are AWS’s equivalent of a data center. It is essential to have services distributed across multiple availability zones, as AWS does not offer any guarantees about the availability of a single node, or even an entire availability zone. For its compute service, it offers only a 99.95% uptime over a given monthly period of the region as a whole, so you’ll want to distribute your workloads across multiple availability zones inside a single region. For some people, this isn’t good enough, and instead they run their services across multiple regions too.</p>
+
+<p class="author">It should be noted, of course, that because providers give you an SLA <em class="calibre4">guarantee</em>, they will tend to limit their liability! If them missing their targets costs you customers and a large amount of money, you might find yourself searching through contracts to see if you can claw anything back from them. Therefore, I would strongly suggest you understand the impact of a supplier failing in its obligations to you, and work out if you need to have a plan B (or C) in your pocket. More than one client I’ve worked with has had a disaster recovery hosting platform with a different supplier, for example, to ensure they weren’t too vulnerable to the mistakes of one company.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

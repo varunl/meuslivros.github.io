@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="REST">
+<div class="preface" id="idp6276416">
+<section data-type="sect2" data-pdf-bookmark="JSON, XML, or Something Else?"><div class="preface" id="idp6162784">
+<h2 class="calibre15" id="calibre_pb_18">JSON, XML, or Something Else?</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="REST (Representational State Transfer)" data-secondary="textual formats" id="idp6818160" class="calibre3"></a><a data-type="indexterm" data-primary="JSON" id="idp6819104" class="calibre3"></a><a data-type="indexterm" data-primary="XML" id="idp6819776" class="calibre3"></a>The use of standard textual formats gives clients a lot of flexibility as to how they consume resources, and REST over HTTP lets us use a variety of formats. The examples I have given so far used XML, but at this stage, JSON is a much more popular content type for services that work over HTTP.</p>
+
+<p class="author">The fact that JSON is a much simpler format means that consumption is also easier. Some proponents also cite its relative compactness when compared to XML as another winning factor, although this isn’t often a real-world issue.</p>
+
+<p class="author">JSON does have some downsides, though. XML defines the <code class="calibre9">link</code> control we used earlier as a hypermedia control. The JSON standard doesn’t define anything similar, so in-house styles are frequently used to shoe-horn this concept in. The <a href="http://bit.ly/hal-spec" class="calibre3">Hypertext Application Language (HAL)</a> attempts to fix this by defining some common standards for hyperlinking for JSON (and XML too, although arguably XML needs less help). If you follow the HAL standard, you can use tools like the web-based HAL browser for exploring hypermedia controls, which can make the task of creating a client much easier.</p>
+
+<p class="author">We aren’t limited to these two formats, of course. We can send pretty much anything over HTTP if we want, even binary. I am seeing more and more people just using HTML as a format instead of XML. For some interfaces, the HTML can do double duty as a UI and an API, although there are pitfalls to be avoided here, as the interactions of a human and a computer are quite different! But it is certainly an attractive idea. There are lots of HTML parsers out there, after all.</p>
+
+<p class="author">Personally, though, I am still a fan of XML. Some of the tool support is better. For example, if I want to extract only certain parts of the payload (a technique we’ll discuss more in <a data-type="xref" href="part0006_split_029.html#a50-versioning" class="calibre3">“Versioning”</a>) I can use XPATH, which is a well-understood standard with lots of tool support, or even CSS selectors, which many find even easier. With JSON, I have JSONPATH, but this is not widely supported. I find it odd that people pick JSON because it is nice and lightweight, then try and push concepts into it like hypermedia controls that already exist in XML. I accept, though, that I am probably in the minority here and that JSON is the format of choice for most people!</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

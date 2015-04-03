@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="Service-to-Host Mapping">
+<div class="preface" id="idp10631472">
+<section data-type="sect2" data-pdf-bookmark="Platform as a Service"><div class="preface" id="idp10674544">
+<h2 class="calibre15" id="calibre_pb_17">Platform as a Service</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="service-to-host mapping" data-secondary="platform as a service (PaaS)" id="idp10675920" class="calibre3"></a><a data-type="indexterm" data-primary="platform as a service (PaaS)" id="idp10676912" class="calibre3"></a>When using a platform as a service (PaaS), you are working at a higher-level abstraction than at a single host. Most of these platforms rely on taking a technology-specific artifact, such as a Java WAR file or Ruby gem, and automatically provisioning and running it for you. Some of these platforms will transparently attempt to handle scaling the system up and down for you, although a more common (and in my experience less error-prone) way will allow you some control over how many nodes your service might run on, but it handles the rest.</p>
+
+<p class="author">At the time of writing, most of the best, most polished PaaS solutions are hosted. <span class="firstname">Heroku</span> comes to mind as being probably the gold class of PaaS. It doesn’t just handle running your service, it also supports services like databases in a very simple fashion. Self-hosted solutions do exist in this space, although they are more immature than the hosted solutions.</p>
+
+<p class="author">When PaaS solutions work well, they work very well indeed. However, when they don’t quite work for you, you often don’t have much control in terms of getting under the hood to fix things. This is part of the trade-off you make. I would say that in my experience the smarter the PaaS solutions try to be, the more they go wrong. I’ve used more than one PaaS that attempts to autoscale based on application use, but does it badly. Invariably the heuristics that drive these smarts tend to be tailored for the average application rather than your specific use case. The more nonstandard your application, the more likely it is that it might not play nicely with a PaaS.</p>
+
+<p class="author">As the good PaaS solutions handle so much for you, they can be an excellent way of handling the increased overhead we get with having many more moving parts. That said, I’m still not sure that we have all the models right in this space yet, and the limited self-hosted options mean that this approach might not work for you. In the coming decade though I expect we’ll be targeting PaaS for deployment more than having to self-manage hosts and deployments of individual services.<a data-type="indexterm" data-startref="ix_stohmap" id="idp10681760" class="calibre3"></a></p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

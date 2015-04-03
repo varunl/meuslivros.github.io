@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Monitoring</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 8. Monitoring">
+<div class="preface" id="monitoring-chapter">
+<section data-type="sect1" data-pdf-bookmark="Single Service, Single Server"><div class="preface" id="idp11346112">
+<h1 class="calibre7" id="calibre_pb_1">Single Service, Single Server</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="monitoring" data-secondary="single service/single server" id="idp11347456" class="calibre3"></a><a data-type="xref" href="part0010_split_001.html#a70-single-service" class="calibre3">Figure 8-1</a> presents a very simple setup: one host, running one service. Now we need to monitor it in order to know when something goes wrong, so we can fix it. So what should we look for?</p>
+
+<figure class="calibre16"><div id="a70-single-service" class="figure">
+<img src="../images/00060.gif" alt="A single service on a single host" hisrc="assets/bdms_0801.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 8-1. </span>A single service on a single host</h6>
+</div></figure>
+
+<p class="author">First, we’ll want to monitor the host itself. CPU, memory — all of these things are useful. We’ll want to know what they should be when things are healthy, so we can alert when they go out of bounds. If we want to run our own monitoring software, we could use something like Nagios to do so, or else use a hosted service like New Relic.</p>
+
+<p class="author">Next, we’ll want to have access to the logs from the server itself. If a user reports an error, these logs should pick it up and hopefully tell us when and where the error is. At this point, with our single host we can probably get by with just logging on to the host and using command-line tools to scan the log. We may even get advanced and use <code class="calibre9">logrotate</code> to move old logs out of the way and avoid them taking up all our disk space.</p>
+
+<p class="author">Finally, we might want to monitor the application itself. At a bare minimum, monitoring the response time of the service is a good idea. You’ll probably be able to do this by looking at the logs coming either from a web server fronting your service, or perhaps from the service itself. If we get very advanced, we might want to track the number of errors we are reporting.</p>
+
+<p class="author">Time passes, loads increase, and we find ourselves needing to scale…</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

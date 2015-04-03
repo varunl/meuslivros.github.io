@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="Scaling Databases">
+<div class="preface" id="idp12036272">
+<section data-type="sect2" data-pdf-bookmark="Scaling for Reads"><div class="preface" id="idp12043760">
+<h2 class="calibre15" id="calibre_pb_20">Scaling for Reads</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="database scaling" data-secondary="for reads" id="idp12045200" class="calibre3"></a><a data-type="indexterm" data-primary="read replicas" id="idp12046176" class="calibre3"></a>Many services are read-mostly. Think of a catalog service that stores information for the items we have for sale. We add records for new items on a fairly irregular basis, and it wouldn’t at all be surprising if we get more than 100 reads of our catalog’s data for every write. Happily, scaling for reads is much easier than scaling for writes. Caching of data can play a large part here, and we’ll discuss that in more depth shortly. Another model is to make use of <em class="calibre4">read replicas</em>.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="RDBMS (relational database management systems)" id="idp12048176" class="calibre3"></a>In a relational database management system (RDBMS) like MySQL or Postgres, data can be copied from a primary node to one or more replicas. This is often done to ensure that a copy of our data is kept safe, but we can also use it to distribute our reads. A service could direct all writes to the single primary node, but distribute reads to one or more read replicas, as we see in <a data-type="xref" href="part0013_split_020.html#a115-read-replicas" class="calibre3">Figure 11-6</a>. The replication from the primary database to the replicas happens at some point after the write. This means that with this technique reads may sometimes see <em class="calibre4">stale</em> data until the replication has completed. Eventually the reads will see the consistent data. Such a setup is called <em class="calibre4">eventually consistent</em>, and if you can handle the temporary inconsistency it is a fairly easy and common way to help scale systems. We’ll look into this in more depth shortly when we look at the CAP theorem.</p>
+
+<figure class="calibre16"><div id="a115-read-replicas" class="figure">
+<img src="../images/00076.jpeg" alt="Using read replicas to scale reads" hisrc="assets/bdms_1106.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 11-6. </span>Using read replicas to scale reads</h6>
+</div></figure>
+
+<p class="author">Years ago, using read replicas to scale was all the rage, although nowadays I would suggest you look to caching first, as it can deliver much more significant improvements in performance, often with less work.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

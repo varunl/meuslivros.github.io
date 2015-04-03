@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="Idempotency"><div class="preface" id="idp11919296">
+<h1 class="calibre7" id="calibre_pb_10">Idempotency</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="microservices at scale" data-secondary="idempotent operations" id="idp11978768" class="calibre3"></a><a data-type="indexterm" data-primary="idempotent operations" id="idp11979776" class="calibre3"></a>In <em class="calibre4">idempotent</em> operations, the outcome doesn’t change after the first application, even if the operation is subsequently applied multiple times. If operations are idempotent, we can repeat the call multiple times without adverse impact. This is very useful when we want to replay messages that we aren’t sure have been processed, a common way of recovering from error.</p>
+
+<p class="author">Let’s consider a simple call to add some points as a result of one of our customers placing an order. We might make a call with the sort of payload shown in <a data-type="xref" href="part0013_split_010.html#creditpoints_ex" class="calibre3">Example 11-1</a>.</p>
+<div id="creditpoints_ex" data-type="example" class="calibre24">
+<h5 class="calibre25"><span class="firstname">Example 11-1. </span>Crediting points to an account</h5>
+
+<pre data-type="programlisting" data-code-language="xml" class="calibre26"><code class="nt">&lt;credit&gt;</code>
+  <code class="nt">&lt;amount&gt;</code>100<code class="nt">&lt;/amount&gt;</code>
+  <code class="nt">&lt;forAccount&gt;</code>1234<code class="nt">&lt;/account&gt;</code>
+<code class="nt">&lt;/credit&gt;</code></pre></div>
+
+<p class="author">If this call is received multiple times, we would add 100 points multiple times. As it stands, therefore, this call is not idempotent. With a bit more information, though, we allow the points bank to make this call idempotent, as shown in <a data-type="xref" href="part0013_split_010.html#addinfo_ex" class="calibre3">Example 11-2</a>.</p>
+<div id="addinfo_ex" data-type="example" class="calibre24">
+<h5 class="calibre25"><span class="firstname">Example 11-2. </span>Adding more information to the points credit to make it idempotent</h5>
+
+<pre data-type="programlisting" data-code-language="xml" class="calibre26"><code class="nt">&lt;credit&gt;</code>
+  <code class="nt">&lt;amount&gt;</code>100<code class="nt">&lt;/amount&gt;</code>
+  <code class="nt">&lt;forAccount&gt;</code>1234<code class="nt">&lt;/account&gt;</code>
+  <code class="nt">&lt;reason&gt;</code>
+    <code class="nt">&lt;forPurchase&gt;</code>4567<code class="nt">&lt;/forPurchase&gt;</code>
+  <code class="nt">&lt;/reason&gt;</code>
+<code class="nt">&lt;/credit&gt;</code></pre></div>
+
+<p class="author">Now we know that this credit relates to a specific order, <code class="calibre9">4567</code>. Assuming that we could receive only one credit for a given order, we could apply this credit again without increasing the overall number of points.</p>
+
+<p class="author">This mechanism works just as well with event-based collaboration, and can be especially useful if you have multiple instances of the same type of service subscribing to events. Even if we store which events have been processed, with some forms of asynchronous message delivery there may be small windows where two workers can see the same message. By processing the events in an idempotent manner, we ensure this won’t cause us any issues.</p>
+
+<p class="author">Some people get quite caught up with this concept, and assume it means that subsequent calls with the same parameters can’t have <em class="calibre4">any</em> impact, which then leaves us in an interesting position. We really would still like to record the fact that a call was received in our logs, for example. We want to record the response time of the call and collect this data for monitoring. The key point here is that it is the underlying business operation that we are considering idempotent, not the entire state of the system.</p>
+
+<p class="author">Some of the HTTP verbs, such as GET and PUT, are defined in the HTTP specification to be idempotent, but for that to be the case, they rely on your service handling these calls in an idempotent manner. If you start making these verbs nonidempotent, but callers think they can safely execute them repeatedly, you may get yourself into a mess. Remember, just because you’re using HTTP as an underlying protocol doesn’t mean you get everything for free!</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

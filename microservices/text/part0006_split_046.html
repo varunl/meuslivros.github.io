@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="Integrating with Third-Party Software">
+<div class="preface" id="idp10049120">
+<section data-type="sect2" data-pdf-bookmark="On Your Own Terms"><div class="preface" id="idp10197808">
+<h2 class="calibre15" id="calibre_pb_46">On Your Own Terms</h2>
+
+<p class="author">COTS and SAAS products absolutely have their place, and it isn’t feasible (or sensible) for most of us to build everything from scratch. So how do we resolve these challenges? The key is to move things back on to your own terms.</p>
+
+<p class="author">The core idea here is to do any customizations on a platform you control, and to limit the number of different consumers of the tool itself. To explore this idea in detail, let’s look at a couple of examples.</p>
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect3" data-pdf-bookmark="Example: CMS as a service"><div class="preface" id="idp10200288">
+<h3 class="calibre28">Example: CMS as a service</h3>
+
+<p class="author"><a data-type="indexterm" data-primary="content management systems (CMS)" id="idp10201632" class="calibre3"></a><a data-type="indexterm" data-primary="third-party software" data-secondary="content management systems (CMS)" id="idp10202400" class="calibre3"></a>In my experience, the CMS is one of the most commonly used product that needs to be customized or integrated with. The reason for this is that unless you want a basic static site, the average enterprise organization wants to enrich the functionality of its website with dynamic content like customer records or the latest product offerings. The source of this dynamic content is typically other services inside the organization, which you may have actually built yourself.</p>
+
+<p class="author">The temptation — and often the selling point of the CMS — is that you can customize the CMS to pull in all this special content and display it to the outside world. However, the development environment for the average CMS is <em class="calibre4">terrible</em>.</p>
+
+<p class="author">Let’s look at what the average CMS specializes in, and what we probably bought it for: content creation and content management. Most CMSes are pretty bad even at doing page layout, typically providing drag-and-drop tools that don’t cut the mustard. And even then, you end up needing to have someone who understands HTML and CSS to fine-tune the CMS templates. They tend to be terrible platforms on which to build custom code.</p>
+
+<p class="author">The answer? Front the CMS with your own service that provides the website to the outside world, as shown in <a data-type="xref" href="part0006_split_046.html#hide-cms" class="calibre3">Figure 4-11</a>. Treat the CMS as a service whose role is to allow for the creation and retrieval of content. In your own service, you write the code and integrate with services how you want. You have control over scaling the website (many commercial CMSes provide their own proprietary add-ons to handle load), and you can pick the templating system that makes sense.</p>
+
+<p class="author">Most CMSes also provide APIs to allow for content creation, so you also have the ability to front that with your own service façade. For some situations, we’ve even used such a façade to abstract out the APIs for retrieving content.</p>
+
+<figure class="calibre16"><div id="hide-cms" class="figure">
+<img src="../images/00020.jpeg" alt="Hiding a CMS using your own service" hisrc="assets/bdms_0411.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 4-11. </span>Hiding a CMS using your own service</h6>
+</div></figure>
+
+<p class="author">We’ve used this pattern multiple times across ThoughtWorks in the last few years, and I’ve done this more than once myself. One notable example was a client that was looking to push out a new website for its products. Initially, it wanted to build the entire solution on the CMS, but it had yet to pick one. We instead suggested this approach, and started development of the fronting website. While waiting for the CMS tool to be selected, we <em class="calibre4">faked</em> it by having a web service that just surfaced static content. We ended up going live with the site well before the CMS was selected by using our fake content service in production to surface content to the live site. Later on, we were able to just drop in the eventually selected tool without any change to the fronting application.</p>
+
+<p class="author">Using this approach, we keep the scope of what the CMS does down to a minimum and move customizations onto our own technology stack.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect3" data-pdf-bookmark="Example: The multirole CRM system"><div class="preface" id="idp10212624">
+<h3 class="calibre28">Example: The multirole CRM system</h3>
+
+<p class="author"><a data-type="indexterm" data-primary="Customer Relationship Management (CRM)" id="idp10213968" class="calibre3"></a><a data-type="indexterm" data-primary="third-party software" data-secondary="Customer Relationship Management (CRM)" id="idp10214736" class="calibre3"></a>The CRM — or Customer Relationship Management — tool is an often-encountered beast that can instill fear in the heart of even the hardiest architect. This sector, as typified by vendors like Salesforce or SAP, is rife with examples of tools that try to do everything for you. This can lead to the tool itself becoming a single point of failure, and a tangled knot of dependencies. Many implementations of CRM tools I have seen are among the best examples of <em class="calibre4">adhesive</em> (as opposed to cohesive) services.</p>
+
+<p class="author">The scope of such a tool typically starts small, but over time it becomes an increasingly important part of how your organization works. The problem is that the direction and choices made around this now-vital system are often made by the tool vendor itself, not by you.</p>
+
+<p class="author">I was involved recently in an exercise to try to wrest some control back. The organization I was working with realized that although it was using the CRM tool for a lot of things, it wasn’t getting the value of the increasing costs associated with the platform. At the same time, multiple internal systems were using the less-than-ideal CRM APIs for integration. We wanted to move the system architecture toward a place where we had services that modeled our businesses domain, and also lay the groundwork for a potential migration.</p>
+
+<p class="author">The first thing we did was identify the core concepts to our domain that the CRM system currently owned. One of these was the concept of a <em class="calibre4">project</em> — that is, something to which a member of staff could be assigned. Multiple other systems needed project information. What we did was instead create a project service. This service exposed projects as RESTful resources, and the external systems could move their integration points over to the new, easier-to-work-with service. Internally, the project service was just a façade, hiding the detail of the underlying integration. You can see this in <a data-type="xref" href="part0006_split_046.html#crm-integration" class="calibre3">Figure 4-12</a>.</p>
+
+<figure class="calibre16"><div id="crm-integration" class="figure">
+<img src="../images/00021.gif" alt="Using facade services to mask the underlying CRM" hisrc="assets/bdms_0412.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 4-12. </span>Using façade services to mask the underlying CRM</h6>
+</div></figure>
+
+<p class="author">The work, which at the time of this writing was still under way, was to identify other domain concepts that the CRM was handling, and create more façades for them. When the time comes for migration away from the underlying CRM, we could then look at each façade in turn to decide if an internal software solution or something off the shelf could fit the bill.</p>
+</div></section>
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

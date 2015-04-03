@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Multithreaded consumer for multipartition topics</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Multithreaded consumer for multipartition topics"><div class="titlepage"><div><div><h1 class="title"><a id="ch06lvl1sec30"/>Multithreaded consumer for multipartition topics</h1></div></div></div><p>The previous<a id="id166" class="indexterm"/> example is a very basic example of a consumer who consumes messages from a single broker with no explicit partitioning of messages within the topic. Let's jump to the next level and write another program, which consumes messages from multiple partitions connecting to single/multiple topics.</p><p>A multithreaded high-level consumer<a id="id167" class="indexterm"/>-API-based design is usually based on the number of partitions in the topic and follows a one-to-one mapping approach between the thread and the partitions within the topic. For example, if four partitions are defined for any topic, as a best practice, only four threads should be initiated with the consumer application to read the data; otherwise some conflicting behavior, such as threads never receiving a message or thread receiving messages from multiple partitions, may occur. Also, receiving multiple messages will not guarantee that the messages will be placed in order. For example, a thread may receive two messages from the first partition and three from the second partition, then three more from the first partition, followed by some more from the first partition, even if the second partition has data available.</p><p>Let's move further.</p><div class="section" title="Importing classes"><div class="titlepage"><div><div><h2 class="title"><a id="ch06lvl2sec31"/>Importing classes</h2></div></div></div><p>This step<a id="id168" class="indexterm"/> remains the same as the previous program.</p></div><div class="section" title="Defining properties"><div class="titlepage"><div><div><h2 class="title"><a id="ch06lvl2sec32"/>Defining properties</h2></div></div></div><p>This step<a id="id169" class="indexterm"/> remains the same for this program as well.</p></div><div class="section" title="Reading the message from threads and printing it"><div class="titlepage"><div><div><h2 class="title"><a id="ch06lvl2sec33"/>Reading the message from threads and printing it</h2></div></div></div><p>The only<a id="id170" class="indexterm"/> difference in this section from the previous section is that we first create a thread pool and get the Kafka streams associated with each thread within the thread pool as shown in the following code:</p><div class="informalexample"><pre class="programlisting">Map&lt;String, Integer&gt; topicCount = new HashMap&lt;String, Integer&gt;();
+    topicCount.put(topic, new Integer(threadCount));
+
+Map&lt;String, List&lt;KafkaStream&lt;byte[], byte[]&gt;&gt;&gt; consumerStreams = consumer.createMessageStreams(topicCount);
+
+List&lt;KafkaStream&lt;byte[], byte[]&gt;&gt; streams = consumerStreams.get(topic);
+
+// Launching the thread pool
+executor = Executors.newFixedThreadPool(threadCount);</pre></div><p>The complete <a id="id171" class="indexterm"/>program listing for the multithread Kafka consumer based on the Kafka high-level consumer API is as follows:</p><div class="informalexample"><pre class="programlisting">package test.kafka.consumer;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import kafka.consumer.Consumer;
+import kafka.consumer.ConsumerConfig;
+import kafka.consumer.ConsumerIterator;
+import kafka.consumer.KafkaStream;
+import kafka.javaapi.consumer.ConsumerConnector;
+
+public class MultiThreadHLConsumer {
+
+  private ExecutorService executor;
+  private final ConsumerConnector consumer;
+  private final String topic;
+
+  public MultiThreadHLConsumer(String zookeeper, String groupId, String topic) {
+
+    Properties props = new Properties();
+    props.put("zookeeper.connect", zookeeper);
+    props.put("group.id", groupId);
+    props.put("zookeeper.session.timeout.ms", "500");
+    props.put("zookeeper.sync.time.ms", "250");
+    props.put("auto.commit.interval.ms", "1000");
+
+    consumer = Consumer.createJavaConsumerConnector(newConsumerConfig(props));
+    this.topic = topic;
+  }
+
+  public void testConsumer(int threadCount) {
+
+    Map&lt;String, Integer&gt; topicCount = new HashMap&lt;String, Integer&gt;();
+
+    // Define thread count for each topic
+    topicCount.put(topic, new Integer(threadCount));
+
+    // Here we have used a single topic but we can also add 
+    // multiple topics to topicCount MAP 
+    Map&lt;String, List&lt;KafkaStream&lt;byte[], byte[]&gt;&gt;&gt; consumerStreams = consumer.createMessageStreams(topicCount);
+
+    List&lt;KafkaStream&lt;byte[], byte[]&gt;&gt; streams = consumerStreams.get(topic);
+
+    // Launching the thread pool
+    executor = Executors.newFixedThreadPool(threadCount);
+
+    //Creating an object messages consumption
+    int threadNumber = 0;
+    for (final KafkaStream stream : streams) {
+      ConsumerIterator&lt;byte[], byte[]&gt; consumerIte = stream.iterator();
+      threadNumber++;
+
+      while (consumerIte.hasNext())
+    System.out.println("Message from thread :: " + threadNumber + " -- " + new String(consumerIte.next().message()));
+    }
+    if (consumer != null)
+      consumer.shutdown();
+    if (executor != null)
+      executor.shutdown();
+  }
+
+  public static void main(String[] args) {
+
+    String topic = args[0];
+    int threadCount = Integer.parseInt(args[1]);
+    MultiThreadHLConsumer simpleHLConsumer = new MultiThreadHLConsumer("localhost:2181", "testgroup", topic);
+    simpleHLConsumer.testConsumer(threadCount);
+  }
+}</pre></div><p>Compile the <a id="id172" class="indexterm"/>previous program and, before running it, read the following information box.</p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note18"/>Note</h3><p>Before we run this program, we need to make sure our cluster is running as a multibroker cluster (comprising either single or multiple nodes). For more information on how to set up single node &#x2013; multiple broker cluster, refer to <a class="link" href="ch03.html" title="Chapter&#xA0;3.&#xA0;Setting up the Kafka Cluster">Chapter 3</a>, <span class="emphasis"><em>Setting up the Kafka Cluster</em></span>.</p></div></div><p>Once your multibroker cluster is up, create a topic with four partitions and set the replication factor to <code class="literal">2</code> before running this program using the following command:</p><div class="informalexample"><pre class="programlisting">
+<span class="strong"><strong>[root@localhost kafka-0.8]# bin/kafka-topics.sh --zookeeper localhost:2181 --create --topic kafkatopic --partitions 4 --replication-factor 2</strong></span>
+</pre></div><p>Now run the previous program using the following command:</p><div class="informalexample"><pre class="programlisting">
+<span class="strong"><strong>[root@localhost kafka-0.8]# java MultiThreadHLConsumer kafkatopic 4</strong></span>
+</pre></div><p>This program will print all the partitions of messages associated with each thread.</p></div></div></body></html>

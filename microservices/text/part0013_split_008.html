@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="The Antifragile Organization">
+<div class="preface" id="idp11900720">
+<section data-type="sect2" data-pdf-bookmark="Bulkheads"><div class="preface" id="idp11941808">
+<h2 class="calibre15" id="calibre_pb_8">Bulkheads</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="bulkheads" id="idp11955584" class="calibre3"></a><a data-type="indexterm" data-primary="antifragile systems" data-secondary="bulkheads" id="idp11956288" class="calibre3"></a>In another pattern from <em class="calibre4">Release It!</em>, Nygard introduces the concept of a <em class="calibre4">bulkhead</em> as a way to isolate yourself from failure. In shipping, a bulkhead is a part of the ship that can be sealed off to protect the rest of the ship. So if the ship springs a leak, you can close the bulkhead doors. You lose part of the ship, but the rest of it remains intact.</p>
+
+<p class="author">In software architecture terms, there are lots of different bulkheads we can consider. Returning to my own experience, we actually missed the chance to implement a bulkhead. We should have used different connection pools for each downstream connection. That way, if one connection pool gets exhausted, the other connections aren’t impacted, as we see in <a data-type="xref" href="part0013_split_008.html#a115-bulkheads" class="calibre3">Figure 11-3</a>. This would ensure that if a downstream service started behaving slowly in the future, only that one connection pool would be impacted, allowing other calls to proceed as normal.</p>
+
+<figure class="calibre16"><div id="a115-bulkheads" class="figure">
+<img src="../images/00073.jpeg" alt="Using a connection pool per downstream service to provide 'bulkheads'" hisrc="assets/bdms_1103.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 11-3. </span>Using a connection pool per downstream service to provide <em class="calibre4">bulkheads</em></h6>
+</div></figure>
+
+<p class="author">Separation of concerns can also be a way to implement bulkheads. By teasing apart functionality into separate microservices, we reduce the chance of an outage in one area affecting another.</p>
+
+<p class="author">Look at all the aspects of your system that can go wrong, both inside your microservices and between them. Do you have bulkheads in place? I’d suggest starting with separate connection pools for each downstream connection at the very least. You may want to go further, however, and consider using circuit breakers too.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="Hystrix library" id="idp11964368" class="calibre3"></a><a data-type="indexterm" data-primary="Polly for .NET" id="idp11965072" class="calibre3"></a><a data-type="indexterm" data-primary="circuit_breaker mixin for Ruby" id="idp11965744" class="calibre3"></a>We can think of our circuit breakers as an automatic mechanism to seal a bulkhead, to not only protect the consumer from the downstream problem, but also to potentially protect the downstream service from more calls that may be having an adverse impact. Given the perils of cascading failure, I’d recommend mandating circuit breakers for all your synchronous downstream calls. You don’t have to write your own, either. Netflix’s <a href="http://bit.ly/1wxQtwW" class="calibre3">Hystrix library</a> is a JVM circuit breaker abstraction that comes with some powerful monitoring, but other implementations exist for different technology stacks, such as <a href="http://bit.ly/1CIDFuT" class="calibre3">Polly  for .NET</a>, or the <a href="http://bit.ly/1CIDFLp" class="calibre3">circuit_breaker mixin for Ruby</a>.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="antifragile systems" data-secondary="load shedding" id="idp11969584" class="calibre3"></a><a data-type="indexterm" data-primary="load shedding" id="idp11970560" class="calibre3"></a>In many ways, bulkheads are the most important of these three patterns. Timeouts and circuit breakers help you free up resources when they are becoming constrained, but bulkheads can ensure they don’t become constrained in the first place. Hystrix allows you, for example, to implement bulkheads that actually reject requests in certain conditions to ensure that resources don’t become even more saturated; this is known as <em class="calibre4">load shedding</em>. Sometimes rejecting a request is the best way to stop an important system from becoming overwhelmed and being a bottleneck for multiple upstream services.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Conway’s Law and System Design</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 10. Conway’s Law and System Design">
+<div class="preface" id="conways-chapter">
+<section data-type="sect1" data-pdf-bookmark="Drivers for Shared Services">
+<div class="preface" id="idp11776976">
+<section data-type="sect2" data-pdf-bookmark="Feature Teams"><div class="preface" id="idp11784736">
+<h2 class="calibre15" id="calibre_pb_10">Feature Teams</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="system design" data-secondary="feature teams" id="idp11786080" class="calibre3"></a><a data-type="indexterm" data-primary="feature-based teams" id="idp11787056" class="calibre3"></a>The idea of feature teams (aka feature-based teams) is that a small team drives the development of a set of features, implementing all functionality required even if it cuts across component (or even service) boundaries. The goals of feature teams are sensible enough. This structure allows the team to retain a focus on the end result and ensures that the work is joined up, avoiding some of the challenges of trying to coordinate changes across multiple different teams.</p>
+
+<p class="author">In many situations, the feature team is a reaction to traditional IT organizations where team structure is aligned around technical boundaries. For example, you might have a team that is responsible for the UI, another that is responsible for the application logic, and a third handling the database. In this environment, a feature team is a significant step up, as it works across all these layers to deliver the functionality.</p>
+
+<p class="author">With wholesale adoption of feature teams, all services can be considered shared. Everyone can change every service, every piece of code. The role of the service custodians here becomes much more complex, if the role exists at all. Unfortunately, I rarely see functioning custodians at all where this pattern is adopted, leading to the sorts of issues we discussed earlier.</p>
+
+<p class="author">But let’s again consider what microservices are: services modeled after a business domain, not a technical one. And if our team that owns any given service is similarly aligned along the business domain, it is much more likely that the team will be able to retain a customer focus, and see more of the feature development through, because it has a holistic understanding and ownership of all the technology associated with a service.</p>
+
+<p class="author">Cross-cutting changes can occur, of course, but their likelihood is significantly reduced by our avoiding technology-oriented teams.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

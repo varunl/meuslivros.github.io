@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="Custom Images">
+<div class="preface" id="idp10580352">
+<section data-type="sect2" data-pdf-bookmark="Immutable Servers"><div class="preface" id="idp10605136">
+<h2 class="calibre15" id="calibre_pb_10">Immutable Servers</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="deployment" data-secondary="immutable servers" id="idp10606368" class="calibre3"></a><a data-type="indexterm" data-primary="immutable servers" id="idp10607344" class="calibre3"></a><a data-type="indexterm" data-primary="configuration drift" id="idp10608016" class="calibre3"></a>By storing all our configuration in source control, we are trying to ensure that we can automatically reproduce services and hopefully entire environments at will. But once we run our deployment process, what happens if someone comes along, logs into the box, and changes things independently of what is in source control? This problem is often called <em class="calibre4">configuration drift</em> — the code in source control no longer reflects the configuration of the running host.</p>
+
+<p class="author">To avoid this, we can ensure that no changes are ever made to a running server. Instead, any change, no matter how small, has to go through a build pipeline in order to create a new machine. You can implement this pattern without using image-based deployments, but it is also a logical extension of using images as artifacts. During our image creation, for example, we could actually disable SSH, ensuring that no one could even log onto the box to make a change!</p>
+
+<p class="author">The same caveats we discussed earlier about cycle time still apply, of course. And we also need to ensure that any data we care about that is stored on the box is stored elsewhere. These complexities aside, I’ve seen adopting this pattern lead to much more straightforward deployments, and easier-to-reason-about environments. And as I’ve already said, anything we can do to simplify things should be pursued!</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

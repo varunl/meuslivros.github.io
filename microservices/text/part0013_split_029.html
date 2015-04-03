@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="Caching">
+<div class="preface" id="idp12149248">
+<section data-type="sect2" data-pdf-bookmark="Hiding the Origin"><div class="preface" id="idp12193424">
+<h2 class="calibre15" id="calibre_pb_29">Hiding the Origin</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="caching" data-secondary="cache failures" id="idp12194800" class="calibre3"></a>With a normal cache, if a request results in a cache miss, the request goes on to the origin to fetch the fresh data with the caller blocking, waiting on the result. In the normal course of things, this is to be expected. But if we suffer a massive cache miss, perhaps because an entire machine (or group of machines) that provide our cache fail, a large number of requests will hit the origin.</p>
+
+<p class="author">For those services that serve up highly cachable data, it is common for the origin itself to be scaled to handle only a fraction of the total traffic, as most requests get served out of memory by the caches that sit in front of the origin. If we suddenly get a thundering herd due to an entire cache region vanishing, our origin could be pummelled out of existence.</p>
+
+<p class="author">One way to protect the origin in such a situation is never to allow requests to go to the origin in the first place. Instead, the origin itself populates the cache asynchronously when needed, as shown in <a data-type="xref" href="part0013_split_029.html#a115-hide-origin" class="calibre3">Figure 11-7</a>. If a cache miss is caused, this triggers an event that the origin can pick up on, alerting it that it needs to repopulate the cache. So if an entire shard has vanished, we can rebuild the cache in the background. We could decide to block the original request waiting for the region to be repopulated, but this could cause contention on the cache itself, leading to further problems. It’s more likely if we are prioritizing keeping the system stable that we would fail the original request, but it would fail fast.</p>
+
+<figure class="calibre16"><div id="a115-hide-origin" class="figure">
+<img src="../images/00077.jpeg" alt="Hiding the origin from the client and populating the cache asynchronously" hisrc="assets/bdms_1107.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 11-7. </span>Hiding the origin from the client and populating the cache asynchronously</h6>
+</div></figure>
+
+<p class="author">This sort of approach may not make sense for some situations, but it can be a way to ensure the system remains up when parts of it fail. By failing requests fast, and ensuring we don’t take up resources or increase latency, we avoid a failure in our cache from cascading downstream and give ourselves a chance to recover.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

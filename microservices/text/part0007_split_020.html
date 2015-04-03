@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Splitting the Monolith</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Splitting the Monolith">
+<div class="preface" id="splitting-chapter">
+<section data-type="sect1" data-pdf-bookmark="Transactional Boundaries">
+<div class="preface" id="idp10358080">
+<section data-type="sect2" data-pdf-bookmark="Distributed Transactions"><div class="preface" id="idp10383888">
+<h2 class="calibre15" id="calibre_pb_21">Distributed Transactions</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="transactions" data-secondary="distributed" id="idp10385280" class="calibre3"></a><a data-type="indexterm" data-primary="distributed transactions" id="idp10386256" class="calibre3"></a><a data-type="indexterm" data-primary="transaction managers" id="idp10386992" class="calibre3"></a>An alternative to manually orchestrating compensating transactions is to use a <em class="calibre4">distributed transaction</em>.  Distributed transactions try to span multiple transactions within them, using some overall governing process called a <em class="calibre4">transaction manager</em> to orchestrate the various transactions being done by underlying systems. Just as with a normal transaction, a distributed transaction tries to ensure that everything remains in a consistent state, only in this case it tries to do so across multiple different systems running in different processes, often communicating across network boundaries.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="two-phase commits" id="idp10389392" class="calibre3"></a><a data-type="indexterm" data-primary="commits, two-phase" id="idp10390320" class="calibre3"></a>The most common algorithm for handling distributed transactions — especially short-lived transactions, as in the case of handling our customer order — is to use a <em class="calibre4">two-phase commit</em>. With a two-phase commit, first comes the voting phase. This is where each participant (also called a <em class="calibre4">cohort</em> in this context) in the distributed transaction tells the transaction manager whether it thinks its local transaction can go ahead. If the transaction manager gets a <em class="calibre4">yes</em> vote from all participants, then it tells them all to go ahead and perform their commits. A single <em class="calibre4">no</em> vote is enough for the transaction manager to send out a rollback to all parties.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="coordination process" id="idp10393456" class="calibre3"></a>This approach relies on all parties halting until the central coordinating process tells them to proceed. This means we are vulnerable to outages. If the transaction manager goes down, the pending transactions never complete. If a cohort fails to respond during voting, everything blocks. And there is also the case of what happens if a commit fails after voting. There is an assumption implicit in this algorithm that this cannot happen: if a cohort says <em class="calibre4">yes</em> during the voting period, then we have to assume it <em class="calibre4">will</em> commit. Cohorts need a way of making this commit work at some point. This means this algorithm isn’t foolproof — rather, it just tries to catch most failure cases.</p>
+
+<p class="author">This coordination process also mean locks; that is, pending transactions can hold locks on resources. Locks on resources can lead to contention, making scaling systems much more difficult, especially in the context of distributed systems.</p>
+
+<p class="author">Distributed transactions have been implemented for specific technology stacks, such as Java’s Transaction API, allowing for disparate resources like a database and a message queue to all participate in the same, overarching transaction. The various algorithms are hard to get right, so I’d suggest you avoid trying to create your own. Instead, do lots of research on this topic if this seems like the route you want to take, and see if you can use an existing implementation.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

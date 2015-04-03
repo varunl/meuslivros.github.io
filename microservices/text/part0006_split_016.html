@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="REST">
+<div class="preface" id="idp6276416">
+<section data-type="sect2" data-pdf-bookmark="REST and HTTP"><div class="preface" id="idp6287536">
+<h2 class="calibre15" id="calibre_pb_16">REST and HTTP</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="REST (Representational State Transfer)" data-secondary="HTTP over REST benefits" id="idp6288736" class="calibre3"></a><a data-type="indexterm" data-primary="HTTP (Hypertext Transfer Protocol)" data-secondary="HTTP over REST benefits" id="idp6289872" class="calibre3"></a>HTTP itself defines some useful capabilities that play very well with the REST style. For example, the HTTP verbs (e.g., GET, POST, and PUT) already have well-understood meanings in the HTTP specification as to how they should work with resources. The REST architectural style actually tells us that methods should behave the same way on all resources, and the HTTP specification happens to define a bunch of methods we can use. GET retrieves a resource in an idempotent way, and POST creates a new resource. This means we can avoid lots of different <code class="calibre9">createCustomer</code> or <code class="calibre9">editCustomer</code> methods. Instead, we can simply POST a customer representation to request that the server create a new resource, and initiate a GET request to retrieve a representation of a resource. Conceptually, there is one <em class="calibre4">endpoint</em> in the form of a <span class="firstname"><code class="calibre9">Customer</code></span> resource in these cases, and the operations we can carry out upon it are baked into the HTTP protocol.</p>
+
+<p class="author">HTTP also brings a large ecosystem of supporting tools and technology. We get to use HTTP caching proxies like Varnish and load balancers like mod_proxy, and many monitoring tools already have lots of support for HTTP out of the box. These building blocks allow us to handle large volumes of HTTP traffic and route them smartly, in a fairly transparent way. We also get to use all the available security controls with HTTP to secure our communications. From basic auth to client certs, the HTTP ecosystem gives us lots of tools to make the security process easier, and we’ll explore that topic more in <a data-type="xref" href="part0011_split_000.html#security-chapter" class="calibre3">Chapter 9</a>. That said, to get these benefits, you have to use HTTP well. Use it badly, and it can be as insecure and hard to scale as any other technology out there. Use it right, though, and you get a lot of help.</p>
+
+<p class="author">Note that HTTP can be used to implement RPC too. SOAP, for example, gets routed over HTTP, but unfortunately uses very little of the specification. Verbs are ignored, as are simple things like HTTP error codes. All too often, it seems, the existing, well-understood standards and technology are ignored in favor of new standards that can only be implemented using brand-new technology — conveniently provided by the same companies that help design the new standards in the first place!</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

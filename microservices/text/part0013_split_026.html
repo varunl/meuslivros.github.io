@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="Caching">
+<div class="preface" id="idp12149248">
+<section data-type="sect2" data-pdf-bookmark="Caching in HTTP"><div class="preface" id="idp12166208">
+<h2 class="calibre15" id="calibre_pb_26">Caching in HTTP</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="caching" data-secondary="in HTTP" id="idp12167584" class="calibre3"></a><a data-type="indexterm" data-primary="HTTP (Hypertext Transfer Protocol)" data-secondary="caching in" id="idp12168560" class="calibre3"></a>HTTP provides some really useful controls to help us cache either on the client side or server side, which are worth understanding even if you aren’t using HTTP itself.</p>
+
+<p class="author">First, with HTTP, we can use <code class="calibre9">cache-control</code> directives in our responses to clients. These tell clients if they should cache the resource at all, and if so how long they should cache it for in seconds. We also have the option of setting an <code class="calibre9">Expires</code> header, where instead of saying how long a piece of content can be cached for, we specify a time and date at which a resource should be considered stale and fetched again. The nature of the resources you are sharing determines which one is most likely to fit. Standard static website content like CSS or images often fit well with a simple <code class="calibre9">cache-control</code> time to live (TTL). On the other hand, if you know in advance when a new version of a resource will be updated, setting an <code class="calibre9">Expires</code> header will make more sense. All of this is very useful in stopping a client from even needing to make a request to the server in the first place.</p>
+
+<p class="author">Aside from <code class="calibre9">cache-control</code> and <code class="calibre9">Expires</code>, we have another option in  our arsenal of HTTP goodies: Entity Tags, or ETags. An ETag is used to determine if the value of a resource has changed. If I update a customer record, the URI to the resource is the same, but the value is different, so I would expect the ETag to change. This becomes powerful when we’re using what is called a <em class="calibre4">conditional GET</em>. When making a GET request, we can specify additional headers, telling the service to send us the resource only if some criteria are met.</p>
+
+<p class="author">For example, let’s imagine we fetch a customer record, and its ETag comes back as <code class="calibre9">o5t6fkd2sa</code>. Later on, perhaps because a <code class="calibre9">cache-control</code> directive has told us the resource should be considered stale, we want to make sure we get the latest version. When issuing the subsequent GET request, we can pass in a <code class="calibre9">If-None-Match: o5t6fkd2sa</code>. This tells the server that we want the resource at the specified URI, unless it already matches this ETag value. If we already have the up-to-date version, the service sends us a <code class="calibre9">304 Not Modified</code> response, telling us we have the latest version. If there is a newer version available, we get a <code class="calibre9">200 OK</code> with the changed resource, and a new ETag for the resource.</p>
+
+<p class="author">The fact that these controls are built into such a widely used specification means we get to take advantage of a lot of preexisting software that handles the caching for us. Reverse proxies like Squid or Varnish can sit transparently on the network between client and server, storing and expiring cached content as required. These systems are geared toward serving huge numbers of concurrent requests very fast, and are a standard way of scaling public-facing websites. CDNs like AWS’s CloudFront or Akamai can ensure that requests are routed to caches near the calling client, making sure that traffic doesn’t go halfway round the world when it needs to. And more prosaically, HTTP client libraries and client caches can handle a lot of this work for us.</p>
+
+<p class="author">ETags, <code class="calibre9">Expires</code>, and <code class="calibre9">cache-control</code> can overlap a bit, and if you aren’t careful you can end up giving conflicting information if you decide to use all of them! For a more in-depth discussion of the various merits, take a look at the book <a href="http://bit.ly/rest-practice" class="calibre3"><em class="calibre4">REST In Practice</em></a> (O’Reilly) or read section 13 of the <a href="http://bit.ly/1JOSoVh" class="calibre3">HTTP 1.1 specification</a>, which describes how both clients and servers are supposed to implement these various controls.</p>
+
+<p class="author">Whether you decide to use HTTP as an interservice protocol, caching at the client and reducing the need for round-trips to the client is well worth it. If you decide to pick a different protocol, understand when and how you can provide hints to the client to help it understand how long it can cache for.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

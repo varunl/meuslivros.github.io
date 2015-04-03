@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="Versioning">
+<div class="preface" id="a50-versioning">
+<section data-type="sect2" data-pdf-bookmark="Coexist Different Endpoints"><div class="preface" id="idp10143168">
+<h2 class="calibre15" id="calibre_pb_33">Coexist Different Endpoints</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="versioning" data-secondary="coexisting different endpoints" id="idp10144416" class="calibre3"></a><a data-type="indexterm" data-primary="endpoints" data-secondary="coexisting different" id="idp10145360" class="calibre3"></a><a data-type="indexterm" data-primary="interfaces" data-secondary="coexisting new and old" id="idp10146304" class="calibre3"></a>If we’ve done all we can to avoid introducing a breaking interface change, our next job is to limit the impact. The thing we want to avoid is forcing consumers to upgrade in lock-step with us, as we always want to maintain the ability to release microservices independently of each other. One approach I have used successfully to handle this is to coexist both the old and new interfaces in the same running service. So if we want to release a breaking change, we deploy a new version of the service that exposes both the old and new versions of the endpoint.</p>
+
+<p class="author">This allows us to get the new microservice out as soon as possible, along with the new interface, but give time for consumers to move over. Once all of the consumers are no longer using the old endpoint, you can remove it along with any associated code, as shown in <a data-type="xref" href="part0006_split_033.html#a50-coexist-endpoints" class="calibre3">Figure 4-5</a>.</p>
+
+<figure class="calibre16"><div id="a50-coexist-endpoints" class="figure">
+<img src="../images/00014.jpeg" alt="Coexisting different endpoint versions allows consumers to migrate gradually" hisrc="assets/bdms_0405.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 4-5. </span>Coexisting different endpoint versions allows consumers to migrate gradually</h6>
+</div></figure>
+
+<p class="author">When I last used this approach, we had gotten ourselves into a bit of a mess with the number of consumers we had and the number of breaking changes we had made. This meant that we were actually coexisting three different versions of the endpoint. This is not something I’d recommend! Keeping all the code around and the associated testing required to ensure they all worked was absolutely an additional burden. To make this more manageable, we internally transformed all requests to the V1 endpoint to a V2 request, and then V2 requests to the V3 endpoint. This meant we could clearly delineate what code was going to be retired when the old endpoint(s) died.</p>
+
+<p class="author">This is in effect an example of the expand and contract pattern, which allows us to phase breaking changes in. We <em class="calibre4">expand</em> the capabilities we offer, supporting both old and new ways of doing something. Once the old consumers do things in the new way, we <em class="calibre4">contract</em> our API, removing the old functionality.</p>
+
+<p class="author">If you are going to coexist endpoints, you need a way for callers to route their requests accordingly. For systems making use of HTTP, I have seen this done with both version numbers in request headers and also in the URI itself — for example, <em class="calibre4">/v1/customer/</em> or <em class="calibre4">/v2/customer/</em>. I’m torn as to which approach makes the most sense. On the one hand, I like URIs being opaque to discourage clients from hardcoding URI templates, but on the other hand, this approach does make things very obvious and can simplify request routing.</p>
+
+<p class="author">For RPC, things can be a little trickier. I have handled this with protocol buffers by putting my methods in different namespaces — for example, <code class="calibre9">v1.createCustomer</code> and <code class="calibre9">v2.createCustomer</code> — but when you are trying to support different versions of the same types being sent over the network, this can become really painful.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

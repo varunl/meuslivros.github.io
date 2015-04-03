@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Bringing It All Together</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 12. Bringing It All Together">
+<div class="preface" id="bring-together-chapter">
+<section data-type="sect1" data-pdf-bookmark="Principles of Microservices">
+<div class="preface" id="idp12371424">
+<section data-type="sect2" data-pdf-bookmark="Independently Deployable"><div class="preface" id="idp12399536">
+<h2 class="calibre15" id="calibre_pb_6">Independently Deployable</h2>
+
+<p class="author">We should always strive to ensure that our microservices can and are deployed by themselves. Even when breaking changes are required, we should seek to <em class="calibre4">coexist versioned endpoints</em> to allow our consumers to change over time. This allows us to optimize for speed of release of new features, as well as increasing the autonomy of the teams owning these microservices by ensuring that they don’t have to constantly orchestrate their deployments. When using RPC-based integration, <em class="calibre4">avoid tightly bound client/server stub generation</em> such as that promoted by Java RMI.</p>
+
+<p class="author">By adopting a <em class="calibre4">one-service-per-host</em> model, you reduce side effects that could cause deploying one service to impact another unrelated service. Consider using <em class="calibre4">blue/green</em> or <em class="calibre4">canary</em> release techniques to separate deployment from release, reducing the risk of a release going wrong. Use <em class="calibre4">consumer-driven contracts</em> to catch breaking changes before they happen.</p>
+
+<p class="author">Remember that it should be the norm, not the exception, that you can make a change to a single service and release it into production, without having to deploy any other services in lock-step. Your <em class="calibre4">consumers should decide when they update themselves</em>, and you need to accommodate this.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Consumer-Driven Tests to the Rescue"><div class="preface" id="idp11229216">
+<h1 class="calibre7" id="calibre_pb_19">Consumer-Driven Tests to the Rescue</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="testing" data-secondary="consumer-driven tests" id="idp11230560" class="calibre3"></a><a data-type="indexterm" data-primary="consumer-driven contracts (CDCs)" id="ix_CDC" class="calibre3"></a>What is one of the key problems we are trying to address when we use the integration tests outlined previously? We are trying to ensure that when we deploy a new service to production, our changes won’t break consumers. One way we can do this without requiring testing against the real consumer is by using a <em class="calibre4">consumer-driven contract (CDC)</em>.</p>
+
+<p class="author">With CDCs, we are defining the expectations of a consumer on a service (or producer). The expectations of the consumers are captured in code form as tests, which are then run against the producer. If done right, these CDCs should be run as part of the CI build of the producer, ensuring that it never gets deployed if it breaks one of these contracts. Very importantly from a test feedback point of view, these tests need to be run only against a single producer in isolation, so can be faster and more reliable than the end-to-end tests they might replace.</p>
+
+<p class="author">As an example, let’s revisit our customer service scenario. The customer service has two separate consumers: the helpdesk and web shop. Both these consuming services have expectations for how the customer service will behave. In this example, you create two sets of tests: one for each consumer representing the helpdesk’s and web shop’s use of the customer service. A good practice here is to have someone from the producer and consumer teams collaborate on creating the tests, so perhaps people from the web shop and helpdesk teams pair with people from the customer service team.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="Test Pyramid" id="idp11235680" class="calibre3"></a>Because these CDCs are expectations on how the customer service should behave, they can be run against the customer service by itself with any of its downstream dependencies stubbed out, as <a data-type="xref" href="part0009_split_019.html#a63-cdc-scope" class="calibre3">Figure 7-9</a> shows. From a scope point of view, they sit at the same level in the test pyramid as service tests, albeit with a very different focus, as shown in <a data-type="xref" href="part0009_split_019.html#a63-pyramid-again" class="calibre3">Figure 7-10</a>. These tests are focused on how a consumer will use the service, and the trigger if they break is very different when compared with service tests. If one of these CDCs breaks during a build of the customer service, it becomes obvious which consumer would be impacted. At this point, you can either fix the problem or else start the discussion about introducing a breaking change in the manner we discussed in <a data-type="xref" href="part0006_split_000.html#integration-chapter" class="calibre3">Chapter 4</a>. So with CDCs, we can identify a breaking change prior to our software going into production without having to use a potentially expensive end-to-end test.</p>
+
+<figure class="calibre16"><div id="a63-cdc-scope" class="figure">
+<img src="../images/00056.jpeg" alt="Consumer-driven testing in the context of our example" hisrc="assets/bdms_0709.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 7-9. </span>Consumer-driven testing in the context of our customer service example</h6>
+</div></figure>
+
+<figure class="calibre16"><div id="a63-pyramid-again" class="figure">
+<img src="../images/00057.gif" alt="Integrating consumer-driven tests into the test pyramid" hisrc="assets/bdms_0710.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 7-10. </span>Integrating consumer-driven tests into the test pyramid</h6>
+</div></figure>
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

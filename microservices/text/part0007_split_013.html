@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Splitting the Monolith</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Splitting the Monolith">
+<div class="preface" id="splitting-chapter">
+<section data-type="sect1" data-pdf-bookmark="Example: Shared Data"><div class="preface" id="idp10321792">
+<h1 class="calibre7" id="calibre_pb_14">Example: Shared Data</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="database decomposition" data-secondary="shared data" id="idp10323168" class="calibre3"></a><a data-type="indexterm" data-primary="shared data" id="idp10324144" class="calibre3"></a><a data-type="indexterm" data-primary="data" data-secondary="shared" id="idp10324816" class="calibre3"></a>Now let’s dive into a more complex example, but one that can be a common problem when you’re trying to tease apart systems: shared mutable data. Our finance code tracks payments made by customers for their orders, and also tracks refunds given to them when they return items. Meanwhile, the warehouse code updates records to show that orders for customers have been dispatched or received. All of this data is displayed in one convenient place on the website so that customers can see what is going on with their account. To keep things simple, we have stored all this information in a fairly generic customer record table, as shown in <a data-type="xref" href="part0007_split_013.html#a58-reify-before" class="calibre3">Figure 5-5</a>.</p>
+
+<figure class="calibre16"><div id="a58-reify-before" class="figure">
+<img src="../images/00026.gif" alt="Accessing customer data - are we missing something?" hisrc="assets/bdms_0505.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 5-5. </span>Accessing customer data: are we missing something?</h6>
+</div></figure>
+
+<p class="author">So both the finance and the warehouse code are writing to, and probably occasionally reading from, the same table. How can we tease this apart? What we actually have here is something you’ll see often — a domain concept that isn’t modeled in the code, and is in fact implicitly modeled in the database. Here, the domain concept that is missing is that of <code class="calibre9">Customer</code>.</p>
+
+<p class="author">We need to make the current abstract concept of the customer concrete. As a transient step, we create a new package called <code class="calibre9">Customer</code>. We can then use an API to expose <code class="calibre9">Customer</code> code to other packages, such as finance or warehouse. Rolling this all the way forward, we may now end up with a distinct customer service (<a data-type="xref" href="part0007_split_013.html#a58-reify-after" class="calibre3">Figure 5-6</a>).</p>
+
+<figure class="calibre16"><div id="a58-reify-after" class="figure">
+<img src="../images/00027.gif" alt="Recognising the bounded context of the customer" hisrc="assets/bdms_0506.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 5-6. </span>Recognizing the bounded context of the customer</h6>
+</div></figure>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

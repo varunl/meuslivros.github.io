@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="Failure Is Everywhere"><div class="preface" id="idp11865248">
+<h1 class="calibre7" id="calibre_pb_1">Failure Is Everywhere</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="microservices at scale" data-secondary="dealing with failures" id="idp11866624" class="calibre3"></a><a data-type="indexterm" data-primary="failures" data-secondary="dealing with" id="idp11867600" class="calibre3"></a><a data-type="indexterm" data-primary="distributed systems" data-secondary="fallacies of" id="idp11868544" class="calibre3"></a>We understand that things can go wrong. Hard disks can fail. Our software can crash. And as anyone who has read the <a href="http://bit.ly/1En0t51" class="calibre3">fallacies of distributed computing</a> can tell you, we know that the network is unreliable. We can do our best to try to limit the causes of failure, but at a certain scale, failure becomes inevitable. Hard drives, for example, are more reliable now than ever before, but they’ll break eventually. The more hard drives you have, the higher the likelihood of failure for an individual unit; failure becomes a statistical certainty at scale.</p>
+
+<p class="author">Even for those of us not thinking at extreme scale, if we can embrace the possibility of failure we will be better off. For example, if we can handle the failure of a service gracefully, then it follows that we can also do in-place upgrades of a service, as a planned outage is much easier to deal with than an unplanned one.</p>
+
+<p class="author">We can also spend a bit less of our time trying to stop the inevitable, and a bit more of our time dealing with it gracefully. I’m amazed at how many organizations put processes and controls in place to try to stop failure from occurring, but put little to no thought into actually making it easier to recover from failure in the first place.</p>
+
+<p class="author">Baking in the assumption that everything can and will fail leads you to think differently about how you solve problems.</p>
+
+<p class="author">I saw one example of this thinking while spending some time on the Google campus many years ago. In the reception area of one of the buildings in Mountain View  was an old rack of machines, there as a sort of exhibit. I noticed a couple of things. First, these servers weren’t in server enclosures, they were just bare motherboards slotted into the rack. The main thing I noticed, though, was that the hard drives were attached by velcro. I asked one of the Googlers why that was. “Oh,” he said, “the hard drives fail so much we don’t want them screwed in. We just rip them out, throw them in the bin, and velcro in a new one.”</p>
+
+<p class="author">So let me repeat: at scale, even if you buy the best kit, the most expensive hardware, you cannot avoid the fact that things can and will fail. Therefore, you need to assume failure can happen. If you build this thinking into everything you do, and plan for failure, you can make different trade-offs. If you know your system can handle the fact that a server can and will fail, why bother spending much on it at all? Why not use a bare motherboard with cheaper components (and some velcro) like Google did, rather than worrying too much about the resiliency of a single node?</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

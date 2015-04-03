@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Test Scope">
+<div class="preface" id="idp11051312">
+<section data-type="sect2" data-pdf-bookmark="How Many?"><div class="preface" id="idp11126096">
+<h2 class="calibre15" id="calibre_pb_7">How Many?</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="testing" data-secondary="selecting number of" id="idp11127296" class="calibre3"></a>So if these tests all have trade-offs, how many of each type do you want? A good rule of thumb is that you probably want an order of magnitude more tests as you descend the pyramid, but the important thing is knowing that you do have different types of automated tests and understanding if your current balance gives you a problem!</p>
+
+<p class="author">I worked on one monolithic system, for example, where we had 4,000 unit tests, 1,000 service tests, and 60 end-to-end tests. We decided that from a feedback point of view we had way too many service and end-to-end tests (the latter of which were the worst offenders in impacting feedback loops), so we worked hard to replace the test coverage with smaller-scoped tests.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="test snow cone" id="idp11129808" class="calibre3"></a>A common anti-pattern is what is often referred to as a <em class="calibre4">test snow cone</em>, or inverted pyramid. Here, there are little to no small-scoped tests, with all the coverage in large-scoped tests. These projects often have glacially slow test runs, and very long feedback cycles. If these tests are run as part of continuous integration, you won’t get many builds, and the nature of the build times means that the build can stay broken for a long period when something does break.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

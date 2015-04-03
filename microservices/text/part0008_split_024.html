@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="From Physical to Virtual">
+<div class="preface" id="idp10695744">
+<section data-type="sect2" data-pdf-bookmark="Docker"><div class="preface" id="idp10722896">
+<h2 class="calibre15" id="calibre_pb_24">Docker</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="virtualization platforms" data-secondary="Docker" id="idp10738160" class="calibre3"></a><a data-type="indexterm" data-primary="Docker" id="idp10739200" class="calibre3"></a>Docker is a platform built on top of lightweight containers. It handles much of the work around handling containers for you. In Docker, you create and deploy <em class="calibre4">apps</em>, which are synonymous with images in the VM world, albeit for a container-based platform. Docker manages the container provisioning, handles some of the networking problems for you, and even provides its own registry concept that allows you to store and version Docker applications.</p>
+
+<p class="author">The Docker app abstraction is a useful one for us, because just as with VM images the underlying technology used to implement the service is hidden from us. We have our builds for our services create Docker applications, and store them in the Docker registry, and away we go.</p>
+
+<p class="author">Docker can also alleviate some of the downsides of running lots of services locally for dev and test purposes. Rather than using Vagrant to host multiple independent VMs, each one containing its own service, we can host a single VM in Vagrant that runs a Docker instance. We then use Vagrant to set up and tear down the Docker platform itself, and use Docker for fast provisioning of individual services.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="CoreOS" id="idp10742784" class="calibre3"></a>A number of different technologies are being developed to take advantage of Docker. CoreOS is a very interesting operating system designed with Docker in mind. It is a stripped-down Linux OS that provides only the essential services to allow Docker to run. This means it consumes fewer resources than other operating systems, making it possible to dedicate even more resources of the underlying machine to our containers. Rather than using a package manager like debs or RPMs, all software is installed as independent Docker apps, each running in its own container.</p>
+
+<p class="author">Docker itself doesn’t solve all problems for us. Think of it as a simple PaaS that works on a single machine. If you want tools to help you manage services across multiple Docker instances across multiple machines, you’ll need to look at other software that adds these capabilities. There is a key need for a scheduling layer that lets you request a container and then finds a Docker container that can run it for you. In this space, Google’s recently open sourced Kubernetes and CoreOS’s cluster technology can help, and it seems every month there is a new entrant in this space. <a href="http://deis.io/" class="calibre3">Deis</a> is another interesting tool based on Docker, which is attempting to provide a Heroku-like PaaS on top of Docker.</p>
+
+<p class="author">I talked earlier about PaaS solutions. My struggle with them has always been that they often get the abstraction level wrong, and that self-hosted solutions lag significantly behind hosted solutions like Heroku. Docker gets much more of this right, and  the explosion of interest in this space means I suspect it will become a much more viable platform for all sorts of deployments over the next few years for all sorts of different use cases. In many ways, Docker with an appropriate scheduling layer sits between IaaS and PaaS solutions — the term <em class="calibre4">containers as a service (CaaS)</em> is already being used to describe it.</p>
+
+<p class="author">Docker is being used in production by multiple companies. It provides many of the benefits of lightweight containers in terms of efficiency and speed of provisioning, together with the tools to avoid many of the downsides. If you are interested in looking at alternative deployment platforms, I’d strongly suggest you give Docker a look.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

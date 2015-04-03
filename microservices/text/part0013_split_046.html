@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="Dynamic Service Registries">
+<div class="preface" id="idp12299680">
+<section data-type="sect2" data-pdf-bookmark="Rolling Your Own"><div class="preface" id="idp12325648">
+<h2 class="calibre15" id="calibre_pb_46">Rolling Your Own</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="dynamic service registries" data-secondary="launching" id="idp12327296" class="calibre3"></a>One approach I have used myself and seen done elsewhere is to roll your own system. On one project we were making heavy use of AWS, which offers the ability to add tags to instances. When launching service instances, I would apply tags to help define what the instance was and what it was used for. These allowed for some rich metadata to be associated with a given host, for example:</p>
+
+<ul class="stafflist">
+<li class="calibre5">
+service = accounts
+</li>
+<li class="calibre5">
+environment = production
+</li>
+<li class="calibre5">
+version = 154
+</li>
+</ul>
+
+<p class="author">I could then use the AWS APIs to query all the instances associated with a given AWS account to find machines I cared about. Here, AWS itself is handling the storing of the metadata associated with each instance, and providing us with the ability to query it. I then built command-line tools for interacting with these instances, and making dashboards for status monitoring becomes fairly easy, especially if you adopt the idea of having each service instance exposing health check details.</p>
+
+<p class="author">The last time I did this we didn’t go as far as having services use the AWS APIs to find their service dependencies, but there is no reason why you couldn’t. Obviously, if you want upstream services to be alerted when the location of a downstream service changes, you’re on your own.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

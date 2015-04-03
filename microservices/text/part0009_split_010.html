@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Implementing Service Tests">
+<div class="preface" id="idp11051936">
+<section data-type="sect2" data-pdf-bookmark="A Smarter Stub Service"><div class="preface" id="idp11164976">
+<h2 class="calibre15" id="calibre_pb_10">A Smarter Stub Service</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="Mountebank" id="idp11165984" class="calibre3"></a><a data-type="indexterm" data-primary="service tests" data-secondary="Mountebank server for" id="idp11166672" class="calibre3"></a>Normally for stub services I’ve rolled them myself. I’ve used everything from Apache or Nginx to embedded Jetty containers or even command-line-launched Python web servers used to launch stub servers for such test cases. I’ve probably reproduced the same work time and time again in creating these stubs. My ThoughtWorks colleague Brandon Bryars has potentially saved many of us a chunk of work with his stub/mock server called <a href="http://www.mbtest.org/" class="calibre3">Mountebank</a>.</p>
+
+<p class="author">You can think of Mountebank as a small software appliance that is programmable via HTTP. The fact that it happens to be written in NodeJS is completely opaque to any calling service. When it launches, you send it commands telling it what port to stub on, what protocol to handle (currently TCP, HTTP, and HTTPS are supported, with more planned), and what responses it should send when requests are sent. It also supports setting expectations if you want to use it as a mock. You can add or remove these stub endpoints at will, making it possible for a single Mountebank instance to stub more than one downstream dependency.</p>
+
+<p class="author">So, if we want to run our service tests for just our customer service we can launch the customer service, and a Mountebank instance that acts as our loyalty points bank. And if those tests pass, I can deploy the customer service straightaway! Or can I? What about the services that call the customer service — the helpdesk and the web shop? Do we know if we have made a change that may break them? Of course, we have forgotten the important tests at the top of the pyramid: the end-to-end tests.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

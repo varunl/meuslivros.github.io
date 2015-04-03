@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 1. Microservices">
+<div class="preface" id="why-services-chapter">
+<section data-type="sect1" data-pdf-bookmark="What Are Microservices?">
+<div class="preface" id="idp3781104">
+<section data-type="sect2" data-pdf-bookmark="Small, and Focused on Doing One Thing Well"><div class="preface" id="idp3783696">
+<h2 class="calibre15" id="calibre_pb_2">Small, and Focused on Doing One Thing Well</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="microservices" data-secondary="size and" id="idp3832064" class="calibre3"></a>Codebases grow as we write code to add new features. Over time, it can be difficult to know where a change needs to be made because the codebase is so large. Despite a drive for clear, modular monolithic codebases, all too often these arbitrary in-process boundaries break down. Code related to similar functions starts to become spread all over, making fixing bugs or implementations more difficult.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="monolithic systems" data-secondary="codebases in" id="idp3833840" class="calibre3"></a><a data-type="indexterm" data-primary="cohesion" id="idp3834816" class="calibre3"></a>Within a monolithic system, we fight against these forces by trying to ensure our code is more cohesive, often by creating abstractions or modules. Cohesion — the drive to have related code grouped together — is an important concept when we think about microservices. This is reinforced by Robert C. Martin’s definition of the <a href="http://bit.ly/1zOFMxl" class="calibre3"><em class="calibre4">Single Responsibility Principle</em></a>, which states “Gather together those things that change for the same reason, and separate those things that change for different reasons.”</p>
+
+<p class="author">Microservices take this same approach to independent services. We focus our service boundaries on business boundaries, making it obvious where code lives for a given piece of functionality. And by keeping this service focused on an explicit boundary, we avoid the temptation for it to grow too large, with all the associated difficulties that this can introduce.</p>
+
+<p class="author">The question I am often asked is <em class="calibre4">how small is small?</em> Giving a number for lines of code is problematic, as some languages are more expressive than others and can therefore do more in fewer lines of code. We must also consider the fact that we could be pulling in multiple dependencies, which themselves contain many lines of code. In addition, some part of your domain may be legitimately complex, requiring more code. Jon Eaves at RealEstate.com.au in Australia characterizes a microservice as something that could be rewritten in two weeks, a rule of thumb that makes sense for his particular context.</p>
+
+<p class="author">Another somewhat trite answer I can give is <em class="calibre4">small enough and no smaller</em>. When speaking at conferences, I nearly always ask the question <em class="calibre4">who has a system that is too big and that you’d like to break down</em>? Nearly everyone raises their hands. We seem to have a very good sense of what is too big, and so it could be argued that once a piece of code no longer <em class="calibre4">feels</em> too big, it’s probably small enough.</p>
+
+<p class="author">A strong factor in helping us answer <em class="calibre4">how small?</em> is how well the service aligns to team structures. If the codebase is too big to be managed by a small team, looking to break it down is very sensible. We’ll talk more about organizational alignment later on.</p>
+
+<p class="author">When it comes to how small is small enough, I like to think in these terms: the smaller the service, the more you maximize the benefits and downsides of microservice architecture. As you get smaller, the benefits around interdependence increase. But so too does some of the complexity that emerges from having more and more moving parts, something that we will explore throughout this book. As you get better at handling this complexity, you can strive for smaller and smaller services.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

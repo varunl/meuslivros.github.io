@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>How to Model Services</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 3. How to Model Services">
+<div class="preface" id="modelling-services-chapter">
+<section data-type="sect1" data-pdf-bookmark="The Technical Boundary"><div class="preface" id="idp4278992">
+<h1 class="calibre7" id="calibre_pb_12">The Technical Boundary</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="modeling services" data-secondary="technical boundaries" id="idp4280432" class="calibre3"></a><a data-type="indexterm" data-primary="technical boundaries" id="idp4281408" class="calibre3"></a>It can be useful to look at what can go wrong when services are modeled incorrectly. A while back, a few colleagues and I were working with a client in California, helping the company adopt some cleaner code practices and move more toward automated testing. We’d started with some of the low-hanging fruit, such as service decomposition, when we noticed something much more worrying. I can’t go into too much detail as to what the application did, but it was a public-facing application with a large, global customer base.</p>
+
+<p class="author">The team, and system, had grown. Originally one person’s vision, the system had taken on more and more features, and more and more users. Eventually, the organization decided to increase the capacity of the team by having a new group of developers based in Brazil take on some of the work. The system got split up, with the front half of the application being essentially stateless, implementing the public-facing website, as shown in <a data-type="xref" href="part0005_split_012.html#a30-onion" class="calibre3">Figure 3-4</a>. The back half of the system was simply a remote procedure call (RPC) interface over a data store. Essentially, imagine you’d taken a repository layer in your codebase and made this a separate service.</p>
+
+<figure class="calibre16"><div id="a30-onion" class="figure">
+<img src="../images/00007.jpeg" alt="An example of a service boundary split across a technical seam" hisrc="assets/bdms_0304.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 3-4. </span>A service boundary split across a technical seam</h6>
+</div></figure>
+
+<p class="author"><a data-type="indexterm" data-primary="onion architecture" id="idp4331728" class="calibre3"></a>Changes frequently had to be made to both services. Both services spoke in terms of low-level, RPC-style method calls, which were overly brittle (we’ll discuss this futher in <a data-type="xref" href="part0006_split_000.html#integration-chapter" class="calibre3">Chapter 4</a>). The service interface was also very chatty too, resulting in performance issues. This resulted in the need for elaborate RPC-batching mechanisms. I called this <em class="calibre4">onion architecture</em>, as it had lots of layers and made me cry when we had to cut through it.</p>
+
+<p class="author">Now on the face of it, the idea of splitting the previously monolithic system along geographical/organizational lines makes perfect sense, as we’ll expand on in <a data-type="xref" href="part0012_split_000.html#conways-chapter" class="calibre3">Chapter 10</a>. Here, however, rather than taking a vertical, business-focused slice through the stack, the team picked what was previously an in-process API and made a horizontal slice.</p>
+
+<p class="author">Making decisions to model service boundaries along technical seams isn’t always wrong. I have certainly seen this make lots of sense when an organization is looking to achieve certain performance objectives, for example. However, it should be your secondary driver for finding these seams, not your primary one.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

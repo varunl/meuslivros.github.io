@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="REST"><div class="preface" id="idp6276416">
+<h1 class="calibre7" id="calibre_pb_15">REST</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="REST (Representational State Transfer)" id="ix_rest" class="calibre3"></a><a data-type="indexterm" data-primary="integration" data-secondary="REST (Representational State Transfer)" id="idp6278928" class="calibre3"></a>REpresentational State Transfer (REST) is an architectural style inspired by the Web. There are many principles and constraints behind the REST style, but we are going to focus on those that really help us when we face integration challenges in a microservices world, and when we’re looking for an alternative style to RPC for our service interfaces.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="REST (Representational State Transfer)" data-secondary="concept of" id="idp6280592" class="calibre3"></a><a data-type="indexterm" data-primary="resources" id="idp6281760" class="calibre3"></a>Most important is the concept of resources. You can think of a resource as a thing that the service itself knows about, like a <code class="calibre9">Customer</code>. The server creates different representations of this <code class="calibre9">Customer</code> on request. How a resource is shown externally is <span class="firstname">completely</span> decoupled from how it is stored internally. A client might ask for a JSON representation of a <code class="calibre9">Customer</code>, for example, even if it is stored in a completely different format. Once a client has a representation of this <code class="calibre9">Customer</code>, it can then make requests to change it, and the server may or may not comply with them.</p>
+
+<p class="author">There are many different styles of REST, and I touch only briefly on them here. I strongly recommend you take a look at the <a href="http://bit.ly/1fh2AGt" class="calibre3">Richardson Maturity Model</a>, where the different styles of REST are compared.</p>
+
+<p class="author">REST itself doesn’t really talk about underlying protocols, although it is most commonly used over HTTP. I have seen implementations of REST using very different protocols before, such as serial or USB, although this can require a lot of work. Some of the features that HTTP gives us as part of the specification, such as verbs, make implementing REST over HTTP easier, whereas with other protocols you’ll have to handle these features yourself.</p>
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

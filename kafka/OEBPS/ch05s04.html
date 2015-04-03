@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>The Kafka producer property list</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="The Kafka producer property list"><div class="titlepage"><div><div><h1 class="title"><a id="ch05lvl1sec26"/>The Kafka producer property list</h1></div></div></div><p>The following table<a id="id134" class="indexterm"/> shows the list of a few important properties that can be configured for Kafka producer. For the complete list, visit <a class="ulink" href="http://kafka.apache.org/08/configuration.html">http://kafka.apache.org/08/configuration.html</a>.</p><div class="informaltable"><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>Property name</p>
+</th><th style="text-align: left" valign="bottom">
+<p>Description</p>
+</th><th style="text-align: left" valign="bottom">
+<p>Default value</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p>
+<code class="literal">metadata.broker.list</code>
+</p>
+</td><td style="text-align: left" valign="top">
+<p>The <a id="id141" class="indexterm"/>producer uses this property for<a id="id142" class="indexterm"/> getting metadata (topics, partitions, and replicas). The socket connections for sending the actual data will be established based on the broker information returned in the metadata. The format is <code class="literal">host1:port1,host2:port2</code>.</p>
+</td><td style="text-align: left" valign="top">&#xA0;</td></tr><tr><td style="text-align: left" valign="top">
+<p>
+<code class="literal">serializer.class</code>
+</p>
+</td><td style="text-align: left" valign="top">
+<p>This <a id="id143" class="indexterm"/>specifies the<a id="id144" class="indexterm"/> serializer class for messages. The default encoder accepts a byte and returns the same byte.</p>
+</td><td style="text-align: left" valign="top">
+<p>
+<code class="literal">DefaultEncoder</code>
+</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>
+<code class="literal">producer.type</code>
+</p>
+</td><td style="text-align: left" valign="top">
+<p>This <a id="id145" class="indexterm"/>property<a id="id146" class="indexterm"/> specifies how the messages will be sent: <code class="literal">async</code> for asynchronous sending and <code class="literal">sync</code> for synchronous sending.</p>
+</td><td style="text-align: left" valign="top">
+<p>
+<code class="literal">sync</code>
+</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>
+<code class="literal">request.required.acks</code>
+</p>
+</td><td style="text-align: left" valign="top">
+<p>This <a id="id147" class="indexterm"/>value controls <span class="emphasis"><em>when</em></span> the producer <a id="id148" class="indexterm"/>receives an acknowledgment from the broker. The value <code class="literal">0</code> means the producer will not receive any acknowledgment from the broker. The value <code class="literal">1</code> means the producer receives an acknowledgment once the lead broker has<a id="id149" class="indexterm"/> received the data. The value <code class="literal">-1</code> means the producer will receive the acknowledgment once all the in-sync replicas have received the data.</p>
+</td><td style="text-align: left" valign="top">
+<p>
+<code class="literal">0</code>
+</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>
+<code class="literal">key.serializer.class</code>
+</p>
+</td><td style="text-align: left" valign="top">
+<p>This<a id="id150" class="indexterm"/> specifies<a id="id151" class="indexterm"/> the serializer class for keys (defaults to the same as for the message serializer class).</p>
+</td><td style="text-align: left" valign="top">
+<p>
+<code class="literal">${serializer.class}</code>
+</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>
+<code class="literal">partitioner.class</code>
+</p>
+</td><td style="text-align: left" valign="top">
+<p>This is<a id="id152" class="indexterm"/> the partitioner class for partitioning <a id="id153" class="indexterm"/>messages among subtopics. The default partitioner is based on the hash value of the key.</p>
+</td><td style="text-align: left" valign="top">
+<p>
+<code class="literal">DefaultPartitioner</code>
+</p>
+</td></tr></tbody></table></div></div></body></html>

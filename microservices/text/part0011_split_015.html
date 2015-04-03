@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Security</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 9. Security">
+<div class="preface" id="security-chapter">
+<section data-type="sect1" data-pdf-bookmark="Securing Data at Rest">
+<div class="preface" id="idp11610768">
+<section data-type="sect2" data-pdf-bookmark="It’s All About the Keys"><div class="preface" id="idp11627424">
+<h2 class="calibre15" id="calibre_pb_15">It’s All About the Keys</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="security" data-secondary="key storage" id="idp11628768" class="calibre3"></a><a data-type="indexterm" data-primary="API key-based authentication" id="idp11629744" class="calibre3"></a>As has been covered so far, encryption relies on an algorithm taking the data to be encrypted and a key and then producing the encrypted data. So, where is your key stored? Now if I am encrypting my data because I am worried about someone stealing my whole database, and I store the key I use in the same database, then I haven’t really achieved much! Therefore, we need to store the keys somewhere else. But where?</p>
+
+<p class="author">One solution is to use a separate security appliance to encrypt and decrypt data. Another is to use a separate key vault that your service can access when it needs a key. The lifecycle management of the keys (and access to change them) can be a vital operation, and these systems can handle this for you.</p>
+
+<p class="author">Some databases even include built-in support for encryption, such as SQL Server’s Transparent Data Encryption, that aim to handle this in a transparent fashion. Even if your database of choice does, research how the keys are handled and understand if the threat you are protecting against is actually being mitigated.</p>
+
+<p class="author">Again, this stuff is complex. Avoid implementing your own, and do some good research!</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

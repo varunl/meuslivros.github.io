@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Security</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 9. Security">
+<div class="preface" id="security-chapter">
+<section data-type="sect1" data-pdf-bookmark="Service-to-Service Authentication and Authorization">
+<div class="preface" id="idp11536688">
+<section data-type="sect2" data-pdf-bookmark="API Keys"><div class="preface" id="idp11582736">
+<h2 class="calibre15" id="calibre_pb_11">API Keys</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="service-to-service authentication/authorization" data-secondary="API keys" id="idp11584112" class="calibre3"></a><a data-type="indexterm" data-primary="API key-based authentication" id="idp11585120" class="calibre3"></a><a data-type="indexterm" data-primary="key-based authentication" id="idp11585808" class="calibre3"></a>All public APIs from services like Twitter, Google, Flickr, and AWS make use of API keys. API keys allow a service to identify who is making a call, and place limits on what they can do. Often the limits go beyond simply giving access to a resource, and can extend to actions like rate-limiting specific callers to protect quality of service for other people.</p>
+
+<p class="author">When it comes to using API keys to handle your own microservice-to-microservice approach, the exact mechanics of how it works will depend on the technology you use. Some systems use a single API key that is shared, and use an approach similar to HMAC as just described. A more common approach is to use a public and private key pair. Typically, you’ll manage keys centrally, just as we would manage identities of people centrally. The gateway model is very popular in this space.</p>
+
+<p class="author">Part of their popularity stems from the fact that API keys are focused on ease of use for programs. Compared to handling a SAML handshake, API key–based authentication is much simpler and more straightforward.</p>
+
+<p class="author">The exact capabilities of the systems vary, and you have multiple options in both the commercial and open source space. Some of the products just handle the API key exchange and some basic key management. Other tools offer everything up to and including rate limiting, monetization, API catalogs, and discovery systems.</p>
+
+<p class="author">Some API systems allow you to bridge API keys to existing directory services. This would allow you to issue API keys to principals (representing people or systems) in your organization, and control the lifecycle of those keys in the same way you’d manage their normal credentials. This opens up the possibility of allowing access to your services in different ways but keeping the same source of truth — for example, using SAML to authenticate humans for SSO, and using API keys for service-to-service communication, as shown in <a data-type="xref" href="part0011_split_011.html#a75-api-gateway" class="calibre3">Figure 9-2</a>.</p>
+
+<figure class="calibre16"><div id="a75-api-gateway" class="figure">
+<img src="../images/00066.jpeg" alt="Using directory services to synchronise Principal information between an SSO and an API gateway" hisrc="assets/bdms_0902.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 9-2. </span>Using directory services to synchronize principal information between an SSO and an API gateway</h6>
+</div></figure>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

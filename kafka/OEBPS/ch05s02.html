@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Simple Java producer</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Simple Java producer"><div class="titlepage"><div><div><h1 class="title"><a id="ch05lvl1sec24"/>Simple Java producer</h1></div></div></div><p>Now we will start writing a simple<a id="id105" class="indexterm"/> Java-based producer to transmit the message to the broker. This <code class="literal">SimpleProducer</code> class<a id="id106" class="indexterm"/> is used to create a message for a specific topic and transmit it.</p><div class="section" title="Importing classes"><div class="titlepage"><div><div><h2 class="title"><a id="ch05lvl2sec19"/>Importing classes</h2></div></div></div><p>As the first step, we<a id="id107" class="indexterm"/> need <a id="id108" class="indexterm"/>to import the following classes:</p><div class="informalexample"><pre class="programlisting">import kafka.javaapi.producer.Producer;
+import kafka.producer.KeyedMessage;
+import kafka.producer.ProducerConfig;</pre></div></div><div class="section" title="Defining properties"><div class="titlepage"><div><div><h2 class="title"><a id="ch05lvl2sec20"/>Defining properties</h2></div></div></div><p>As the next step in<a id="id109" class="indexterm"/> writing the <a id="id110" class="indexterm"/>producer, we need to define properties for making a connection with Kafka broker and pass these properties to the Kafka producer:</p><div class="informalexample"><pre class="programlisting">Properties props = new Properties();
+props.put("metadata.broker.list","localhost:9092");
+props.put("serializer.class","kafka.serializer.StringEncoder");
+props.put("request.required.acks", "1");
+ProducerConfig config = new ProducerConfig(props); 
+Producer&lt;Integer, String&gt; producer = new Producer&lt;Integer, String&gt;(config);</pre></div><p>Now let us see the major properties mentioned in the code:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">metadata.broker.list</code>: This<a id="id111" class="indexterm"/> property specifies the broker <code class="literal">&lt;node:port&gt;</code> that the producer needs to connect to (more information is provided in the next example).</li><li class="listitem" style="list-style-type: disc"><code class="literal">serializer.class list</code>: This<a id="id112" class="indexterm"/> property specifies the serializer class that needs to be used while preparing the message for transmission from the producer to the broker. In this example, we will be using the string encoder provided by Kafka. By default, the serializer class for the key and message is the same, but we can change the serializer class for the key by using the <code class="literal">key.serializer.class</code> property.</li><li class="listitem" style="list-style-type: disc"><code class="literal">request.required.acks</code>: This <a id="id113" class="indexterm"/>property instructs the Kafka broker to send an acknowledgment to the producer when a <a id="id114" class="indexterm"/>message is received. By default, the <a id="id115" class="indexterm"/>producer works in the "fire and forget" mode and is not informed in case of message loss.</li></ul></div></div><div class="section" title="Building the message and sending it"><div class="titlepage"><div><div><h2 class="title"><a id="ch05lvl2sec21"/>Building the message and sending it</h2></div></div></div><p>As the final step, we need to build the <a id="id116" class="indexterm"/>message and send it to the<a id="id117" class="indexterm"/> broker as shown in the following code:</p><div class="informalexample"><pre class="programlisting">String messageStr = new String("Hello from Java Producer");
+KeyedMessage&lt;Integer, String&gt; data = new KeyedMessage&lt;Integer, String&gt;(topic, messageStr);
+producer.send(data); </pre></div><p>The complete program will look as follows:</p><div class="informalexample"><pre class="programlisting">package test.kafka;
+
+import java.util.Properties;
+import kafka.javaapi.producer.Producer;
+import kafka.producer.KeyedMessage;
+import kafka.producer.ProducerConfig;
+
+public class SimpleProducer {
+    private static Producer&lt;Integer, String&gt; producer;
+    private final Properties props = new Properties();public    SimpleProducer()
+    {
+      props.put("broker.list", "localhost:9092");
+      props.put("serializer.class", "kafka.serializer.StringEncoder");
+      props.put("request.required.acks", "1");
+      producer = new Producer&lt;Integer, String&gt;(new ProducerConfig(props));
+    }
+public static void main(String[] args) {
+    SimpleProducer sp = new SimpleProducer();
+    String topic = (String) args[0];
+    String messageStr = (String) args[1];
+    KeyedMessage&lt;Integer, String&gt; data = new KeyedMessage&lt;Integer, String&gt;(topic, messageStr);
+    producer.send(data);
+    producer.close();
+  }
+}</pre></div><p>Compile the preceding <a id="id118" class="indexterm"/>program<a id="id119" class="indexterm"/> and use the following command to run it:</p><div class="informalexample"><pre class="programlisting"> [root@localhost kafka-0.8]# java SimpleProducer kafkatopic Hello_There</pre></div><p>Here, <code class="literal">kafkatopic</code> is the topic that will be created automatically when the message <code class="literal">Hello_There</code> is sent to the broker.</p></div></div></body></html>

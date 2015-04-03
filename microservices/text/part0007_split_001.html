@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Splitting the Monolith</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Splitting the Monolith">
+<div class="preface" id="splitting-chapter">
+<section data-type="sect1" data-pdf-bookmark="It’s All About Seams"><div class="preface" id="idp10243248">
+<h1 class="calibre7" id="calibre_pb_1">It’s All About Seams</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="monolithic systems" data-secondary="lack of cohesion/loose coupling in" id="idp10244624" class="calibre3"></a><a data-type="indexterm" data-primary="decompositional techniques" data-secondary="seam concept" id="idp10245568" class="calibre3"></a><a data-type="indexterm" data-primary="seams, concept of" id="idp10246480" class="calibre3"></a>We discussed in <a data-type="xref" href="part0005_split_000.html#modelling-services-chapter" class="calibre3">Chapter 3</a> that we want our services to be highly cohesive and loosely coupled. The problem with the monolith is that all too often it is the opposite of both. Rather than tend toward cohesion, and keep things together that tend to change together, we acquire and stick together all sorts of unrelated code. Likewise, loose coupling doesn’t really exist: if I want to make a change to a line of code, I may be able to do that easily enough, but I cannot deploy that change without potentially impacting much of the rest of the monolith, and I’ll certainly have to redeploy the entire system.</p>
+
+<p class="author">In his book <em class="calibre4">Working Effectively with Legacy Code</em> (Prentice-Hall), Michael Feathers defines the concept of a <em class="calibre4">seam</em> — that is, a portion of the code that can be treated in isolation and worked on without impacting the rest of the codebase. We also want to identify seams. But rather than finding them for the purpose of cleaning up our codebase, we want to identify seams that can become service boundaries.</p>
+
+<p class="author">So what makes a good seam? Well, as we discussed previously, bounded contexts make excellent seams, because by definition they represent cohesive and yet loosely coupled boundaries in an organization. So the first step is to start identifying these boundaries in our code.</p>
+
+<p class="author">Most programming languages provide namespace concepts that allow us to group similar code together. Java’s <code class="calibre9">package</code> concept is a fairly weak example, but gives us much of what we need. All other mainstream programming languages have similar concepts built in, with JavaScript very arguably being an exception.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Breaking Apart MusicCorp"><div class="preface" id="idp10252288">
+<div class="calibre29" id="calibre_pb_2"></div>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

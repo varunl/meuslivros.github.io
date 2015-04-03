@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="Service-to-Host Mapping">
+<div class="preface" id="idp10631472">
+<section data-type="sect2" data-pdf-bookmark="Application Containers"><div class="preface" id="idp10639584">
+<h2 class="calibre15" id="calibre_pb_15">Application Containers</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="service-to-host mapping" data-secondary="application containers" id="idp10654192" class="calibre3"></a><a data-type="indexterm" data-primary="application containers" id="idp10655168" class="calibre3"></a>If you’re familiar with deploying .NET applications behind IIS or Java applications into a servlet container, you will be well acquainted with the model where multiple distinct services or applications sit inside a single application container, which in turn sits on a single host, as we see in <a data-type="xref" href="part0008_split_015.html#a61-application-server" class="calibre3">Figure 6-7</a>. The idea is that the application container your services live in gives you benefits in terms of improved manageability, such as clustering support to handle grouping multiple instances together, monitoring tools, and the like.</p>
+
+<figure class="calibre16"><div id="a61-application-server" class="figure">
+<img src="../images/00043.jpeg" alt="Deploying multiple microservices into a single application server" hisrc="assets/bdms_0607.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 6-7. </span>Multiple microservices per host</h6>
+</div></figure>
+
+<p class="author">This setup can also yield benefits in terms of reducing overhead of language runtimes. Consider running five Java services in a single Java servlet container. I only have the overhead of one single JVM. Compare this with running five independent JVMs on the same host when using embedded containers. That said, I still feel that these application containers have enough downsides that you should challenge yourself to see if they are really required.</p>
+
+<p class="author">First among the downsides is that they inevitably constrain technology choice. You have to buy into a technology stack. This can limit not only the technology choices for the implementation of the service itself, but also the options you have in terms of automation and management of your systems. As we’ll discuss shortly, one of the ways we can address the overhead of managing multiple hosts is around automation, and so constraining our options for resolving this may well be doubly damaging.</p>
+
+<p class="author">I would also question some of the value of the container features. Many of them tout the ability to manage clusters to support shared in-memory session state, something we absolutely want to avoid in any case due to the challenges this creates when scaling our services. And the monitoring capabilities they provide won’t be sufficient when we consider the sorts of joined-up monitoring we want to do in a microservices world, as we’ll see in <a data-type="xref" href="part0010_split_000.html#monitoring-chapter" class="calibre3">Chapter 8</a>. Many of them also have quite slow spin-up times, impacting developer feedback cycles.</p>
+
+<p class="author">There are other sets of problems too. Attempting to do proper lifecycle management of applications on top of platforms like the JVM can be problematic, and more complex than simply restarting a JVM. Analyzing resource use and threads is also much more complex, as you have multiple applications sharing the same process. And remember, even if you do get value from a technology-specific container, they aren’t free. Aside from the fact that many of them are commercial and so have a cost implication, they add a resource overhead in and of themselves.</p>
+
+<p class="author">Ultimately, this approach is again an attempt to optimize for scarcity of resources that simply may not hold up anymore. Whether you decide to have multiple services per host as a deployment model, I would strongly suggest looking at self-contained deployable microservices as artifacts. For .NET, this is possible with things like Nancy, and Java has supported this model for years. For example, the venerable Jetty embedded container makes for a very lightweight self-contained HTTP server, which is the core of the Dropwizard stack. Google has been known to quite happily use embedded Jetty containers for serving static content directly, so we know these things can operate at scale.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

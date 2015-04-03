@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Splitting the Monolith</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Splitting the Monolith">
+<div class="preface" id="splitting-chapter">
+<section data-type="sect1" data-pdf-bookmark="Data Retrieval via Service Calls"><div class="preface" id="idp10418480">
+<h1 class="calibre7" id="calibre_pb_25">Data Retrieval via Service Calls</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="reporting databases" data-secondary="data retrieval via service calls" id="idp10419824" class="calibre3"></a><a data-type="indexterm" data-primary="data" data-secondary="retrieval via service calls" id="idp10420768" class="calibre3"></a><a data-type="indexterm" data-primary="service calls, data retrieval via" id="idp10421680" class="calibre3"></a>There are many variants of this model, but they all rely on pulling the required data from the source systems via API calls. For a very simple reporting system, like a dashboard that might just want to show the number of orders placed in the last 15 minutes, this might be fine. To report across data from two or more systems, you need to make multiple calls to assemble this data.</p>
+
+<p class="author">This approach breaks down rapidly with use cases that require larger volumes of data, however. Imagine a use case where we want to report on customer purchasing behavior for our music shop over the last 24 months, looking at various trends in customer behavior and how this has impacted on revenue. We need to pull large volumes of data from at least the customer and finance systems. Keeping a local copy of this data in the reporting system is dangerous, as we may not know if it has changed (even historic data may be changed after the fact), so to generate an accurate report we need all of the finance and customer records for the last two years. With even modest numbers of customers, you can see that this quickly will become a very slow operation.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="reporting databases" data-secondary="third-party software" id="idp10424288" class="calibre3"></a><a data-type="indexterm" data-primary="third-party software" id="idp10425264" class="calibre3"></a><a data-type="indexterm" data-primary="third-party software" data-secondary="reporting databases" id="idp10425936" class="calibre3"></a>Reporting systems also often rely on third-party tools that expect to retrieve data in a certain way, and here providing a SQL interface is the fastest way to ensure your reporting tool chain is as easy to integrate with as possible. We could still use this approach to pull data periodically into a SQL database, of course, but this still presents us with some challenges.</p>
+
+<p class="author">One of the key challenges is that the APIs exposed by the various microservices may well not be designed for reporting use cases. For example, a customer service may allow us to find a customer by an ID, or search for a customer by various fields, but wouldn’t necessarily expose an API to retrieve all customers. This could lead to many calls being made to retrieve all the data — for example, having to iterate through a list of all the customers, making a separate call for each one. Not only could this be inefficient for the reporting system, it could generate load for the service in question too.</p>
+
+<p class="author">While we could speed up some of the data retrieval by adding cache headers to the resources exposed by our service, and have this data cached in something like a reverse proxy, the nature of reporting is often that we access the <em class="calibre4">long tail</em> of data. This means that we may well request resources that no one else has requested before (or at least not for a sufficiently long time), resulting in a potentially expensive <em class="calibre4">cache miss</em>.</p>
+
+<p class="author">You could resolve this by exposing batch APIs to make reporting easier. For example, our customer service could allow you to pass a list of customer IDs to it to retrieve them in batches, or may even expose an interface that lets you page through all the customers. A more extreme version of this is to model the batch request as a resource in its own right. For example, the customer service might expose something like a <code class="calibre9">BatchCustomerExport</code> resource endpoint. The calling system would POST a <span class="firstname"><code class="calibre9">BatchRequest</code></span>, perhaps passing in a location where a file can be placed with all the data. The customer service would return an HTTP 202 response code, indicating that the request was accepted but has not yet been processed. The calling system could then poll the resource waiting until it retrieves a 201 Created status, indicating that the request has been fulfilled, and then the calling system could go and fetch the data. This would allow potentially large data files to be exported without the overhead of being sent over HTTP; instead, the system could simply save a CSV file to a shared location.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="data" data-secondary="batch insertion of" id="idp10433088" class="calibre3"></a>I have seen the preceding approach used for batch insertion of data, where it worked well. I am less in favor of it for reporting systems, however, as I feel that there are other, potentially simpler solutions that can scale more effectively when you’re dealing with traditional reporting needs.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

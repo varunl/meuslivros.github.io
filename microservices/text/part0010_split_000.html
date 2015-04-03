@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Monitoring</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 8. Monitoring"><div class="preface" id="monitoring-chapter">
+<h1 class="calibre6" id="calibre_pb_0"><span class="label">Chapter 8. </span>Monitoring</h1>
+
+
+<p class="author"><a data-type="indexterm" data-primary="monitoring" data-secondary="complexities of" id="idp11340272" class="calibre3"></a>As I’ve hopefully shown so far, breaking our system up into smaller, fine-grained microservices results in multiple benefits. It also, however, adds complexity when it comes to monitoring the system in production. In this chapter, we’ll look at the challenges associated with monitoring and identifying problems in our fine-grained systems, and I’ll outline some of the things you can do to have your cake and eat it too!</p>
+
+<p class="author">Picture the scene. It’s a quiet Friday afternoon, and the team is looking forward to sloping off early to the pub as a way to start a weekend away from work. Then suddenly the emails arrive. The website is misbehaving! Twitter is ablaze with your company’s failings, your boss is chewing your ear off, and the prospects of a quiet weekend vanish.</p>
+
+<p class="author">What’s the first thing you need to know? What the hell has gone wrong?</p>
+
+<p class="author">In the world of the monolithic application, we at least have a very obvious place to start our investigations. Website slow? It’s the monolith. Website giving odd errors? It’s the monolith. CPU at 100%? Monolith. Smell of burning? Well, you get the idea. Having a single point of failure also makes failure investigation somewhat simpler!</p>
+
+<p class="author">Now let’s think about our own, microservice-based system. The capabilities we offer our users are served from multiple small services, some of which communicate with yet more services to accomplish their tasks. There are lots of advantages to such an approach (which is good, as otherwise this book would be a waste of time), but in the world of monitoring, we have a more complex problem on our hands.</p>
+
+<p class="author">We now have multiple servers to monitor, multiple logfiles to sift through, and multiple places where network latency could cause problems. So how do we approach this? We need to make sense of what otherwise might be a chaotic, tangled mess — the last thing any of us wants to deal with on a Friday afternoon (or at any time, come to that!).</p>
+
+<p class="author">The answer here is pretty straightforward: monitor the small things, and use aggregation to see the bigger picture. To see how, we’ll start with the simplest system we can: a single node.</p>
+
+
+
+
+
+
+</div></section></body></html>

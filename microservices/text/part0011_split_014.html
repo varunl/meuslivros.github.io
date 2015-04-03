@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Security</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 9. Security">
+<div class="preface" id="security-chapter">
+<section data-type="sect1" data-pdf-bookmark="Securing Data at Rest">
+<div class="preface" id="idp11610768">
+<section data-type="sect2" data-pdf-bookmark="Go with the Well Known"><div class="preface" id="idp11616160">
+<h2 class="calibre15" id="calibre_pb_14">Go with the Well Known</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="data encryption" id="idp11617536" class="calibre3"></a><a data-type="indexterm" data-primary="encryption" id="idp11618240" class="calibre3"></a><a data-type="indexterm" data-primary="security" data-secondary="encryption" id="idp11618912" class="calibre3"></a>The easiest way you can mess up data encryption is to try to implement your own encryption algorithms, or even try to implement someone else’s. Whatever programming language you use, you’ll have access to reviewed, regularly patched implementations of well-regarded encryption algorithms. Use those! And subscribe to the mailing lists/advisory lists for the technology you choose to make sure you are aware of vulnerabilities as they are found so you can keep them patched and up to date.</p>
+
+<p class="author">For encryption at rest, unless you have a very good reason for picking something else, pick a well-known implementation of AES-128 or AES-256 for your platform.<a xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:svg="http://www.w3.org/2000/svg" data-type="noteref" id="idp11621056-marker" href="part0011_split_031.html#idp11621056" class="calibre3"><sup class="calibre22">3</sup></a> Both the Java and .NET runtimes include implementations of AES that are highly likely to be well tested (and well patched), but separate libraries exist for most platforms too — for example, the <a href="http://www.bouncycastle.org/" class="calibre3">Bouncy Castle libraries</a> for Java and C#.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="security" data-secondary="passwords" id="idp11624032" class="calibre3"></a><a data-type="indexterm" data-primary="passwords" id="idp11625008" class="calibre3"></a>For passwords, you should consider using a technique called <a href="http://bit.ly/1BrIKpi" class="calibre3"><em class="calibre4">salted password hashing</em></a>.</p>
+
+<p class="author">Badly implemented encryption could be worse than having none, as the false sense of security (pardon the pun) can lead you to take your eye off the ball.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

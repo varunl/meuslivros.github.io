@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>The Evolutionary Architect</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 2. The Evolutionary Architect">
+<div class="preface" id="architect-chapter">
+<section data-type="sect1" data-pdf-bookmark="Exception Handling"><div class="preface" id="idp4640816">
+<h1 class="calibre7" id="calibre_pb_18">Exception Handling</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="systems architects" data-secondary="exception handling" id="idp4642016" class="calibre3"></a><a data-type="indexterm" data-primary="exception handling" id="idp4642992" class="calibre3"></a>So our principles and practices guide how our systems should be built. But what happens when our system deviates from this? Sometimes we make a decision that is just an exception to the rule. In these cases, it might be worth capturing such a decision in a log somewhere for future reference. If enough <em class="calibre4">exceptions</em> are found, it may eventually make sense to change the principle or practice to reflect a new understanding of the world. For example, we might have a practice that states that we will always use MySQL for data storage. But then we see compelling reasons to use Cassandra for highly scalable storage, at which point we change our practice to say, “Use MySQL for most storage requirements, unless you expect large growth in volumes, in which case use Cassandra.”</p>
+
+<p class="author">It’s probably worth reiterating, though, that every organization is different. I’ve worked with some companies where the development teams have a high degree of trust and autonomy, and there the principles are lightweight (and the need for overt exception handling is greatly reduced if not eliminated). In more structured organizations in which developers have less freedom, tracking exceptions may be vital to ensure that the rules put in place properly reflect the challenges people are facing. With all that said, I am a fan of microservices as a way of optimizing for autonomy of teams, giving them as much freedom as possible to solve the problem at hand. If you are working in an organization that places lots of restrictions on how developers can do their work, then microservices may not be for you.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

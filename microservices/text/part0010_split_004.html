@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Monitoring</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 8. Monitoring">
+<div class="preface" id="monitoring-chapter">
+<section data-type="sect1" data-pdf-bookmark="Logs, Logs, and Yet More Logs…"><div class="preface" id="idp11371040">
+<h1 class="calibre7" id="calibre_pb_4">Logs, Logs, and Yet More Logs…</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="monitoring" data-secondary="central logging" id="idp11372208" class="calibre3"></a><a data-type="indexterm" data-primary="logstash" id="idp11373184" class="calibre3"></a><a data-type="indexterm" data-primary="Kibana" id="idp11373856" class="calibre3"></a><a data-type="indexterm" data-primary="aggregated logs" id="idp11374528" class="calibre3"></a><a data-type="indexterm" data-primary="logs" data-secondary="aggregated" data-seealso="monitoring" id="idp11375200" class="calibre3"></a>Now the number of hosts we are running on is becoming a challenge. SSH-multiplexing to retrieve logs probably isn’t going to cut it now, and there isn’t a screen big enough for you to have terminals open on every host. Instead, we’re looking to use specialized subsystems to grab our logs and make them available centrally. One example of this is <a href="http://logstash.net" class="calibre3">logstash</a>, which can parse multiple logfile formats and can send them to downstream systems for further investigation.</p>
+
+<p class="author"><a href="http://bit.ly/1BrIp6a" class="calibre3">Kibana</a> is an ElasticSearch-backed system for viewing logs, illustrated in <a data-type="xref" href="part0010_split_004.html#a70-kibana" class="calibre3">Figure 8-4</a>. You can use a query syntax to search through logs, allowing you to do things like restrict time and date ranges or use regular expressions to find matching strings. Kibana can even generate graphs from the logs you send it, allowing you to see at a glance how many errors have been generated over time, for example.</p>
+
+<figure class="calibre16"><div id="a70-kibana" class="figure">
+<img src="../images/00063.gif" alt="Using Kibana to view aggregated logs" hisrc="assets/bdms_0804.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 8-4. </span>Using Kibana to view aggregated logs</h6>
+</div></figure>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

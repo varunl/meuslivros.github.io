@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Kafka broker property list</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Kafka broker property list"><div class="titlepage"><div><div><h1 class="title"><a id="ch03lvl1sec16"/>Kafka broker property list</h1></div></div></div><p>The following is the <a id="id58" class="indexterm"/>list of few <a id="id59" class="indexterm"/>important properties that can be configured for the Kafka broker. For the complete list, visit <a class="ulink" href="http://kafka.apache.org/documentation.html#brokerconfig">http://kafka.apache.org/documentation.html#brokerconfig</a>.</p><div class="informaltable"><table border="1"><colgroup><col style="text-align: left"/><col style="text-align: left"/><col style="text-align: left"/></colgroup><thead><tr><th style="text-align: left" valign="bottom">
+<p>Property name</p>
+</th><th style="text-align: left" valign="bottom">
+<p>Description</p>
+</th><th style="text-align: left" valign="bottom">
+<p>Default value</p>
+</th></tr></thead><tbody><tr><td style="text-align: left" valign="top">
+<p>
+<code class="literal">broker.id</code>
+</p>
+</td><td style="text-align: left" valign="top">
+<p>Each <a id="id60" class="indexterm"/>broker is <a id="id61" class="indexterm"/>uniquely identified by an ID. This ID serves as the broker's name, and allows the broker to be moved to a different host/port without confusing consumers.</p>
+</td><td style="text-align: left" valign="top">
+<p>
+<code class="literal">0</code>
+</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>
+<code class="literal">log.dirs</code>
+</p>
+</td><td style="text-align: left" valign="top">
+<p>These<a id="id62" class="indexterm"/> are the directories<a id="id63" class="indexterm"/> in which the log data is kept.</p>
+</td><td style="text-align: left" valign="top">
+<p>
+<code class="literal">/tmp/kafka-logs</code>
+</p>
+</td></tr><tr><td style="text-align: left" valign="top">
+<p>
+<code class="literal">zookeeper.connect</code>
+</p>
+</td><td style="text-align: left" valign="top">
+<p>This specifies<a id="id64" class="indexterm"/> the ZooKeeper's connection string in<a id="id65" class="indexterm"/> the form <code class="literal">hostname:port/chroot</code>. Here, <code class="literal">chroot</code> is a base directory that is prepended to all path operations (this effectively namespaces all Kafka znodes to allow sharing with other applications on the same ZooKeeper cluster).</p>
+</td><td style="text-align: left" valign="top">
+<p>
+<code class="literal">localhost:2181</code>
+</p>
+</td></tr></tbody></table></div></div></body></html>

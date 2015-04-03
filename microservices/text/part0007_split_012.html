@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Splitting the Monolith</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Splitting the Monolith">
+<div class="preface" id="splitting-chapter">
+<section data-type="sect1" data-pdf-bookmark="Example: Shared Static Data"><div class="preface" id="idp10310208">
+<h1 class="calibre7" id="calibre_pb_13">Example: Shared Static Data</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="database decomposition" data-secondary="shared static data" id="idp10311552" class="calibre3"></a><a data-type="indexterm" data-primary="shared static data" id="idp10312528" class="calibre3"></a><a data-type="indexterm" data-primary="data" data-secondary="shared static" id="idp10313200" class="calibre3"></a><a data-type="indexterm" data-primary="static data" id="idp10314144" class="calibre3"></a>I have seen perhaps as many country codes stored in databases (shown in <a data-type="xref" href="part0007_split_012.html#a58-country-codes" class="calibre3">Figure 5-4</a>) as I have written <code class="calibre9">StringUtils</code> classes for in-house Java projects. This seems to imply that we plan to change the countries our system supports way more frequently than we’ll deploy new code, but whatever the real reason, these examples of shared static data being stored in databases come up a lot. So what do we do in our music shop if all our potential services read from the same table like this?</p>
+
+<figure class="calibre16"><div id="a58-country-codes" class="figure">
+<img src="../images/00025.gif" alt="Country Codes In The Database" hisrc="assets/bdms_0504.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 5-4. </span>Country codes in the database</h6>
+</div></figure>
+
+<p class="author">Well, we have a few options. One is to duplicate this table for each of our packages, with the long-term view that it will be duplicated within each service also. This leads to a potential consistency challenge, of course: what happens if I update one table to reflect the creation of Newmantopia off the east coast of Australia, but not another?</p>
+
+<p class="author">A second option is to instead treat this shared, static data as code. Perhaps it could be in a property file deployed as part of the service, or perhaps just as an enumeration. The problems around the consistency of data remain, although experience has shown that it is far easier to push out changes to configuration files than alter live database tables. This is often a very sensible approach.</p>
+
+<p class="author">A third option, which may well be extreme, is to push this static data into a service of its own right. In a couple of situations I have encountered, the volume, complexity, and rules associated with the static reference data were sufficient that this approach was warranted, but it’s probably overkill if we are just talking about country codes!</p>
+
+<p class="author">Personally, in most situations I’d try to push for keeping this data in configuration files or directly in code, as it is the simple option for most cases.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Splitting the Monolith</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Splitting the Monolith">
+<div class="preface" id="splitting-chapter">
+<section data-type="sect1" data-pdf-bookmark="Understanding Root Causes"><div class="preface" id="idp10487872">
+<h1 class="calibre7" id="calibre_pb_32">Understanding Root Causes</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="database decomposition" data-secondary="selecting separation timing" id="idp10488976" class="calibre3"></a><a data-type="indexterm" data-primary="decompositional techniques" data-secondary="selecting separation timing" id="idp10489968" class="calibre3"></a>We have discussed how to split apart larger services into smaller ones, but why did these services grow so large in the first place? The first thing to understand is that growing a service to the point that it needs to be split is completely OK. We <em class="calibre4">want</em> the architecture of our system to change over time in an incremental fashion. The key is knowing it needs to be split before the split becomes too expensive.</p>
+
+<p class="author">But in practice many of us will have seen services grow well beyond the point of sanity. Despite knowing that a smaller set of services would be easier to deal with than the huge monstrosity we currently have, we still plow on with growing the beast. Why?</p>
+
+<p class="author">Part of the problem is knowing where to start, and I’m hoping this chapter has helped. But another challenge is the cost associated with splitting out services. Finding somewhere to run the service, spinning up a new service stack, and so on, are nontrivial tasks. So how do we address this? Well, if doing something is right but difficult, we should strive to make things easier. Investment in libraries and lightweight service frameworks can reduce the cost associated with creating the new service. Giving people access to self-service provision virtual machines or even making a platform as a service (PaaS) available will make it easier to provision systems and test them. Throughout the rest of the book, we’ll be discussing a number of ways to help you keep this cost down.<a data-type="indexterm" data-startref="ix_dbdecomp" id="idp10493808" class="calibre3"></a></p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

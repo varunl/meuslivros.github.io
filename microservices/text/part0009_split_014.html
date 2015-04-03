@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Flaky and Brittle Tests">
+<div class="preface" id="idp11187328">
+<section data-type="sect2" data-pdf-bookmark="Who Writes These Tests?"><div class="preface" id="idp11198448">
+<h2 class="calibre15" id="calibre_pb_14">Who Writes These Tests?</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="end-to-end tests" data-secondary="creation of" id="idp11199792" class="calibre3"></a>With the tests that run as part of the pipeline for a specific service, the sensible starting point is that the team that owns that service should write those tests (we’ll talk more about service ownership in <a data-type="xref" href="part0012_split_000.html#conways-chapter" class="calibre3">Chapter 10</a>). But if we consider that we might have multiple teams involved, and the end-to-end-tests step is now effectively shared between the teams, who writes and looks after these tests?</p>
+
+<p class="author">I have seen a number of anti-patterns caused here. These tests become a free-for-all, with all teams granted access to add tests without any understanding of the health of the whole suite. This can often result in an explosion of test cases, sometimes resulting in the test snow cone we talked about earlier. I have seen situations where, because there was no real obvious ownership of these tests, their results get ignored. When they break, everyone assumes it is someone else’s problem, so they don’t care whether the tests are passing.</p>
+
+<p class="author">Sometimes organizations react by having a dedicated team write these tests. This can be disastrous. The team developing the software becomes increasingly distant from the tests for its code. Cycle times increase, as service owners end up waiting for the test team to write end-to-end tests for the functionality they just wrote. Because another team writes these tests, the team that wrote the service is less involved with, and therefore less likely to know, how to run and fix these tests. Although it is unfortunately still a common organizational pattern, I see significant harm done whenever a team is distanced from writing tests for the code it wrote in the first place.</p>
+
+<p class="author">Getting this aspect right is really hard. We don’t want to duplicate effort, nor do we want to completely centralize this to the extent that the teams building services are too far removed from things. The best balance I have found is to treat the end-to-end test suite as a shared codebase, but with joint ownership. Teams are free to check in to this suite, but the ownership of the health of the suite has to be shared between the teams developing the services themselves. If you want to make extensive use of end-to-end tests with multiple teams I think this approach is essential, and yet I have seen it done very rarely, and never without issue.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

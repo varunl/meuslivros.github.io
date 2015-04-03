@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Security</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 9. Security">
+<div class="preface" id="security-chapter">
+<section data-type="sect1" data-pdf-bookmark="A Worked Example"><div class="preface" id="idp11673376">
+<h1 class="calibre7" id="calibre_pb_25">A Worked Example</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="security" data-secondary="example setup" id="idp11674912" class="calibre3"></a>Having a finer-grained system architecture gives us much more freedom in how we implement our security. For those parts that deal with the most sensitive information or expose the most valuable capabilities, we can adopt the strictest security provisions. But for other parts of the system, we can afford to be much more lax in what we worry about.</p>
+
+<p class="author">Let’s consider MusicCorp once again, and pull some of the preceding concepts together to see where and how we might use some of these security techniques. We’re looking primarily at the security concerns of data in transit and at rest. <a data-type="xref" href="part0011_split_025.html#a75-music-before" class="calibre3">Figure 9-4</a> shows a subset of the overall system that we’ll be analyzing, which currently shows a crushing lack of regard for security concerns. Everything is sent over plain old HTTP.</p>
+
+<figure class="calibre16"><div id="a75-music-before" class="figure">
+<img src="../images/00068.jpeg" alt="A subset of MusicCorp's unfortunately nonsecure architecture" hisrc="assets/bdms_0904.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 9-4. </span>A subset of MusicCorp’s unfortunately insecure architecture</h6>
+</div></figure>
+
+<p class="author">Here we have standard web browsers that are used by our customers to shop on the site. We also introduce the concept of a third-party royalty gateway: we’ve started working with a third-party company that will handle royalty payments for our new streaming service. It contacts us occasionally to pull down records of what music has been streamed when — information we jealously protect as we are worried about competition from rival companies. Finally, we expose our catalog data to other third parties — for example, allowing the metadata about artist or song to be embedded in music review sites. Inside our network perimeter, we have some collaborating services, which are only ever used internally.</p>
+
+<p class="author">For the browser, we’ll use a mix of standard HTTP traffic for nonsecure content, to allow for it to be cached. For secure, logged-in pages, all secure content will be sent over HTTPS, giving our customers extra protection if they are doing things like running on public WiFi networks.</p>
+
+<p class="author">When it comes to the third-party royalty payment system, we are concerned not only about the nature of the data we are exposing, but also about making sure the requests we’re getting are legitimate. Here, we insist that our third party uses client certificates. All the data is sent over a secure, cryptographic channel, increasing our ability to ensure we’re being asked for this data by the right person. We do, of course, have to think about what happens when the data leaves our control. Will our partner care about the data as much as we will?</p>
+
+<p class="author">For the feeds of catalog data, we want this information shared as widely as possible to allow people to easily buy music from us! However, we don’t want this abused, and we’d like some idea of who is using our data. Here, API keys make perfect sense.</p>
+
+<p class="author">Inside the network perimeter, things are a bit more nuanced. How worried are we about people compromising our internal networks? Ideally, we’d like to use HTTPS at a minimum, but managing it is somewhat painful. We decide instead to put the work (initially, at least) into hardening our network perimeter, including having a properly configured firewall and selecting an appropriate hardware or software security appliance to check for malicious traffic (e.g., port scanning or denial-of-service attacks).</p>
+
+<p class="author">That said, we are concerned about <em class="calibre4">some</em> of our data and where it lives. We aren’t worried about the catalog service; after all, we want that data shared and have provided an API for it! But we are very concerned about our customers’ data. Here, we decide to encrypt the data held by the customer service, and decrypt data on read. If attackers do penetrate our network, they could still run requests against the customer service’s API, but the current implementation does not allow for the bulk retrieval of customer data. If it did, we would likely consider the use of client certificates to protect this information. Even if attackers compromise the machine the database is running on and manage to download the entire contents, they would need access to the key used to encrypt and decrypt the data to make use if it.</p>
+
+<p class="author"><a data-type="xref" href="part0011_split_025.html#a75-music-after" class="calibre3">Figure 9-5</a> shows the final picture. As you can see, the choices we made about what technology to use were based on an understanding of the nature of the information being secured. Your own architecture’s security concerns are likely to be very different, and so you may end up with a different-looking solution.</p>
+
+<figure class="calibre16"><div id="a75-music-after" class="figure">
+<img src="../images/00069.gif" alt="MusicCorp's more secure system" hisrc="assets/bdms_0905.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 9-5. </span>MusicCorp’s more secure system</h6>
+</div></figure>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="Remote Procedure Calls">
+<div class="preface" id="idp4394032">
+<section data-type="sect2" data-pdf-bookmark="Brittleness"><div class="preface" id="idp4443904">
+<h2 class="calibre15" id="calibre_pb_13">Brittleness</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="remote procedure calls" data-secondary="brittleness" id="idp4445504" class="calibre3"></a><a data-type="indexterm" data-primary="brittleness" id="idp4446480" class="calibre3"></a>Some of the most popular implementations of RPC can lead to some nasty forms of brittleness, Java’s RMI being a very good example. Let’s consider a very simple Java interface that we have decided to make a remote API for our customer service. <a data-type="xref" href="part0006_split_013.html#a50-customer-java-rmi" class="calibre3">Example 4-1</a> declares the methods we are going to expose remotely. Java RMI then generates the client and server stubs for our method.</p>
+<div id="a50-customer-java-rmi" data-type="example" class="calibre24">
+<h5 class="calibre25"><span class="firstname">Example 4-1. </span>Defining a service endpoint using Java RMI</h5>
+
+<pre data-type="programlisting" data-code-language="java" class="calibre26"><code class="kn">import</code> <code class="nn">java.rmi.Remote</code><code class="calibre9">;</code>
+<code class="kn">import</code> <code class="nn">java.rmi.RemoteException</code><code class="calibre9">;</code>
+
+<code class="kn">public</code> <code class="kn">interface</code> <code class="nc">CustomerRemote</code> <code class="kn">extends</code> <code class="n">Remote</code> <code class="calibre9">{</code>
+  <code class="kn">public</code> <code class="n">Customer</code> <code class="nf">findCustomer</code><code class="calibre9">(</code><code class="n">String</code> <code class="n">id</code><code class="calibre9">)</code> <code class="kn">throws</code> <code class="n">RemoteException</code><code class="calibre9">;</code>
+
+  <code class="kn">public</code> <code class="n">Customer</code> <code class="nf">createCustomer</code><code class="calibre9">(</code><code class="n">String</code> <code class="n">firstname</code><code class="calibre9">,</code> <code class="n">String</code> <code class="n">surname</code><code class="calibre9">,</code> <code class="n">String</code> <code class="n">emailAddress</code><code class="calibre9">)</code>
+      <code class="kn">throws</code> <code class="n">RemoteException</code><code class="calibre9">;</code>
+<code class="calibre9">}</code></pre></div>
+
+<p class="author">In this interface, <code class="calibre9">findCustomer</code> takes the first name, surname, and email address. What happens if we decide to allow the <code class="calibre9">Customer</code> object to also be created with just an email address? We could add a new method at this point pretty easily, like so:</p>
+
+<pre data-type="programlisting" data-code-language="java" class="calibre27"><code class="calibre9">...</code>
+<code class="kn">public</code> <code class="n">Customer</code> <code class="nf">createCustomer</code><code class="calibre9">(</code><code class="n">String</code> <code class="n">emailAddress</code><code class="calibre9">)</code> <code class="kn">throws</code> <code class="n">RemoteException</code><code class="calibre9">;</code>
+<code class="calibre9">...</code></pre>
+
+<p class="author">The problem is that now we need to regenerate the client stubs too. Clients that want to consume the new method need the new stubs, and depending on the nature of the changes to the specification, consumers that don’t need the new method may also need to have their stubs upgraded too. This is manageable, of course, but to a point. The reality is that changes like this are fairly common. RPC endpoints often end up having a large number of methods for different ways of creating or interacting with objects. This is due in part to the fact that we are still thinking of these remote calls as local ones.</p>
+
+<p class="author">There is another sort of brittleness, though. Let’s take a look at what our <code class="calibre9">Customer</code> object looks like:</p>
+
+<pre data-type="programlisting" data-code-language="java" class="calibre27"><code class="kn">public</code> <code class="kn">class</code> <code class="nc">Customer</code> <code class="kn">implements</code> <code class="n">Serializable</code> <code class="calibre9">{</code>
+  <code class="kn">private</code> <code class="n">String</code> <code class="n">firstName</code><code class="calibre9">;</code>
+  <code class="kn">private</code> <code class="n">String</code> <code class="n">surname</code><code class="calibre9">;</code>
+  <code class="kn">private</code> <code class="n">String</code> <code class="n">emailAddress</code><code class="calibre9">;</code>
+  <code class="kn">private</code> <code class="n">String</code> <code class="n">age</code><code class="calibre9">;</code>
+<code class="calibre9">}</code></pre>
+
+<p class="author">Now, what if it turns out that although we expose the <code class="calibre9">age</code> field in our <code class="calibre9">Customer</code> objects, none of our consumers ever use it? We decide we want to remove this field. But if the server implementation removes <code class="calibre9">age</code> from its definition of this type, and we don’t do the same to all the consumers, then even though they never used the field, the code associated with deserializing the <code class="calibre9">Customer</code> object on the consumer side will break. To roll out this change, I would have to deploy both a new server and clients at the same time. This is a key challenge with any RPC mechanism that promotes the use of binary stub generation: you don’t get to separate client and server deployments. If you use this technology, lock-step releases may be in your future.</p>
+
+<p class="author">Similar problems occur if I want to restructure the <code class="calibre9">Customer</code> object even if I didn’t remove fields — for example, if I wanted to encapsulate <code class="calibre9">firstName</code> and <code class="calibre9">surname</code> into a new <code class="calibre9">naming</code> type to make it easier to manage. I could, of course, fix this by passing around dictionary types as the parameters of my calls, but at that point, I lose many of the benefits of the generated stubs because I’ll still have to manually match and extract the fields I want.</p>
+
+<p class="author">In practice, objects used as part of binary serialization across the wire can be thought of as <em class="calibre4">expand-only</em> types. This brittleness results in the types being exposed over the wire and becoming a mass of fields, some of which are no longer used but can’t be safely removed.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

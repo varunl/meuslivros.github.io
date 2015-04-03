@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Cross-Functional Testing">
+<div class="preface" id="idp11306928">
+<section data-type="sect2" data-pdf-bookmark="Performance Tests"><div class="preface" id="idp11317408">
+<h2 class="calibre15" id="calibre_pb_28">Performance Tests</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="testing" data-secondary="performance tests" id="idp11318784" class="calibre3"></a><a data-type="indexterm" data-primary="performance tests" id="idp11319760" class="calibre3"></a>Performance tests are worth calling out explicitly as a way of ensuring that some of our cross-functional requirements can be met. When decomposing systems into smaller microservices, we increase the number of calls that will be made across network boundaries. Where previously an operation might have involved one database call, it may now involve three or four calls across network boundaries to other services, with a matching number of database calls. All of this can decrease the speed at which our systems operate. Tracking down sources of latency is especially important. When you have a call chain of multiple synchronous calls, if any part of the chain starts acting slowly, everything is affected, potentially leading to a significant impact. This makes having some way to performance test your applications even more important than it might be with a more monolithic system. Often the reason this sort of testing gets delayed is because initially there isn’t enough of the system there to test. I understand this problem, but all too often it leads to kicking the can down the road, with performance testing often only being done just before you go live for the first time, if at all! Don’t fall into this trap.</p>
+
+<p class="author">As with functional tests, you may want a mix. You may decide that you want performance tests that isolate individual services, but start with tests that check core journeys in your system. You may be able to take end-to-end journey tests and simply run these at volume.</p>
+
+<p class="author">To generate worthwhile results, you’ll often need to run given scenarios with gradually increasing numbers of simulated customers. This allows you to see how latency of calls varies with increasing load. This means that performance tests can take a while to run. In addition, you’ll want the system to match production as closely as possible, to ensure that the results you see will be indicative of the performance you can expect on the production systems. This can mean that you’ll need to acquire a more production-like volume of data, and may need more machines to match the infrastructure — tasks that can be challenging. Even if you struggle to make the performance environment truly production-like, the tests may still have value in tracking down bottlenecks. Just be aware that you may get false negatives, or even worse, false positives.</p>
+
+<p class="author">Due to the time it takes to run performance tests, it isn’t always feasible to run them on every check-in. It is a common practice to run a subset every day, and a larger set every week. Whatever approach you pick, make sure you run them as regularly as you can. The longer you go without running performance tests, the harder it can be to track down the culprit. Performance problems are especially difficult to resolve, so if you can reduce the number of commits you need to look at in order to see a newly introduced problem, your life will be much easier.</p>
+
+<p class="author">And make sure you also look at the results! I’ve been very surprised by the number of teams I have encountered who have spent a lot of work implementing tests and running them, and never check the numbers. Often this is because people don’t know what a <em class="calibre4">good</em> result looks like. You really need to have targets. This way, you can make the build go <em class="calibre4">red</em> or <em class="calibre4">green</em> based on the results, with a red (failing) build being a clear call to action.</p>
+
+<p class="author">Performance tesing needs to be done in concert with monitoring the real system performance (which we’ll discuss more in <a data-type="xref" href="part0010_split_000.html#monitoring-chapter" class="calibre3">Chapter 8</a>), and ideally should use the same tools in your performance test environment for visualizing system behavior as those you use in production. This can make it much easier to compare like with like.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Flaky and Brittle Tests">
+<div class="preface" id="idp11187328">
+<section data-type="sect2" data-pdf-bookmark="How Long?"><div class="preface" id="idp11205376">
+<h2 class="calibre15" id="calibre_pb_15">How Long?</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="end-to-end tests" data-secondary="timing of" id="idp11206752" class="calibre3"></a>These end-to-end tests can take a while. I have seen them take up to a day to run, if not more, and on one project I worked on, a full regression suite took six weeks! I rarely see teams actually curate their end-to-end test suites to reduce overlap in test coverage, or spend enough time in making them fast.</p>
+
+<p class="author">This slowness, combined with the fact that these tests can often be flaky, can be a major problem. A test suite that takes all day and often has breakages that have nothing to do with broken functionality are a disaster. Even if your functionality <em class="calibre4">is</em> broken, it could take you many hours to find out — at which point many of us would already have moved on to other activities, and the context switch in shifting our brains back to fix the issue is painful.</p>
+
+<p class="author">We can ameliorate some of this by running tests in parallel — for example, making use of tools like Selenium Grid. However, this approach is not a substitute for actually understanding what needs to be tested and actively <em class="calibre4">removing</em> tests that are no longer needed.</p>
+
+<p class="author">Removing tests is sometimes a fraught exercise, and I suspect shares much in common with people who want to remove certain airport security measures. No matter how ineffective the security measures might be, any conversation about removing them is often countered with knee-jerk reactions about not caring about people’s safety or wanting terrorists to win. It is hard to have a balanced conversation about the value something adds versus the burden it entails. It can also be a difficult risk/reward trade-off. Do you get thanked if you remove a test? Maybe. But you’ll certainly get blamed if a test you removed lets a bug through. When it comes to the larger-scoped test suites, however, this is exactly what we need to be able to do. If the same feature is covered in 20 different tests, perhaps we can get rid of half of them, as those 20 tests take 10 minutes to run! What this requires is a better understanding of risk, which something humans are famously bad at. As a result, this intelligent curation and management of larger-scoped, high-burden tests happens incredibly infrequently. Wishing people did this more isn’t the same thing as making it happen.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

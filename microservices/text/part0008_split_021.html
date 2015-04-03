@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="From Physical to Virtual">
+<div class="preface" id="idp10695744">
+<section data-type="sect2" data-pdf-bookmark="Traditional Virtualization"><div class="preface" id="idp10698816">
+<h2 class="calibre15" id="calibre_pb_21">Traditional Virtualization</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="virtualization" data-secondary="traditional" id="idp10700096" class="calibre3"></a><a data-type="indexterm" data-primary="deployment" data-secondary="virtualization, traditional" id="idp10700944" class="calibre3"></a>Why is having lots of hosts expensive? Well, if you need a physical server per host, the answer is fairly obvious. If this is the world you are operating in, then the multiple-service-per-host model is probably right for you, although don’t be surprised if this becomes an ever more challenging constraint. I suspect, however, that most of you are using virtualization of some sort. Virtualization allows us to slice up a physical server into separate hosts, each of which can run different things. So if we want one service per host, can’t we just slice up our physical infrastructure into smaller and smaller pieces?</p>
+
+<p class="author">Well, for some people, you can. However, slicing up the machine into ever increasing VMs isn’t free. Think of our physical machine as a sock drawer. If we put lots of wooden dividers into our drawer, can we store more socks or fewer? The answer is fewer: the dividers themselves take up room too! Our drawer might be easier to deal with and organize, and perhaps we could decide to put T-shirts in one of the spaces now rather than just socks, but more dividers means less overall space.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="virtualization" data-secondary="type 2" id="idp10703824" class="calibre3"></a><a data-type="indexterm" data-primary="type 2 virtualization" id="idp10705024" class="calibre3"></a><a data-type="indexterm" data-primary="virtualization" data-secondary="hypervisors" id="idp10705696" class="calibre3"></a><a data-type="indexterm" data-primary="hypervisors" id="idp10706640" class="calibre3"></a><a data-type="indexterm" data-primary="deployment" data-secondary="virtualization, type 2" id="idp10707312" class="calibre3"></a><a data-type="indexterm" data-primary="deployment" data-secondary="virtualization, hypervisors" id="idp10708256" class="calibre3"></a>In the world of virtualization, we have a similar overhead as our sock drawer dividers. To understand where this overhead comes from, let’s look at how most virtualization is done. <a data-type="xref" href="part0008_split_021.html#a61-virtualisation-comparison" class="calibre3">Figure 6-9</a> shows a comparison of two types of virtualization. On the left, we see the various layers involved in what is called <em class="calibre4">type 2 virtualization</em>, which is the sort implemented by AWS, VMWare, VSphere, Xen, and KVM. (Type 1 virtualization refers to technology where the VMs run directly on hardware, not on top of another operating system.) On our physical infrastructure we have a host operating system. On this OS we run something called a <em class="calibre4">hypervisor</em>, which has two key jobs. First, it maps resources like CPU and memory from the virtual host to the physical host. Second, it acts as a control layer, allowing us to manipulate the virtual machines <span class="firstname">themselves</span>.</p>
+
+<figure class="calibre16"><div id="a61-virtualisation-comparison" class="figure">
+<img src="../images/00045.gif" alt="A comparison of standard 'Type 2' virtualization, and lightweight containers" hisrc="assets/bdms_0609.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 6-9. </span>A comparison of standard <em class="calibre4">Type 2</em> virtualization, and lightweight containers</h6>
+</div></figure>
+
+<p class="author">Inside the VMs, we get what looks like completely different hosts. They can run their own operating systems, with their own kernels. They can be considered almost hermetically sealed machines, kept isolated from the underlying physical host and the other virtual machines by the hypervisor.</p>
+
+<p class="author">The problem is that the hypervisor here needs to set aside resources to do its job. This takes away CPU, I/O, and memory that could be used elsewhere. The more hosts the hypervisor manages, the more resources it needs. At a certain point, this overhead becomes a constraint in slicing up your physical infrastructure any further. In practice, this means that there are often diminishing returns in slicing up a physical box into smaller and smaller parts, as proportionally more and more resources go into the overhead of the hypervisor.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

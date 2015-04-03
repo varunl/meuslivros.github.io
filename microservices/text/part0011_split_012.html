@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Security</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 9. Security">
+<div class="preface" id="security-chapter">
+<section data-type="sect1" data-pdf-bookmark="Service-to-Service Authentication and Authorization">
+<div class="preface" id="idp11536688">
+<section data-type="sect2" data-pdf-bookmark="The Deputy Problem"><div class="preface" id="idp11593344">
+<h2 class="calibre15" id="calibre_pb_12">The Deputy Problem</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="service-to-service authentication/authorization" data-secondary="confused deputy problem" id="idp11594720" class="calibre3"></a><a data-type="indexterm" data-primary="confused deputy problem" id="idp11595728" class="calibre3"></a><a data-type="indexterm" data-primary="deputy problem" id="idp11596400" class="calibre3"></a>Having a principal authenticate with a given microserservice is simple enough. But what happens if that service then needs to make additional calls to complete an operation? Take a look at <a data-type="xref" href="part0011_split_012.html#a75-deputy" class="calibre3">Figure 9-3</a>, which illustrates MusicCorp’s online shopping site. Our online shop is a browser-based JavaScript UI. It makes calls to a server-side shop application, using the backends-for-frontends pattern we described in <a data-type="xref" href="part0006_split_000.html#integration-chapter" class="calibre3">Chapter 4</a>. Calls made between the browser and server calls can be authenticated using SAML or OpenID Connect or similar. So far, so good.</p>
+
+<p class="author">When I am logged in, I can click on a link to view details of an order. To display the information, we need to pull back the original order from the order service, but we also want to look up shipping information for the order. So clicking the link to <span class="firstname"><em class="calibre4">/orderStatus/12345</em></span> causes the online shop to initiate a call from the online shop service to both the order service and shipping service asking for those details. But should these downstream services accept the calls from the online shop? We could adopt a stance of implicit trust — that because the call came from within our perimeter, it is OK. We could even use certificates or API keys to confirm that yes, it really is the online shop asking for this information. But is this enough?</p>
+
+<figure class="calibre16"><div id="a75-deputy" class="figure">
+<img src="../images/00067.gif" alt="An example where a confused deputy could come into play" hisrc="assets/bdms_0903.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 9-3. </span>An example where a confused deputy could come into play</h6>
+</div></figure>
+
+<p class="author">There is a type of vulnerability called the <em class="calibre4">confused deputy problem</em>, which in the context of service-to-service communication refers to a situation where a malicious party can trick a deputy service into making calls to a downstream service on his behalf that he shouldn’t be able to. For example, as a customer, when I log in to the online shopping system, I can see my account details. What if I could trick the online shopping UI into making a request for someone else’s details, maybe by making a call with my logged-in credentials?</p>
+
+<p class="author">In this example, what is to stop me from asking for orders that are not mine? Once logged in, I could start sending requests for other orders that aren’t mine to see if I could get useful information. We could try to protect against this inside the online shop itself, by checking who the order is for and rejecting it if someone’s asking for things he shouldn’t. If we have lots of different applications that surface this information, though, we could potentially be duplicating this logic in lots of places.</p>
+
+<p class="author">We could route requests directly from the UI to the order service and allow it to validate the request, but then we hit the various downsides we discussed in <a data-type="xref" href="part0006_split_000.html#integration-chapter" class="calibre3">Chapter 4</a>. Alternatively, when the online shop sends the request to the order service, it could state not just what order it wants, but also on whose behalf it is asking. Some authentication schemes allow us to pass in the original principal’s credentials downstream, although with SAML this is a bit of a nightmare, involving nested SAML assertions that are technically achievable — but so difficult that no one ever does this. This can become even more complex, of course. Imagine if the services the online shop talks to in turn make more downstream calls. How far do we have to go in validating trust for all those deputies?</p>
+
+<p class="author">This problem, unfortunately, has no simple answer, because it isn’t a simple problem. Be aware that it exists, though. Depending on the sensitivity of the operation in <span class="firstname">question</span>, you might have to choose between implicit trust, verifying the identity of the caller, or asking the caller to provide the credentials of the original principal.<a data-type="indexterm" data-startref="auth" id="idp11609264" class="calibre3"></a><a data-type="indexterm" data-startref="ix_STSauth" id="idp11609968" class="calibre3"></a></p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

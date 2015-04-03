@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Security</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 9. Security">
+<div class="preface" id="security-chapter">
+<section data-type="sect1" data-pdf-bookmark="Service-to-Service Authentication and Authorization">
+<div class="preface" id="idp11536688">
+<section data-type="sect2" data-pdf-bookmark="Client Certificates"><div class="preface" id="idp11565296">
+<h2 class="calibre15" id="calibre_pb_9">Client Certificates</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="service-to-service authentication/authorization" data-secondary="client certificates" id="idp11566496" class="calibre3"></a><a data-type="indexterm" data-primary="client certificates" id="idp11567504" class="calibre3"></a><a data-type="indexterm" data-primary="Transport Layer Security (TLS)" id="idp11568176" class="calibre3"></a><a data-type="indexterm" data-primary="certificate management" id="idp11568816" class="calibre3"></a>Another approach to confirm the identity of a client is to make use of capabilities in Transport Layer Security (TLS), the successor to SSL, in the form of client certificates. Here, each client has an X.509 certificate installed that is used to establish a link between client and server. The server can verify the authenticity of the client certificate, providing strong guarantees that the client is valid.</p>
+
+<p class="author">The operational challenges here in certificate management are even more onerous than with just using server-side certificates. It isn’t just some of the basic issues of creating and managing a greater number of certificates; rather, it’s that with all the complexities around the certificates themselves, you can expect to spend a lot of time trying to diagnose why a service won’t accept what you believe to be a completely valid client certificate. And then we have to consider the difficulty of revoking and reissuing certificates should the worst happen.  Using wildcard certificates can help, but won’t solve all problems. This additional burden means you’ll be looking to use this technique when you are especially concerned about the sensitivity of the data being sent, or if you are sending data via networks you don’t fully control. So you might decide to secure communication of very important data between parties that is sent over the Internet, for example.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Monitoring</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 8. Monitoring">
+<div class="preface" id="monitoring-chapter">
+<section data-type="sect1" data-pdf-bookmark="Summary"><div class="preface" id="idp11471168">
+<h1 class="calibre7" id="calibre_pb_14">Summary</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="monitoring" data-secondary="overview of" id="idp11472544" class="calibre3"></a>So, we’ve covered a lot here! I’ll attempt to summarize this chapter into some easy-to-follow advice.</p>
+
+<p class="author">For each service:</p>
+
+<ul class="stafflist">
+<li class="calibre5">
+Track inbound response time at a bare minimum. Once you’ve done that, follow with error rates and then start working on application-level metrics.
+</li>
+<li class="calibre5">
+Track the health of all downstream responses, at a bare minimum including the response time of downstream calls, and at best tracking error rates. Libraries like Hystrix can help here.
+</li>
+<li class="calibre5">
+Standardize on how and where metrics are collected.
+</li>
+<li class="calibre5">
+Log into a standard location, in a standard format if possible. Aggregation is a pain if every service uses a different layout!
+</li>
+<li class="calibre5">
+Monitor the underlying operating system so you can track down rogue processes and do capacity planning.
+</li>
+</ul>
+
+<p class="author">For the system:</p>
+
+<ul class="stafflist">
+<li class="calibre5">
+Aggregate host-level metrics like CPU together with application-level metrics.
+</li>
+<li class="calibre5">
+Ensure your metric storage tool allows for aggregation at a system or service level, and drill down to individual hosts.
+</li>
+<li class="calibre5">
+Ensure your metric storage tool allows you to maintain data long enough to understand trends in your system.
+</li>
+<li class="calibre5">
+Have a single, queryable tool for aggregating and storing logs.
+</li>
+<li class="calibre5">
+Strongly consider standardizing on the use of correlation IDs.
+</li>
+<li class="calibre5">
+Understand what requires a call to action, and structure alerting and dashboards accordingly.
+</li>
+<li class="calibre5">
+Investigate the possibility of unifying how you aggregate all of your various metrics by seeing if a tool like Suro or Riemann makes sense for you.
+</li>
+</ul>
+
+<p class="author">I’ve also attempted to outline the direction in which monitoring is moving: away from systems specialized to do just one thing, and toward generic event processing systems that allow you to look at your system in a more holistic way. This is an exciting and emerging space, and while a full investigation is outside the scope of this book, hopefully I’ve given you enough to get started with. If you want to know more, I go into some of these ideas and more in my earlier publication <a class="calibre3" href="http://www.oreilly.com/webops-perf/free/lightweight-systems.csp"><em class="calibre4">Lightweight Systems for Realtime Monitoring</em></a> (O’Reilly).</p>
+
+<p class="author">In the next chapter, we’ll take a different holistic view of our systems to consider some of the unique advantages — and challenges — that fine-grained architectures can provide in the area of security.</p>
+</div></section>
+
+
+
+
+
+
+
+</div></section></body></html>

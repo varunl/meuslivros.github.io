@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="Custom Images"><div class="preface" id="idp10580352">
+<h1 class="calibre7" id="calibre_pb_8">Custom Images</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="deployment" data-secondary="custom images" id="idp10581888" class="calibre3"></a><a data-type="indexterm" data-primary="images" data-secondary="custom" id="idp10582864" class="calibre3"></a><a data-type="indexterm" data-primary="custom images" id="idp10583808" class="calibre3"></a>One of the challenges with automated configuration management systems like Puppet, Chef, and Ansible can be the time taken to run the scripts on a machine. Let’s take a simple example of a server being provisioned and configured to allow for the deployment of a Java application.  Let’s assume I’m using AWS to provision the server, using the standard Ubuntu image. The first thing I need to do is install the Oracle JVM to run my Java application. I’ve seen this simple process take around five minutes, with a couple of minutes taken up by the machine being provisioned, and a few more to install the JVM. Then we can think about actually putting our software on it.</p>
+
+<p class="author">This is actually a fairly trivial example. We will often want to install other common bits of software. For example, we might want to use collectd for gathering OS stats, use logstash for log aggregation, and perhaps install the appropriate bits of nagios for monitoring (we’ll talk more about this software in <a data-type="xref" href="part0010_split_000.html#monitoring-chapter" class="calibre3">Chapter 8</a>). Over time, more things might get added, leading to longer and longer amounts of time needed for provisioning of these dependencies.</p>
+
+<p class="author">Puppet, Chef, Ansible, and their ilk can be smart and will avoid installing software that is already present. This does not mean that running the scripts on existing machines will always be fast, unfortunately, as running all the checks takes time. We also want to avoid keeping our machines around for too long, as we don’t want to allow for too much configuration drift (which we’ll explore in more depth shortly). And if we’re using an on-demand compute platform we might be constantly shutting down and spinning up new instances on a daily basis (if not more frequently), so the declarative nature of these configuration management tools may be of limited use.</p>
+
+<p class="author">Over time, watching the same tools get installed over and over again can become a real drag. If you are trying to do this multiple times per day — perhaps as part of development or CI — this becomes a real problem in terms of providing fast feedback. It can also lead to increased downtime when deploying in production if your systems don’t allow for zero-downtime deployment, as you’re waiting to install all the pre-requisites on your machines even before you get to installing your software. Models like blue/green deployment (which we’ll discuss in <a data-type="xref" href="part0009_split_000.html#testing-chapter" class="calibre3">Chapter 7</a>) can help mitigate this, as they allow us to deploy a new version of our service without taking the old one offline.</p>
+
+<p class="author">One approach to reducing this spin-up time is to create a virtual machine image that bakes in some of the common dependencies we use, as shown in <a data-type="xref" href="part0008_split_008.html#a61-custom-image" class="calibre3">Figure 6-5</a>. All virtualization platforms I’ve used allow you to build your own images, and the tools to do so are much more advanced than they were even a few years ago. This shifts things somewhat. Now we could bake the common tools into our own image. When we want to deploy our software, we spin up an instance of this custom image, and all we have to do is install the latest version of our service.</p>
+
+<figure class="calibre16"><div id="a61-custom-image" class="figure">
+<img src="../images/00041.gif" alt="Creating a custom Image" hisrc="assets/bdms_0605.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 6-5. </span>Creating a custom VM image</h6>
+</div></figure>
+
+<p class="author">Of course, because you build the image only once, when you subsequently launch copies of this image you don’t need to spend time installing your dependencies, as they are already there. This can result in a significant time savings. If your core dependencies don’t change, new versions of your service can continue to use the same base image.</p>
+
+<p class="author">There are some drawbacks with this approach, though. Building images can take a long time. This means that for developers you may want to support other ways of deploying services to ensure they don’t have to wait half an hour just to create a binary deployment. Second, some of the resulting images can be large. This could be a real problem if you’re creating your own VMWare images, for example, as moving a 20GB image around a network isn’t always a simple activity. We’ll be looking at container technology shortly, and specifically Docker, which can avoid some of these drawbacks.</p>
+
+<p class="author">Historically, one of the challenges is that the tool chain required to build such an image varied from platform to platform. Building a VMWare image is different from building an AWS AMI, a Vagrant image, or a Rackspace image. This may not have been a problem if you had the same platform everywhere, but not all organizations were this lucky. And even if they were, the tools in this space were often difficult to work with, and they didn’t play nicely with other tools you might be using for machine configuration.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="Packer" id="idp10596784" class="calibre3"></a><a href="http://www.packer.io/" class="calibre3">Packer</a> is a tool designed to make creation of images much easier. Using configuration scripts of your choice (Chef, Ansible, Puppet, and more are supported), it allows us to create images for different platforms from the same configuration. At the time of writing, it has support for VMWare, AWS, Rackspace Cloud, Digital Ocean, and Vagrant, and I’ve seen teams use it successfully for building Linux and Windows images. This means you could create an image for deployment on your production AWS environment and a matching Vagrant image for local development and test, all from the same configuration.</p>
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

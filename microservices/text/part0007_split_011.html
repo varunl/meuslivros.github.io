@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Splitting the Monolith</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Splitting the Monolith">
+<div class="preface" id="splitting-chapter">
+<section data-type="sect1" data-pdf-bookmark="Example: Breaking Foreign Key Relationships"><div class="preface" id="idp10296096">
+<h1 class="calibre7" id="calibre_pb_12">Example: Breaking Foreign Key Relationships</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="database decomposition" data-secondary="breaking foreign key relationships" id="idp10297504" class="calibre3"></a><a data-type="indexterm" data-primary="foreign key relationships, breaking" id="idp10298448" class="calibre3"></a>In this example, our catalog code uses a generic line item table to store information about an album. Our finance code uses a ledger table to track financial transactions. At the end of each month we need to generate reports for various people in the organization so they can see how we’re doing. We want to make the reports nice and easy to read, so rather than saying, “We sold 400 copies of SKU 12345 and made $1,300,” we’d like to add more information about what was sold (i.e., “We sold 400 copies of Bruce Springsteen’s <em class="calibre4">Greatest Hits</em> and made $1,300”). To do this, our reporting code in the finance package will reach into the line item table to pull out the title for the SKU. It may also have a foreign key constraint from the ledger to the line item table, as we see in <a data-type="xref" href="part0007_split_011.html#a58-foreign-key-before" class="calibre3">Figure 5-2</a>.</p>
+
+<figure class="calibre16"><div id="a58-foreign-key-before" class="figure">
+<img src="../images/00023.gif" alt="Foreign-key relationship" hisrc="assets/bdms_0502.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 5-2. </span>Foreign key relationship</h6>
+</div></figure>
+
+<p class="author">So how do we fix things here? Well, we need to make a change in two places. First, we need to stop the finance code from reaching into the line item table, as this table really belongs to the catalog code, and we don’t want database integration happening once catalog and finance are services in their own rights. The quickest way to address this is rather than having the code in finance reach into the line item table, we’ll expose the data via an API call in the catalog package that the finance code can call. This API call will be the forerunner of a call we will make over the wire, as we see in <a data-type="xref" href="part0007_split_011.html#a58-foreign-key-after" class="calibre3">Figure 5-3</a>.</p>
+
+<figure class="calibre16"><div id="a58-foreign-key-after" class="figure">
+<img src="../images/00024.gif" alt="Post removal of the foreign key relationship" hisrc="assets/bdms_0503.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 5-3. </span>Post removal of the foreign key relationship</h6>
+</div></figure>
+
+<p class="author">At this point it becomes clear that we may well end up having to make two database calls to generate the report. This is correct. And the same thing will happen if these are two separate services. Typically concerns around performance are now raised. I have a fairly easy answer to those: how fast does your system need to be? And how fast is it now? If you can test its current performance and know what good performance looks like, then you should feel confident in making a change. Sometimes making one thing slower in exchange for other things is the right thing to do, especially if <em class="calibre4">slower</em> is still perfectly acceptable.</p>
+
+<p class="author">But what about the foreign key relationship? Well, we lose this altogether. This becomes a constraint we need to now manage in our resulting services rather than in the database level. This may mean that we need to implement our own consistency check across services, or else trigger actions to clean up related data. Whether or not this is needed is often not a technologist’s choice to make. For example, if our order service contains a list of IDs for catalog items, what happens if a catalog item is removed and an order now refers to an invalid catalog ID? Should we allow it? If we do, then how is this represented in the order when it is displayed? If we don’t, then how can we check that this isn’t violated? These are questions you’ll need to get answered by the people who define how your system should behave for its users.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

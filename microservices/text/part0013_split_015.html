@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="Scaling">
+<div class="preface" id="idp11977920">
+<section data-type="sect2" data-pdf-bookmark="Load Balancing"><div class="preface" id="idp12124800">
+<h2 class="calibre15" id="calibre_pb_15">Load Balancing</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="scaling" data-secondary="load balancing" id="idp12126352" class="calibre3"></a><a data-type="indexterm" data-primary="load balancing" id="idp12127328" class="calibre3"></a>When you need your service to be resilient, you want to avoid single points of failure. For a typical microservice that exposes a synchronous HTTP endpoint, the easiest way to achieve this is to have multiple hosts running your microservice instance, sitting behind a load balancer, as shown in <a data-type="xref" href="part0013_split_015.html#a115-load-balancing" class="calibre3">Figure 11-4</a>. To consumers of the microservice, you don’t know if you are talking to one microservice instance or a hundred.</p>
+
+<figure class="calibre16"><div id="a115-load-balancing" class="figure">
+<img src="../images/00074.gif" alt="An example of a load balancing approach to scale the number of customer service instances" hisrc="assets/bdms_1104.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 11-4. </span>An example of a load balancing approach to scale the number of customer service instances</h6>
+</div></figure>
+
+<p class="author">Load balancers come in all shapes and sizes, from big and expensive hardware appliances to software-based load balancers like mod_proxy. They all share some key capabilities. They distribute calls sent to them to one or more instances based on some algorithm, remove instances when they are no longer healthy, and hopefully add them back in when they are.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="SSL termination" id="idp12011424" class="calibre3"></a><a data-type="indexterm" data-primary="HTTP (Hypertext Transfer Protocol)" data-secondary="HTTP termination" id="idp12012128" class="calibre3"></a>Some load balancers provide useful features. A common one is <em class="calibre4">SSL termination</em>, where inbound HTTPS connections to the load balancer are transformed to HTTP connections once they hit the instance itself. Historically, the overhead of managing SSL was significant enough that having a load balancer handle this process for you was fairly useful. Nowadays, this is as much about simplifying the set-up of the individual hosts running the instance. The point of using HTTPS, though, is to ensure that the requests aren’t vulnerable to a man-in-the-middle attack, as we discussed in <a data-type="xref" href="part0011_split_000.html#security-chapter" class="calibre3">Chapter 9</a>, so if we use SSL termination, we are potentially exposing ourselves somewhat. One mitigation is to have all the instances of the microservice inside a single VLAN, as we see in <a data-type="xref" href="part0013_split_015.html#a115-load-balancing-vlan" class="calibre3">Figure 11-5</a>. A VLAN is a virtual local area network, that is isolated in such a way that requests from outside it can come only via a router, and in this case our router is also our SSL-terminating load balancer. The only communication to the microservice from outside the VLAN comes over HTTPS, but internally everything is HTTP.</p>
+
+<figure class="calibre16"><div id="a115-load-balancing-vlan" class="figure">
+<img src="../images/00075.jpeg" alt="Using HTTPS termination at the load balancer with a VLAN for improved security" hisrc="assets/bdms_1105.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 11-5. </span>Using HTTPS termination at the load balancer with a VLAN for improved security</h6>
+</div></figure>
+
+<p class="author">AWS provides HTTPS-terminating load balancers in the form of ELBs (elastic load balancers) and you can use its security groups or virtual private clouds (VPCs) to implement the VLAN. Otherwise, software like mod_proxy can play a similar role as a software load balancer. Many organizations have hardware load balancers, which can be difficult to automate. In such circumstances I have found myself advocating for software load balancers sitting <em class="calibre4">behind</em> the hardware load balancers to allow teams the freedom to reconfigure these as required. You do want to watch for the fact that all too often the hardware load balancers themselves are single points of failure! Whatever approach you take, when considering the configuration of a load balancer, treat it as you treat the configuration of your service: make sure it is stored in version control and can be applied automatically.</p>
+
+<p class="author">Load balancers allow us to add more instances of our microservice in a way that is transparent to any service consumers. This gives us an increased ability to handle load, and also reduce the impact of a single host failing. However, many, if not most, of your microservices will have some sort of persistent data store, probably a database sitting on a different machine. If we have multiple microservice instances on different machines, but only a single host running the database instance, our database is still a single source of failure. We’ll talk about patterns to handle this shortly.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

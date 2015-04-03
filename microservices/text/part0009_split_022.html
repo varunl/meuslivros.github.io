@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="So Should You Use End-to-End Tests?"><div class="preface" id="idp11260688">
+<h1 class="calibre7" id="calibre_pb_22">So Should You Use End-to-End Tests?</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="testing" data-secondary="semantic monitoring" id="idp11262032" class="calibre3"></a><a data-type="indexterm" data-primary="semantic monitoring" id="idp11263008" class="calibre3"></a><a data-type="indexterm" data-primary="end-to-end tests" data-secondary="appropriate uses for" id="idp11263680" class="calibre3"></a>As outlined in detail earlier in the chapter, end-to-end tests have a large number of disadvantages that grow significantly as you add more moving parts under test. From speaking to people who have been implementing microservices at scale for a while now, I have learned that most of them over time remove the need entirely for end-to-end tests in favor of tools like CDCs and improved monitoring. But they do not necessarily throw those tests away. They end up using many of those end-to-end journey tests to monitor the production system using a technique called <em class="calibre4">semantic monitoring</em>, which we will discuss more in <a data-type="xref" href="part0010_split_000.html#monitoring-chapter" class="calibre3">Chapter 8</a>.</p>
+
+<p class="author">You can view running end-to-end tests prior to production deployment as training wheels. While you are learning how CDCs work, and improving your production monitoring and deployment techniques, these end-to-end tests may form a useful safety net, where you are trading off cycle time for decreased risk. But as you improve those other areas, you can start to reduce your reliance on end-to-end tests to the point where they are no longer needed.</p>
+
+<p class="author">Similarly, you may work in an environment where the appetite to <em class="calibre4">learn in production</em> is low, and people would rather work as hard as they can to eliminate any defects before production, even if that means software takes longer to ship. As long as you understand that you cannot be certain that you have eliminated all sources of defects, and  that you will still need to have effective monitoring and remediation in place in production, this may be a sensible decision.</p>
+
+<p class="author">Obviously you’ll have a better understanding of your own organization’s risk profile than me, but I would challenge you to think long and hard about how much end-to-end testing you really need to do.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

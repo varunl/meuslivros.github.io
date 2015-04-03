@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="CAP Theorem"><div class="preface" id="idp12222832">
+<h1 class="calibre7" id="calibre_pb_33">CAP Theorem</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="CAP theorem" data-secondary="basics of" id="idp12224368" class="calibre3"></a><a data-type="indexterm" data-primary="consistency" data-secondary="in CAP theorem" id="idp12225568" class="calibre3"></a><a data-type="indexterm" data-primary="partition tolerance" data-secondary="in CAP theorem" id="idp12226512" class="calibre3"></a><a data-type="indexterm" data-primary="availability" data-secondary="in CAP theorem" id="idp12227456" class="calibre3"></a><a data-type="indexterm" data-primary="microservices at scale" data-secondary="CAP theorem" id="idp12228400" class="calibre3"></a><a data-type="indexterm" data-primary="CAP theorem" id="ix_CAPther" class="calibre3"></a>We’d like to have it all, but unfortunately we know we can’t. And when it comes to distributed systems like those we build using microservice architectures, we even have a mathematical proof that tells us we can’t. You may well have heard about the CAP theorem, especially in discussions about the merits of various different types of data stores. At its heart it tells us that in a distributed system, we have three things we can trade off against each other: <em class="calibre4">consistency</em>, <em class="calibre4">availability</em>, and <em class="calibre4">partition tolerance</em>. Specifically, the theorem tells us that we get to keep two in a failure mode.</p>
+
+<p class="author">Consistency is the system characteristic by which I will get the same answer if I go to multiple nodes. Availability means that every request receives a response. Partition tolerance is the system’s ability to handle the fact that communication between its parts is sometimes impossible.</p>
+
+<p class="author">Since Eric Brewer published his original conjecture, the idea has gained a mathematical proof. I’m not going to dive into the math of the proof itself, as not only is this not that sort of book, but I can also guarantee that I would get it wrong. Instead, let’s use some worked examples that will help us understand that under it all, the CAP theorem is a distillation of a very logical set of reasoning.</p>
+
+<p class="author">We’ve already talked about some simple database scaling techniques. Let’s use one of these to probe the ideas behind the CAP theorem. Let’s imagine that our inventory service is deployed across two separate data centers, as shown in <a data-type="xref" href="part0013_split_033.html#a115-multimaster-replication" class="calibre3">Figure 11-8</a>. Backing our service instance in each data center is a database, and these two databases talk to each other to try to synchronize data between them. Reads and writes are done via the local database node, and replication is used to synchronize the data between the nodes.</p>
+
+<p class="author">Now let’s think about what happens when something fails. Imagine that something as simple as the network link between the two data centers stops working. The synchronization at this point fails. Writes made to the primary database in DC1 will not propagate to DC2, and vice versa. Most databases that support these setups also support some sort of queuing technique to ensure that we can recover from this afterward, but what happens in the meantime?</p>
+
+<figure class="calibre16"><div id="a115-multimaster-replication" class="figure">
+<img src="../images/00078.jpeg" alt="Using multi-primary replication to share data between two database nodes" hisrc="assets/bdms_1108.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 11-8. </span>Using multiprimary replication to share data between two database nodes</h6>
+</div></figure>
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

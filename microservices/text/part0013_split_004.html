@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="Architectural Safety Measures"><div class="preface" id="idp11900096">
+<h1 class="calibre7" id="calibre_pb_4">Architectural Safety Measures</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="microservices at scale" data-secondary="architectural safety measures" id="idp11901600" class="calibre3"></a><a data-type="indexterm" data-primary="architectural safety" id="idp11902544" class="calibre3"></a><a data-type="indexterm" data-primary="Strangler Application Pattern" id="idp11903216" class="calibre3"></a>There are a few patterns, which collectively I refer to as <em class="calibre4">architectural safety measures</em>, that we can make use of to ensure that if something does go wrong, it doesn’t cause nasty ripple-out effects. These are points it is essential you understand, and should strongly consider standardizing in your system to ensure that one bad citizen doesn’t bring the whole world crashing down around your ears. In a moment, we’ll take a look at a few key safety measures you should consider, but before we do, I’d like to share a brief story to outline the sort of thing that can go wrong.</p>
+
+<p class="author">I was a technical lead on a project where we were building an online classified ads website. The website itself handled fairly high volumes, and generated a good deal of income for the business. Our core application handled some display of classified ads itself, and also proxied calls to other services that provided different types of products, as shown in <a data-type="xref" href="part0013_split_004.html#a115-legacy-stranger" class="calibre3">Figure 11-1</a>. This is actually an example of a <em class="calibre4">strangler application</em>, where a new system intercepts calls made to legacy applications and gradually replaces them altogether. As part of this project, we were partway through retiring the older applications. We had just moved over the highest volume and biggest earning product, but much of the rest of the ads were still being served by a number of older applications. In terms of both the number of searches and the money made by these applications, there was a very long tail.</p>
+
+<figure class="calibre16"><div id="a115-legacy-stranger" class="figure">
+<img src="../images/00071.gif" alt="A classified ads website 'strangling' older legacy applications" hisrc="assets/bdms_1101.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 11-1. </span>A classified ads website <em class="calibre4">strangling</em> older legacy applications</h6>
+</div></figure>
+
+<p class="author">Our system had been live for a while and was behaving very well, handling a not insignificant load. At that time we must have been handling around 6,000–7,000 requests per second during peak, and although most of that was very heavily cached by reverse proxies sitting in front of our application servers, the searches for products (the most important aspect of the site) were mostly uncached and required a full server round-trip.</p>
+
+<p class="author">One morning, just before we hit our daily lunchtime peak, the system started behaving slowly, then gradually started failing. We had some level of monitoring on our new core application, enough to tell us that each of our application nodes was hitting a 100% CPU spike, well above the normal levels even at peak. In a short period of time, the entire site went down.</p>
+
+<p class="author">We managed to track down the culprit and bring the site back up. It turned out one of the downstream ad systems, one of the oldest and least actively maintained, had started responding very slowly. Responding very slowly is one of the worst failure modes you can experience. If a system is just not there, you find out pretty quickly. When it’s just <em class="calibre4">slow</em>, you end up waiting around for a while before giving up. But whatever the cause of the failure, we had created a system that was vulnerable to a cascading failure. A downstream service, over which we had little control, was able to take down our whole system.</p>
+
+<p class="author">While one team looked at the problems with the downstream system, the rest of us started looking at what had gone wrong in our application. We found a few problems. We were using an HTTP connection pool to handle our downstream connections. The threads in the pool itself had timeouts configured for how long they would wait when making the downstream HTTP call, which is good. The problem was that the workers were all taking a while to time out due to the slow downstream system. While they were waiting, more requests went to the pool asking for worker threads. With no workers available, these requests themselves hung. It turned out the connection pool library we were using did have a timeout for waiting for workers, but this was <em class="calibre4">disabled by default</em>! This led to a huge build-up of blocked threads. Our application normally had 40 concurrent connections at any given time. In the space of five minutes, this situation caused us to peak at around 800 connections, bringing the system down.</p>
+
+<p class="author">What was worse was that the downstream service we were talking to represented functionality that less than 5% of our customer base used, and generated even less revenue than that. When you get down to it, we discovered the hard way that systems that just act slow are <em class="calibre4">much</em> harder to deal with than systems that just fail fast. In a distributed system, latency kills.</p>
+
+<p class="author">Even if we’d had the timeouts on the pool set correctly, we were also sharing a single HTTP connection pool for all outbound requests. This meant that one slow service could exhaust the number of available workers all by itself, even if everything else was healthy.  Lastly, it was clear that the downstream service in question wasn’t healthy, but we kept sending traffic its way. In our situation, this meant we were actually making a bad situation worse, as the downstream service had no chance to recover. We ended up implementing three fixes to avoid this happening again: getting our <em class="calibre4">timeouts</em> right, implementing <em class="calibre4">bulkheads</em> to separate out different connection pools, and implementing a <em class="calibre4">circuit breaker</em> to avoid sending calls to an unhealthy system in the first place.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

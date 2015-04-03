@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Flaky and Brittle Tests">
+<div class="preface" id="idp11187328">
+<section data-type="sect2" data-pdf-bookmark="The Great Pile-up"><div class="preface" id="idp11212272">
+<h2 class="calibre15" id="calibre_pb_16">The Great Pile-up</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="end-to-end tests" data-secondary="feedback cycle" id="idp11213280" class="calibre3"></a>The long feedback cycles associated with end-to-end tests aren’t just a problem when it comes to developer productivity. With a long test suite, any breaks take a while to fix, which reduces the amount of time that the end-to-end tests can be expected to be passing. If we deploy only software that has passed through all our tests successfully (which we should!), this means fewer of our services get through to the point of being deployable into production.</p>
+
+<p class="author">This can lead to a pile-up. While a broken integration test stage is being fixed, more changes from upstream teams can pile in. Aside from the fact that this can make fixing the build harder, it means the scope of changes to be deployed increases. One way to resolve this is to not let people check in if the end-to-end tests are failing, but given a long test suite time this is often impractical. Try saying, “You 30 developers: no check-ins til we fix this seven-hour-long build!”</p>
+
+<p class="author">The larger the scope of a deployment and the higher the risk of a release, the more likely we are to break something. A key driver to ensuring we can release our software frequently is based on the idea that we release small changes as soon as they are ready.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

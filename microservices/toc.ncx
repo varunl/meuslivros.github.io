@@ -1,0 +1,2049 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="eng">
+  <head>
+    <meta content="e471e0c4-e032-4c89-a426-3fb9e536feaf" name="dtb:uid"/>
+    <meta content="5" name="dtb:depth"/>
+    <meta content="calibre (2.19.0)" name="dtb:generator"/>
+    <meta content="0" name="dtb:totalPageCount"/>
+    <meta content="0" name="dtb:maxPageNumber"/>
+  </head>
+  <docTitle>
+    <text>Building Microservices</text>
+  </docTitle>
+  <navMap>
+    <navPoint class="chapter" id="num_1" playOrder="1">
+      <navLabel>
+        <text>Preface</text>
+      </navLabel>
+      <content src="text/part0002_split_000.html"/>
+      <navPoint class="chapter" id="num_2" playOrder="2">
+        <navLabel>
+          <text>Who Should Read This Book</text>
+        </navLabel>
+        <content src="text/part0002_split_001.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_3" playOrder="3">
+        <navLabel>
+          <text>Why I Wrote This Book</text>
+        </navLabel>
+        <content src="text/part0002_split_002.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_4" playOrder="4">
+        <navLabel>
+          <text>A Word on Microservices Today</text>
+        </navLabel>
+        <content src="text/part0002_split_003.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_5" playOrder="5">
+        <navLabel>
+          <text>Navigating This Book</text>
+        </navLabel>
+        <content src="text/part0002_split_004.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_6" playOrder="6">
+        <navLabel>
+          <text>Conventions Used in This Book</text>
+        </navLabel>
+        <content src="text/part0002_split_005.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_7" playOrder="7">
+        <navLabel>
+          <text>Safari® Books Online</text>
+        </navLabel>
+        <content src="text/part0002_split_006.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_8" playOrder="8">
+        <navLabel>
+          <text>How to Contact Us</text>
+        </navLabel>
+        <content src="text/part0002_split_007.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_9" playOrder="9">
+        <navLabel>
+          <text>Acknowledgments</text>
+        </navLabel>
+        <content src="text/part0002_split_008.html"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_10" playOrder="10">
+      <navLabel>
+        <text>1. Microservices</text>
+      </navLabel>
+      <content src="text/part0003_split_000.html"/>
+      <navPoint class="chapter" id="num_11" playOrder="11">
+        <navLabel>
+          <text>What Are Microservices?</text>
+        </navLabel>
+        <content src="text/part0003_split_001.html"/>
+        <navPoint class="chapter" id="num_12" playOrder="12">
+          <navLabel>
+            <text>Small, and Focused on Doing One Thing Well</text>
+          </navLabel>
+          <content src="text/part0003_split_002.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_13" playOrder="13">
+          <navLabel>
+            <text>Autonomous</text>
+          </navLabel>
+          <content src="text/part0003_split_003.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_14" playOrder="14">
+        <navLabel>
+          <text>Key Benefits</text>
+        </navLabel>
+        <content src="text/part0003_split_004.html"/>
+        <navPoint class="chapter" id="num_15" playOrder="15">
+          <navLabel>
+            <text>Technology Heterogeneity</text>
+          </navLabel>
+          <content src="text/part0003_split_005.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_16" playOrder="16">
+          <navLabel>
+            <text>Resilience</text>
+          </navLabel>
+          <content src="text/part0003_split_006.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_17" playOrder="17">
+          <navLabel>
+            <text>Scaling</text>
+          </navLabel>
+          <content src="text/part0003_split_007.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_18" playOrder="18">
+          <navLabel>
+            <text>Ease of Deployment</text>
+          </navLabel>
+          <content src="text/part0003_split_008.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_19" playOrder="19">
+          <navLabel>
+            <text>Organizational Alignment</text>
+          </navLabel>
+          <content src="text/part0003_split_009.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_20" playOrder="20">
+          <navLabel>
+            <text>Composability</text>
+          </navLabel>
+          <content src="text/part0003_split_010.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_21" playOrder="21">
+          <navLabel>
+            <text>Optimizing for Replaceability</text>
+          </navLabel>
+          <content src="text/part0003_split_011.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_22" playOrder="22">
+        <navLabel>
+          <text>What About Service-Oriented Architecture?</text>
+        </navLabel>
+        <content src="text/part0003_split_012.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_23" playOrder="23">
+        <navLabel>
+          <text>Other Decompositional Techniques</text>
+        </navLabel>
+        <content src="text/part0003_split_013.html"/>
+        <navPoint class="chapter" id="num_24" playOrder="24">
+          <navLabel>
+            <text>Shared Libraries</text>
+          </navLabel>
+          <content src="text/part0003_split_014.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_25" playOrder="25">
+          <navLabel>
+            <text>Modules</text>
+          </navLabel>
+          <content src="text/part0003_split_015.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_26" playOrder="26">
+        <navLabel>
+          <text>No Silver Bullet</text>
+        </navLabel>
+        <content src="text/part0003_split_016.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_27" playOrder="27">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="text/part0003_split_017.html"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_28" playOrder="28">
+      <navLabel>
+        <text>2. The Evolutionary Architect</text>
+      </navLabel>
+      <content src="text/part0004_split_000.html"/>
+      <navPoint class="chapter" id="num_29" playOrder="29">
+        <navLabel>
+          <text>Inaccurate Comparisons</text>
+        </navLabel>
+        <content src="text/part0004_split_001.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_30" playOrder="30">
+        <navLabel>
+          <text>An Evolutionary Vision for the Architect</text>
+        </navLabel>
+        <content src="text/part0004_split_002.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_31" playOrder="31">
+        <navLabel>
+          <text>Zoning</text>
+        </navLabel>
+        <content src="text/part0004_split_003.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_32" playOrder="32">
+        <navLabel>
+          <text>A Principled Approach</text>
+        </navLabel>
+        <content src="text/part0004_split_004.html"/>
+        <navPoint class="chapter" id="num_33" playOrder="33">
+          <navLabel>
+            <text>Strategic Goals</text>
+          </navLabel>
+          <content src="text/part0004_split_005.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_34" playOrder="34">
+          <navLabel>
+            <text>Principles</text>
+          </navLabel>
+          <content src="text/part0004_split_006.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_35" playOrder="35">
+          <navLabel>
+            <text>Practices</text>
+          </navLabel>
+          <content src="text/part0004_split_007.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_36" playOrder="36">
+          <navLabel>
+            <text>Combining Principles and Practices</text>
+          </navLabel>
+          <content src="text/part0004_split_008.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_37" playOrder="37">
+          <navLabel>
+            <text>A Real-World Example</text>
+          </navLabel>
+          <content src="text/part0004_split_009.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_38" playOrder="38">
+        <navLabel>
+          <text>The Required Standard</text>
+        </navLabel>
+        <content src="text/part0004_split_010.html"/>
+        <navPoint class="chapter" id="num_39" playOrder="39">
+          <navLabel>
+            <text>Monitoring</text>
+          </navLabel>
+          <content src="text/part0004_split_011.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_40" playOrder="40">
+          <navLabel>
+            <text>Interfaces</text>
+          </navLabel>
+          <content src="text/part0004_split_012.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_41" playOrder="41">
+          <navLabel>
+            <text>Architectural Safety</text>
+          </navLabel>
+          <content src="text/part0004_split_013.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_42" playOrder="42">
+        <navLabel>
+          <text>Governance Through Code</text>
+        </navLabel>
+        <content src="text/part0004_split_014.html"/>
+        <navPoint class="chapter" id="num_43" playOrder="43">
+          <navLabel>
+            <text>Exemplars</text>
+          </navLabel>
+          <content src="text/part0004_split_015.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_44" playOrder="44">
+          <navLabel>
+            <text>Tailored Service Template</text>
+          </navLabel>
+          <content src="text/part0004_split_016.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_45" playOrder="45">
+        <navLabel>
+          <text>Technical Debt</text>
+        </navLabel>
+        <content src="text/part0004_split_017.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_46" playOrder="46">
+        <navLabel>
+          <text>Exception Handling</text>
+        </navLabel>
+        <content src="text/part0004_split_018.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_47" playOrder="47">
+        <navLabel>
+          <text>Governance and Leading from the Center</text>
+        </navLabel>
+        <content src="text/part0004_split_019.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_48" playOrder="48">
+        <navLabel>
+          <text>Building a Team</text>
+        </navLabel>
+        <content src="text/part0004_split_020.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_49" playOrder="49">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="text/part0004_split_021.html"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_50" playOrder="50">
+      <navLabel>
+        <text>3. How to Model Services</text>
+      </navLabel>
+      <content src="text/part0005_split_000.html"/>
+      <navPoint class="chapter" id="num_51" playOrder="51">
+        <navLabel>
+          <text>Introducing MusicCorp</text>
+        </navLabel>
+        <content src="text/part0005_split_001.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_52" playOrder="52">
+        <navLabel>
+          <text>What Makes a Good Service?</text>
+        </navLabel>
+        <content src="text/part0005_split_002.html"/>
+        <navPoint class="chapter" id="num_53" playOrder="53">
+          <navLabel>
+            <text>Loose Coupling</text>
+          </navLabel>
+          <content src="text/part0005_split_003.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_54" playOrder="54">
+          <navLabel>
+            <text>High Cohesion</text>
+          </navLabel>
+          <content src="text/part0005_split_004.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_55" playOrder="55">
+        <navLabel>
+          <text>The Bounded Context</text>
+        </navLabel>
+        <content src="text/part0005_split_005.html"/>
+        <navPoint class="chapter" id="num_56" playOrder="56">
+          <navLabel>
+            <text>Shared and Hidden Models</text>
+          </navLabel>
+          <content src="text/part0005_split_006.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_57" playOrder="57">
+          <navLabel>
+            <text>Modules and Services</text>
+          </navLabel>
+          <content src="text/part0005_split_007.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_58" playOrder="58">
+          <navLabel>
+            <text>Premature Decomposition</text>
+          </navLabel>
+          <content src="text/part0005_split_008.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_59" playOrder="59">
+        <navLabel>
+          <text>Business Capabilities</text>
+        </navLabel>
+        <content src="text/part0005_split_009.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_60" playOrder="60">
+        <navLabel>
+          <text>Turtles All the Way Down</text>
+        </navLabel>
+        <content src="text/part0005_split_010.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_61" playOrder="61">
+        <navLabel>
+          <text>Communication in Terms of Business Concepts</text>
+        </navLabel>
+        <content src="text/part0005_split_011.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_62" playOrder="62">
+        <navLabel>
+          <text>The Technical Boundary</text>
+        </navLabel>
+        <content src="text/part0005_split_012.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_63" playOrder="63">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="text/part0005_split_013.html"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_64" playOrder="64">
+      <navLabel>
+        <text>4. Integration</text>
+      </navLabel>
+      <content src="text/part0006_split_000.html"/>
+      <navPoint class="chapter" id="num_65" playOrder="65">
+        <navLabel>
+          <text>Looking for the Ideal Integration Technology</text>
+        </navLabel>
+        <content src="text/part0006_split_001.html"/>
+        <navPoint class="chapter" id="num_66" playOrder="66">
+          <navLabel>
+            <text>Avoid Breaking Changes</text>
+          </navLabel>
+          <content src="text/part0006_split_002.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_67" playOrder="67">
+          <navLabel>
+            <text>Keep Your APIs Technology-Agnostic</text>
+          </navLabel>
+          <content src="text/part0006_split_003.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_68" playOrder="68">
+          <navLabel>
+            <text>Make Your Service Simple for Consumers</text>
+          </navLabel>
+          <content src="text/part0006_split_004.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_69" playOrder="69">
+          <navLabel>
+            <text>Hide Internal Implementation Detail</text>
+          </navLabel>
+          <content src="text/part0006_split_005.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_70" playOrder="70">
+        <navLabel>
+          <text>Interfacing with Customers</text>
+        </navLabel>
+        <content src="text/part0006_split_006.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_71" playOrder="71">
+        <navLabel>
+          <text>The Shared Database</text>
+        </navLabel>
+        <content src="text/part0006_split_007.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_72" playOrder="72">
+        <navLabel>
+          <text>Synchronous Versus Asynchronous</text>
+        </navLabel>
+        <content src="text/part0006_split_008.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_73" playOrder="73">
+        <navLabel>
+          <text>Orchestration Versus Choreography</text>
+        </navLabel>
+        <content src="text/part0006_split_009.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_74" playOrder="74">
+        <navLabel>
+          <text>Remote Procedure Calls</text>
+        </navLabel>
+        <content src="text/part0006_split_010.html"/>
+        <navPoint class="chapter" id="num_75" playOrder="75">
+          <navLabel>
+            <text>Technology Coupling</text>
+          </navLabel>
+          <content src="text/part0006_split_011.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_76" playOrder="76">
+          <navLabel>
+            <text>Local Calls Are Not Like Remote Calls</text>
+          </navLabel>
+          <content src="text/part0006_split_012.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_77" playOrder="77">
+          <navLabel>
+            <text>Brittleness</text>
+          </navLabel>
+          <content src="text/part0006_split_013.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_78" playOrder="78">
+          <navLabel>
+            <text>Is RPC Terrible?</text>
+          </navLabel>
+          <content src="text/part0006_split_014.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_79" playOrder="79">
+        <navLabel>
+          <text>REST</text>
+        </navLabel>
+        <content src="text/part0006_split_015.html"/>
+        <navPoint class="chapter" id="num_80" playOrder="80">
+          <navLabel>
+            <text>REST and HTTP</text>
+          </navLabel>
+          <content src="text/part0006_split_016.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_81" playOrder="81">
+          <navLabel>
+            <text>Hypermedia As the Engine of Application State</text>
+          </navLabel>
+          <content src="text/part0006_split_017.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_82" playOrder="82">
+          <navLabel>
+            <text>JSON, XML, or Something Else?</text>
+          </navLabel>
+          <content src="text/part0006_split_018.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_83" playOrder="83">
+          <navLabel>
+            <text>Beware Too Much Convenience</text>
+          </navLabel>
+          <content src="text/part0006_split_019.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_84" playOrder="84">
+          <navLabel>
+            <text>Downsides to REST Over HTTP</text>
+          </navLabel>
+          <content src="text/part0006_split_020.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_85" playOrder="85">
+        <navLabel>
+          <text>Implementing Asynchronous Event-Based Collaboration</text>
+        </navLabel>
+        <content src="text/part0006_split_021.html"/>
+        <navPoint class="chapter" id="num_86" playOrder="86">
+          <navLabel>
+            <text>Technology Choices</text>
+          </navLabel>
+          <content src="text/part0006_split_022.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_87" playOrder="87">
+          <navLabel>
+            <text>Complexities of Asynchronous Architectures</text>
+          </navLabel>
+          <content src="text/part0006_split_023.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_88" playOrder="88">
+        <navLabel>
+          <text>Services as State Machines</text>
+        </navLabel>
+        <content src="text/part0006_split_024.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_89" playOrder="89">
+        <navLabel>
+          <text>Reactive Extensions</text>
+        </navLabel>
+        <content src="text/part0006_split_025.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_90" playOrder="90">
+        <navLabel>
+          <text>DRY and the Perils of Code Reuse in a Microservice World</text>
+        </navLabel>
+        <content src="text/part0006_split_026.html"/>
+        <navPoint class="chapter" id="num_91" playOrder="91">
+          <navLabel>
+            <text>Client Libraries</text>
+          </navLabel>
+          <content src="text/part0006_split_027.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_92" playOrder="92">
+        <navLabel>
+          <text>Access by Reference</text>
+        </navLabel>
+        <content src="text/part0006_split_028.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_93" playOrder="93">
+        <navLabel>
+          <text>Versioning</text>
+        </navLabel>
+        <content src="text/part0006_split_029.html"/>
+        <navPoint class="chapter" id="num_94" playOrder="94">
+          <navLabel>
+            <text>Defer It for as Long as Possible</text>
+          </navLabel>
+          <content src="text/part0006_split_030.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_95" playOrder="95">
+          <navLabel>
+            <text>Catch Breaking Changes Early</text>
+          </navLabel>
+          <content src="text/part0006_split_031.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_96" playOrder="96">
+          <navLabel>
+            <text>Use Semantic Versioning</text>
+          </navLabel>
+          <content src="text/part0006_split_032.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_97" playOrder="97">
+          <navLabel>
+            <text>Coexist Different Endpoints</text>
+          </navLabel>
+          <content src="text/part0006_split_033.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_98" playOrder="98">
+          <navLabel>
+            <text>Use Multiple Concurrent Service Versions</text>
+          </navLabel>
+          <content src="text/part0006_split_034.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_99" playOrder="99">
+        <navLabel>
+          <text>User Interfaces</text>
+        </navLabel>
+        <content src="text/part0006_split_035.html"/>
+        <navPoint class="chapter" id="num_100" playOrder="100">
+          <navLabel>
+            <text>Toward Digital</text>
+          </navLabel>
+          <content src="text/part0006_split_036.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_101" playOrder="101">
+          <navLabel>
+            <text>Constraints</text>
+          </navLabel>
+          <content src="text/part0006_split_037.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_102" playOrder="102">
+          <navLabel>
+            <text>API Composition</text>
+          </navLabel>
+          <content src="text/part0006_split_038.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_103" playOrder="103">
+          <navLabel>
+            <text>UI Fragment Composition</text>
+          </navLabel>
+          <content src="text/part0006_split_039.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_104" playOrder="104">
+          <navLabel>
+            <text>Backends for Frontends</text>
+          </navLabel>
+          <content src="text/part0006_split_040.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_105" playOrder="105">
+          <navLabel>
+            <text>A Hybrid Approach</text>
+          </navLabel>
+          <content src="text/part0006_split_041.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_106" playOrder="106">
+        <navLabel>
+          <text>Integrating with Third-Party Software</text>
+        </navLabel>
+        <content src="text/part0006_split_042.html"/>
+        <navPoint class="chapter" id="num_107" playOrder="107">
+          <navLabel>
+            <text>Lack of Control</text>
+          </navLabel>
+          <content src="text/part0006_split_043.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_108" playOrder="108">
+          <navLabel>
+            <text>Customization</text>
+          </navLabel>
+          <content src="text/part0006_split_044.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_109" playOrder="109">
+          <navLabel>
+            <text>Integration Spaghetti</text>
+          </navLabel>
+          <content src="text/part0006_split_045.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_110" playOrder="110">
+          <navLabel>
+            <text>On Your Own Terms</text>
+          </navLabel>
+          <content src="text/part0006_split_046.html"/>
+          <navPoint class="chapter" id="num_111" playOrder="111">
+            <navLabel>
+              <text>Example: CMS as a service</text>
+            </navLabel>
+            <content src="text/part0006_split_046.html#idp10200288"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_112" playOrder="112">
+            <navLabel>
+              <text>Example: The multirole CRM system</text>
+            </navLabel>
+            <content src="text/part0006_split_046.html#idp10212624"/>
+          </navPoint>
+        </navPoint>
+        <navPoint class="chapter" id="num_113" playOrder="113">
+          <navLabel>
+            <text>The Strangler Pattern</text>
+          </navLabel>
+          <content src="text/part0006_split_047.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_114" playOrder="114">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="text/part0006_split_048.html"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_115" playOrder="115">
+      <navLabel>
+        <text>5. Splitting the Monolith</text>
+      </navLabel>
+      <content src="text/part0007_split_000.html"/>
+      <navPoint class="chapter" id="num_116" playOrder="116">
+        <navLabel>
+          <text>It’s All About Seams</text>
+        </navLabel>
+        <content src="text/part0007_split_001.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_117" playOrder="117">
+        <navLabel>
+          <text>Breaking Apart MusicCorp</text>
+        </navLabel>
+        <content src="text/part0007_split_001.html#idp10252288"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_118" playOrder="118">
+        <navLabel>
+          <text>The Reasons to Split the Monolith</text>
+        </navLabel>
+        <content src="text/part0007_split_003.html"/>
+        <navPoint class="chapter" id="num_119" playOrder="119">
+          <navLabel>
+            <text>Pace of Change</text>
+          </navLabel>
+          <content src="text/part0007_split_004.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_120" playOrder="120">
+          <navLabel>
+            <text>Team Structure</text>
+          </navLabel>
+          <content src="text/part0007_split_005.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_121" playOrder="121">
+          <navLabel>
+            <text>Security</text>
+          </navLabel>
+          <content src="text/part0007_split_006.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_122" playOrder="122">
+          <navLabel>
+            <text>Technology</text>
+          </navLabel>
+          <content src="text/part0007_split_007.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_123" playOrder="123">
+        <navLabel>
+          <text>Tangled Dependencies</text>
+        </navLabel>
+        <content src="text/part0007_split_008.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_124" playOrder="124">
+        <navLabel>
+          <text>The Database</text>
+        </navLabel>
+        <content src="text/part0007_split_009.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_125" playOrder="125">
+        <navLabel>
+          <text>Getting to Grips with the Problem</text>
+        </navLabel>
+        <content src="text/part0007_split_010.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_126" playOrder="126">
+        <navLabel>
+          <text>Example: Breaking Foreign Key Relationships</text>
+        </navLabel>
+        <content src="text/part0007_split_011.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_127" playOrder="127">
+        <navLabel>
+          <text>Example: Shared Static Data</text>
+        </navLabel>
+        <content src="text/part0007_split_012.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_128" playOrder="128">
+        <navLabel>
+          <text>Example: Shared Data</text>
+        </navLabel>
+        <content src="text/part0007_split_013.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_129" playOrder="129">
+        <navLabel>
+          <text>Example: Shared Tables</text>
+        </navLabel>
+        <content src="text/part0007_split_014.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_130" playOrder="130">
+        <navLabel>
+          <text>Refactoring Databases</text>
+        </navLabel>
+        <content src="text/part0007_split_015.html"/>
+        <navPoint class="chapter" id="num_131" playOrder="131">
+          <navLabel>
+            <text>Staging the Break</text>
+          </navLabel>
+          <content src="text/part0007_split_016.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_132" playOrder="132">
+        <navLabel>
+          <text>Transactional Boundaries</text>
+        </navLabel>
+        <content src="text/part0007_split_017.html"/>
+        <navPoint class="chapter" id="num_133" playOrder="133">
+          <navLabel>
+            <text>Try Again Later</text>
+          </navLabel>
+          <content src="text/part0007_split_018.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_134" playOrder="134">
+          <navLabel>
+            <text>Abort the Entire Operation</text>
+          </navLabel>
+          <content src="text/part0007_split_019.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_135" playOrder="135">
+          <navLabel>
+            <text>Distributed Transactions</text>
+          </navLabel>
+          <content src="text/part0007_split_020.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_136" playOrder="136">
+          <navLabel>
+            <text>So What to Do?</text>
+          </navLabel>
+          <content src="text/part0007_split_021.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_137" playOrder="137">
+        <navLabel>
+          <text>Reporting</text>
+        </navLabel>
+        <content src="text/part0007_split_022.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_138" playOrder="138">
+        <navLabel>
+          <text>The Reporting Database</text>
+        </navLabel>
+        <content src="text/part0007_split_023.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_139" playOrder="139">
+        <navLabel>
+          <text>Data Retrieval via Service Calls</text>
+        </navLabel>
+        <content src="text/part0007_split_024.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_140" playOrder="140">
+        <navLabel>
+          <text>Data Pumps</text>
+        </navLabel>
+        <content src="text/part0007_split_025.html"/>
+        <navPoint class="chapter" id="num_141" playOrder="141">
+          <navLabel>
+            <text>Alternative Destinations</text>
+          </navLabel>
+          <content src="text/part0007_split_026.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_142" playOrder="142">
+        <navLabel>
+          <text>Event Data Pump</text>
+        </navLabel>
+        <content src="text/part0007_split_027.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_143" playOrder="143">
+        <navLabel>
+          <text>Backup Data Pump</text>
+        </navLabel>
+        <content src="text/part0007_split_028.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_144" playOrder="144">
+        <navLabel>
+          <text>Toward Real Time</text>
+        </navLabel>
+        <content src="text/part0007_split_029.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_145" playOrder="145">
+        <navLabel>
+          <text>Cost of Change</text>
+        </navLabel>
+        <content src="text/part0007_split_030.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_146" playOrder="146">
+        <navLabel>
+          <text>Understanding Root Causes</text>
+        </navLabel>
+        <content src="text/part0007_split_031.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_147" playOrder="147">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="text/part0007_split_032.html"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_148" playOrder="148">
+      <navLabel>
+        <text>6. Deployment</text>
+      </navLabel>
+      <content src="text/part0008_split_000.html"/>
+      <navPoint class="chapter" id="num_149" playOrder="149">
+        <navLabel>
+          <text>A Brief Introduction to Continuous Integration</text>
+        </navLabel>
+        <content src="text/part0008_split_001.html"/>
+        <navPoint class="chapter" id="num_150" playOrder="150">
+          <navLabel>
+            <text>Are You Really Doing It?</text>
+          </navLabel>
+          <content src="text/part0008_split_002.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_151" playOrder="151">
+        <navLabel>
+          <text>Mapping Continuous Integration to Microservices</text>
+        </navLabel>
+        <content src="text/part0008_split_003.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_152" playOrder="152">
+        <navLabel>
+          <text>Build Pipelines and Continuous Delivery</text>
+        </navLabel>
+        <content src="text/part0008_split_004.html"/>
+        <navPoint class="chapter" id="num_153" playOrder="153">
+          <navLabel>
+            <text>And the Inevitable Exceptions</text>
+          </navLabel>
+          <content src="text/part0008_split_005.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_154" playOrder="154">
+        <navLabel>
+          <text>Platform-Specific Artifacts</text>
+        </navLabel>
+        <content src="text/part0008_split_006.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_155" playOrder="155">
+        <navLabel>
+          <text>Operating System Artifacts</text>
+        </navLabel>
+        <content src="text/part0008_split_007.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_156" playOrder="156">
+        <navLabel>
+          <text>Custom Images</text>
+        </navLabel>
+        <content src="text/part0008_split_008.html"/>
+        <navPoint class="chapter" id="num_157" playOrder="157">
+          <navLabel>
+            <text>Images as Artifacts</text>
+          </navLabel>
+          <content src="text/part0008_split_009.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_158" playOrder="158">
+          <navLabel>
+            <text>Immutable Servers</text>
+          </navLabel>
+          <content src="text/part0008_split_010.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_159" playOrder="159">
+        <navLabel>
+          <text>Environments</text>
+        </navLabel>
+        <content src="text/part0008_split_011.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_160" playOrder="160">
+        <navLabel>
+          <text>Service Configuration</text>
+        </navLabel>
+        <content src="text/part0008_split_012.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_161" playOrder="161">
+        <navLabel>
+          <text>Service-to-Host Mapping</text>
+        </navLabel>
+        <content src="text/part0008_split_013.html"/>
+        <navPoint class="chapter" id="num_162" playOrder="162">
+          <navLabel>
+            <text>Multiple Services Per Host</text>
+          </navLabel>
+          <content src="text/part0008_split_014.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_163" playOrder="163">
+          <navLabel>
+            <text>Application Containers</text>
+          </navLabel>
+          <content src="text/part0008_split_015.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_164" playOrder="164">
+          <navLabel>
+            <text>Single Service Per Host</text>
+          </navLabel>
+          <content src="text/part0008_split_016.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_165" playOrder="165">
+          <navLabel>
+            <text>Platform as a Service</text>
+          </navLabel>
+          <content src="text/part0008_split_017.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_166" playOrder="166">
+        <navLabel>
+          <text>Automation</text>
+        </navLabel>
+        <content src="text/part0008_split_018.html"/>
+        <navPoint class="chapter" id="num_167" playOrder="167">
+          <navLabel>
+            <text>Two Case Studies on the Power of Automation</text>
+          </navLabel>
+          <content src="text/part0008_split_019.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_168" playOrder="168">
+        <navLabel>
+          <text>From Physical to Virtual</text>
+        </navLabel>
+        <content src="text/part0008_split_020.html"/>
+        <navPoint class="chapter" id="num_169" playOrder="169">
+          <navLabel>
+            <text>Traditional Virtualization</text>
+          </navLabel>
+          <content src="text/part0008_split_021.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_170" playOrder="170">
+          <navLabel>
+            <text>Vagrant</text>
+          </navLabel>
+          <content src="text/part0008_split_022.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_171" playOrder="171">
+          <navLabel>
+            <text>Linux Containers</text>
+          </navLabel>
+          <content src="text/part0008_split_023.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_172" playOrder="172">
+          <navLabel>
+            <text>Docker</text>
+          </navLabel>
+          <content src="text/part0008_split_024.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_173" playOrder="173">
+        <navLabel>
+          <text>A Deployment Interface</text>
+        </navLabel>
+        <content src="text/part0008_split_025.html"/>
+        <navPoint class="chapter" id="num_174" playOrder="174">
+          <navLabel>
+            <text>Environment Definition</text>
+          </navLabel>
+          <content src="text/part0008_split_026.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_175" playOrder="175">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="text/part0008_split_027.html"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_176" playOrder="176">
+      <navLabel>
+        <text>7. Testing</text>
+      </navLabel>
+      <content src="text/part0009_split_000.html"/>
+      <navPoint class="chapter" id="num_177" playOrder="177">
+        <navLabel>
+          <text>Types of Tests</text>
+        </navLabel>
+        <content src="text/part0009_split_001.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_178" playOrder="178">
+        <navLabel>
+          <text>Test Scope</text>
+        </navLabel>
+        <content src="text/part0009_split_002.html"/>
+        <navPoint class="chapter" id="num_179" playOrder="179">
+          <navLabel>
+            <text>Unit Tests</text>
+          </navLabel>
+          <content src="text/part0009_split_003.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_180" playOrder="180">
+          <navLabel>
+            <text>Service Tests</text>
+          </navLabel>
+          <content src="text/part0009_split_004.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_181" playOrder="181">
+          <navLabel>
+            <text>End-to-End Tests</text>
+          </navLabel>
+          <content src="text/part0009_split_005.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_182" playOrder="182">
+          <navLabel>
+            <text>Trade-Offs</text>
+          </navLabel>
+          <content src="text/part0009_split_006.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_183" playOrder="183">
+          <navLabel>
+            <text>How Many?</text>
+          </navLabel>
+          <content src="text/part0009_split_007.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_184" playOrder="184">
+        <navLabel>
+          <text>Implementing Service Tests</text>
+        </navLabel>
+        <content src="text/part0009_split_008.html"/>
+        <navPoint class="chapter" id="num_185" playOrder="185">
+          <navLabel>
+            <text>Mocking or Stubbing</text>
+          </navLabel>
+          <content src="text/part0009_split_009.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_186" playOrder="186">
+          <navLabel>
+            <text>A Smarter Stub Service</text>
+          </navLabel>
+          <content src="text/part0009_split_010.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_187" playOrder="187">
+        <navLabel>
+          <text>Those Tricky End-to-End Tests</text>
+        </navLabel>
+        <content src="text/part0009_split_011.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_188" playOrder="188">
+        <navLabel>
+          <text>Downsides to End-to-End Testing</text>
+        </navLabel>
+        <content src="text/part0009_split_012.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_189" playOrder="189">
+        <navLabel>
+          <text>Flaky and Brittle Tests</text>
+        </navLabel>
+        <content src="text/part0009_split_013.html"/>
+        <navPoint class="chapter" id="num_190" playOrder="190">
+          <navLabel>
+            <text>Who Writes These Tests?</text>
+          </navLabel>
+          <content src="text/part0009_split_014.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_191" playOrder="191">
+          <navLabel>
+            <text>How Long?</text>
+          </navLabel>
+          <content src="text/part0009_split_015.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_192" playOrder="192">
+          <navLabel>
+            <text>The Great Pile-up</text>
+          </navLabel>
+          <content src="text/part0009_split_016.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_193" playOrder="193">
+          <navLabel>
+            <text>The Metaversion</text>
+          </navLabel>
+          <content src="text/part0009_split_017.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_194" playOrder="194">
+        <navLabel>
+          <text>Test Journeys, Not Stories</text>
+        </navLabel>
+        <content src="text/part0009_split_018.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_195" playOrder="195">
+        <navLabel>
+          <text>Consumer-Driven Tests to the Rescue</text>
+        </navLabel>
+        <content src="text/part0009_split_019.html"/>
+        <navPoint class="chapter" id="num_196" playOrder="196">
+          <navLabel>
+            <text>Pact</text>
+          </navLabel>
+          <content src="text/part0009_split_020.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_197" playOrder="197">
+          <navLabel>
+            <text>It’s About Conversations</text>
+          </navLabel>
+          <content src="text/part0009_split_021.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_198" playOrder="198">
+        <navLabel>
+          <text>So Should You Use End-to-End Tests?</text>
+        </navLabel>
+        <content src="text/part0009_split_022.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_199" playOrder="199">
+        <navLabel>
+          <text>Testing After Production</text>
+        </navLabel>
+        <content src="text/part0009_split_023.html"/>
+        <navPoint class="chapter" id="num_200" playOrder="200">
+          <navLabel>
+            <text>Separating Deployment from Release</text>
+          </navLabel>
+          <content src="text/part0009_split_024.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_201" playOrder="201">
+          <navLabel>
+            <text>Canary Releasing</text>
+          </navLabel>
+          <content src="text/part0009_split_025.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_202" playOrder="202">
+          <navLabel>
+            <text>Mean Time to Repair Over Mean Time Between Failures?</text>
+          </navLabel>
+          <content src="text/part0009_split_026.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_203" playOrder="203">
+        <navLabel>
+          <text>Cross-Functional Testing</text>
+        </navLabel>
+        <content src="text/part0009_split_027.html"/>
+        <navPoint class="chapter" id="num_204" playOrder="204">
+          <navLabel>
+            <text>Performance Tests</text>
+          </navLabel>
+          <content src="text/part0009_split_028.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_205" playOrder="205">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="text/part0009_split_029.html"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_206" playOrder="206">
+      <navLabel>
+        <text>8. Monitoring</text>
+      </navLabel>
+      <content src="text/part0010_split_000.html"/>
+      <navPoint class="chapter" id="num_207" playOrder="207">
+        <navLabel>
+          <text>Single Service, Single Server</text>
+        </navLabel>
+        <content src="text/part0010_split_001.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_208" playOrder="208">
+        <navLabel>
+          <text>Single Service, Multiple Servers</text>
+        </navLabel>
+        <content src="text/part0010_split_002.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_209" playOrder="209">
+        <navLabel>
+          <text>Multiple Services, Multiple Servers</text>
+        </navLabel>
+        <content src="text/part0010_split_003.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_210" playOrder="210">
+        <navLabel>
+          <text>Logs, Logs, and Yet More Logs…</text>
+        </navLabel>
+        <content src="text/part0010_split_004.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_211" playOrder="211">
+        <navLabel>
+          <text>Metric Tracking Across Multiple Services</text>
+        </navLabel>
+        <content src="text/part0010_split_005.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_212" playOrder="212">
+        <navLabel>
+          <text>Service Metrics</text>
+        </navLabel>
+        <content src="text/part0010_split_006.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_213" playOrder="213">
+        <navLabel>
+          <text>Synthetic Monitoring</text>
+        </navLabel>
+        <content src="text/part0010_split_007.html"/>
+        <navPoint class="chapter" id="num_214" playOrder="214">
+          <navLabel>
+            <text>Implementing Semantic Monitoring</text>
+          </navLabel>
+          <content src="text/part0010_split_008.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_215" playOrder="215">
+        <navLabel>
+          <text>Correlation IDs</text>
+        </navLabel>
+        <content src="text/part0010_split_009.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_216" playOrder="216">
+        <navLabel>
+          <text>The Cascade</text>
+        </navLabel>
+        <content src="text/part0010_split_010.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_217" playOrder="217">
+        <navLabel>
+          <text>Standardization</text>
+        </navLabel>
+        <content src="text/part0010_split_011.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_218" playOrder="218">
+        <navLabel>
+          <text>Consider the Audience</text>
+        </navLabel>
+        <content src="text/part0010_split_012.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_219" playOrder="219">
+        <navLabel>
+          <text>The Future</text>
+        </navLabel>
+        <content src="text/part0010_split_013.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_220" playOrder="220">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="text/part0010_split_014.html"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_221" playOrder="221">
+      <navLabel>
+        <text>9. Security</text>
+      </navLabel>
+      <content src="text/part0011_split_000.html"/>
+      <navPoint class="chapter" id="num_222" playOrder="222">
+        <navLabel>
+          <text>Authentication and Authorization</text>
+        </navLabel>
+        <content src="text/part0011_split_001.html"/>
+        <navPoint class="chapter" id="num_223" playOrder="223">
+          <navLabel>
+            <text>Common Single Sign-On Implementations</text>
+          </navLabel>
+          <content src="text/part0011_split_002.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_224" playOrder="224">
+          <navLabel>
+            <text>Single Sign-On Gateway</text>
+          </navLabel>
+          <content src="text/part0011_split_003.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_225" playOrder="225">
+          <navLabel>
+            <text>Fine-Grained Authorization</text>
+          </navLabel>
+          <content src="text/part0011_split_004.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_226" playOrder="226">
+        <navLabel>
+          <text>Service-to-Service Authentication and Authorization</text>
+        </navLabel>
+        <content src="text/part0011_split_005.html"/>
+        <navPoint class="chapter" id="num_227" playOrder="227">
+          <navLabel>
+            <text>Allow Everything Inside the Perimeter</text>
+          </navLabel>
+          <content src="text/part0011_split_006.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_228" playOrder="228">
+          <navLabel>
+            <text>HTTP(S) Basic Authentication</text>
+          </navLabel>
+          <content src="text/part0011_split_007.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_229" playOrder="229">
+          <navLabel>
+            <text>Use SAML or OpenID Connect</text>
+          </navLabel>
+          <content src="text/part0011_split_008.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_230" playOrder="230">
+          <navLabel>
+            <text>Client Certificates</text>
+          </navLabel>
+          <content src="text/part0011_split_009.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_231" playOrder="231">
+          <navLabel>
+            <text>HMAC Over HTTP</text>
+          </navLabel>
+          <content src="text/part0011_split_010.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_232" playOrder="232">
+          <navLabel>
+            <text>API Keys</text>
+          </navLabel>
+          <content src="text/part0011_split_011.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_233" playOrder="233">
+          <navLabel>
+            <text>The Deputy Problem</text>
+          </navLabel>
+          <content src="text/part0011_split_012.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_234" playOrder="234">
+        <navLabel>
+          <text>Securing Data at Rest</text>
+        </navLabel>
+        <content src="text/part0011_split_013.html"/>
+        <navPoint class="chapter" id="num_235" playOrder="235">
+          <navLabel>
+            <text>Go with the Well Known</text>
+          </navLabel>
+          <content src="text/part0011_split_014.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_236" playOrder="236">
+          <navLabel>
+            <text>It’s All About the Keys</text>
+          </navLabel>
+          <content src="text/part0011_split_015.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_237" playOrder="237">
+          <navLabel>
+            <text>Pick Your Targets</text>
+          </navLabel>
+          <content src="text/part0011_split_016.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_238" playOrder="238">
+          <navLabel>
+            <text>Decrypt on Demand</text>
+          </navLabel>
+          <content src="text/part0011_split_017.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_239" playOrder="239">
+          <navLabel>
+            <text>Encrypt Backups</text>
+          </navLabel>
+          <content src="text/part0011_split_018.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_240" playOrder="240">
+        <navLabel>
+          <text>Defense in Depth</text>
+        </navLabel>
+        <content src="text/part0011_split_019.html"/>
+        <navPoint class="chapter" id="num_241" playOrder="241">
+          <navLabel>
+            <text>Firewalls</text>
+          </navLabel>
+          <content src="text/part0011_split_020.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_242" playOrder="242">
+          <navLabel>
+            <text>Logging</text>
+          </navLabel>
+          <content src="text/part0011_split_021.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_243" playOrder="243">
+          <navLabel>
+            <text>Intrusion Detection (and Prevention) System</text>
+          </navLabel>
+          <content src="text/part0011_split_022.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_244" playOrder="244">
+          <navLabel>
+            <text>Network Segregation</text>
+          </navLabel>
+          <content src="text/part0011_split_023.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_245" playOrder="245">
+          <navLabel>
+            <text>Operating System</text>
+          </navLabel>
+          <content src="text/part0011_split_024.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_246" playOrder="246">
+        <navLabel>
+          <text>A Worked Example</text>
+        </navLabel>
+        <content src="text/part0011_split_025.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_247" playOrder="247">
+        <navLabel>
+          <text>Be Frugal</text>
+        </navLabel>
+        <content src="text/part0011_split_026.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_248" playOrder="248">
+        <navLabel>
+          <text>The Human Element</text>
+        </navLabel>
+        <content src="text/part0011_split_027.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_249" playOrder="249">
+        <navLabel>
+          <text>The Golden Rule</text>
+        </navLabel>
+        <content src="text/part0011_split_028.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_250" playOrder="250">
+        <navLabel>
+          <text>Baking Security In</text>
+        </navLabel>
+        <content src="text/part0011_split_029.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_251" playOrder="251">
+        <navLabel>
+          <text>External Verification</text>
+        </navLabel>
+        <content src="text/part0011_split_030.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_252" playOrder="252">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="text/part0011_split_031.html"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_253" playOrder="253">
+      <navLabel>
+        <text>10. Conway’s Law and System Design</text>
+      </navLabel>
+      <content src="text/part0012_split_000.html"/>
+      <navPoint class="chapter" id="num_254" playOrder="254">
+        <navLabel>
+          <text>Evidence</text>
+        </navLabel>
+        <content src="text/part0012_split_001.html"/>
+        <navPoint class="chapter" id="num_255" playOrder="255">
+          <navLabel>
+            <text>Loose and Tightly Coupled Organizations</text>
+          </navLabel>
+          <content src="text/part0012_split_002.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_256" playOrder="256">
+          <navLabel>
+            <text>Windows Vista</text>
+          </navLabel>
+          <content src="text/part0012_split_003.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_257" playOrder="257">
+        <navLabel>
+          <text>Netflix and Amazon</text>
+        </navLabel>
+        <content src="text/part0012_split_004.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_258" playOrder="258">
+        <navLabel>
+          <text>What Can We Do with This?</text>
+        </navLabel>
+        <content src="text/part0012_split_005.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_259" playOrder="259">
+        <navLabel>
+          <text>Adapting to Communication Pathways</text>
+        </navLabel>
+        <content src="text/part0012_split_006.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_260" playOrder="260">
+        <navLabel>
+          <text>Service Ownership</text>
+        </navLabel>
+        <content src="text/part0012_split_007.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_261" playOrder="261">
+        <navLabel>
+          <text>Drivers for Shared Services</text>
+        </navLabel>
+        <content src="text/part0012_split_008.html"/>
+        <navPoint class="chapter" id="num_262" playOrder="262">
+          <navLabel>
+            <text>Too Hard to Split</text>
+          </navLabel>
+          <content src="text/part0012_split_009.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_263" playOrder="263">
+          <navLabel>
+            <text>Feature Teams</text>
+          </navLabel>
+          <content src="text/part0012_split_010.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_264" playOrder="264">
+          <navLabel>
+            <text>Delivery Bottlenecks</text>
+          </navLabel>
+          <content src="text/part0012_split_011.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_265" playOrder="265">
+        <navLabel>
+          <text>Internal Open Source</text>
+        </navLabel>
+        <content src="text/part0012_split_012.html"/>
+        <navPoint class="chapter" id="num_266" playOrder="266">
+          <navLabel>
+            <text>Role of the Custodians</text>
+          </navLabel>
+          <content src="text/part0012_split_013.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_267" playOrder="267">
+          <navLabel>
+            <text>Maturity</text>
+          </navLabel>
+          <content src="text/part0012_split_014.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_268" playOrder="268">
+          <navLabel>
+            <text>Tooling</text>
+          </navLabel>
+          <content src="text/part0012_split_015.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_269" playOrder="269">
+        <navLabel>
+          <text>Bounded Contexts and Team Structures</text>
+        </navLabel>
+        <content src="text/part0012_split_016.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_270" playOrder="270">
+        <navLabel>
+          <text>The Orphaned Service?</text>
+        </navLabel>
+        <content src="text/part0012_split_017.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_271" playOrder="271">
+        <navLabel>
+          <text>Case Study: RealEstate.com.au</text>
+        </navLabel>
+        <content src="text/part0012_split_018.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_272" playOrder="272">
+        <navLabel>
+          <text>Conway’s Law in Reverse</text>
+        </navLabel>
+        <content src="text/part0012_split_019.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_273" playOrder="273">
+        <navLabel>
+          <text>People</text>
+        </navLabel>
+        <content src="text/part0012_split_020.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_274" playOrder="274">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="text/part0012_split_021.html"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_275" playOrder="275">
+      <navLabel>
+        <text>11. Microservices at Scale</text>
+      </navLabel>
+      <content src="text/part0013_split_000.html"/>
+      <navPoint class="chapter" id="num_276" playOrder="276">
+        <navLabel>
+          <text>Failure Is Everywhere</text>
+        </navLabel>
+        <content src="text/part0013_split_001.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_277" playOrder="277">
+        <navLabel>
+          <text>How Much Is Too Much?</text>
+        </navLabel>
+        <content src="text/part0013_split_002.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_278" playOrder="278">
+        <navLabel>
+          <text>Degrading Functionality</text>
+        </navLabel>
+        <content src="text/part0013_split_003.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_279" playOrder="279">
+        <navLabel>
+          <text>Architectural Safety Measures</text>
+        </navLabel>
+        <content src="text/part0013_split_004.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_280" playOrder="280">
+        <navLabel>
+          <text>The Antifragile Organization</text>
+        </navLabel>
+        <content src="text/part0013_split_005.html"/>
+        <navPoint class="chapter" id="num_281" playOrder="281">
+          <navLabel>
+            <text>Timeouts</text>
+          </navLabel>
+          <content src="text/part0013_split_006.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_282" playOrder="282">
+          <navLabel>
+            <text>Circuit Breakers</text>
+          </navLabel>
+          <content src="text/part0013_split_007.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_283" playOrder="283">
+          <navLabel>
+            <text>Bulkheads</text>
+          </navLabel>
+          <content src="text/part0013_split_008.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_284" playOrder="284">
+          <navLabel>
+            <text>Isolation</text>
+          </navLabel>
+          <content src="text/part0013_split_009.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_285" playOrder="285">
+        <navLabel>
+          <text>Idempotency</text>
+        </navLabel>
+        <content src="text/part0013_split_010.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_286" playOrder="286">
+        <navLabel>
+          <text>Scaling</text>
+        </navLabel>
+        <content src="text/part0013_split_011.html"/>
+        <navPoint class="chapter" id="num_287" playOrder="287">
+          <navLabel>
+            <text>Go Bigger</text>
+          </navLabel>
+          <content src="text/part0013_split_012.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_288" playOrder="288">
+          <navLabel>
+            <text>Splitting Workloads</text>
+          </navLabel>
+          <content src="text/part0013_split_013.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_289" playOrder="289">
+          <navLabel>
+            <text>Spreading Your Risk</text>
+          </navLabel>
+          <content src="text/part0013_split_014.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_290" playOrder="290">
+          <navLabel>
+            <text>Load Balancing</text>
+          </navLabel>
+          <content src="text/part0013_split_015.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_291" playOrder="291">
+          <navLabel>
+            <text>Worker-Based Systems</text>
+          </navLabel>
+          <content src="text/part0013_split_016.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_292" playOrder="292">
+          <navLabel>
+            <text>Starting Again</text>
+          </navLabel>
+          <content src="text/part0013_split_017.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_293" playOrder="293">
+        <navLabel>
+          <text>Scaling Databases</text>
+        </navLabel>
+        <content src="text/part0013_split_018.html"/>
+        <navPoint class="chapter" id="num_294" playOrder="294">
+          <navLabel>
+            <text>Availability of Service Versus Durability of Data</text>
+          </navLabel>
+          <content src="text/part0013_split_019.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_295" playOrder="295">
+          <navLabel>
+            <text>Scaling for Reads</text>
+          </navLabel>
+          <content src="text/part0013_split_020.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_296" playOrder="296">
+          <navLabel>
+            <text>Scaling for Writes</text>
+          </navLabel>
+          <content src="text/part0013_split_021.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_297" playOrder="297">
+          <navLabel>
+            <text>Shared Database Infrastructure</text>
+          </navLabel>
+          <content src="text/part0013_split_022.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_298" playOrder="298">
+          <navLabel>
+            <text>CQRS</text>
+          </navLabel>
+          <content src="text/part0013_split_023.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_299" playOrder="299">
+        <navLabel>
+          <text>Caching</text>
+        </navLabel>
+        <content src="text/part0013_split_024.html"/>
+        <navPoint class="chapter" id="num_300" playOrder="300">
+          <navLabel>
+            <text>Client-Side, Proxy, and Server-Side Caching</text>
+          </navLabel>
+          <content src="text/part0013_split_025.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_301" playOrder="301">
+          <navLabel>
+            <text>Caching in HTTP</text>
+          </navLabel>
+          <content src="text/part0013_split_026.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_302" playOrder="302">
+          <navLabel>
+            <text>Caching for Writes</text>
+          </navLabel>
+          <content src="text/part0013_split_027.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_303" playOrder="303">
+          <navLabel>
+            <text>Caching for Resilience</text>
+          </navLabel>
+          <content src="text/part0013_split_028.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_304" playOrder="304">
+          <navLabel>
+            <text>Hiding the Origin</text>
+          </navLabel>
+          <content src="text/part0013_split_029.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_305" playOrder="305">
+          <navLabel>
+            <text>Keep It Simple</text>
+          </navLabel>
+          <content src="text/part0013_split_030.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_306" playOrder="306">
+          <navLabel>
+            <text>Cache Poisoning: A Cautionary Tale</text>
+          </navLabel>
+          <content src="text/part0013_split_031.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_307" playOrder="307">
+        <navLabel>
+          <text>Autoscaling</text>
+        </navLabel>
+        <content src="text/part0013_split_032.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_308" playOrder="308">
+        <navLabel>
+          <text>CAP Theorem</text>
+        </navLabel>
+        <content src="text/part0013_split_033.html"/>
+        <navPoint class="chapter" id="num_309" playOrder="309">
+          <navLabel>
+            <text>Sacrificing Consistency</text>
+          </navLabel>
+          <content src="text/part0013_split_034.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_310" playOrder="310">
+          <navLabel>
+            <text>Sacrificing Availability</text>
+          </navLabel>
+          <content src="text/part0013_split_035.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_311" playOrder="311">
+          <navLabel>
+            <text>Sacrificing Partition Tolerance?</text>
+          </navLabel>
+          <content src="text/part0013_split_036.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_312" playOrder="312">
+          <navLabel>
+            <text>AP or CP?</text>
+          </navLabel>
+          <content src="text/part0013_split_037.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_313" playOrder="313">
+          <navLabel>
+            <text>It’s Not All or Nothing</text>
+          </navLabel>
+          <content src="text/part0013_split_038.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_314" playOrder="314">
+          <navLabel>
+            <text>And the Real World</text>
+          </navLabel>
+          <content src="text/part0013_split_039.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_315" playOrder="315">
+        <navLabel>
+          <text>Service Discovery</text>
+        </navLabel>
+        <content src="text/part0013_split_040.html"/>
+        <navPoint class="chapter" id="num_316" playOrder="316">
+          <navLabel>
+            <text>DNS</text>
+          </navLabel>
+          <content src="text/part0013_split_041.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_317" playOrder="317">
+        <navLabel>
+          <text>Dynamic Service Registries</text>
+        </navLabel>
+        <content src="text/part0013_split_042.html"/>
+        <navPoint class="chapter" id="num_318" playOrder="318">
+          <navLabel>
+            <text>Zookeeper</text>
+          </navLabel>
+          <content src="text/part0013_split_043.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_319" playOrder="319">
+          <navLabel>
+            <text>Consul</text>
+          </navLabel>
+          <content src="text/part0013_split_044.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_320" playOrder="320">
+          <navLabel>
+            <text>Eureka</text>
+          </navLabel>
+          <content src="text/part0013_split_045.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_321" playOrder="321">
+          <navLabel>
+            <text>Rolling Your Own</text>
+          </navLabel>
+          <content src="text/part0013_split_046.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_322" playOrder="322">
+          <navLabel>
+            <text>Don’t Forget the Humans!</text>
+          </navLabel>
+          <content src="text/part0013_split_047.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_323" playOrder="323">
+        <navLabel>
+          <text>Documenting Services</text>
+        </navLabel>
+        <content src="text/part0013_split_048.html"/>
+        <navPoint class="chapter" id="num_324" playOrder="324">
+          <navLabel>
+            <text>Swagger</text>
+          </navLabel>
+          <content src="text/part0013_split_049.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_325" playOrder="325">
+          <navLabel>
+            <text>HAL and the HAL Browser</text>
+          </navLabel>
+          <content src="text/part0013_split_050.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_326" playOrder="326">
+        <navLabel>
+          <text>The Self-Describing System</text>
+        </navLabel>
+        <content src="text/part0013_split_051.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_327" playOrder="327">
+        <navLabel>
+          <text>Summary</text>
+        </navLabel>
+        <content src="text/part0013_split_052.html"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_328" playOrder="328">
+      <navLabel>
+        <text>12. Bringing It All Together</text>
+      </navLabel>
+      <content src="text/part0014_split_000.html"/>
+      <navPoint class="chapter" id="num_329" playOrder="329">
+        <navLabel>
+          <text>Principles of Microservices</text>
+        </navLabel>
+        <content src="text/part0014_split_001.html"/>
+        <navPoint class="chapter" id="num_330" playOrder="330">
+          <navLabel>
+            <text>Model Around Business Concepts</text>
+          </navLabel>
+          <content src="text/part0014_split_002.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_331" playOrder="331">
+          <navLabel>
+            <text>Adopt a Culture of Automation</text>
+          </navLabel>
+          <content src="text/part0014_split_003.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_332" playOrder="332">
+          <navLabel>
+            <text>Hide Internal Implementation Details</text>
+          </navLabel>
+          <content src="text/part0014_split_004.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_333" playOrder="333">
+          <navLabel>
+            <text>Decentralize All the Things</text>
+          </navLabel>
+          <content src="text/part0014_split_005.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_334" playOrder="334">
+          <navLabel>
+            <text>Independently Deployable</text>
+          </navLabel>
+          <content src="text/part0014_split_006.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_335" playOrder="335">
+          <navLabel>
+            <text>Isolate Failure</text>
+          </navLabel>
+          <content src="text/part0014_split_007.html"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_336" playOrder="336">
+          <navLabel>
+            <text>Highly Observable</text>
+          </navLabel>
+          <content src="text/part0014_split_008.html"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_337" playOrder="337">
+        <navLabel>
+          <text>When Shouldn’t You Use Microservices?</text>
+        </navLabel>
+        <content src="text/part0014_split_009.html"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_338" playOrder="338">
+        <navLabel>
+          <text>Parting Words</text>
+        </navLabel>
+        <content src="text/part0014_split_010.html"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_339" playOrder="339">
+      <navLabel>
+        <text>Index</text>
+      </navLabel>
+      <content src="text/part0015.html"/>
+    </navPoint>
+  </navMap>
+</ncx>

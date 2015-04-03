@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<ncx:ncx xmlns:ncx="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+  <ncx:head>
+    <ncx:meta name="cover" content="cover"/>
+    <ncx:meta name="dtb:depth" content="-1"/>
+    <ncx:meta name="dtb:totalPageCount" content="0"/>
+    <ncx:meta name="dtb:maxPageNumber" content="0"/>
+  </ncx:head>
+  <ncx:docTitle>
+    <ncx:text>Apache Kafka</ncx:text>
+  </ncx:docTitle>
+  <ncx:navMap>
+    <ncx:navPoint id="id286448480" playOrder="1">
+      <ncx:navLabel>
+        <ncx:text>Apache Kafka</ncx:text>
+      </ncx:navLabel>
+      <ncx:content src="index.html"/>
+      <ncx:navPoint playOrder="2" id="toc">
+        <ncx:navLabel>
+          <ncx:text>Table of Contents</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="toc.html"/>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286448500" playOrder="3">
+        <ncx:navLabel>
+          <ncx:text>Apache Kafka</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="pr01.html"/>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286691997" playOrder="4">
+        <ncx:navLabel>
+          <ncx:text>Credits</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="pr02.html"/>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286697291" playOrder="5">
+        <ncx:navLabel>
+          <ncx:text>About the Author</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="pr03.html"/>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286697323" playOrder="6">
+        <ncx:navLabel>
+          <ncx:text>About the Reviewers</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="pr04.html"/>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286697349" playOrder="7">
+        <ncx:navLabel>
+          <ncx:text>www.PacktPub.com</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="pr05.html"/>
+        <ncx:navPoint id="id286697355" playOrder="8">
+          <ncx:navLabel>
+            <ncx:text>Support files, eBooks, discount offers and more</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="pr05.html#ch00lvl3sec01"/>
+          <ncx:navPoint id="id286697411" playOrder="9">
+            <ncx:navLabel>
+              <ncx:text>Why Subscribe?</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="pr05.html#ch00lvl4sec01"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286697444" playOrder="10">
+            <ncx:navLabel>
+              <ncx:text>Free Access for Packt account holders</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="pr05.html#ch00lvl4sec02"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286697461" playOrder="11">
+        <ncx:navLabel>
+          <ncx:text>Preface</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="pr06.html"/>
+        <ncx:navPoint id="id286697474" playOrder="12">
+          <ncx:navLabel>
+            <ncx:text>What this book covers</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="pr06.html#ch00lvl1sec02"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286697570" playOrder="13">
+          <ncx:navLabel>
+            <ncx:text>What you need for this book</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="pr06s02.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286697589" playOrder="14">
+          <ncx:navLabel>
+            <ncx:text>Who this book is for</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="pr06s03.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286697603" playOrder="15">
+          <ncx:navLabel>
+            <ncx:text>Conventions</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="pr06s04.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286697678" playOrder="16">
+          <ncx:navLabel>
+            <ncx:text>Reader feedback</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="pr06s05.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286697703" playOrder="17">
+          <ncx:navLabel>
+            <ncx:text>Customer support</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="pr06s06.html"/>
+          <ncx:navPoint id="id286697715" playOrder="18">
+            <ncx:navLabel>
+              <ncx:text>Downloading the color images of this book</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="pr06s06.html#ch00lvl2sec02"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286697730" playOrder="19">
+            <ncx:navLabel>
+              <ncx:text>Errata</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="pr06s06.html#ch00lvl2sec03"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286697762" playOrder="20">
+            <ncx:navLabel>
+              <ncx:text>Piracy</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="pr06s06.html#ch00lvl2sec04"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286697783" playOrder="21">
+            <ncx:navLabel>
+              <ncx:text>Questions</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="pr06s06.html#ch00lvl2sec05"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286697799" playOrder="22">
+        <ncx:navLabel>
+          <ncx:text>1. Introducing Kafka</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch01.html"/>
+        <ncx:navPoint id="id286722356" playOrder="23">
+          <ncx:navLabel>
+            <ncx:text>Need for Kafka</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch01.html#ch01lvl1sec08"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286722426" playOrder="24">
+          <ncx:navLabel>
+            <ncx:text>Few Kafka usages</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch01s02.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286722645" playOrder="25">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch01s03.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286722660" playOrder="26">
+        <ncx:navLabel>
+          <ncx:text>2. Installing Kafka</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch02.html"/>
+        <ncx:navPoint id="id286722771" playOrder="27">
+          <ncx:navLabel>
+            <ncx:text>Installing Kafka</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch02.html#ch02lvl1sec11"/>
+          <ncx:navPoint id="id286722834" playOrder="28">
+            <ncx:navLabel>
+              <ncx:text>Downloading Kafka</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch02.html#ch02lvl2sec06"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286723018" playOrder="29">
+            <ncx:navLabel>
+              <ncx:text>Installing the prerequisites</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch02.html#ch02lvl2sec07"/>
+            <ncx:navPoint id="id286723054" playOrder="30">
+              <ncx:navLabel>
+                <ncx:text>Installing Java 1.6 or later</ncx:text>
+              </ncx:navLabel>
+              <ncx:content src="ch02.html#ch02lvl3sec02"/>
+            </ncx:navPoint>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286723161" playOrder="31">
+            <ncx:navLabel>
+              <ncx:text>Building Kafka</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch02.html#ch02lvl2sec08"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286723457" playOrder="32">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch02s02.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286723468" playOrder="33">
+        <ncx:navLabel>
+          <ncx:text>3. Setting up the Kafka Cluster</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch03.html"/>
+        <ncx:navPoint id="id286723589" playOrder="34">
+          <ncx:navLabel>
+            <ncx:text>Single node – single broker cluster</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch03.html#ch03lvl1sec13"/>
+          <ncx:navPoint id="id286723629" playOrder="35">
+            <ncx:navLabel>
+              <ncx:text>Starting the ZooKeeper server</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch03.html#ch03lvl2sec09"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286723900" playOrder="36">
+            <ncx:navLabel>
+              <ncx:text>Starting the Kafka broker</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch03.html#ch03lvl2sec10"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286724012" playOrder="37">
+            <ncx:navLabel>
+              <ncx:text>Creating a Kafka topic</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch03.html#ch03lvl2sec11"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286724077" playOrder="38">
+            <ncx:navLabel>
+              <ncx:text>Starting a producer for sending messages</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch03.html#ch03lvl2sec12"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286724289" playOrder="39">
+            <ncx:navLabel>
+              <ncx:text>Starting a consumer for consuming messages</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch03.html#ch03lvl2sec13"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286750691" playOrder="40">
+          <ncx:navLabel>
+            <ncx:text>Single node – multiple broker cluster</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch03s02.html"/>
+          <ncx:navPoint id="id286750731" playOrder="41">
+            <ncx:navLabel>
+              <ncx:text>Starting ZooKeeper</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch03s02.html#ch03lvl2sec14"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286750760" playOrder="42">
+            <ncx:navLabel>
+              <ncx:text>Starting the Kafka broker</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch03s02.html#ch03lvl2sec15"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286751018" playOrder="43">
+            <ncx:navLabel>
+              <ncx:text>Creating a Kafka topic</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch03s02.html#ch03lvl2sec16"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286751099" playOrder="44">
+            <ncx:navLabel>
+              <ncx:text>Starting a producer for sending messages</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch03s02.html#ch03lvl2sec17"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286751184" playOrder="45">
+            <ncx:navLabel>
+              <ncx:text>Starting a consumer for consuming messages</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch03s02.html#ch03lvl2sec18"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286751228" playOrder="46">
+          <ncx:navLabel>
+            <ncx:text>Multiple node – multiple broker cluster</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch03s03.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286751319" playOrder="47">
+          <ncx:navLabel>
+            <ncx:text>Kafka broker property list</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch03s04.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286751666" playOrder="48">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch03s05.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286751682" playOrder="49">
+        <ncx:navLabel>
+          <ncx:text>4. Kafka Design</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch04.html"/>
+        <ncx:navPoint id="id286751787" playOrder="50">
+          <ncx:navLabel>
+            <ncx:text>Kafka design fundamentals</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04.html#ch04lvl1sec18"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286752118" playOrder="51">
+          <ncx:navLabel>
+            <ncx:text>Message compression in Kafka</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04s02.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286752279" playOrder="52">
+          <ncx:navLabel>
+            <ncx:text>Cluster mirroring in Kafka</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04s03.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286752389" playOrder="53">
+          <ncx:navLabel>
+            <ncx:text>Replication in Kafka</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04s04.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286752722" playOrder="54">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch04s05.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286752737" playOrder="55">
+        <ncx:navLabel>
+          <ncx:text>5. Writing Producers</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch05.html"/>
+        <ncx:navPoint id="id286752923" playOrder="56">
+          <ncx:navLabel>
+            <ncx:text>The Java producer API</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch05.html#ch05lvl1sec23"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286753276" playOrder="57">
+          <ncx:navLabel>
+            <ncx:text>Simple Java producer</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch05s02.html"/>
+          <ncx:navPoint id="id286753321" playOrder="58">
+            <ncx:navLabel>
+              <ncx:text>Importing classes</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch05s02.html#ch05lvl2sec19"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286753379" playOrder="59">
+            <ncx:navLabel>
+              <ncx:text>Defining properties</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch05s02.html#ch05lvl2sec20"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286753556" playOrder="60">
+            <ncx:navLabel>
+              <ncx:text>Building the message and sending it</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch05s02.html#ch05lvl2sec21"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286753717" playOrder="61">
+          <ncx:navLabel>
+            <ncx:text>Creating a simple Java producer with message partitioning</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch05s03.html"/>
+          <ncx:navPoint id="id286753749" playOrder="62">
+            <ncx:navLabel>
+              <ncx:text>Importing classes</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch05s03.html#ch05lvl2sec22"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286753778" playOrder="63">
+            <ncx:navLabel>
+              <ncx:text>Defining properties</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch05s03.html#ch05lvl2sec23"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286753932" playOrder="64">
+            <ncx:navLabel>
+              <ncx:text>Implementing the Partitioner class</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch05s03.html#ch05lvl2sec24"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286753992" playOrder="65">
+            <ncx:navLabel>
+              <ncx:text>Building the message and sending it</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch05s03.html#ch05lvl2sec25"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286754217" playOrder="66">
+          <ncx:navLabel>
+            <ncx:text>The Kafka producer property list</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch05s04.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286754834" playOrder="67">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch05s05.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286754851" playOrder="68">
+        <ncx:navLabel>
+          <ncx:text>6. Writing Consumers</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch06.html"/>
+        <ncx:navPoint id="id286754954" playOrder="69">
+          <ncx:navLabel>
+            <ncx:text>Java consumer API</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch06.html#ch06lvl1sec28"/>
+          <ncx:navPoint id="id286755010" playOrder="70">
+            <ncx:navLabel>
+              <ncx:text>High-level consumer API</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch06.html#ch06lvl2sec26"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286755323" playOrder="71">
+            <ncx:navLabel>
+              <ncx:text>Simple consumer API</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch06.html#ch06lvl2sec27"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286755544" playOrder="72">
+          <ncx:navLabel>
+            <ncx:text>Simple high-level Java consumer</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch06s02.html"/>
+          <ncx:navPoint id="id286755648" playOrder="73">
+            <ncx:navLabel>
+              <ncx:text>Importing classes</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch06s02.html#ch06lvl2sec28"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286755721" playOrder="74">
+            <ncx:navLabel>
+              <ncx:text>Defining properties</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch06s02.html#ch06lvl2sec29"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286755912" playOrder="75">
+            <ncx:navLabel>
+              <ncx:text>Reading messages from a topic and printing them</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch06s02.html#ch06lvl2sec30"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286756022" playOrder="76">
+          <ncx:navLabel>
+            <ncx:text>Multithreaded consumer for multipartition topics</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch06s03.html"/>
+          <ncx:navPoint id="id286756109" playOrder="77">
+            <ncx:navLabel>
+              <ncx:text>Importing classes</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch06s03.html#ch06lvl2sec31"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286756138" playOrder="78">
+            <ncx:navLabel>
+              <ncx:text>Defining properties</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch06s03.html#ch06lvl2sec32"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286756168" playOrder="79">
+            <ncx:navLabel>
+              <ncx:text>Reading the message from threads and printing it</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch06s03.html#ch06lvl2sec33"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286756417" playOrder="80">
+          <ncx:navLabel>
+            <ncx:text>Kafka consumer property list</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch06s04.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286757184" playOrder="81">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch06s05.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286757198" playOrder="82">
+        <ncx:navLabel>
+          <ncx:text>7. Kafka Integrations</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch07.html"/>
+        <ncx:navPoint id="id286757237" playOrder="83">
+          <ncx:navLabel>
+            <ncx:text>Kafka integration with Storm</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch07.html#ch07lvl1sec33"/>
+          <ncx:navPoint id="id286757287" playOrder="84">
+            <ncx:navLabel>
+              <ncx:text>Introduction to Storm</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch07.html#ch07lvl2sec34"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286757601" playOrder="85">
+            <ncx:navLabel>
+              <ncx:text>Integrating Storm</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch07.html#ch07lvl2sec35"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286757905" playOrder="86">
+          <ncx:navLabel>
+            <ncx:text>Kafka integration with Hadoop</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch07s02.html"/>
+          <ncx:navPoint id="id286757932" playOrder="87">
+            <ncx:navLabel>
+              <ncx:text>Introduction to Hadoop</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch07s02.html#ch07lvl2sec36"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286758366" playOrder="88">
+            <ncx:navLabel>
+              <ncx:text>Integrating Hadoop</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch07s02.html#ch07lvl2sec37"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286758451" playOrder="89">
+            <ncx:navLabel>
+              <ncx:text>Hadoop producer</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch07s02.html#ch07lvl2sec38"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286758716" playOrder="90">
+            <ncx:navLabel>
+              <ncx:text>Hadoop consumer</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch07s02.html#ch07lvl2sec39"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286758820" playOrder="91">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch07s03.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="id286758835" playOrder="92">
+        <ncx:navLabel>
+          <ncx:text>8. Kafka Tools</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="ch08.html"/>
+        <ncx:navPoint id="id286758874" playOrder="93">
+          <ncx:navLabel>
+            <ncx:text>Kafka administration tools</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch08.html#ch08lvl1sec36"/>
+          <ncx:navPoint id="id286758902" playOrder="94">
+            <ncx:navLabel>
+              <ncx:text>Kafka topic tools</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch08.html#ch08lvl2sec40"/>
+          </ncx:navPoint>
+          <ncx:navPoint id="id286759132" playOrder="95">
+            <ncx:navLabel>
+              <ncx:text>Kafka replication tools</ncx:text>
+            </ncx:navLabel>
+            <ncx:content src="ch08.html#ch08lvl2sec41"/>
+          </ncx:navPoint>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286759421" playOrder="96">
+          <ncx:navLabel>
+            <ncx:text>Integration with other tools</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch08s02.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286759632" playOrder="97">
+          <ncx:navLabel>
+            <ncx:text>Kafka performance testing</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch08s03.html"/>
+        </ncx:navPoint>
+        <ncx:navPoint id="id286759767" playOrder="98">
+          <ncx:navLabel>
+            <ncx:text>Summary</ncx:text>
+          </ncx:navLabel>
+          <ncx:content src="ch08s04.html"/>
+        </ncx:navPoint>
+      </ncx:navPoint>
+      <ncx:navPoint id="backindex" playOrder="99">
+        <ncx:navLabel>
+          <ncx:text>Index</ncx:text>
+        </ncx:navLabel>
+        <ncx:content src="backindex.html"/>
+      </ncx:navPoint>
+    </ncx:navPoint>
+  </ncx:navMap>
+</ncx:ncx>

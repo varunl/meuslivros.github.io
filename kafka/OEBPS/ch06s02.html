@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Simple high-level Java consumer</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Simple high-level Java consumer"><div class="titlepage"><div><div><h1 class="title"><a id="ch06lvl1sec29"/>Simple high-level Java consumer</h1></div></div></div><p>Now, <a id="id1530" class="indexterm"/>we will start writing a single-threaded simple<a id="id1540" class="indexterm"/> Java consumer developed using high-level consumer API for consuming the messages from a topic. This <code class="literal">SimpleHLConsumer</code> class<a id="id155" class="indexterm"/> is used to fetch a message from a specific topic and consume it, assuming that there is a single partition within the topic.</p><div class="section" title="Importing classes"><div class="titlepage"><div><div><h2 class="title"><a id="ch06lvl2sec28"/>Importing classes</h2></div></div></div><p>As a <a id="id1560" class="indexterm"/>first step, we need to import the following classes:</p><div class="informalexample"><pre class="programlisting">import kafka.consumer.ConsumerConfig;
+import kafka.consumer.KafkaStream;
+import kafka.javaapi.consumer.ConsumerConnector;</pre></div></div><div class="section" title="Defining properties"><div class="titlepage"><div><div><h2 class="title"><a id="ch06lvl2sec29"/>Defining properties</h2></div></div></div><p>As a next step, <a id="id157" class="indexterm"/>we need to define properties for making a connection with ZooKeeper and pass these properties to the Kafka consumer using the following code:</p><div class="informalexample"><pre class="programlisting">Properties props = new Properties();
+props.put("zookeeper.connect", "localhost:2181");
+props.put("group.id", "testgroup");
+props.put("zookeeper.session.timeout.ms", "500");
+props.put("zookeeper.sync.time.ms", "250");
+props.put("auto.commit.interval.ms", "1000");
+new ConsumerConfig(props);</pre></div><p>Now, let us see the major properties mentioned in the code:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">zookeeper.connect</code>: This <a id="id158" class="indexterm"/>property specifies the ZooKeeper <code class="literal">&lt;node:port&gt;</code> connection details</li><li class="listitem" style="list-style-type: disc"><code class="literal">group.id</code>: This<a id="id159" class="indexterm"/> property specifies the name for the consumer group shared by all the consumers within the group</li><li class="listitem" style="list-style-type: disc"><code class="literal">zookeeper.session.timeout.ms</code>: This<a id="id160" class="indexterm"/> property specifies ZooKeeper session timeout in milliseconds</li><li class="listitem" style="list-style-type: disc"><code class="literal">zookeeper.sync.time.ms</code>: This <a id="id161" class="indexterm"/>property specifies ZooKeeper sync time in milliseconds with ZooKeeper leader</li><li class="listitem" style="list-style-type: disc"><code class="literal">auto.commit.interval.ms</code><a id="id162" class="indexterm"/>: This property defines the frequency in milliseconds for the consumer offsets to get committed to ZooKeeper</li></ul></div></div><div class="section" title="Reading messages from a topic and printing them"><div class="titlepage"><div><div><h2 class="title"><a id="ch06lvl2sec30"/>Reading messages from a topic and printing them</h2></div></div></div><p>As a final <a id="id163" class="indexterm"/>step, we need to read the message using the following code:</p><div class="informalexample"><pre class="programlisting">Map&lt;String, Integer&gt; topicCount = new HashMap&lt;String, Integer&gt;();
+topicCount.put(topic, new Integer(1));
+
+Map&lt;String, List&lt;KafkaStream&lt;byte[], byte[]&gt;&gt;&gt; consumerStreams = consumer.createMessageStreams(topicCount);
+
+List&lt;KafkaStream&lt;byte[], byte[]&gt;&gt; streams = consumerStreams.get(topic);
+
+for (final KafkaStream stream : streams) {
+ConsumerIterator&lt;byte[], byte[]&gt; consumerIte = stream.iterator();
+  while (consumerIte.hasNext())
+    System.out.println("Message from Single Topic :: "
+    + new String(consumerIte.next().message()));
+} </pre></div><p>So, the complete program will look like the following code:</p><div class="informalexample"><pre class="programlisting">package test.kafka.consumer;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import kafka.consumer.Consumer;
+import kafka.consumer.ConsumerConfig;
+import kafka.consumer.ConsumerIterator;
+import kafka.consumer.KafkaStream;
+import kafka.javaapi.consumer.ConsumerConnector;
+
+public class SimpleHLConsumer {
+
+  private final ConsumerConnector consumer;
+  private final String topic;
+
+public SimpleHLConsumer(String zookeeper, String groupId, String topic) {
+<a id="id164" class="indexterm"/>
+    Properties props = new Properties();
+    props.put("zookeeper.connect", zookeeper);
+    props.put("group.id", groupId);
+    props.put("zookeeper.session.timeout.ms", "500");
+    props.put("zookeeper.sync.time.ms", "250");
+    props.put("auto.commit.interval.ms", "1000");
+
+    consumer = Consumer.createJavaConsumerConnector(
+    new ConsumerConfig(props));
+    this.topic = topic;
+  }
+
+  public void testConsumer() {
+
+    Map&lt;String, Integer&gt; topicCount = new HashMap&lt;String, Integer&gt;();
+        // Define single thread for topic
+    topicCount.put(topic, new Integer(1));
+
+Map&lt;String, List&lt;KafkaStream&lt;byte[], byte[]&gt;&gt;&gt; consumerStreams = consumer.createMessageStreams(topicCount);
+
+List&lt;KafkaStream&lt;byte[], byte[]&gt;&gt; streams = consumerStreams.get(topic);
+
+    for (final KafkaStream stream : streams) {
+      ConsumerIterator&lt;byte[], byte[]&gt; consumerIte = stream.iterator();
+      while (consumerIte.hasNext())
+      System.out.println("Message from Single Topic :: " + 
+      new String(consumerIte.next().message()));
+    }
+    if (consumer != null)
+      consumer.shutdown();
+  }
+
+  public static void main(String[] args) {
+
+    String topic = args[0];
+SimpleHLConsumer simpleHLConsumer = new SimpleHLConsumer("localhost:2181", "testgroup", topic);
+    simpleHLConsumer.testConsumer();
+  }
+}</pre></div><p>Compile the <a id="id165" class="indexterm"/>previous program and use the following command to run it:</p><div class="informalexample"><pre class="programlisting">
+<span class="strong"><strong>[root@localhost kafka-0.8]# java SimpleHLConsumer kafkatopic </strong></span>
+</pre></div><p>Here, <code class="literal">kafkatopic</code> is the topic where the Kafka producer places the messages for consumption.</p></div></div></body></html>

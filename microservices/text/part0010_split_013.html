@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Monitoring</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 8. Monitoring">
+<div class="preface" id="monitoring-chapter">
+<section data-type="sect1" data-pdf-bookmark="The Future"><div class="preface" id="idp11459616">
+<h1 class="calibre7" id="calibre_pb_13">The Future</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="monitoring" data-secondary="real-time reporting" id="idp11460992" class="calibre3"></a>I have seen many organizations where metrics are siloed into different systems. Application-level metrics, like the number of orders placed, end up in a proprietary analytics system like Omniture, which is often available only to select parts of <em class="calibre4">the business</em>, or else ends up in the dreaded data warehouse, aka where data goes to die. Reporting from such systems is often not available in real time, although that is starting to change. Meanwhile, <em class="calibre4">system</em> metrics like response times, error rates, and CPU load are stored in systems that the operations teams can access. These systems typically allow for real-time reporting, as normally the point of them is to provoke an immediate call to action.</p>
+
+<p class="author">Historically, the idea that we can find out about key business metrics a day or two later was fine, as typically we were unable to react fast enough to this data to do anything about it anyway. Now, though, we operate in a world in which many of us can and do push out multiple releases per day. Teams now measure themselves not in terms of how many <em class="calibre4">points</em> they complete, but instead optimize for how long it takes for code to get from laptop to live. In such an environment, we need all our metrics at our fingertips to take the right action. Ironically, the very systems that store business metrics are often not tuned for immediate access to data, but our operational systems are.</p>
+
+<p class="author">So why handle operational and business metrics in the same way? Ultimately, both types of things break down to events that say <em class="calibre4">something happened at X</em>. So, if we can unify the systems we use to gather, aggregate, and store these events, and make them available for reporting, we end up with a much simpler architecture.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="Riemann" id="idp11466608" class="calibre3"></a><a data-type="indexterm" data-primary="Suro" id="idp11467312" class="calibre3"></a><a href="http://riemann.io/" class="calibre3">Riemann</a> is an event server that allows for fairly advanced aggregation and routing of events and can form part of such a solution. <a href="https://github.com/Netflix/suro" class="calibre3">Suro</a> is Netflix’s <em class="calibre4">data pipeline</em> and operates in a similar space. Suro is explicitly used to handle both metrics associated with user behavior, and more operational data like application logs. This data can then be dispatched to a variety of systems, like Storm for real-time analysis, Hadoop for offline batch processing, or Kibana for log analysis.</p>
+
+<p class="author">Many organizations are moving in a fundamentally different direction: away from having specialized tool chains for different types of metrics and toward more generic event routing systems capable of significant scale. These systems manage to provide much more flexibility, while at the same time actually simplifying our architecture.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

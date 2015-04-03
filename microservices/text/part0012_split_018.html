@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Conway’s Law and System Design</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 10. Conway’s Law and System Design">
+<div class="preface" id="conways-chapter">
+<section data-type="sect1" data-pdf-bookmark="Case Study: RealEstate.com.au"><div class="preface" id="idp11829792">
+<h1 class="calibre7" id="calibre_pb_18">Case Study: RealEstate.com.au</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="system design" data-secondary="case study" id="idp11831136" class="calibre3"></a>REA’s core business is real estate. But this encompasses multiple different facets, each of which operates as a single line of business (LOB). For example, one line of business deals with residential property in Australia, another commercial, while another might relate to one of REA’s overseas businesses. These lines of business have IT delivery teams (or <em class="calibre4">squads</em>) associated with them; some may have only a single squad, while the biggest has four. So for residential property, there are multiple teams involved with creating the website and listing services to allow people to browse property. People rotate between these teams every now and then, but  tend to stay within that line of business for extended periods, ensuring that the team members can build up a strong awareness of that part of the domain. This in turn helps the communication between the various business stakeholders and the team delivering features for them.</p>
+
+<p class="author">Each squad inside a line of business is expected to own the entire lifecycle of the services it creates, including building, testing and releasing, supporting, and even decommissioning. A core delivery services team provides advice and guidance to these teams, as well as tooling to help it get the job done. A strong culture of automation is key, and REA makes heavy use of AWS as a key part of enabling the teams to be more autonomous. <a data-type="xref" href="part0012_split_018.html#a100-rea-structure" class="calibre3">Figure 10-1</a> illustrates how this all works.</p>
+
+<figure class="calibre16"><div id="a100-rea-structure" class="figure">
+<img src="../images/00070.jpeg" alt="An overview of Realestate.com.au's organizational and team structure, and alignment with architecture" hisrc="assets/bdms_1001.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 10-1. </span>An overview of Realestate.com.au’s organizational and team structure, and alignment with architecture</h6>
+</div></figure>
+
+<p class="author">It isn’t just the delivery organization that is aligned to how the business operates. It extends to the architecture too. One example of this is integration methods. Within an LOB, all services are free to talk to each other in any way they see fit, as decided by the squads who act as their custodians. But between LOBs, all communication is mandated to be asynchronous batch, one of the few cast-iron rules of the very small architecture team. This coarse-grained communication matches the coarse-grained communication that exists between the different parts of the business too. By insisting on it being batch, each LOB has a lot of freedom in how it acts and manages itself. It could afford to take its services down whenever it wanted, knowing that as long as it can satisfy the batch integration with other parts of the business and its own business stakeholders, no one would care.</p>
+
+<p class="author">This structure has allowed for significant autonomy of not only the teams but also the different parts of the business. From a handful of services a few years ago, REA now has hundreds, with more services than people, and is growing at a rapid pace. The ability to deliver change has helped the company achieve significant success in the local market to the point where it is expanding overseas. And, most heartening of all, from talking to the people there I get the impression that both the architecture and organizational structure as they stand now are just the latest iteration rather than the destination. I daresay in another five years REA will look very different again.</p>
+
+<p class="author">Those organizations that are adaptive enough to change not only their system architecture but also their organizational structure can yield huge benefits in terms of improved autonomy of teams and faster time to market for new features and functionality. REA is just one of a number of organizations that are realizing that system architecture doesn’t exist in a vacuum.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

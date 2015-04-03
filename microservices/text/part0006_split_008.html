@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="Synchronous Versus Asynchronous"><div class="preface" id="idp4378720">
+<h1 class="calibre7" id="calibre_pb_8">Synchronous Versus Asynchronous</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="integration" data-secondary="synchronous vs. asynchronous communication" id="idp4379968" class="calibre3"></a><a data-type="indexterm" data-primary="communication" data-secondary="synchronous vs. asynchronous" id="idp4381040" class="calibre3"></a><a data-type="indexterm" data-primary="synchronous communication" id="idp4382048" class="calibre3"></a><a data-type="indexterm" data-primary="asynchronous collaboration" data-secondary="vs. synchronous" id="idp4382736" class="calibre3"></a>Before we start diving into the specifics of different technology choices, we should discuss one of the most important decisions we can make in terms of how services collaborate. Should communication be synchronous or asynchronous? This fundamental choice inevitably guides us toward certain implementation detail.</p>
+
+<p class="author">With synchronous communication, a call is made to a remote server, which blocks until the operation completes. With asynchronous communication, the caller doesn’t wait for the operation to complete before returning, and may not even care whether or not the operation completes at all.</p>
+
+<p class="author">Synchronous communication can be easier to reason about. We know when things have completed successfully or not. Asynchronous communication can be very useful for long-running jobs, where keeping a connection open for a long period of time between the client and server is impractical. It also works very well when you need low latency, where blocking a call while waiting for the result can slow things down. Due to the nature of mobile networks and devices, firing off requests and assuming things have worked (unless told otherwise) can ensure that the UI remains responsive even if the network is highly laggy. On the flipside, the technology to handle asynchronous communication can be a bit more involved, as we’ll discuss shortly.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="collaboration" data-secondary="request/response" id="idp4386304" class="calibre3"></a><a data-type="indexterm" data-primary="request/response collaboration" id="idp4387280" class="calibre3"></a>These two different modes of communication can enable two different idiomatic styles of collaboration: <em class="calibre4">request/response</em> or <em class="calibre4">event-based</em>. With request/response, a client initiates a request and waits for the response. This model clearly aligns well to synchronous communication, but can work for asynchronous communication too. I might kick off an operation and register a callback, asking the server to let me know when my operation has completed.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="collaboration" data-secondary="event-based" id="idp4389664" class="calibre3"></a><a data-type="indexterm" data-primary="event-based collaboration" id="idp4390640" class="calibre3"></a>With an event-based collaboration, we invert things. Instead of a client initiating requests asking for things to be done, it instead says <em class="calibre4">this thing happened</em> and expects other parties to know what to do. We never tell anyone else what to do. Event-based systems by their nature are asynchronous. The smarts are more evenly distributed — that is, the business logic is not centralized into core brains, but instead pushed out more evenly to the various collaborators. Event-based collaboration is also highly decoupled. The client that emits an event doesn’t have any way of knowing who or what will react to it, which also means that you can add new subscribers to these events without the client ever needing to know.</p>
+
+<p class="author">So are there any other drivers that might push us to pick one style over another? One important factor to consider is how well these styles are suited for solving an often-complex problem: how do we handle processes that span service boundaries and may be long running?</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="From Physical to Virtual">
+<div class="preface" id="idp10695744">
+<section data-type="sect2" data-pdf-bookmark="Linux Containers"><div class="preface" id="idp10722272">
+<h2 class="calibre15" id="calibre_pb_23">Linux Containers</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="virtualization platforms" data-secondary="Linux containers" id="idp10723808" class="calibre3"></a><a data-type="indexterm" data-primary="Linux containers" id="idp10724800" class="calibre3"></a>For Linux users, there is an alternative to virtualization. Rather than having a hypervisor to segment and control separate virtual hosts, Linux containers instead create a separate process space in which other processes live.</p>
+
+<p class="author">On Linux, process are run by a given user, and have certain capabilities based on how the permissions are set. Processes can spawn other processes. For example, if I launch a process in a terminal, that child process is generally considered a child of the terminal process. The Linux kernel’s job is maintaining this tree of processes.</p>
+
+<p class="author">Linux containers extend this idea. Each container is effectively a subtree of the overall system process tree. These containers can have physical resources allocated to them, something the kernel handles for us. This general approach has been around in many forms, such as Solaris Zones and OpenVZ, but it is LXC that has become most popular. LXC is now available out of the box in any modern Linux kernel.</p>
+
+<p class="author">If we look at a stack diagram for a host running LXC in <a data-type="xref" href="part0008_split_021.html#a61-virtualisation-comparison" class="calibre3">Figure 6-9</a>, we see a few differences. First, we don’t need a hypervisor. Second, although each container can run its own operating system distribution, it has to share the same kernel (because the kernel is where the process tree lives). This means that our host operating system could run Ubuntu, and our containers CentOS, as long as they could both share the same kernel.</p>
+
+<p class="author">We don’t just benefit from the resources saved by not needing a hypervisor. We also gain in terms of feedback. Linux containers are <em class="calibre4">much</em> faster to provision than full-fat virtual machines. It isn’t uncommon for a VM to take many minutes to start — but with Linux containers, startup can take a few seconds. You also have finer-grained control over the containers themselves in terms of assigning resources to them, which makes it much easier to tweak the settings to get the most out of the underlying <span class="firstname">hardware</span>.</p>
+
+<p class="author">Due to the lighter-weight nature of containers, we can have many more of them running on the same hardware than would be possible with VMs. By deploying one service per container, as in <a data-type="xref" href="part0008_split_023.html#a61-services-to-containers" class="calibre3">Figure 6-10</a>, we get a degree of isolation from other containers (although this isn’t perfect), and can do so much more cost effectively than would be possible if we wanted to run each service in its own VM.</p>
+
+<figure class="calibre16"><div id="a61-services-to-containers" class="figure">
+<img src="../images/00046.jpeg" alt="Running services in separate containers" hisrc="assets/bdms_0610.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 6-10. </span>Running services in separate containers</h6>
+</div></figure>
+
+<p class="author">Containers can be used well with full-fat virtualization too. I’ve seen more than one project provision a large AWS EC2 instance and run LXC containers on it to get the best of both worlds: an on-demand ephemeral compute platform in the form of EC2, coupled with highly flexible and fast containers running on top of it.</p>
+
+<p class="author">Linux containers aren’t without some problems, however. Imagine I have lots of microservices running in their own containers on a host. How does the outside world see them? You need some way to route the outside world through to the underlying containers, something many of the hypervisors do for you with normal virtualization. I’ve seen many a person sink inordinate amounts of time into configuring port forwarding using IPTables to expose containers directly. Another point to bear in mind is that these containers cannot be considered completely sealed from each other. There are many documented and known ways in which a process from one container can bust out and interact with other containers or the underlying host. Some of these problems are by design and some are bugs that are being addressed, but either way if you don’t trust the code you are running, don’t expect that you can run it in a container and be safe. If you need that sort of isolation, you’ll need to consider using virtual machines instead.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="Scaling Databases">
+<div class="preface" id="idp12036272">
+<section data-type="sect2" data-pdf-bookmark="CQRS"><div class="preface" id="idp12065904">
+<h2 class="calibre15" id="calibre_pb_23">CQRS</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="database scaling" data-secondary="Command-Query Responsibility Segregation (CQRS)" id="idp12067312" class="calibre3"></a><a data-type="indexterm" data-primary="Command-Query Responsibility Segregation (CQRS)" id="idp12068256" class="calibre3"></a>The Command-Query Responsibility Segregation (CQRS) pattern refers to an alternate model for storing and querying information. With normal databases, we use one system for performing modifications to data and querying the data. With CQRS, part of the system deals with commands, which capture requests to modify state, while another part of the system deals with queries.</p>
+
+<p class="author">Commands come in requesting changes in state. These commands are validated, and if they work, they will be applied to the model. Commands should contain information about their intent. They can be processed synchronously or asynchronously, allowing for different models to handle scaling; we could, for example, just queue up inbound requests and process them later.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="event sourcing" id="idp12145728" class="calibre3"></a>The key takeaway here is that the internal models used to handle commands and queries are themselves completely separate. For example, I might choose to handle and process commands as events, perhaps just storing the list of commands in a data store (a process known as <em class="calibre4">event sourcing</em>). My query model could query an event store and create projections from stored events to assemble the state of domain objects, or could just pick up a feed from the command part of the system to update a different type of store. In many ways, we get the same benefits of read replicas that we discussed earlier, without the requirement that the backing store for the replicas be the same as the data store used to handle data modifications.</p>
+
+<p class="author">This form of separation allows for different types of scaling. The command and query parts of our system could live in different services, or on different hardware, and could make use of radically different types of data store. This can unlock a large number of ways to handle scale. You could even support different types of read format by having multiple implementations of the query piece, perhaps supporting a graph-based representation of your data, or a key/value-based form of your data.</p>
+
+<p class="author">Be warned, however: this sort of pattern is quite a shift away from a model where a single data store handles all our CRUD operations. I’ve seen more than one experienced development team struggle to get this pattern right!</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

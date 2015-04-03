@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Conway’s Law and System Design</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 10. Conway’s Law and System Design">
+<div class="preface" id="conways-chapter">
+<section data-type="sect1" data-pdf-bookmark="Adapting to Communication Pathways"><div class="preface" id="idp11757648">
+<h1 class="calibre7" id="calibre_pb_6">Adapting to Communication Pathways</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="system design" data-secondary="adapting to communication pathways" id="idp11759040" class="calibre3"></a><a data-type="indexterm" data-primary="communication" data-secondary="adapting to pathways" id="idp11760080" class="calibre3"></a>Let’s first consider a simple, single team. It’s in charge of all aspects of the system design and implementation. It can have frequent, fine-grained communication. Imagine that this team is in charge of a single service — say, our music shop’s catalog service. Now consider the inside of a service: lots of fine-grained method or function calls. As we’ve discussed before, we aim to ensure our services are decomposed such that the pace of change inside a service is much higher than the pace of change between services. This single team, with its ability for fine-grained communication, matches nicely with the communication pathways of the code within the service.</p>
+
+<p class="author">This single team finds it easy to communicate about proposed changes and refactorings, and typically has a good sense of ownership.</p>
+
+<p class="author">Now let’s imagine a different scenario. Instead of a single, geolocated team owning our catalog service, suppose that teams in the UK and India both are actively involved in changing a service — effectively having joint ownership of the service. Geographical and time zone boundaries here make fine-grained communication between those teams difficult. Instead, they rely on more coarse-grained communication via video conferencing and email. How easy is it for a team member in the UK to make a simple refactoring with confidence? The cost of communications in a geographically distributed team is higher, and therefore the cost of coordinating changes is higher.</p>
+
+<p class="author">When the cost of coordinating change increases, one of two things happen. Either people find ways to reduce the coordination/communication costs, or they stop making changes. The latter is exactly how we end up with large, hard-to-maintain <span class="firstname">codebases</span>.</p>
+
+<p class="author">I recall one client project I worked on where ownership of a single service was shared between two geographical locations. Eventually, each site started specializing what work it handled. This allowed it to take ownership of part of the codebase, within which it could have an easier cost of change. The teams then had more coarse-grained communication about how the two parts interrelated; effectively, the communication pathways made possible within the organizational structure matched the coarse-grained API that formed the boundary between the two halves of the <span class="firstname">codebase</span>.</p>
+
+<p class="author">So where does this leave us when considering evolving our own service design? Well, I would suggest that geographical boundaries between people involved with the development of a system can be a great way to drive when services should be decomposed, and that in general, you should look to assign ownership of a service to a single, colocated team who can keep the cost of change low.</p>
+
+<p class="author">Perhaps your organization decides that it wants to increase the number of people working on your project by opening up an office in another country. At this point, think actively about what parts of your system can be moved over. Perhaps this is what drives your decisions about what seams to split out next.</p>
+
+<p class="author">It is also worth noting at this point that, at least based on the observations of the authors of the <em class="calibre4">Exploring the Duality Between Product and Organizational Architectures</em> report previously referenced, if the organization building the system is more loosely coupled (e.g., consisting of geographically distributed teams), the systems being built tend toward the more modular, and therefore hopefully less coupled. The tendency of a single team that owns many services to lean toward tighter integration is very hard to maintain in a more distributed organization.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

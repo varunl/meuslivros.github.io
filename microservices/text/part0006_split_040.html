@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="User Interfaces">
+<div class="preface" id="idp10048528">
+<section data-type="sect2" data-pdf-bookmark="Backends for Frontends"><div class="preface" id="idp10074976">
+<h2 class="calibre15" id="calibre_pb_40">Backends for Frontends</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="user interfaces" data-secondary="API gateways" id="idp10087424" class="calibre3"></a><a data-type="indexterm" data-primary="endpoints" data-secondary="server-side aggregation" id="idp10088400" class="calibre3"></a>A common solution to the problem of chatty interfaces with backend services, or the need to vary content for different types of devices, is to have a server-side aggregation endpoint, or API gateway. This can marshal multiple backend calls, vary and aggregate content if needed for different devices, and serve it up, as we see in <a data-type="xref" href="part0006_split_040.html#a50-UI-gateway" class="calibre3">Figure 4-9</a>. I’ve seen this approach lead to disaster when these server-side endpoints become thick layers with too much behavior. They end up getting managed by separate teams, and being another place where logic has to change whenever some functionality changes.</p>
+
+<figure class="calibre16"><div id="a50-UI-gateway" class="figure">
+<img src="../images/00018.jpeg" alt="Using a single monolithic gateway to handle calls to/from UIs" hisrc="assets/bdms_0409.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 4-9. </span>Using a single monolithic gateway to handle calls to/from UIs</h6>
+</div></figure>
+
+<p class="author">The problem that can occur is that normally we’ll have one giant layer for all our services. This leads to everything being thrown in together, and suddenly we start to lose isolation of our various user interfaces, limiting our ability to release them independently. A model I prefer and that I’ve seen work well is to restrict the use of these backends to one specific user interface or application, as we see in <a data-type="xref" href="part0006_split_040.html#a50-UI-bffs" class="calibre3">Figure 4-10</a>.</p>
+
+<figure class="calibre16"><div id="a50-UI-bffs" class="figure">
+<img src="../images/00019.jpeg" alt="Using dedicated backends for frontends" hisrc="assets/bdms_0410.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 4-10. </span>Using dedicated backends for frontends</h6>
+</div></figure>
+
+<p class="author"><a data-type="indexterm" data-primary="backends for frontends (BFFs)" id="idp10097136" class="calibre3"></a>This pattern is sometimes referred to as <em class="calibre4">backends for frontends (BFFs)</em>. It allows the team focusing on any given UI to also handle its own server-side components. You can see these backends as parts of the user interface that happen to be embedded in the server. Some types of UI may need a minimal server-side footprint, while others may need a lot more. If you need an API authentication and authorization layer, this can sit between our BFFs and our UIs. We’ll explore this more in <a data-type="xref" href="part0011_split_000.html#security-chapter" class="calibre3">Chapter 9</a>.</p>
+
+<p class="author">The danger with this approach is the same as with any aggregating layer; it can take on logic it shouldn’t. The business logic for the various capabilities these backends use should stay in the services themselves. These BFFs should only contain behavior specific to delivering a particular user experience.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

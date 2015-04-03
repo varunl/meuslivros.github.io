@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Splitting the Monolith</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Splitting the Monolith">
+<div class="preface" id="splitting-chapter">
+<section data-type="sect1" data-pdf-bookmark="Backup Data Pump"><div class="preface" id="idp10466176">
+<h1 class="calibre7" id="calibre_pb_29">Backup Data Pump</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="reporting databases" data-secondary="backup data pumps" id="idp10467552" class="calibre3"></a><a data-type="indexterm" data-primary="data pumps" data-secondary="backup" id="idp10468528" class="calibre3"></a><a data-type="indexterm" data-primary="backup data pumps" id="idp10469472" class="calibre3"></a><a data-type="indexterm" data-primary="security" data-secondary="backups" id="idp10470144" class="calibre3"></a>This option is based on an approach used at Netflix, which takes advantage of existing backup solutions and also resolves some scale issues that Netflix has to deal with. In some ways, you can consider this a special case of a data pump, but it seemed like such an interesting solution that it deserves inclusion.</p>
+
+<p class="author">Netflix has decided to standardize on Cassandra as the backing store for its services, of which there are many. Netflix has invested significant time in building tools to make Cassandra easy to work with, much of which the company has shared with the rest of the world via numerous open source projects. Obviously it is very important that the data Netflix stores is properly backed up. To back up Cassandra data, the standard approach is to make a copy of the data files that back it and store them somewhere safe. Netflix stores these files, known as SSTables, in Amazon’s S3 object store, which provides significant data durability guarantees.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="Aegisthus project" id="idp10472896" class="calibre3"></a>Netflix needs to report across all this data, but given the scale involved this is a nontrivial challenge. Its approach is to use Hadoop that uses SSTable backup as the source of its jobs. In the end, Netflix ended up implementing a pipeline capable of processing large amounts of data using this approach, which it then open sourced as the <a href="http://bit.ly/1EMC3zf" class="calibre3">Aegisthus project</a>. Like data pumps, though, with this pattern we still have a coupling to the destination reporting schema (or target system).</p>
+
+<p class="author">It is conceivable that using a similar approach — that is, using mappers that work off backups — would work in other contexts as well. And if you’re already using Cassandra, Netflix has already done much of the work for you!</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

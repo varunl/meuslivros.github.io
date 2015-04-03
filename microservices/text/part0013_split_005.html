@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices at Scale</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 11. Microservices at Scale">
+<div class="preface" id="at-scale-chapter">
+<section data-type="sect1" data-pdf-bookmark="The Antifragile Organization"><div class="preface" id="idp11900720">
+<h1 class="calibre7" id="calibre_pb_5">The Antifragile Organization</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="antifragile systems" id="ix_antifragilesys" class="calibre3"></a><a data-type="indexterm" data-primary="microservices at scale" data-secondary="antifragile systems" id="idp11921184" class="calibre3"></a>In his book <em class="calibre4">Antifragile</em> (Random House), Nassim Taleb talks about things that actually benefit from failure and disorder. Ariel Tseitlin used this concept to coin the concept of the <a href="http://bit.ly/1e9i40t" class="calibre3">antifragile organization</a> in regards to how Netflix operates.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="antifragile systems" data-secondary="examples of" id="idp11923840" class="calibre3"></a>The scale at which Netflix operates is well known, as is the fact that Netflix is based entirely on the AWS infrastructure. These two factors mean that it has to embrace failure well. Netflix goes beyond that by actually <em class="calibre4">inciting</em> failure to ensure that its systems are tolerant of it.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="game days" id="idp11925856" class="calibre3"></a><a data-type="indexterm" data-primary="DiRT (Disaster Recovery Test)" id="idp11926672" class="calibre3"></a>Some organizations would be happy with <em class="calibre4">game days</em>, where failure is simulated by systems being switched off and having the various teams react. During my time at Google, this was a fairly common occurrence for various systems, and I certainly think that many organizations could benefit from having these sorts of exercises regularly. Google goes beyond simple tests to mimic server failure, and as part of its annual <a href="http://bit.ly/15CnW3a" class="calibre3">DiRT (Disaster Recovery Test) exercises</a> it has simulated large-scale disasters such as earthquakes. Netflix also takes a more aggressive approach, by writing programs that cause failure and running them in production on a daily basis.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="Chaos Monkey" id="idp11929728" class="calibre3"></a><a data-type="indexterm" data-primary="Latency Monkey" id="idp11930432" class="calibre3"></a><a data-type="indexterm" data-primary="Chaos Gorilla" id="idp11931104" class="calibre3"></a><a data-type="indexterm" data-primary="failure bots" id="idp11931776" class="calibre3"></a>The most famous of these programs is the Chaos Monkey, which during certain hours of the day will turn off random machines. Knowing that this can and will happen in production means that the developers who create the systems really have to be prepared for it. The Chaos Monkey is just one part of Netflix’s Simian Army of failure bots. The Chaos Gorilla is used to take out an entire availability center (the AWS equivalent of a data center), whereas the Latency Monkey simulates slow network connectivity between machines. Netflix has made these tools available under an <a href="http://bit.ly/1fsqzaH" class="calibre3">open source license</a>. For many, the ultimate test of whether your system really is robust might be unleashing your very own Simian Army on your production infrastructure.</p>
+
+<p class="author">Embracing and inciting failure through software, and building systems that can handle it, is only part of what Netflix does. It also understands the importance of learning from the failure when it occurs, and adopting a blameless culture when mistakes do happen. Developers are further empowered to be part of this learning and evolving process, as each developer is also responsible for managing his or her production services.</p>
+
+<p class="author">By causing failure to happen, and building for it, Netflix has ensured that the systems it has scale better, and better support the needs of its customers.</p>
+
+<p class="author">Not everyone needs to go to the sorts of extremes that Google or Netflix do, but it is important to understand the mindset shift that is required with distributed systems. Things will fail. The fact that your system is now spread across multiple machines (which can and will fail) across a network (which will be unreliable) can actually make your system more vulnerable, not less. So regardless of whether you’re trying to provide a service at the scale of Google or Netflix, preparing yourself for the sorts of failure that happen with more distributed architectures is pretty important. So what do we need to do to handle failure in our systems?</p>
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

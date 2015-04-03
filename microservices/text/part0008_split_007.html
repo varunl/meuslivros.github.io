@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="Operating System Artifacts"><div class="preface" id="idp10569840">
+<h1 class="calibre7" id="calibre_pb_7">Operating System Artifacts</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="deployment" data-secondary="artifacts, operating system" id="idp10571184" class="calibre3"></a><a data-type="indexterm" data-primary="artifacts" data-secondary="operating system" id="idp10572176" class="calibre3"></a><a data-type="indexterm" data-primary="operating system artifacts" id="idp10573120" class="calibre3"></a>One way to avoid the problems associated with technology-specific artifacts is to create artifacts that are native to the underlying operating system. For example, for a RedHat– or CentOS-based system, I might build RPMs; for Ubuntu, I might build a deb package; or for Windows, an MSI.</p>
+
+<p class="author">The advantage of using OS-specific artifacts is that from a deployment point of view we don’t care what the underlying technology is. We just use the tools native to the OS to install the package. The OS tools can also help us uninstall and get information about the packages too, and may even provide package repositories that our CI tools can push to. Much of the work done by the OS package manager can also offset work that you might otherwise do in a tool like Puppet or Chef. On all Linux platforms I have used, for example, you can define dependencies from your packages to other packages you rely on, and the OS tools will automatically install them for you too.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="FPM package manager tool" id="idp10575600" class="calibre3"></a>The downside can be the difficulty in creating the packages in the first place. For Linux, the <a href="http://bit.ly/15LaQSb" class="calibre3">FPM package manager tool</a> gives a nicer abstraction for creating Linux OS packages, and converting from a tarball-based deployment to an OS-based deployment can be fairly straightforward. The Windows space is somewhat trickier. The native packaging system in the form of MSI installers and the like leave a lot to be desired when compared to the capabilities in the Linux space. The NuGet package system has started to help address this, at least in terms of helping manage development libraries. More recently, Chocolatey NuGet has extended these ideas, providing a package manager for Windows designed for deploying tools and services, which is much more like the package managers in the Linux space. This is certainly a step in the right direction, although the fact that the idiomatic style in Windows is still <em class="calibre4">deploy something in IIS</em> means that this approach may be unappealing for some Windows teams.</p>
+
+<p class="author">Another downside, of course, could be if you are deploying onto multiple different operating systems. The overhead of managing artifacts for different OSes could be pretty steep. If you’re creating software for other people to install, you may not have a choice. If you are installing software onto machines you control, however, I would suggest you look at unifying or at least reducing the number of different operating systems you use. It can greatly reduce variations in behavior from one machine to the next, and simplify deployment and maintenance tasks.</p>
+
+<p class="author">In general, those teams I’ve seen that have moved to OS-based package management have simplified their deployment approach, and tend to avoid the trap of big, complex deployment scripts. Especially if you’re on Linux, this can be a good way to simplify deployment of microservices using disparate technology stacks.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

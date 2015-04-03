@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Test Scope">
+<div class="preface" id="idp11051312">
+<section data-type="sect2" data-pdf-bookmark="Service Tests"><div class="preface" id="idp11107568">
+<h2 class="calibre15" id="calibre_pb_4">Service Tests</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="service tests" data-secondary="scope of" id="idp11108816" class="calibre3"></a>Service tests are designed to bypass the user interface and test services directly. In a monolithic application, we might just be testing a collection of classes that provide a <em class="calibre4">service</em> to the UI. For a system comprising a number of services, a service test would test an individual service’s capabilities.</p>
+
+<p class="author">The reason we want to test a single service by itself is to improve the isolation of the test to make finding and fixing problems faster. To achieve this isolation, we need to stub out all external collaborators so only the service itself is in scope, as <a data-type="xref" href="part0009_split_004.html#a63-example-service-test-scope" class="calibre3">Figure 7-5</a> shows.</p>
+
+<figure class="calibre16"><div id="a63-example-service-test-scope" class="figure">
+<img src="../images/00052.jpeg" alt="Scope of service tests on our example system" hisrc="assets/bdms_0705.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 7-5. </span>Scope of service tests on our example system</h6>
+</div></figure>
+
+<p class="author">Some of these tests could be as fast as small tests, but if you decide to test against a real database, or go over networks to stubbed downstream collaborators, test times can increase. They also cover more scope than a simple unit test, so that when they fail it can be harder to detect what is broken than with a unit test.  However, they have much fewer moving parts and are therefore less brittle than larger-scoped tests.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Testing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Testing">
+<div class="preface" id="testing-chapter">
+<section data-type="sect1" data-pdf-bookmark="Types of Tests"><div class="preface" id="idp11035680">
+<h1 class="calibre7" id="calibre_pb_1">Types of Tests</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="testing" data-secondary="types of tests" id="idp11037120" class="calibre3"></a><a data-type="indexterm" data-primary="Marick's quadrant" id="idp11038096" class="calibre3"></a>As a consultant, I like pulling out the odd quadrant as a way of categorizing the world, and I was starting to worry this book wouldn’t have one. Luckily, Brian Marick came up with a fantastic categorization system for tests that fits right in. <a data-type="xref" href="part0009_split_001.html#a60-quadrant" class="calibre3">Figure 7-1</a> shows a variation of Marick’s quadrant from Lisa Crispin and Janet Gregory’s book <em class="calibre4">Agile Testing</em> (Addison-Wesley) that helps categorize the different types of tests.</p>
+
+<figure class="calibre16"><div id="a60-quadrant" class="figure">
+<img src="../images/00048.jpeg" alt="Brian Marick's testing quadrant" hisrc="assets/bdms_0701.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 7-1. </span>Brian Marick’s testing quadrant. Crispin, Lisa; Gregory, Janet, Agile Testing: A Practical Guide for Testers and Agile Teams, 1st Edition, © 2009. Adapted by permission of Pearson Education, Inc., Upper Saddle River, NJ.</h6>
+</div></figure>
+
+<p class="author"><a data-type="indexterm" data-primary="technology-facing tests" id="idp11042800" class="calibre3"></a><a data-type="indexterm" data-primary="acceptance testing" id="idp11043728" class="calibre3"></a><a data-type="indexterm" data-primary="exploratory testing" id="idp11044400" class="calibre3"></a><a data-type="indexterm" data-primary="unit tests" data-secondary="Marick's quadrant" id="idp11045072" class="calibre3"></a><a data-type="indexterm" data-primary="property testing" id="idp11046016" class="calibre3"></a><a data-type="indexterm" data-primary="business-facing tests" id="idp11046688" class="calibre3"></a>At the bottom, we have tests that are <em class="calibre4">technology-facing</em> — that is, tests that aid the developers in creating the system in the first place. Performance tests and small-scoped <em class="calibre4">unit</em> tests fall into this category — all typically automated. This is compared with the top half of the quadrant, where tests help the nontechnical stakeholders understand how your system works. These could be large-scoped, end-to-end tests, as shown in the top-left Acceptance Test square, or manual testing as typified by user testing done against a UAT system, as shown in the Exploratory Testing square.</p>
+
+<p class="author">Each type of test shown in this quadrant has a place. Exactly how much of each test you want to do will depend on the nature of your system, but the key point to understand is that you have multiple choices in terms of how to test your system. The trend recently has been away from any large-scale manual testing, in favor of automating as much as possible, and I certainly agree with this approach. If you currently carry out large amounts of manual testing, I would suggest you address that before proceeding too far down the path of microservices, as you won’t get many of their benefits if you are unable to validate your software quickly and efficiently.</p>
+
+<p class="author">For the purposes of this chapter, we will ignore manual testing. Although this sort of testing can be very useful and certainly has its part to play, the differences with testing a microservice architecture mostly play out in the context of various types of automated tests, so that is where we will focus our time.</p>
+
+<p class="author">But when it comes to automated tests, how many of each test do we want? Another model will come in very handy to help us answer this question, and understand what the different trade-offs might be.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Integration">
+<div class="preface" id="integration-chapter">
+<section data-type="sect1" data-pdf-bookmark="Versioning">
+<div class="preface" id="a50-versioning">
+<section data-type="sect2" data-pdf-bookmark="Use Multiple Concurrent Service Versions"><div class="preface" id="idp10157584">
+<h2 class="calibre15" id="calibre_pb_34">Use Multiple Concurrent Service Versions</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="versioning" data-secondary="multiple concurrent versions" id="idp10158816" class="calibre3"></a>Another versioning solution often cited is to have different versions of the service live at once, and for older consumers to route their traffic to the older version, with newer versions seeing the new one, as shown in <a data-type="xref" href="part0006_split_034.html#a50-multiple-service-versions" class="calibre3">Figure 4-6</a>. This is the approach used sparingly by Netflix in situations where the cost of changing older consumers is too high, especially in rare cases where legacy devices are still tied to older versions of the API. Personally, I am not a fan of this idea, and understand why Netflix uses it rarely. First, if I need to fix an internal bug in my service, I now have to fix and deploy two different sets of services. This would probably mean I have to branch the codebase for my service, and this is always problematic. Second, it means I need smarts to handle directing consumers to the right microservice. This behavior inevitably ends up sitting in middleware somewhere or a bunch of <code class="calibre9">nginx</code> scripts, making it harder to reason about the behavior of the system. Finally, consider any persistent state our service might manage. Customers created by either version of the service need to be stored and made visible to all services, no matter which version was used to create the data in the first place. This can be an additional source of complexity.</p>
+
+<figure class="calibre16"><div id="a50-multiple-service-versions" class="figure">
+<img src="../images/00015.jpeg" alt="Running multiple versions of the same service to support old endpoints" hisrc="assets/bdms_0406.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 4-6. </span>Running multiple versions of the same service to support old endpoints</h6>
+</div></figure>
+
+<p class="author">Coexisting concurrent service versions for a short period of time can make perfect sense, especially when you’re doing things like blue/green deployments or canary releases (we’ll be discussing these patterns more in <a data-type="xref" href="part0009_split_000.html#testing-chapter" class="calibre3">Chapter 7</a>). In these situations, we may be coexisting versions only for a few minutes or perhaps hours, and normally will have only two different versions of the service present at the same time. The longer it takes for you to get consumers upgraded to the newer version and released, the more you should look to coexist different endpoints in the same microservice rather than coexist entirely different versions. I remain unconvinced that this work is worthwhile for the average project.<a data-type="indexterm" data-startref="ix_version" id="idp10047600" class="calibre3"></a></p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

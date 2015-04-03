@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Microservices</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 1. Microservices">
+<div class="preface" id="why-services-chapter">
+<section data-type="sect1" data-pdf-bookmark="Key Benefits">
+<div class="preface" id="idp4019920">
+<section data-type="sect2" data-pdf-bookmark="Technology Heterogeneity"><div class="preface" id="idp4021936">
+<h2 class="calibre15" id="calibre_pb_5">Technology Heterogeneity</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="microservices" data-secondary="technology heterogeneity of" id="idp4023344" class="calibre3"></a><a data-type="indexterm" data-primary="technology heterogeneity" id="idp4024384" class="calibre3"></a><a data-type="indexterm" data-primary="heterogeneity" data-secondary="benefits of" id="idp4025072" class="calibre3"></a>With a system composed of multiple, collaborating services, we can decide to use different technologies inside each one. This allows us to pick the right tool for each job, rather than having to select a more standardized, one-size-fits-all approach that often ends up being the lowest common denominator.</p>
+
+<p class="author">If one part of our system needs to improve its performance, we might decide to use a different technology stack that is better able to achieve the performance levels required. We may also decide that how we store our data needs to change for different parts of our system. For example, for a social network, we might store our users’ interactions in a graph-oriented database to reflect the highly interconnected nature of a social graph, but perhaps the posts the users make could be stored in a document-oriented data store, giving rise to a heterogeneous architecture like the one shown in <a data-type="xref" href="part0003_split_005.html#a10-mixed-tech" class="calibre3">Figure 1-1</a>.</p>
+
+<figure class="calibre16"><div id="a10-mixed-tech" class="figure">
+<img src="../images/00001.jpeg" alt="Microservices can allow you to more easily embrace different technologies" hisrc="assets/bdms_0101.png" class="calibre17"/>
+<h6 class="calibre18"><span class="firstname">Figure 1-1. </span>Microservices can allow you to more easily embrace different technologies</h6>
+</div></figure>
+
+<p class="author">With microservices, we are also able to adopt technology more quickly, and understand how new advancements may help us. One of the biggest barriers to trying out and adopting new technology is the risks associated with it. With a monolithic application, if I want to try a new programming language, database, or framework, any change will impact a large amount of my system. With a system consisting of multiple services, I have multiple new places in which to try out a new piece of technology. I can pick a service that is perhaps lowest risk and use the technology there, knowing that I can limit any potential negative impact. Many organizations find this ability to more quickly absorb new technologies to be a real advantage for them.</p>
+
+<p class="author">Embracing multiple technologies doesn’t come without an overhead, of course. Some organizations choose to place some constraints on language choices. Netflix and Twitter, for example, mostly use the Java Virtual Machine (JVM) as a platform, as they have a very good understanding of the reliability and performance of that system. They also develop libraries and tooling for the JVM that make operating at scale much easier, but make it more difficult for non-Java-based services or clients. But neither Twitter nor Netflix use only one technology stack for all jobs, either. Another counterpoint to concerns about mixing in different technologies is the size. If I really can rewrite my microservice in two weeks, you may well mitigate the risks of embracing new technology.</p>
+
+<p class="author">As you’ll find throughout this book, just like many things concerning microservices, it’s all about finding the right balance. We’ll discuss how to make technology choices in <a data-type="xref" href="part0004_split_000.html#architect-chapter" class="calibre3">Chapter 2</a>, which focuses on evolutionary architecture; and in <a data-type="xref" href="part0006_split_000.html#integration-chapter" class="calibre3">Chapter 4</a>, which deals with integration, you’ll learn how to ensure that your services can evolve their technology independently of each other without undue coupling.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="Custom Images">
+<div class="preface" id="idp10580352">
+<section data-type="sect2" data-pdf-bookmark="Images as Artifacts"><div class="preface" id="idp10598880">
+<h2 class="calibre15" id="calibre_pb_9">Images as Artifacts</h2>
+
+<p class="author"><a data-type="indexterm" data-primary="deployment" data-secondary="artifacts, images as" id="idp10600080" class="calibre3"></a><a data-type="indexterm" data-primary="artifacts" data-secondary="images" id="idp10601056" class="calibre3"></a><a data-type="indexterm" data-primary="images" data-secondary="as artifacts" id="idp10602000" class="calibre3"></a>So we can create virtual machine images that bake in dependencies to speed up feedback, but why stop there? We could go further, bake our service into the image itself, and adopt the model of our service artifact being an image. Now, when we launch our image, our service is there ready to go. This really fast spin-up time is the reason that Netflix has adopted the model of baking its own services as AWS AMIs.</p>
+
+<p class="author">Just as with OS-specific packages, these VM images become a nice way of abstracting out the differences in the technology stacks used to create the services. Do we care if the service running on the image is written in Ruby or Java, and uses a gem or JAR file? All we care about is that it works. We can focus our efforts, then, on automating the creation and deployment of these images. This also becomes a really neat way to implement another deployment concept, the <em class="calibre4">immutable server</em>.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

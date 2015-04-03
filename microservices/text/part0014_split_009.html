@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Bringing It All Together</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 12. Bringing It All Together">
+<div class="preface" id="bring-together-chapter">
+<section data-type="sect1" data-pdf-bookmark="When Shouldn’t You Use Microservices?"><div class="preface" id="idp12372016">
+<h1 class="calibre7" id="calibre_pb_9">When Shouldn’t You Use Microservices?</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="microservices" data-secondary="appropriate application of" id="idp12419392" class="calibre3"></a>I get asked this question a lot. My first piece of advice would be that the less well you understand a domain, the harder it will be for you to find proper bounded contexts for your services. As we discussed previously, getting service boundaries wrong can result in having to make lots of changes in service-to-service collaboration — an expensive operation. So if you’re coming to a monolithic system for which you don’t understand the domain, spend some time learning what the system does first, and then look to identify clean module boundaries prior to splitting out services.</p>
+
+<p class="author">Greenfield development is also quite challenging. It isn’t just that the domain is also likely to be new; it’s that it is much easier to chunk up something you have than something you don’t! So again, consider starting monolithic first and break things out when you’re stable.</p>
+
+<p class="author"><a data-type="indexterm" data-primary="microservices" data-secondary="drawbacks of" id="idp12422048" class="calibre3"></a>Many of the challenges you’re going to face with microservices get worse with scale. If you mostly do things manually, you might be OK with 1 or 2 services, but 5 or 10? Sticking with old monitoring practices where you just look at stats like CPU and memory likewise might work OK for a few services, but the more service-to-service collaboration you do, the more painful this will become. You’ll find yourself hitting these pain points as you add more services, and I hope the advice in this book will help you see some of these problems coming, and give you some concrete tips for how to deal with them. I spoke before about REA and Gilt taking a while to build the tooling and practices to manage microservices well, prior to being able to use them in any large quantity. These stories just reinforce to me the importance of starting gradually so you understand your organization’s appetite and ability to change, which will help you properly adopt microservices.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></section></body></html>

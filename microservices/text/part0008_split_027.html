@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Deployment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body data-type="book" class="calibre">
+<section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deployment">
+<div class="preface" id="deployment-chapter">
+<section data-type="sect1" data-pdf-bookmark="Summary"><div class="preface" id="idp10748896">
+<h1 class="calibre7" id="calibre_pb_27">Summary</h1>
+
+<p class="author"><a data-type="indexterm" data-primary="deployment" data-secondary="overview of" id="idp10878048" class="calibre3"></a>We’ve covered a lot of ground here, so a recap is in order. First, focus on maintaining the ability to release one service independently from another, and make sure that whatever technology you select supports this. I greatly prefer having a single repository per microservice, but am firmer still that you need one CI build per microservice if you want to deploy them separately.</p>
+
+<p class="author">Next, if possible, move to a single-service per host/container. Look at alternative technologies like LXC or Docker to make managing the moving parts cheaper and easier, but understand that whatever technology you adopt, a culture of automation is key to managing everything. Automate everything, and if the technology you have doesn’t allow this, get some new technology! Being able to use a platform like AWS will give you huge benefits when it comes to automation.</p>
+
+<p class="author">Make sure you understand the impact your deployment choices have on developers, and make sure they feel the love too. Creating tools that let you self-service-deploy any given service into a number of different environments is really important, and will help developers, testers, and operations people alike.</p>
+
+<p class="author">Finally, if you want to go deeper into this topic, I thoroughly recommend you read Jez Humble and David Farley’s <em class="calibre4">Continuous Delivery</em> (Addison-Wesley), which goes into much more detail on subjects like pipeline design and artifact management.</p>
+
+<p class="author">In the next chapter, we’ll be going deeper into a topic we touched on briefly here. Namely, how do we test our microservices to make sure they actually work?</p>
+</div></section>
+
+
+
+
+
+
+
+</div></section></body></html>
