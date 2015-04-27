@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" profile="http://www.idpf.org/epub/30/profile/content/"><head><title>Apache Kafka</title></head><body>
+  
+  
+  <nav id="toc" epub:type="toc"><h1>Contents</h1><ol>
+<li id="id286448480"><a href="index.html">Apache Kafka</a><ol>
+<li id="toc"><a href="toc.html">Table of Contents</a></li>
+<li id="id286448500"><a href="pr01.html">Apache Kafka</a></li>
+<li id="id286691997"><a href="pr02.html">Credits</a></li>
+<li id="id286697291"><a href="pr03.html">About the Author</a></li>
+<li id="id286697323"><a href="pr04.html">About the Reviewers</a></li>
+<li id="id286697349"><a href="pr05.html">www.PacktPub.com</a><ol>
+<li id="id286697355"><a href="pr05.html#ch00lvl3sec01">Support files, eBooks, discount offers and more</a><ol>
+<li id="id286697411"><a href="pr05.html#ch00lvl4sec01">Why Subscribe?</a></li>
+<li id="id286697444"><a href="pr05.html#ch00lvl4sec02">Free Access for Packt account holders</a></li></ol></li></ol></li>
+<li id="id286697461"><a href="pr06.html">Preface</a><ol>
+<li id="id286697474"><a href="pr06.html#ch00lvl1sec02">What this book covers</a></li>
+<li id="id286697570"><a href="pr06s02.html">What you need for this book</a></li>
+<li id="id286697589"><a href="pr06s03.html">Who this book is for</a></li>
+<li id="id286697603"><a href="pr06s04.html">Conventions</a></li>
+<li id="id286697678"><a href="pr06s05.html">Reader feedback</a></li>
+<li id="id286697703"><a href="pr06s06.html">Customer support</a><ol>
+<li id="id286697715"><a href="pr06s06.html#ch00lvl2sec02">Downloading the color images of this book</a></li>
+<li id="id286697730"><a href="pr06s06.html#ch00lvl2sec03">Errata</a></li>
+<li id="id286697762"><a href="pr06s06.html#ch00lvl2sec04">Piracy</a></li>
+<li id="id286697783"><a href="pr06s06.html#ch00lvl2sec05">Questions</a></li></ol></li></ol></li>
+<li id="id286697799"><a href="ch01.html">1. Introducing Kafka</a><ol>
+<li id="id286722356"><a href="ch01.html#ch01lvl1sec08">Need for Kafka</a></li>
+<li id="id286722426"><a href="ch01s02.html">Few Kafka usages</a></li>
+<li id="id286722645"><a href="ch01s03.html">Summary</a></li></ol></li>
+<li id="id286722660"><a href="ch02.html">2. Installing Kafka</a><ol>
+<li id="id286722771"><a href="ch02.html#ch02lvl1sec11">Installing Kafka</a><ol>
+<li id="id286722834"><a href="ch02.html#ch02lvl2sec06">Downloading Kafka</a></li>
+<li id="id286723018"><a href="ch02.html#ch02lvl2sec07">Installing the prerequisites</a><ol>
+<li id="id286723054"><a href="ch02.html#ch02lvl3sec02">Installing Java 1.6 or later</a></li></ol></li>
+<li id="id286723161"><a href="ch02.html#ch02lvl2sec08">Building Kafka</a></li></ol></li>
+<li id="id286723457"><a href="ch02s02.html">Summary</a></li></ol></li>
+<li id="id286723468"><a href="ch03.html">3. Setting up the Kafka Cluster</a><ol>
+<li id="id286723589"><a href="ch03.html#ch03lvl1sec13">Single node – single broker cluster</a><ol>
+<li id="id286723629"><a href="ch03.html#ch03lvl2sec09">Starting the ZooKeeper server</a></li>
+<li id="id286723900"><a href="ch03.html#ch03lvl2sec10">Starting the Kafka broker</a></li>
+<li id="id286724012"><a href="ch03.html#ch03lvl2sec11">Creating a Kafka topic</a></li>
+<li id="id286724077"><a href="ch03.html#ch03lvl2sec12">Starting a producer for sending messages</a></li>
+<li id="id286724289"><a href="ch03.html#ch03lvl2sec13">Starting a consumer for consuming messages</a></li></ol></li>
+<li id="id286750691"><a href="ch03s02.html">Single node – multiple broker cluster</a><ol>
+<li id="id286750731"><a href="ch03s02.html#ch03lvl2sec14">Starting ZooKeeper</a></li>
+<li id="id286750760"><a href="ch03s02.html#ch03lvl2sec15">Starting the Kafka broker</a></li>
+<li id="id286751018"><a href="ch03s02.html#ch03lvl2sec16">Creating a Kafka topic</a></li>
+<li id="id286751099"><a href="ch03s02.html#ch03lvl2sec17">Starting a producer for sending messages</a></li>
+<li id="id286751184"><a href="ch03s02.html#ch03lvl2sec18">Starting a consumer for consuming messages</a></li></ol></li>
+<li id="id286751228"><a href="ch03s03.html">Multiple node – multiple broker cluster</a></li>
+<li id="id286751319"><a href="ch03s04.html">Kafka broker property list</a></li>
+<li id="id286751666"><a href="ch03s05.html">Summary</a></li></ol></li>
+<li id="id286751682"><a href="ch04.html">4. Kafka Design</a><ol>
+<li id="id286751787"><a href="ch04.html#ch04lvl1sec18">Kafka design fundamentals</a></li>
+<li id="id286752118"><a href="ch04s02.html">Message compression in Kafka</a></li>
+<li id="id286752279"><a href="ch04s03.html">Cluster mirroring in Kafka</a></li>
+<li id="id286752389"><a href="ch04s04.html">Replication in Kafka</a></li>
+<li id="id286752722"><a href="ch04s05.html">Summary</a></li></ol></li>
+<li id="id286752737"><a href="ch05.html">5. Writing Producers</a><ol>
+<li id="id286752923"><a href="ch05.html#ch05lvl1sec23">The Java producer API</a></li>
+<li id="id286753276"><a href="ch05s02.html">Simple Java producer</a><ol>
+<li id="id286753321"><a href="ch05s02.html#ch05lvl2sec19">Importing classes</a></li>
+<li id="id286753379"><a href="ch05s02.html#ch05lvl2sec20">Defining properties</a></li>
+<li id="id286753556"><a href="ch05s02.html#ch05lvl2sec21">Building the message and sending it</a></li></ol></li>
+<li id="id286753717"><a href="ch05s03.html">Creating a simple Java producer with message partitioning</a><ol>
+<li id="id286753749"><a href="ch05s03.html#ch05lvl2sec22">Importing classes</a></li>
+<li id="id286753778"><a href="ch05s03.html#ch05lvl2sec23">Defining properties</a></li>
+<li id="id286753932"><a href="ch05s03.html#ch05lvl2sec24">Implementing the Partitioner class</a></li>
+<li id="id286753992"><a href="ch05s03.html#ch05lvl2sec25">Building the message and sending it</a></li></ol></li>
+<li id="id286754217"><a href="ch05s04.html">The Kafka producer property list</a></li>
+<li id="id286754834"><a href="ch05s05.html">Summary</a></li></ol></li>
+<li id="id286754851"><a href="ch06.html">6. Writing Consumers</a><ol>
+<li id="id286754954"><a href="ch06.html#ch06lvl1sec28">Java consumer API</a><ol>
+<li id="id286755010"><a href="ch06.html#ch06lvl2sec26">High-level consumer API</a></li>
+<li id="id286755323"><a href="ch06.html#ch06lvl2sec27">Simple consumer API</a></li></ol></li>
+<li id="id286755544"><a href="ch06s02.html">Simple high-level Java consumer</a><ol>
+<li id="id286755648"><a href="ch06s02.html#ch06lvl2sec28">Importing classes</a></li>
+<li id="id286755721"><a href="ch06s02.html#ch06lvl2sec29">Defining properties</a></li>
+<li id="id286755912"><a href="ch06s02.html#ch06lvl2sec30">Reading messages from a topic and printing them</a></li></ol></li>
+<li id="id286756022"><a href="ch06s03.html">Multithreaded consumer for multipartition topics</a><ol>
+<li id="id286756109"><a href="ch06s03.html#ch06lvl2sec31">Importing classes</a></li>
+<li id="id286756138"><a href="ch06s03.html#ch06lvl2sec32">Defining properties</a></li>
+<li id="id286756168"><a href="ch06s03.html#ch06lvl2sec33">Reading the message from threads and printing it</a></li></ol></li>
+<li id="id286756417"><a href="ch06s04.html">Kafka consumer property list</a></li>
+<li id="id286757184"><a href="ch06s05.html">Summary</a></li></ol></li>
+<li id="id286757198"><a href="ch07.html">7. Kafka Integrations</a><ol>
+<li id="id286757237"><a href="ch07.html#ch07lvl1sec33">Kafka integration with Storm</a><ol>
+<li id="id286757287"><a href="ch07.html#ch07lvl2sec34">Introduction to Storm</a></li>
+<li id="id286757601"><a href="ch07.html#ch07lvl2sec35">Integrating Storm</a></li></ol></li>
+<li id="id286757905"><a href="ch07s02.html">Kafka integration with Hadoop</a><ol>
+<li id="id286757932"><a href="ch07s02.html#ch07lvl2sec36">Introduction to Hadoop</a></li>
+<li id="id286758366"><a href="ch07s02.html#ch07lvl2sec37">Integrating Hadoop</a></li>
+<li id="id286758451"><a href="ch07s02.html#ch07lvl2sec38">Hadoop producer</a></li>
+<li id="id286758716"><a href="ch07s02.html#ch07lvl2sec39">Hadoop consumer</a></li></ol></li>
+<li id="id286758820"><a href="ch07s03.html">Summary</a></li></ol></li>
+<li id="id286758835"><a href="ch08.html">8. Kafka Tools</a><ol>
+<li id="id286758874"><a href="ch08.html#ch08lvl1sec36">Kafka administration tools</a><ol>
+<li id="id286758902"><a href="ch08.html#ch08lvl2sec40">Kafka topic tools</a></li>
+<li id="id286759132"><a href="ch08.html#ch08lvl2sec41">Kafka replication tools</a></li></ol></li>
+<li id="id286759421"><a href="ch08s02.html">Integration with other tools</a></li>
+<li id="id286759632"><a href="ch08s03.html">Kafka performance testing</a></li>
+<li id="id286759767"><a href="ch08s04.html">Summary</a></li></ol></li>
+<li id="backindex"><a href="backindex.html">Index</a></li></ol></li></ol></nav>
+</body></html>

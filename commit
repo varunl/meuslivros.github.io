@@ -1,0 +1,14 @@
+USER=$(git config --global user.name)
+EMAIL=$(git config --global user.email)
+
+git config --global user.name "meus livros"
+git config --global user.email meuslivros@maildrop.cc
+
+git add .
+git commit -a -m "add books"
+git push 
+
+git config --global user.name "$USER"
+git config --global user.email $EMAIL
+
+

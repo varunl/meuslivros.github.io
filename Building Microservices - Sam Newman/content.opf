@@ -1,5 +1,4 @@
 <?xml version='1.0' encoding='utf-8'?>
-
 <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="uuid_id" version="2.0">
   <metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:calibre="http://calibre.kovidgoyal.net/2009/metadata" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
     <dc:date>2015-02-01T22:00:00+00:00</dc:date>
@@ -13,7 +12,7 @@
     <dc:identifier id="uuid_id" opf:scheme="uuid">e471e0c4-e032-4c89-a426-3fb9e536feaf</dc:identifier>
     <dc:identifier opf:scheme="calibre">e471e0c4-e032-4c89-a426-3fb9e536feaf</dc:identifier>
     <dc:language>en</dc:language>
-    <dc:title>Building Microservices</dc:title> 
+    <dc:title>Building Microservices</dc:title>
     <dc:publisher>O'Reilly Media</dc:publisher>
   </metadata>
   <manifest>
