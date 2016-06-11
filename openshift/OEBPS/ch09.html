@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html><html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml"><head><title>Deploying an Existing Docker Image</title><link rel="stylesheet" type="text/css" href="epub.css"/></head><body data-type="book"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 9. Deploying an Existing Docker Image"><div class="chapter" id="chapter_anydocker">
+<h1><span class="label">Chapter 9. </span>Deploying an Existing Docker Image</h1>
+
+
+<p>In the previous chapters we learned some key features of the OpenShift container application platform including the powerful source-to-image feature.  If you recall, the S2I feature allows you to interact with the platform from a pure source code perspective.  While this is awesome, there may be occasions when you want to deploy an existing Docker image to the platform.  You will be happy to know that OpenShift supports this common request. After all, what good is a container platform if doesn’t support the running of containers that have already been built? In this chapter we are going to deploy a Docker image from the public Docker Hub.</p>
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="What Is Docker Hub?"><div class="sect1" id="idm140645241384432">
+<h1>What Is Docker Hub?</h1>
+
+<p>If you are not familiar with Docker-based containers, chances are you haven’t heard about Docker Hub before.  Don’t worry, it is a pretty simple concept to understand.  However, to understand the need for Docker Hub, you first need to understand how a Docker image is actually built.</p>
+
+<p>Unless they are using OpenShift, most developers don’t have the luxury of a S2I project that automatically creates Docker images on the fly based on their source code.  What this means is that when using plain Docker, a developer has to do a couple of things, namely create Dockerfiles and perform builds.</p>
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="The Dockerfile"><div class="sect2" id="idm140645241381760">
+<h2>The Dockerfile</h2>
+
+<p>A Dockerfile is a text document that defines how an image should be created.  Depending on the complexity of the application, the Dockerfile can quickly become verbose and unwieldy.  As an example, here is the Dockerfile for the <em>official</em> popular Tomcat 8 servlet container:</p>
+
+<pre data-type="programlisting" data-code-language="docker"><code class="k">FROM</code><code class="s"> java:8-jre</code>
+
+<code class="k">ENV</code><code class="s"> CATALINA_HOME /usr/local/tomcat</code>
+<code class="k">ENV</code><code class="s"> PATH $CATALINA_HOME/bin:$PATH</code>
+<code class="k">RUN</code> mkdir -p <code class="s2">"</code><code class="nv">$CATALINA_HOME</code><code class="s2">"</code>
+<code class="k">WORKDIR</code><code class="s"> $CATALINA_HOME</code>
+
+<code class="c"># see https://www.apache.org/dist/tomcat/tomcat-8/KEYS</code>
+<code class="k">RUN</code> gpg --keyserver pool.sks-keyservers.net --recv-keys <code class="se">\</code>
+	05AB33110949707C93A279E3D3EFE6B686867BA6 <code class="se">\</code>
+	07E48665A34DCAFAE522E5E6266191C37C037D42 <code class="se">\</code>
+	47309207D818FFD8DCD3F83F1931D684307A10A5 <code class="se">\</code>
+	541FBE7D8F78B25E055DDEE13C370389288584E7 <code class="se">\</code>
+	61B832AC2F1C5A90F0F9B00A1C506407564C17A3 <code class="se">\</code>
+	79F7026C690BAA50B92CD8B66A3AD3F4F22C4FED <code class="se">\</code>
+	9BA44C2621385CB966EBA586F72C284D731FABEE <code class="se">\</code>
+	A27677289986DB50844682F8ACB77FC2E86E29AC <code class="se">\</code>
+	A9C5DF4D22E99998D9875A5110C01C5A2F6059E7 <code class="se">\</code>
+	DCFD35E0BF8CA7344752DE8B6FB21E8933C60243 <code class="se">\</code>
+	F3A04C595DB5B6A5F1ECA43E3B7BBB100D811BBE <code class="se">\</code>
+	F7DA48BB64BCB84ECBA7EE6935CD23C10D498E23
+
+<code class="k">ENV</code><code class="s"> TOMCAT_MAJOR 8</code>
+<code class="k">ENV</code><code class="s"> TOMCAT_VERSION 8.0.32</code>
+<code class="k">ENV</code><code class="s"> TOMCAT_TGZ_URL https://www.apache.org/dist/tomcat/tomcat-$TOMCAT_MAJOR/ \</code>
+v<code class="nv">$TOMCAT_VERSION</code>/bin/apache-tomcat-<code class="nv">$TOMCAT_VERSION</code>.tar.gz
+
+<code class="k">RUN</code> <code class="nb">set</code> -x <code class="se">\</code>
+	<code class="o">&amp;&amp;</code> curl -fSL <code class="s2">"</code><code class="nv">$TOMCAT_TGZ_URL</code><code class="s2">"</code> -o tomcat.tar.gz <code class="se">\</code>
+	<code class="o">&amp;&amp;</code> curl -fSL <code class="s2">"</code><code class="nv">$TOMCAT_TGZ_URL</code><code class="s2">.asc"</code> -o tomcat.tar.gz.asc <code class="se">\</code>
+	<code class="o">&amp;&amp;</code> gpg --verify tomcat.tar.gz.asc <code class="se">\</code>
+	<code class="o">&amp;&amp;</code> tar -xvf tomcat.tar.gz --strip-components<code class="o">=</code><code class="m">1</code> <code class="se">\</code>
+	<code class="o">&amp;&amp;</code> rm bin/*.bat <code class="se">\</code>
+	<code class="o">&amp;&amp;</code> rm tomcat.tar.gz*
+
+<code class="k">EXPOSE</code><code class="s"> 8080</code>
+<code class="k">CMD</code><code class="s"> ["catalina.sh", "run"]</code></pre>
+
+<p>But wait, that doesn’t look so complicated does it?  Well, at first glance, this may appear to be true, but if you dig in just a bit further, you can see that this Dockerfile actually inherits the <em>java:8-jre</em> image.  To really understand the image pipeline, you would also have to examine the <em>FROM</em> Dockerfile.  The <em>FROM</em> Dockerfile contains the following information at the very top:</p>
+
+<pre data-type="programlisting">FROM buildpack-deps:jessie-curl</pre>
+<div data-type="note" epub:type="note"><h6>Note</h6>
+<p>I have omitted the full Dockerfile for brevity’s sake. If you would like to view the full Dockerfile for _java:8-jre, visit the <a href="https://hub.docker.com/_/java/">official repository</a>.</p>
+</div>
+
+<p>What’s interesting is that the <em>FROM</em> image for Java 8 is actually <code>buildpack-deps:jessie-curl</code>.  The entire Docker image pipeline for a Tomcat server is as follows:</p>
+
+<pre data-type="programlisting">tomcat:8.0-&gt;_java:8-jre-&gt;_buildpack-deps:jessie-curl-&gt;debian:jessie</pre>
+
+<p>Working with Dockerfiles can certainly be helpful but it can also get confusing pretty quickly.  Not only that, if you want to run the <em>official</em> Tomcat 8 Docker image, you have to dig in to the details just a bit to determine what underlying technology is actually being used.  In this example, it appears that the Debian Linux distribution is used.  While that may be fine for some, it may not be for others that are running in production.</p>
+
+<p>Knowing you have a fully supported platform like OpenShift where you know the image pipeline is supported and verified by Red Hat can really ease any reluctance you may have about using Docker-based containers in a production environment.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="The Docker Build"><div class="sect2" id="idm140645241381136">
+<h2>The Docker Build</h2>
+
+<p>Once you have crafted that perfect chain of Dockerfiles, including one to actually copy their .war file into the container, a build is needed to actually create the image.  The Docker build process is actually pretty simple once your Dockerfile is error-free. It can be performed with a command like the following:</p>
+
+<pre data-type="programlisting">$ docker build -t imagename .</pre>
+
+<p>This will resolve all of the <em>FROM</em> images in the Dockerfile chain and produce an image based on the Dockerfile in the current directory.  Once the image has been created, you can tag the image to specify the version number.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Sharing the Docker Image"><div class="sect2" id="idm140645241299488">
+<h2>Sharing the Docker Image</h2>
+
+<p>Whew, after all of that we now have a new Docker image.  The next step is to actually share that image with other people so they can run it.  This is where Docker Hub comes in.</p>
+
+<p>In its simplest form, Docker Hub is a public repository where users can publish their images for use by others.  Remember signing up for a GitHub account earlier in this book? Well, Docker Hub is like GitHub but for container images instead of source code.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Running a Docker Hub Image on OpenShift"><div class="sect1" id="idm140645241297008">
+<h1>Running a Docker Hub Image on OpenShift</h1>
+
+<p>You are probably going to send me mean and nasty email after you realize this entire chapter was written to introduce you to one single OpenShift command.  That’s okay, I probably deserve it, but I did think it was important for you to get a glimpse of the process of creating and distributing images. But at this point you probably just want to deploy the Tomcat 8 image, right?  Good news. Open your favorite terminal and enter the following commands, assuming you have authenticated to your OpenShift server:</p>
+
+<pre data-type="programlisting">$ oc new-project tomcat8 --display-name='Tomcat 8'
+$ oc new-app tomcat:8.0</pre>
+
+<p>You should see the following information after entering the preceding command:</p>
+
+<pre data-type="programlisting">--&gt; Found Docker image b9c02aa (12 days old) from Docker Hub for "tomcat:8.0"
+    * An image stream will be created as "tomcat:8.0" that will track this image
+    * This image will be deployed in deployment config "tomcat"
+    * [WARNING] Image "tomcat" runs as the 'root' user which may not be permitted
+    by your cluster administrator
+    * Port 8080/tcp will be load balanced by service "tomcat"
+--&gt; Creating resources with label app=tomcat ...
+    ImageStream "tomcat" created
+    DeploymentConfig "tomcat" created
+    Service "tomcat" created
+--&gt; Success
+    Run 'oc status' to view your app.</pre>
+
+<p>As you can see in the output, OpenShift realized that you wanted to use the Tomcat 8.0 image and it didn’t have it in the OpenShift registry.  Since the image wasn’t available in the OpenShift registry, the platform then connected to the public Docker Hub registry to look for the image.  Once it was found, it was downloaded (pulled) and stored in the OpenShift registry.  Digging a bit deeper, the platform then extracted some meta-data and created Kubernetes objects for the image and finally deployed it inside of a pod.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Routes"><div class="sect1" id="idm140645241291456">
+<h1>Routes</h1>
+
+<p>Now that we have our fancy new public Tomcat 8 servlet container deployed to the platform, let’s test it out.  Open your favorite browser and log in to the OpenShift web console.  Once you have been authenticated, you should see the projects shown in <a data-type="xref" href="#fig0901">Figure 9-1</a>.</p>
+
+<figure><div id="fig0901" class="figure">
+<img src="assets/osfd_0901.png" alt="Projects"/>
+<h6><span class="label">Figure 9-1. </span>Projects</h6>
+</div></figure>
+
+<p>After clicking on the new <em>Tomcat 8</em> project we created on the command line, you will see the project overview page shown in <a data-type="xref" href="#fig0902">Figure 9-2</a>.</p>
+
+<figure><div id="fig0902" class="figure">
+<img src="assets/osfd_0902.png" alt="Project Overview"/>
+<h6><span class="label">Figure 9-2. </span>Project overview</h6>
+</div></figure>
+
+<p>What’s different about this project compared to our first application using WildFly in <a data-type="xref" href="ch04.html#chapter_firstapplication">Chapter 4</a>?  Give up?  A route doesn’t exist for the Tomcat 8 server yet. This means that although the Tomcat Docker image has been deployed in a container, it isn’t yet accessible via the network.  In order for Tomcat 8 to be visible, we need to expose the service as an external route.  Routes are for externalizing the ports of an application or making it available as Internet facing.  This is a fairly easy process.  Simply click the <em>Create Route</em> link inside of the <em>SERVICE</em> box.  On the next page, you will be presented with the screen shown in <a data-type="xref" href="#fig0903">Figure 9-3</a>.</p>
+
+<figure><div id="fig0903" class="figure">
+<img src="assets/osfd_0903.png" alt="Create Route"/>
+<h6><span class="label">Figure 9-3. </span>Create route</h6>
+</div></figure>
+
+<p>For this example, leave all of the values as they are and simply click the <em>Create</em> button.  This will generate a default route using the <em>xip.io</em> service we discussed previously in this book.</p>
+
+<p>After you click the <em>Create</em> button, you will now see that a route is displayed in the <em>SERVICE</em> box, as <a data-type="xref" href="#fig0904">Figure 9-4</a> shows.</p>
+
+<figure><div id="fig0904" class="figure">
+<img src="assets/osfd_0904.png" alt="Exposed route"/>
+<h6><span class="label">Figure 9-4. </span>Exposed route</h6>
+</div></figure>
+
+<p>What are you waiting on?  Go ahead, click the route.  You will be greeted with the familiar Tomcat welcome page, as shown in <a data-type="xref" href="#fig0905">Figure 9-5</a>.</p>
+
+<figure><div id="fig0905" class="figure">
+<img src="assets/osfd_0905.png" alt="Tomcat application"/>
+<h6><span class="label">Figure 9-5. </span>Tomcat application</h6>
+</div></figure>
+
+<p>Congratulations! You just deployed your very own Tomcat 8 server from the public Docker Hub.  Want to scale this puppy up?  Go ahead, knock yourself out.</p>
+
+<p>While deploying this public Docker-based image was certainly cool, you have to consider what’s missing here. The biggest thing to remember is that an image such as this doesn’t take advantage of the platform’s S2I build and deploy pipeline. This means you can’t actually deploy code to the Tomcat container and have the build automatically happen.  In this case, you would have to either create yet another Dockerfile that copies your built source code into the appropriate location or manually copy over a .war file into the running container.  For that reason, you should use the S2I-enabled Tomcat 8 image that is shipped with the OpenShift platform.  Using that builder image will save you a ton of time and headaches when deploying application code.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Summary"><div class="sect1" id="idm140645241290832">
+<h1>Summary</h1>
+
+<p>In this chapter, we learned a bit about the process to create and build Docker-based images.  We also learned about Docker Hub and how to deploy an image that is hosted in a public external repository.  Finally, we learned how to create a route so that the container can be accessed.</p>
+</div></section>
+
+
+
+
+
+
+
+</div></section></body></html>

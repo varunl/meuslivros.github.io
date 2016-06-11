@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" profile="http://www.idpf.org/epub/30/profile/content/"><head><title>OpenShift for Developers</title></head><body><nav id="toc" epub:type="toc"><h1>Contents</h1><ol>
+<li id="foreword-idm140645247057376"><a href="foreword01.html#idm140645247057376">Foreword</a></li>
+<li id="preface-idm140645247056640"><a href="preface01.html#idm140645247056640">Introduction</a><ol>
+<li id="sect1-idm140645247373824"><a href="preface01.html#idm140645247373824">Who Should Read This Book</a></li>
+<li id="sect1-idm140645247492176"><a href="preface01.html#idm140645247492176">Why We Wrote This Book</a></li>
+<li id="sect1-idm140645247273152"><a href="preface01.html#idm140645247273152">Navigating This Book</a></li>
+<li id="sect1-idm140645247375888"><a href="preface01.html#idm140645247375888">Online Resources</a></li>
+<li id="sect1-idm140645247352624"><a href="preface01.html#idm140645247352624">Conventions Used in This Book</a></li>
+<li id="sect1-idm140645247547968"><a href="preface01.html#idm140645247547968">Using Code Examples</a></li>
+<li id="sect1-idm140645247135872"><a href="preface01.html#idm140645247135872">Safari® Books Online</a></li>
+<li id="sect1-idm140645247123440"><a href="preface01.html#idm140645247123440">How to Contact Us</a></li>
+<li id="sect1-idm140645247110848"><a href="preface01.html#idm140645247110848">Acknowledgments</a><ol>
+<li id="sect2-idm140645247110016"><a href="preface01.html#idm140645247110016">Grant</a></li>
+<li id="sect2-idm140645247480704"><a href="preface01.html#idm140645247480704">Graham</a></li></ol></li></ol></li>
+<li id="chapter-idm140645247432800"><a href="ch01.html#chapter_dockerkubeopenshift">1. Introduction to a Container Application Platform</a><ol>
+<li id="sect1-idm140645247471664"><a href="ch01.html#idm140645247471664">Docker</a></li>
+<li id="sect1-idm140645247462704"><a href="ch01.html#idm140645247462704">Kubernetes to the Rescue?</a></li>
+<li id="sect1-idm140645247458576"><a href="ch01.html#idm140645247458576">OpenShift</a><ol>
+<li id="sect2-idm140645247455408"><a href="ch01.html#idm140645247455408">Web-Based Console</a></li>
+<li id="sect2-idm140645247449872"><a href="ch01.html#idm140645247449872">Command-Line Tool</a></li>
+<li id="sect2-idm140645247446224"><a href="ch01.html#idm140645247446224">Source-to-Image</a></li>
+<li id="sect2-idm140645247442160"><a href="ch01.html#idm140645247442160">Integrated Logging and Metrics</a></li></ol></li>
+<li id="sect1-idm140645247176160"><a href="ch01.html#idm140645247176160">Summary</a></li></ol></li>
+<li id="chapter-idm140645247174240"><a href="ch02.html#chapter_terminology">2. Concepts You Need to Understand</a><ol>
+<li id="sect1-idm140645247171216"><a href="ch02.html#idm140645247171216">Interacting with OpenShift</a></li>
+<li id="sect1-idm140645247159040"><a href="ch02.html#idm140645247159040">The Deployed Application</a></li>
+<li id="sect1-idm140645247148480"><a href="ch02.html#idm140645247148480">Build and Deployment Process</a></li>
+<li id="sect1-idm140645247140464"><a href="ch02.html#idm140645247140464">Online Cheat Sheet</a></li>
+<li id="sect1-idm140645247251936"><a href="ch02.html#idm140645247251936">Summary</a></li></ol></li>
+<li id="chapter-idm140645243151392"><a href="ch03.html#chapter_installingvm">3. Installing the All-in-One VM</a><ol>
+<li id="sect1-idm140645243141216"><a href="ch03.html#idm140645243141216">Software Requirements</a><ol>
+<li id="sect2-idm140645243138944"><a href="ch03.html#idm140645243138944">Install VirtualBox</a></li>
+<li id="sect2-idm140645243133088"><a href="ch03.html#idm140645243133088">Install Vagrant</a></li>
+<li id="sect2-idm140645243012304"><a href="ch03.html#idm140645243012304">Vagrant init</a></li>
+<li id="sect2-idm140645244188928"><a href="ch03.html#idm140645244188928">Change Your Memory Configuration</a></li>
+<li id="sect2-idm140645243029792"><a href="ch03.html#idm140645243029792">Start Things Up</a></li>
+<li id="sect2-idm140645243071488"><a href="ch03.html#idm140645243071488">Download the Latest oc Command-Line Tool</a></li></ol></li>
+<li id="sect1-idm140645243109840"><a href="ch03.html#idm140645243109840">Initial Login from the Web Console</a></li>
+<li id="sect1-idm140645242991104"><a href="ch03.html#idm140645242991104">Now Log In from the Command Line</a></li>
+<li id="sect1-idm140645242981648"><a href="ch03.html#idm140645242981648">Now Log In to the Web Console as a Normal User</a></li>
+<li id="sect1-idm140645242970848"><a href="ch03.html#idm140645242970848">Create a GitHub Account</a></li>
+<li id="sect1-idm140645242857072"><a href="ch03.html#idm140645242857072">Summary</a></li></ol></li>
+<li id="chapter-idm140645243150768"><a href="ch04.html#chapter_firstapplication">4. Developing and Deploying Your First Application</a><ol>
+<li id="sect1-idm140645242852128"><a href="ch04.html#idm140645242852128">Understanding the Tools</a><ol>
+<li id="sect2-idm140645242924576"><a href="ch04.html#idm140645242924576">Git</a></li>
+<li id="sect2-idm140645242905648"><a href="ch04.html#idm140645242905648">WildFly</a></li></ol></li>
+<li id="sect1-idm140645242899408"><a href="ch04.html#idm140645242899408">Creating Our First Application</a><ol>
+<li id="sect2-idm140645242897744"><a href="ch04.html#idm140645242897744">Creating a Copy of the Sample Application</a></li>
+<li id="sect2-idm140645242889248"><a href="ch04.html#idm140645242889248">Creating the Application</a></li></ol></li>
+<li id="sect1-idm140645242888176"><a href="ch04.html#idm140645242888176">Making a Code Change and Starting a New Build</a></li>
+<li id="sect1-idm140645242803776"><a href="ch04.html#idm140645242803776">Summary</a></li></ol></li>
+<li id="chapter-idm140645242775040"><a href="ch05.html#chapter_addingdependencies">5. Adding Dependencies and a Database</a><ol>
+<li id="sect1-idm140645242771040"><a href="ch05.html#idm140645242771040">Creating the Base Application</a><ol>
+<li id="sect2-idm140645242769216"><a href="ch05.html#idm140645242769216">Forking the Repository and Deploying the Application</a><ol>
+<li id="sect3-idm140645242754496"><a href="ch05.html#idm140645242754496">Testing the application</a></li>
+<li id="sect3-idm140645242753552"><a href="ch05.html#idm140645242753552">Linking the database to the application</a></li>
+<li id="sect3-idm140645242552128"><a href="ch05.html#idm140645242552128">Importing the database schema</a></li></ol></li>
+<li id="sect2-idm140645242768592"><a href="ch05.html#idm140645242768592">Adding the Database to the Application</a></li></ol></li>
+<li id="sect1-idm140645242490784"><a href="ch05.html#idm140645242490784">Adding a REST Endpoint</a></li>
+<li id="sect1-idm140645242165664"><a href="ch05.html#idm140645242165664">Summary</a></li></ol></li>
+<li id="chapter-idm140645242159008"><a href="ch06.html#chapter_lifecycle">6. Deploying and Scaling Your Application</a><ol>
+<li id="sect1-idm140645242155376"><a href="ch06.html#idm140645242155376">Automatic Deployments Using Webhooks</a><ol>
+<li id="sect2-idm140645242144512"><a href="ch06.html#idm140645242144512">Adding Our Webhook URI to GitHub</a></li>
+<li id="sect2-idm140645241832448"><a href="ch06.html#idm140645241832448">Visibility of Your OpenShift Instance</a></li></ol></li>
+<li id="sect1-idm140645241825600"><a href="ch06.html#idm140645241825600">Scaling Your Application</a><ol>
+<li id="sect2-idm140645241822832"><a href="ch06.html#idm140645241822832">Scaling from the Web Console</a></li>
+<li id="sect2-idm140645241815568"><a href="ch06.html#idm140645241815568">Applications Suitable for Scaling</a></li>
+<li id="sect2-idm140645241811824"><a href="ch06.html#idm140645241811824">Automatic Scaling of an Application</a></li></ol></li>
+<li id="sect1-idm140645241809664"><a href="ch06.html#idm140645241809664">Deployment Strategies</a><ol>
+<li id="sect2-idm140645241807088"><a href="ch06.html#idm140645241807088">Rolling Strategy</a></li>
+<li id="sect2-idm140645241802352"><a href="ch06.html#idm140645241802352">Recreate Strategy</a></li>
+<li id="sect2-idm140645241798832"><a href="ch06.html#idm140645241798832">Changing the Strategy</a></li>
+<li id="sect2-idm140645241798496"><a href="ch06.html#idm140645241798496">Implementing Custom Strategies</a></li></ol></li>
+<li id="sect1-idm140645241786800"><a href="ch06.html#idm140645241786800">Application Health Checks</a></li>
+<li id="sect1-idm140645241786272"><a href="ch06.html#idm140645241786272">Deployment Lifecycle Hooks</a></li>
+<li id="sect1-idm140645241722112"><a href="ch06.html#idm140645241722112">Application Rollback</a></li>
+<li id="sect1-idm140645241625904"><a href="ch06.html#idm140645241625904">Summary</a></li></ol></li>
+<li id="chapter-idm140645242158544"><a href="ch07.html#chapter_applicationtemplates">7. Using Application Templates</a><ol>
+<li id="sect1-idm140645241620704"><a href="ch07.html#idm140645241620704">What Is an Application Template?</a></li>
+<li id="sect1-idm140645241612352"><a href="ch07.html#idm140645241612352">Benefits of Using Templates</a></li>
+<li id="sect1-idm140645241610560"><a href="ch07.html#idm140645241610560">Using Our First Application Template</a></li>
+<li id="sect1-idm140645241609936"><a href="ch07.html#idm140645241609936">Creating Your Own Templates</a></li>
+<li id="sect1-idm140645241539712"><a href="ch07.html#idm140645241539712">Summary</a></li></ol></li>
+<li id="chapter-idm140645241537312"><a href="ch08.html#chapter_management">8. Working with Your Application</a><ol>
+<li id="sect1-idm140645241534672"><a href="ch08.html#idm140645241534672">Listing Running Instances</a></li>
+<li id="sect1-idm140645241534048"><a href="ch08.html#idm140645241534048">Container Logs</a><ol>
+<li id="sect2-idm140645241522480"><a href="ch08.html#idm140645241522480">Build Logs</a></li>
+<li id="sect2-idm140645241513088"><a href="ch08.html#idm140645241513088">Application Logs</a></li>
+<li id="sect2-idm140645241506512"><a href="ch08.html#idm140645241506512">Application Startup Failures</a></li></ol></li>
+<li id="sect1-idm140645241498528"><a href="ch08.html#idm140645241498528">Environment Variables</a></li>
+<li id="sect1-idm140645241497872"><a href="ch08.html#idm140645241497872">Editing Configurations</a></li>
+<li id="sect1-idm140645241435360"><a href="ch08.html#idm140645241435360">Debugging an Application</a></li>
+<li id="sect1-idm140645241421200"><a href="ch08.html#idm140645241421200">Deleting an Application</a></li>
+<li id="sect1-idm140645241399936"><a href="ch08.html#idm140645241399936">Summary</a></li></ol></li>
+<li id="chapter-idm140645241536848"><a href="ch09.html#chapter_anydocker">9. Deploying an Existing Docker Image</a><ol>
+<li id="sect1-idm140645241384432"><a href="ch09.html#idm140645241384432">What Is Docker Hub?</a><ol>
+<li id="sect2-idm140645241381760"><a href="ch09.html#idm140645241381760">The Dockerfile</a></li>
+<li id="sect2-idm140645241381136"><a href="ch09.html#idm140645241381136">The Docker Build</a></li>
+<li id="sect2-idm140645241299488"><a href="ch09.html#idm140645241299488">Sharing the Docker Image</a></li></ol></li>
+<li id="sect1-idm140645241297008"><a href="ch09.html#idm140645241297008">Running a Docker Hub Image on OpenShift</a></li>
+<li id="sect1-idm140645241291456"><a href="ch09.html#idm140645241291456">Routes</a></li>
+<li id="sect1-idm140645241290832"><a href="ch09.html#idm140645241290832">Summary</a></li></ol></li>
+<li id="afterword-idm140645241264592"><a href="afterword01.html#idm140645241264592">Afterword</a><ol>
+<li id="sect1-idm140645241261968"><a href="afterword01.html#idm140645241261968">What We Covered</a></li>
+<li id="sect1-idm140645241259808"><a href="afterword01.html#idm140645241259808">Final Words</a></li></ol></li></ol></nav></body></html>

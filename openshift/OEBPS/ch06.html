@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html><html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml"><head><title>Deploying and Scaling Your Application</title><link rel="stylesheet" type="text/css" href="epub.css"/></head><body data-type="book"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 6. Deploying and Scaling Your Application"><div class="chapter" id="chapter_lifecycle">
+<h1><span class="label">Chapter 6. </span>Deploying and Scaling Your Application</h1>
+
+
+<p>By now you have successfully deployed both the <em>Hello, World</em> and <em>Insults</em> applications based on the WildFly application server for Java. applications aren’t static and as you continue to make changes you will want to keep redeploying the application. We already showed you how you can manually trigger a rebuild and redeployment of your application, but doing that all the time can get repetitive. In this chapter we discuss how to define triggers so that any time you push changes to your code repository on GitHub, your application will be automatically rebuilt and redeployed. We will also look at how to scale your application, deployment strategies when releasing new versions, application health checks, and rollbacks.</p>
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Automatic Deployments Using Webhooks"><div class="sect1" id="idm140645242155376">
+<h1>Automatic Deployments Using Webhooks</h1>
+
+<p>A webhook (also called a web callback or HTTP push API) is a way an application can provide other applications with real-time information or notifications.</p>
+
+<p>We can configure the GitHub code hosting service to trigger a webhook each time we push a set of changes to your project code repository. Using this tool, we can notify OpenShift when you have made code changes and thus initiate rebuild and redeployment of our application.</p>
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Adding Our Webhook URI to GitHub"><div class="sect2" id="idm140645242144512">
+<h2>Adding Our Webhook URI to GitHub</h2>
+
+<p>Before we can configure GitHub with a webhook for your application, we need to first find the webhook URI for your particular application:</p>
+<ol>
+<li>
+<p>Navigate back to the <em>Builds</em> page for the <em>helloworld</em> application in the OpenShift web console. But this time click the <em>Configuration</em> tab (see <a data-type="xref" href="#fig0601">Figure 6-1</a>).</p>
+
+<figure><div id="fig0601" class="figure">
+<img src="assets/osfd_0601.png" alt="GitHub webbook URL"/>
+<h6><span class="label">Figure 6-1. </span>GitHub webhook URL</h6>
+</div></figure>
+</li>
+<li>
+<p>In the <em>Triggers</em> section you will find two different types of webhook URLs specified: <em>Generic webhook URL</em> and a <em>GitHub webhook URL</em>. Since we are going to configure GitHub with a webhook, select and use the <em>GitHub webhook URL</em>.</p>
+</li>
+<li>
+<p>Head to GitHub and find the code repository created when you originally forked the <em>helloworld</em> project. Find the <em>Settings</em> tag and select it, as shown in <a data-type="xref" href="#fig0602">Figure 6-2</a>.</p>
+
+<figure><div id="fig0602" class="figure">
+<img src="assets/osfd_0602.png" alt="Settings on GitHub"/>
+<h6><span class="label">Figure 6-2. </span>Settings on GitHub</h6>
+</div></figure>
+</li>
+<li>
+<p>Next, select the <em>Webhooks &amp; services</em> option, as shown in <a data-type="xref" href="#fig0603">Figure 6-3</a>.</p>
+
+<figure><div id="fig0603" class="figure">
+<img src="assets/osfd_0603.png" alt="Webhooks and services on GitHub"/>
+<h6><span class="label">Figure 6-3. </span>Webhooks &amp; services on GitHub</h6>
+</div></figure>
+</li>
+<li>
+<p>Then the <em>Add webhook</em> button, as shown in <a data-type="xref" href="#fig0604">Figure 6-4</a>.</p>
+
+<figure><div id="fig0604" class="figure">
+<img src="assets/osfd_0604.png" alt="Add Webhook on GitHub"/>
+<h6><span class="label">Figure 6-4. </span>Add webhook on GitHub</h6>
+</div></figure>
+</li>
+<li>
+<p>This will bring you to the page where you can enter the callback URL for the webhook. At this point you should copy and paste the <em>GitHub webhook URL</em> from the <em>Builds</em> page of the OpenShift web console into the <em>Payload URL</em> field, as shown in <a data-type="xref" href="#fig0605">Figure 6-5</a>.</p>
+
+<figure><div id="fig0605" class="figure">
+<img src="assets/osfd_0605.png" alt="Setting callback URL on GitHub"/>
+<h6><span class="label">Figure 6-5. </span>Setting callback URL on GitHub</h6>
+</div></figure>
+</li>
+<li>
+<p>Finally, you can select the <em>Add webhook</em> button.</p>
+</li>
+
+</ol>
+<div data-type="note" epub:type="note"><h6>Note</h6>
+<p>If your OpenShift instance has been set up with a self-signed SSL certificate for HTTPS connections, you will need to select <em>Disable SSL verification</em>. If this is not done, GitHub will first attempt to verify the SSL certificate when connecting, which for a self-signed certificate will fail.</p>
+</div>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Visibility of Your OpenShift Instance"><div class="sect2" id="idm140645241832448">
+<h2>Visibility of Your OpenShift Instance</h2>
+
+<p>At this point, whenever you push a code change to your GitHub repository for your application, the application will be automatically rebuilt and deployed. But we do though have to admit to a slight fib.</p>
+
+<p>For the webhook mechanism to work, your OpenShift instance must be visible from GitHub. In other words, the OpenShift instance must be hosted on a publicly visible URL.</p>
+
+<p>In this book, we use the all-in-one VM image running on your own machine. Although we use the <em>xip.io</em> service to give the impression that your application is accessible over the public Internet, it isn’t really and can only be accessed from your local system. This is because the IP address <code>10.2.2.2</code> is actually a private address.</p>
+
+<p>Sorry for this slight detour, but we wanted to explain all the required steps. That way when you are using an OpenShift instance that is visible to your source code repository service, you will still know how to set it up. If you want to be able to use this feature using the all-in-one VM, you will need to use a webhook proxy service such as <a href="http://www.ultrahook.com">Ultrahook</a>.</p>
+
+<p>Finally, although we have provided an example here for setting up GitHub, other source code repository services are also supported. You will just need to work out whether they make use of a webhook mechanism compatible with GitHub, or if they can be set up to generate a callback suitable for use with the <em>generic webhook URL</em> endpoint. Use whichever is appropriate for your service.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Scaling Your Application"><div class="sect1" id="idm140645241825600">
+<h1>Scaling Your Application</h1>
+
+<p>You are now in a position to make code changes to your application and have it automatically deployed. So far, we’ve been running with a single instance of your application. WildFly, upon which your application is based, can scale up to handle a high number of connections, but eventually you may hit a limit on the amount of CPU resources available to you if resource limits have been defined for a pod.</p>
+
+<p>In order to handle the greater load you will need to scale out the number of instances of your application. But don’t fear—OpenShift makes this an easy task. All you need to do is specify the number of replicas of your application that you want running. OpenShift will then work out the best place to run your application, as well as set up routing to load balance requests across as many copies as you have.</p>
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Scaling from the Web Console"><div class="sect2" id="idm140645241822832">
+<h2>Scaling from the Web Console</h2>
+
+<p>Scaling up the number of instances of your application running can be done from the <em>Overview</em> page for your application in the OpenShift web console (the page with those tell-tale up and down arrows we saw previously). Jump to that page and click the up arrow key twice to increase the replica count to 3, as shown in <a data-type="xref" href="#fig0606">Figure 6-6</a>.</p>
+
+<figure><div id="fig0606" class="figure">
+<img src="assets/osfd_0606.png" alt="Scaling Up"/>
+<h6><span class="label">Figure 6-6. </span>Scaling up</h6>
+</div></figure>
+
+<p>Once you do this, you will see the tracker for the number of instances running change as the target number is updated and the new instances are started. Once they are all running, you can reduce it again by selecting the down arrow.</p>
+
+<p>Decreasing the number of replicas down to zero is possible, but OpenShift will display a popup to confirm the action. This is because reducing the replica count to zero is the same as putting your application offline. If users try to connect, the OpenShift router will still accept the connection, but will return a HTTP 503 Service Unavailable error because there will be no copy of your application to route traffic to.</p>
+
+<p>If you were running a production application it would be better to put up a maintenance page indicating a planned outage, but if you needed to take a site down in a hurry over security concerns or some other reason, reducing the replica count to zero is an easy way to do it.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Applications Suitable for Scaling"><div class="sect2" id="idm140645241815568">
+<h2>Applications Suitable for Scaling</h2>
+
+<p>Although OpenShift will let you scale up any application you may have started, you do need to ensure that any application is safe to scale up to more than one instance.</p>
+
+<p>If your application is a web application that adheres to the <a href="http://12factor.net">12-factor methodology</a>, or what might also be called a cloud native application, then it would generally be safe to scale up.</p>
+
+<p>Applications that can’t usually be able to be scaled up include traditional relational databases backed by persistent storage. Databases cannot be scaled in the traditional way as only the primary instance of the database should have the ability to update data. Scaling can still be performed, but usually only on read-only instances of the database.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Automatic Scaling of an Application"><div class="sect2" id="idm140645241811824">
+<h2>Automatic Scaling of an Application</h2>
+
+<p>In the previous section, we manually scaled up the application from the web console, but OpenShift also supports automatic scaling. While we don’t cover auto scaling here, it works by defining upper and lower thresholds for CPU usage by pod. If the upper threshold is consistently exceeded by the running pods for your application, a new instance of your application will be started. When CPU usage drops back below the lower threshold, because your application is no longer working as hard, the number of instances will be scaled back again.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Deployment Strategies"><div class="sect1" id="idm140645241809664">
+<h1>Deployment Strategies</h1>
+
+<p>A deployment strategy defines the process by which a new version of your application is started and the existing instances shut down. By default OpenShift uses a rolling deployment strategy that enables you to perform an update with no apparent down time.</p>
+
+<p>But this default strategy isn’t suitable for all applications, so it is important to understand all the strategies available so you can be sure you are using the correct one.</p>
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Rolling Strategy"><div class="sect2" id="idm140645241807088">
+<h2>Rolling Strategy</h2>
+
+<p>A rolling deployment slowly replaces instances of the previous version of an application with instances of the new version of the application. A rolling deployment can wait for new pods to become ready via a readiness check before scaling down the old instances. Such a readiness check allows a rolling deployment to be aborted if a problem occurs.</p>
+
+<p>This is the default deployment strategy in OpenShift. Because it runs old and new instances of your application in parallel and balances traffic across them as new instances are deployed and old instances shut down, it enables an update with no down time.</p>
+
+<p>As you make code changes, when deploying the new version of your application you have to consider whether the new code will work with the existing data stored in a database. If old and new code require different versions of the database model, you should not use the rolling strategy.</p>
+
+<p>Also remember what we said previously about scaling up applications. For some applications it wouldn’t be safe to run more than one instance at any time, even if there had been no code changes.</p>
+
+<p>A rolling deployment is therefore not suitable where multiple instances of the same application cannot be run at the same time, or where instances of both old and new code cannot be run at the same time.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Recreate Strategy"><div class="sect2" id="idm140645241802352">
+<h2>Recreate Strategy</h2>
+
+<p>Rather than starting up new instances of your application while still running old instances, the recreate strategy first shuts down all running instances of the old application. Only after all the old instances of the application have been shut down will the instances using the new code be started.</p>
+
+<p>This strategy should be used where you cannot run more than one instance of your application at the same time, or where you cannot run instances using old and new code at the same time. If you were running a traditional relational database, you would typically use this deployment strategy. It should also be used for a front-end web application when you need to perform a database migration as part of the deployment. We will talk more about database migrations later when discussing lifecycle hooks.</p>
+
+<p>With this strategy, as all old instances of the application will be stopped before deploying instances with the new code, there may be a period of time when your application is not available. Unless you have taken steps to first route traffic to a temporary application that shows a maintenance page, users will see a HTTP 503 Service Unavailable error response.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Changing the Strategy"><div class="sect2" id="idm140645241798832">
+<h2>Changing the Strategy</h2>
+
+<p>At the time of writing, to change the deployment strategy we need to drop below the covers of what the OpenShift web console and command-line tools provide direct support for and edit the <em>Deployment Configuration</em> directly. To do this we are going to use the <code>oc edit</code> command:</p>
+
+<pre data-type="programlisting">oc edit dc/insults -o json</pre>
+
+<p>This command will start up an editor displaying the deployment configuration in JSON format. Find in the deployment configuration the “strategy” subsection located under the spec section. Replace this definition, substituting <code>"Recreate"</code> for the <code>"type"</code> attribute, as shown here:</p>
+
+<pre data-type="programlisting" data-code-language="json">    <code class="s2">"spec"</code><code class="err">:</code> <code class="p">{</code>
+        <code class="nt">"strategy"</code><code class="p">:</code> <code class="p">{</code>
+            <code class="nt">"type"</code><code class="p">:</code> <code class="s2">"Recreate"</code>
+        <code class="p">},</code></pre>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Implementing Custom Strategies"><div class="sect2" id="idm140645241798496">
+<h2>Implementing Custom Strategies</h2>
+
+<p>In addition to these two basic deployment strategies, various other more complicated strategies can be implemented including Blue-Green or A/B deployment strategies. These can be implemented by using multiple deployment configurations and reconfiguring what pods are associated with the exposed service for an application using labels. Custom strategies like this can be set up manually, or you can provide an image that embeds the logic for handling a deployment and that interacts with OpenShift via the REST API to make the changes in resources associated with the application.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Application Health Checks"><div class="sect1" id="idm140645241786800">
+<h1>Application Health Checks</h1>
+
+<p>Your application is starting up okay, but how can you monitor it to know whether it is actually ready to handle requests? Even if it starts out handling requests okay, how can you know whether it fails at some point and stops handling new requests? This is where high-level application health checks come in.</p>
+
+<p>Two primary types of health checks are provided: a readiness probe and a liveness probe.</p>
+
+<p>The readiness probe is used to determine if a new instance of your application is running properly before reconfiguring the router to send traffic to it, while a liveness probe is run periodically once traffic has been switched to an instance of your application to ensure it is still behaving correctly. If the liveness probe fails, OpenShift will automatically shut down that instance of your application and replace it with a new one.</p>
+
+<p>Both types of probes can be implemented three different ways:</p>
+<dl>
+<dt>HTTP check</dt>
+<dd>
+<p>The container is considered healthy if a HTTP request against a defined URL returns with a HTTP 200 or 399 status code.</p>
+</dd>
+<dt>Container execution check</dt>
+<dd>
+<p>The container is considered healthy if a defined command run inside of the container returns with a <em>0</em> exit status.</p>
+</dd>
+<dt>TCP socket check</dt>
+<dd>
+<p>The container is considered healthy if a connection can be established to the exposed port of the application.</p>
+</dd>
+</dl>
+
+<p>You can check the deployment logs for details of any errors in the event that a probe fails.</p>
+
+<p>Try adding an HTTP type readiness probe check to the <em>Insults</em> application using the command:</p>
+
+<pre data-type="programlisting">$ oc set probe dc/insults --readiness --get-url=http://:8080/healthz
+deploymentconfig "insults" updated</pre>
+
+<p>Because a configuration change was made, a new deployment will be triggered immediately. On the <em>Overview</em> page, you will see the new deployment being run, displayed above the existing one and marked as <em>In Progress</em>, as shown in <a data-type="xref" href="#fig0607">Figure 6-7</a>.</p>
+
+<figure><div id="fig0607" class="figure">
+<img src="assets/osfd_0607.png" alt="Readiness Probe"/>
+<h6><span class="label">Figure 6-7. </span>Readiness probe</h6>
+</div></figure>
+
+<p>The new deployment will stay in this state for a period, eventually moving to a failed state, because although we added a readiness probe, the application doesn’t provide one at that URL. As a result the application always returns an HTTP status code of 404.</p>
+
+<p>But change the HTTP URL for the readiness probe to be the root URL for the site:</p>
+
+<pre data-type="programlisting">$ oc set probe dc/insults --readiness --get-url=http://:8080/
+deploymentconfig "insults" updated</pre>
+
+<p>and you will see the failed deployment removed and yet another new deployment performed. Because this time the readiness probe uses a valid URL that returns a 200 HTTP status code, it will be seen as ready, with traffic switched to the new instance and the old instances shut down.</p>
+
+<p>Readiness probes can be used to check whether a new instance of your application is running okay before switching traffic to it, thereby reducing the chance that your new application is broken causing your site to be unavailable.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Deployment Lifecycle Hooks"><div class="sect1" id="idm140645241786272">
+<h1>Deployment Lifecycle Hooks</h1>
+
+<p>Health checks are great for determining if your application is running okay. But what if you require special steps as part of your deployment? This is what lifecycle hooks are for.</p>
+
+<p>An example of a step you might run would be to set a database flag to cause a site maintenance page to be put up by your web application at the start of the deployment, with it removed once the deployment is complete. You could also use an appropriate lifecycle hook to run a database migration, although keep in mind what we said earlier about the different types of deployment strategies and find the one most suitable for your project.</p>
+
+<p>There are three different types of lifecycle hooks available:</p>
+<dl>
+<dt>Pre</dt>
+<dd>
+<p>This hook is executed before any new instance of your application for a deployment is started and also before any old instances have been shutdown.</p>
+</dd>
+<dt>Mid</dt>
+<dd>
+<p>When using the <em>Recreate</em> deployment strategy, this is executed after all old instances of your application have been shut down, but before any new instances of your application have been started. This hook is usually used where you can safely run any database migrations.</p>
+</dd>
+<dt>Post</dt>
+<dd>
+<p>This is executed after all instances of your application for a deployment have been started and old instances have been shut down.</p>
+</dd>
+</dl>
+
+<p>Both of the applications we have deployed so far use the <em>rolling</em> deployment strategy. Let’s configure the <em>Insults</em> application with both a <em>pre</em> and <em>post</em> hook so you can see when a new deployment is starting and when it finishes.</p>
+
+<p>As before when updating the deployment strategy, to set a deployment lifecycle hook we use the <code>oc edit</code> command.</p>
+
+<p>Run this command again:</p>
+
+<pre data-type="programlisting">oc edit dc/insults -o json</pre>
+
+<p>From the editor find the “strategy” subsection under the deployment configuration <code>"spec"</code> section. We are going to restore this to a rolling deployment strategy. To that we are then going to add <code>"pre"</code> and <code>"post"</code> sections under <code>"rollingParams"</code> to yield:</p>
+
+<pre data-type="programlisting" data-code-language="json">    <code class="s2">"spec"</code><code class="err">:</code> <code class="p">{</code>
+        <code class="nt">"strategy"</code><code class="p">:</code> <code class="p">{</code>
+            <code class="nt">"type"</code><code class="p">:</code> <code class="s2">"Rolling"</code><code class="p">,</code>
+            <code class="nt">"rollingParams"</code><code class="p">:</code> <code class="p">{</code>
+                <code class="nt">"pre"</code><code class="p">:</code> <code class="p">{</code>
+                    <code class="nt">"failurePolicy"</code><code class="p">:</code> <code class="s2">"Abort"</code><code class="p">,</code>
+                    <code class="nt">"execNewPod"</code><code class="p">:</code> <code class="p">{</code>
+                        <code class="nt">"command"</code><code class="p">:</code> <code class="p">[</code>
+                            <code class="s2">"/usr/bin/echo"</code><code class="p">,</code>
+                            <code class="s2">"RUNNING PRE HOOK"</code>
+                        <code class="p">],</code>
+                        <code class="nt">"containerName"</code><code class="p">:</code> <code class="s2">"insults"</code>
+                    <code class="p">}</code>
+                <code class="p">},</code>
+                <code class="nt">"post"</code><code class="p">:</code> <code class="p">{</code>
+                    <code class="nt">"failurePolicy"</code><code class="p">:</code> <code class="s2">"Abort"</code><code class="p">,</code>
+                    <code class="nt">"execNewPod"</code><code class="p">:</code> <code class="p">{</code>
+                        <code class="nt">"command"</code><code class="p">:</code> <code class="p">[</code>
+                            <code class="s2">"/usr/bin/echo"</code><code class="p">,</code>
+                            <code class="s2">"RUNNING POST HOOK"</code>
+                        <code class="p">],</code>
+                        <code class="nt">"containerName"</code><code class="p">:</code> <code class="s2">"insults"</code>
+                    <code class="p">}</code>
+                <code class="p">}</code>
+            <code class="p">}</code>
+        <code class="p">},</code></pre>
+
+<p>Adding lifecycle hooks will not automatically cause a redeployment, so trigger a new deployment by running the <code>oc deploy</code> command:</p>
+
+<pre data-type="programlisting">$ oc deploy insults --latest
+Started deployment #10</pre>
+
+<p>This time when deployment occurs, a transient instance of the <code>insults</code> container for your application will be started and the command defined by the lifecycle hook run.</p>
+
+<p>You can watch the progress as the containers are started and stopped using the <code>oc get pods</code> command:</p>
+
+<pre data-type="programlisting">$ oc get pods --watch
+insults-10-deploy   0/1       Pending   0         3h
+insults-10-deploy   0/1       Pending   0         3h
+insults-10-deploy   0/1       ContainerCreating   0         3h
+insults-10-hook-pre   0/1       Pending   0         3h
+insults-10-hook-pre   0/1       Pending   0         3h
+insults-10-hook-pre   0/1       ContainerCreating   0         3h
+insults-10-deploy   1/1       Running   0         3h
+insults-10-hook-pre   0/1       Completed   0         3h
+insults-10-rbo58   0/1       Pending   0         3h
+insults-10-rbo58   0/1       Pending   0         3h
+insults-10-rbo58   0/1       ContainerCreating   0         3h
+insults-10-rbo58   0/1       Running   0         3h
+insults-10-rbo58   1/1       Running   0         3h
+insults-9-sc3fz   1/1       Terminating   0         3h
+insults-9-sc3fz   1/1       Terminating   0         3h
+insults-10-hook-post   0/1       Pending   0         3h
+insults-10-hook-post   0/1       Pending   0         3h
+insults-10-hook-post   0/1       ContainerCreating   0         3h
+insults-10-hook-post   0/1       Completed   0         3h
+insults-10-deploy   0/1       Completed   0         3h
+insults-10-deploy   0/1       Completed   0         3h
+insults-10-hook-post   0/1       Completed   0         3h
+insults-10-hook-pre   0/1       Completed   0         3h
+insults-9-sc3fz   0/1       Terminating   0         3h
+insults-9-sc3fz   0/1       Terminating   0         3h</pre>
+
+<p>The containers in which the lifecycle hooks are run are short-lived and are automatically cleaned up. But if you are quick enough you should be able to capture the messages logged from the corresponding pod using the <code>oc logs</code> command or from the OpenShift web console. We will talk about the <code>oc logs</code> command and how to use it in a later chapter.</p>
+
+<p>Try experimenting with the <em>post</em> hook, replacing the command with <em>/usr/bin/false</em>. This will cause the overall deployment to fail and everything will be automatically rolled back to the previous successful deployment.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Application Rollback"><div class="sect1" id="idm140645241722112">
+<h1>Application Rollback</h1>
+
+<p>When using the readiness process with a lifecycle hook, if the check or action fails, deployment will not proceed and everything will be returned to the previous state.</p>
+
+<p>If deployment was successful, but you later find the application is failing in some way due to the latest code changes, you will likely need a way to roll back to the last known good version of your application.</p>
+
+<p>To get a list of all the deployments that have been made, you can use the following:</p>
+
+<pre data-type="programlisting">oc describe dc/insults</pre>
+
+<p>Look for the list of deployments and find the last deployment before the current one, which is marked as complete. You can roll back to this version using the <code>oc rollback</code> command:</p>
+
+<pre data-type="programlisting"> $ oc rollback insults --to-version=10
+#12 rolled back to insults-10
+Warning: the following images triggers were disabled: insults:latest
+  You can re-enable them with: oc deploy insults --enable-triggers -n insultapp</pre>
+
+<p>As noted in the command output, rolling back to a prior version will disable image change and configuration change triggers. After addressing any issues and running a new build, you will need to re-enable the triggers when starting the next deployment.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Summary"><div class="sect1" id="idm140645241625904">
+<h1>Summary</h1>
+
+<p>In this chapter, we introduced you to scaling and deployments. Many chapters could be written on these topics alone, but we wanted to keep things as simple as possible. You should have at least got a glimpse of the power that is available to you through these features, as well as the <code>oc</code> command-line tool. We will look more at the <code>oc</code> command-line tool and how it can be used to manage your application later on.</p>
+</div></section>
+
+
+
+
+
+
+
+</div></section></body></html>

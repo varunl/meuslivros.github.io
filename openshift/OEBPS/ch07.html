@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html><html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml"><head><title>Using Application Templates</title><link rel="stylesheet" type="text/css" href="epub.css"/></head><body data-type="book"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 7. Using Application Templates"><div class="chapter" id="chapter_applicationtemplates">
+<h1><span class="label">Chapter 7. </span>Using Application Templates</h1>
+
+
+<p>One of the first things a developer does when starting a new job or when deciding to work on a project already in progress is to spend a good deal of time just getting their environment set up and configured.  This can take hours, days, or even a week depending on the complexity of the project before they are able to run a full build and deploy of the application assets. But wouldn’t it be nice if a new developer could get a working environment up in a matter of minutes?  This was our goal with application templates on the OpenShift platform, and we have made some great progress.  In this chapter will we explain what an application template is and how to use it.</p>
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="What Is an Application Template?"><div class="sect1" id="idm140645241620704">
+<h1>What Is an Application Template?</h1>
+
+<p>The official OpenShift 3 <a href="http://red.ht/1NVyUGr">documentation</a> states:</p>
+<blockquote>
+<p>A template describes a set of objects that can be parameterized and processed to produce a list of objects for creation by OpenShift. The objects to create can include anything that users have permission to create within a project, for example services, build configurations, and deployment configurations. A template may also define a set of labels to apply to every object defined in the template.</p></blockquote>
+
+<p>This means that typically a template will include:</p>
+
+<ul>
+<li>
+<p>A set of resources that is created as part of “creating/deploying” the template.</p>
+</li>
+<li>
+<p>A set of values for the parameters defined in the template.</p>
+</li>
+<li>
+<p>A matching label attached to each of the generated resources that provides a convenient way to indicate the resources are connected.</p>
+</li>
+</ul>
+
+<p>A template will be defined in JSON or YAML format, and will be loaded into OpenShift for user instantiation, also known as application creation.</p>
+
+<p>Templates can have global visibility scope (visible for every OpenShift project) or project visibility scope (visible only for a specific project).</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Benefits of Using Templates"><div class="sect1" id="idm140645241612352">
+<h1>Benefits of Using Templates</h1>
+
+<p>A template provides developers with an easy way to create all the necessary OpenShift resources for their application to work with minimal effort. This allows you to quickly deploy an application without having to understand all the underlying technology of the OpenShift 3 platform.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Using Our First Application Template"><div class="sect1" id="idm140645241610560">
+<h1>Using Our First Application Template</h1>
+
+<p>Now that we understand what an application template is and how it can beneficial to a developer, let’s try using one.  The application template we will be using will create a full Java EE application and a MongoDB database that will perform geospatial queries to update a map via REST endpoints.  Sounds pretty complicated, right?  Let’s get this application stack up and running with just a few commands!</p>
+
+<p>The first thing we want to do is create a new project to hold our application.  Issue the following command:</p>
+
+<pre data-type="programlisting">oc new-project parksapp --display-name="Baseball Parks Application Stack"</pre>
+
+<p>Once you have a new project, you can add the template to the project namespace with the following command:</p>
+
+<pre data-type="programlisting">oc create -f https://raw.githubusercontent.com/gshipley/openshift3mlbparks/
+master/mlbparks-template.json</pre>
+
+<p>This will make the template available only for the namespace that it was loaded to, in this case the project.  If you want a template to be available to any user on the system, add it to the <em>openshift</em> namespace as the cluster administrator.</p>
+
+<p>You can verify that the template was added by browsing to your project in the web console. You should see it displayed an as available option to deploy as shown in <a data-type="xref" href="#fig0701">Figure 7-1</a>.</p>
+
+<figure><div id="fig0701" class="figure">
+<img src="assets/osfd_0701.png" alt="Templates"/>
+<h6><span class="label">Figure 7-1. </span>Templates</h6>
+</div></figure>
+
+<p>To deploy this application stack as running containers, simply click the template and then click the <em>Create</em> button.  Your entire stack will be up and running in short order.  Pretty awesome stuff, huh?</p>
+
+<p>If you wanted to create an application based on the template you loaded from the command line, you would simply enter the following command:</p>
+
+<pre data-type="programlisting">oc new-app mlbparks --name="myparks"</pre>
+
+<p>There are many templates available today including ones for application stacks such as Wordpress as well as Node.js coupled with MongoDB.</p>
+
+<p>We spoke briefly about namespaces as it relates to application templates.  To show the available template for your current project, you can enter:</p>
+
+<pre data-type="programlisting">oc get templates</pre>
+
+<p>To show templates in another namespace you have permission to view, you can provide the <em>-n</em> switch.  For example, the list of templates available to anyone on the system that have been loaded by the cluster administrator, issue the following command:</p>
+
+<pre data-type="programlisting">oc get templates -n openshift</pre>
+
+<p class="pagebreak-before">At the time of writing, the following templates are loaded by default in the <em>all-in-one</em> image we are using:</p>
+<table style="width: 100%">
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p>datagrid65-basic</p></td>
+<td><p>Application template for JDG 6.5 applications.</p></td>
+</tr>
+<tr>
+<td><p>datagrid65-https</p></td>
+<td><p>Application template for JDG 6.5 applications.</p></td>
+</tr>
+<tr>
+<td><p>datagrid65-mysql</p></td>
+<td><p>Application template for JDG 6.5 and MySQL applications.</p></td>
+</tr>
+<tr>
+<td><p>datagrid65-mysql-persistent</p></td>
+<td><p>Application template for JDG 6.5 and MySQL applications with persistent storage.</p></td>
+</tr>
+<tr>
+<td><p>datagrid65-postgresql</p></td>
+<td><p>Application template for JDG 6.5 and PostgreSQL applications.</p></td>
+</tr>
+<tr>
+<td><p>datagrid65-postgresql-persistent</p></td>
+<td><p>Application template for JDG 6.5 and PostgreSQL applications with persistent storage.</p></td>
+</tr>
+<tr>
+<td><p>decisionserver62-amq-s2i</p></td>
+<td><p>Application template for BRMS Realtime Decision Server 6 A-MQ applications.</p></td>
+</tr>
+<tr>
+<td><p>decisionserver62-basic-s2i</p></td>
+<td><p>Application template for BRMS Realtime Decision Server 6 applications.</p></td>
+</tr>
+<tr>
+<td><p>decisionserver62-https-s2i</p></td>
+<td><p>Application template for BRMS Realtime Decision Server 6 HTTPS applications.</p></td>
+</tr>
+<tr>
+<td><p>eap64-amq-persistent-s2i</p></td>
+<td><p>Application template for EAP 6 A-MQ applications with persistent storage.</p></td>
+</tr>
+<tr>
+<td><p>eap64-amq-s2i</p></td>
+<td><p>Application template for EAP 6 A-MQ applications built using S2I.</p></td>
+</tr>
+<tr>
+<td><p>eap64-basic-s2i</p></td>
+<td><p>Application template for EAP 6 applications built using S2I.</p></td>
+</tr>
+<tr>
+<td><p>eap64-https-s2i</p></td>
+<td><p>Application template for EAP 6 applications built using S2I.</p></td>
+</tr>
+<tr>
+<td><p>eap64-mongodb-persistent-s2i</p></td>
+<td><p>Application template for EAP 6 MongDB applications with persistent storage.</p></td>
+</tr>
+<tr>
+<td><p>eap64-mongodb-s2i</p></td>
+<td><p>Application template for EAP 6 MongDB applications built using S2I.</p></td>
+</tr>
+<tr>
+<td><p>eap64-mysql-persistent-s2i</p></td>
+<td><p>Application template for EAP 6 MySQL applications with persistent storage.</p></td>
+</tr>
+<tr>
+<td><p>eap64-mysql-s2i</p></td>
+<td><p>Application template for EAP 6 MySQL applications built using S2I.</p></td>
+</tr>
+<tr>
+<td><p>eap64-postgresql-persistent-s2i</p></td>
+<td><p>Application template for EAP 6 PostgreSQL applications with persistent storage.</p></td>
+</tr>
+<tr>
+<td><p>eap64-postgresql-s2i</p></td>
+<td><p>Application template for EAP 6 PostgreSQL applications built using S2I.</p></td>
+</tr>
+<tr>
+<td><p>jenkins-ephemeral</p></td>
+<td><p>Jenkins service, without persistent storage.</p></td>
+</tr>
+<tr>
+<td><p>jenkins-persistent</p></td>
+<td><p>Jenkins service, with persistent storage.</p></td>
+</tr>
+<tr>
+<td><p>mongodb-ephemeral</p></td>
+<td><p>MongoDB database service, without persistent storage.</p></td>
+</tr>
+<tr>
+<td><p>mongodb-persistent</p></td>
+<td><p>MongoDB database service, with persistent storage.</p></td>
+</tr>
+<tr>
+<td><p>mysql-ephemeral</p></td>
+<td><p>MySQL database service, without persistent storage.</p></td>
+</tr>
+<tr>
+<td><p>mysql-persistent</p></td>
+<td><p>MySQL database service, with persistent storage.</p></td>
+</tr>
+<tr>
+<td><p>nodejs-example</p></td>
+<td><p>An example Node.js application with no database.</p></td>
+</tr>
+<tr>
+<td><p>nodejs-mongodb-example</p></td>
+<td><p>An example Node.js application with a MongoDB database.</p></td>
+</tr>
+<tr>
+<td><p>postgresql-ephemeral</p></td>
+<td><p>PostgreSQL database service, without persistent storage.</p></td>
+</tr>
+<tr>
+<td><p>postgresql-persistent</p></td>
+<td><p>PostgreSQL database service, with persistent storage.</p></td>
+</tr>
+</tbody>
+</table>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Creating Your Own Templates"><div class="sect1" id="idm140645241609936">
+<h1>Creating Your Own Templates</h1>
+
+<p>As you have probably discovered by now, creating and using application templates is a very powerful tool to have at your disposal when developing software.  The OpenShift team has put in a tremendous amount of work to ensure that application templates exist and are usable today.  The team is continually working on improving the creation flow so instead of trying to detail this here we refer you to the official OpenShift documentation to ensure you are using the latest tools to create them. But if you just want to dive in head first, try the following command while inside of the project you want to create a template for:</p>
+
+<pre data-type="programlisting">oc export all --as-template=myapplication -o json &gt; mytemplate.json</pre>
+
+<p>That should give you some JSON to get started with.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Summary"><div class="sect1" id="idm140645241539712">
+<h1>Summary</h1>
+
+<p>In this chapter, we learned about application templates and how to use them. We created a full Java EE stack with MongoDB using an application template.  We then covered the available application templates provided out of the box with the <em>all-in-one</em> image. In the next chapter, we’ll look at how you can determine what your application is doing when running and how to debug issues.</p>
+</div></section>
+
+
+
+
+
+
+
+</div></section></body></html>

@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html><html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml"><head><title>Adding Dependencies and a Database</title><link rel="stylesheet" type="text/css" href="epub.css"/></head><body data-type="book"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 5. Adding Dependencies and a Database"><div class="chapter" id="chapter_addingdependencies">
+<h1><span class="label">Chapter 5. </span>Adding Dependencies and a Database</h1>
+
+
+<p>In the last chapter, we deployed a very simple <em>Hello, world</em> application.  In this chapter we are going to create a new application that contains a more real-world example. In the application we will be building here the user will be insulted with a friendly message.  What could be more fun than that?  How about a Elizabethan insult chosen randomly? These Shakespearean insult words have been floating around the Internet since before dial-up. Let’s put them to good use complete with a database backend and a HTTP-based API.  The insult consists of two adjectives and a noun and will look something like this:</p>
+
+<pre data-type="programlisting">Thou art a Mewling Motley-minded Vassal!</pre>
+
+<p>Let’s get started.</p>
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Creating the Base Application"><div class="sect1" id="idm140645242771040">
+<h1>Creating the Base Application</h1>
+
+<p>We are going to start simple by deploying a static version of the insult application that simply randomly chooses an insult and then displays it on a JSP page.  In a previous chapter, you learned how to fork an application on GitHub. We are going to following those steps so we have a starting point for this application that we will then modify.</p>
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Forking the Repository and Deploying the Application"><div class="sect2" id="idm140645242769216">
+<h2>Forking the Repository and Deploying the Application</h2>
+
+<p>Point your favorite browser to the project’s <a href="https://github.com/gshipley/book-insultapp">GitHub page</a>.</p>
+
+<p>Once you have the repository open in your browser, fork the repository by clicking on the <em>Fork</em> button on the top righthand side of the screen.  This will create a copy of the repository that you can modify.</p>
+
+<p>After the project has been <em>forked</em> to your account, the next step is to create a new project to hold our application code and then deploy it using the WildFly application server.  Let’s start by creating a new project called <em>insultapp</em> using the following command:</p>
+
+<pre data-type="programlisting">oc new-project insultapp --display-name="Elizabethan Insult Application"</pre>
+
+<p>This command will create a new project for us called <em>insultapp</em> and will also be displayed in the WebUi with the display name we provided as shown <a data-type="xref" href="#fig0501">Figure 5-1</a>.</p>
+
+<figure><div id="fig0501" class="figure">
+<img src="assets/osfd_0501.png" alt="Project List"/>
+<h6><span class="label">Figure 5-1. </span>Project list</h6>
+</div></figure>
+
+<p>The next thing we need to do is create a deployment that contains our application code.  We can do this with the <em>oc new-app</em> command while specifying the image we want to use as well as the repository we want to use for the build.</p>
+
+<pre data-type="programlisting">oc new-app wildfly:latest~https://github.com/gshipley/book-insultapp.git
+--name='insults'</pre>
+
+<p>It is important to remember to use the repository URL for the version you forked and not the one shown in the example above.</p>
+
+<p>You may be wondering what the tilde character in the <em>oc new-app</em> command means. When creating containers on the OpenShift platform it means you want to use an existing source code repository and take advantage of the S2I build process.  After entering the preceding command, you will see the following output, which indicates the application deployment process has started:</p>
+
+<pre data-type="programlisting">--&gt; Found image 330a039 (5 weeks old) in image stream "wildfly in project
+    openshift" under tag :latest for "wildfly:latest"
+    * A source build using source code from
+    https://github.com/gshipley/book-insultapp.git will be
+    created
+      * The resulting image will be pushed to image stream
+      "insults:latest"
+    * This image will be deployed in deployment config "insults"
+    * Port 8080/tcp will be load balanced by service "insults"
+--&gt; Creating resources with label app=insults ...
+    ImageStream "insults" created
+    BuildConfig "insults" created
+    DeploymentConfig "insults" created
+    Service "insults" created
+--&gt; Success
+    Build scheduled for "insults" - use the logs command to track
+    its progress.
+    Run 'oc status' to view your app.</pre>
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect3" data-pdf-bookmark="Testing the application"><div class="sect3" id="idm140645242754496">
+<h3>Testing the application</h3>
+
+<p>Once the Insult application has been deployed, the last thing we need to do is expose a route to the application and then verify that it is indeed serving up insults.  To expose a route, issue the following command:</p>
+
+<pre data-type="programlisting">oc expose service insults</pre>
+<div data-type="note" epub:type="note"><h6>Note</h6>
+<p>One of the advantages of creating and deploying applications from the web console is that a route is automatically created for you.  When deploying new containers while using the <em>oc</em> tool, you will need to expose the service manually.</p>
+</div>
+
+<p>Finally, we can verify that the application is working by visiting it via the exposed URL, which can be found in the web console or by running the following command:</p>
+
+<pre data-type="programlisting">oc get routes</pre>
+
+<p>The output will look like the following:</p>
+
+<pre data-type="programlisting">NAME    HOST/PORT                                PATH    SERVICE   LABELS
+insults insults-insultapp.apps.10.2.2.2.xip.io           insults   app=insults</pre>
+
+<p>What are you waiting for?  Fire up your browser and get your first insult.</p>
+
+<p>The code that generates the insults is pretty straightforward in that it just randomly chooses two adjectives and a noun from a multidimensional string array.  This is shown in the following code, which can be found in the <em>InsultGenerator.java</em> file under the <em>/src/main/java/org/openshift</em> directory:</p>
+
+<pre data-type="programlisting" data-code-language="java"><code class="kn">package</code> <code class="n">org</code><code class="o">.</code><code class="na">openshift</code><code class="o">;</code>
+
+<code class="kn">import</code> <code class="nn">java.util.Random</code><code class="o">;</code>
+
+<code class="kd">public</code> <code class="kd">class</code> <code class="nc">InsultGenerator</code> <code class="o">{</code>
+	<code class="kd">public</code> <code class="n">String</code> <code class="nf">generateInsult</code><code class="o">()</code> <code class="o">{</code>
+		<code class="n">String</code> <code class="n">words</code><code class="o">[][]</code> <code class="o">=</code> <code class="o">{{</code><code class="s">"Artless"</code><code class="o">,</code> <code class="s">"Bawdy"</code><code class="o">,</code> <code class="s">"Beslubbering"</code><code class="o">},</code>
+		<code class="o">{</code><code class="s">"Base-court"</code><code class="o">,</code> <code class="s">"Bat-fowling"</code><code class="o">,</code> <code class="s">"Beef-witted"</code><code class="o">},</code> <code class="o">{</code><code class="s">"Apple-john"</code><code class="o">,</code>
+		<code class="s">"Baggage"</code><code class="o">,</code> <code class="s">"Barnacle"</code><code class="o">}};</code>
+		<code class="n">String</code> <code class="n">vowels</code> <code class="o">=</code> <code class="s">"AEIOU"</code><code class="o">;</code>
+		<code class="n">String</code> <code class="n">article</code> <code class="o">=</code> <code class="s">"an"</code><code class="o">;</code>
+		<code class="n">String</code> <code class="n">firstAdjective</code> <code class="o">=</code> <code class="n">words</code><code class="o">[</code><code class="mi">0</code><code class="o">][</code>
+		<code class="k">new</code> <code class="nf">Random</code><code class="o">().</code><code class="na">nextInt</code><code class="o">(</code><code class="n">words</code><code class="o">[</code><code class="mi">0</code><code class="o">].</code><code class="na">length</code><code class="o">)];</code>
+		<code class="n">String</code> <code class="n">secondAdjective</code> <code class="o">=</code> <code class="n">words</code><code class="o">[</code><code class="mi">1</code><code class="o">][</code>
+		<code class="k">new</code> <code class="nf">Random</code><code class="o">().</code><code class="na">nextInt</code><code class="o">(</code><code class="n">words</code><code class="o">[</code><code class="mi">1</code><code class="o">].</code><code class="na">length</code><code class="o">)];</code>
+		<code class="n">String</code> <code class="n">noun</code> <code class="o">=</code> <code class="n">words</code><code class="o">[</code><code class="mi">2</code><code class="o">][</code><code class="k">new</code> <code class="n">Random</code><code class="o">().</code><code class="na">nextInt</code><code class="o">(</code><code class="n">words</code><code class="o">[</code><code class="mi">2</code><code class="o">].</code><code class="na">length</code><code class="o">)];</code>
+		<code class="k">if</code> <code class="o">(</code><code class="n">vowels</code><code class="o">.</code><code class="na">indexOf</code><code class="o">(</code><code class="n">firstAdjective</code><code class="o">.</code><code class="na">charAt</code><code class="o">(</code><code class="mi">0</code><code class="o">))</code> <code class="o">==</code> <code class="o">-</code><code class="mi">1</code><code class="o">)</code> <code class="o">{</code>
+			<code class="n">article</code> <code class="o">=</code> <code class="s">"a"</code><code class="o">;</code>
+		<code class="o">}</code>
+		<code class="k">return</code> <code class="n">String</code><code class="o">.</code><code class="na">format</code><code class="o">(</code><code class="s">"Thou art %s %s %s %s!"</code><code class="o">,</code> <code class="n">article</code><code class="o">,</code>
+		<code class="n">firstAdjective</code><code class="o">,</code> <code class="n">secondAdjective</code><code class="o">,</code> <code class="n">noun</code><code class="o">);</code>
+	<code class="o">}</code>
+<code class="o">}</code></pre>
+
+<p>While the preceding code certainly works, we’d rather generate the insult using a longer list of words that is easily updated without having to change application code.  For this reason, we are going to add the Postgres database to our application and then import a schema that contains more words to choose from.</p>
+
+<p>The first thing we need to do is add our database to our project using the web console.  Open up your browser and go to the <em>Elizabethan Insult Application</em> project we created.  Once you are on the Overview page, click the <em>Add to project</em> button at the top of the screen as shown in <a data-type="xref" href="#fig0502">Figure 5-2</a>.</p>
+
+<figure><div id="fig0502" class="figure">
+<img src="assets/osfd_0502.png" alt="Add to Project"/>
+<h6><span class="label">Figure 5-2. </span>Add to project</h6>
+</div></figure>
+
+<p>On the next page that is displayed, type <strong><code>postgres</code></strong> in the filter box and select the <em>postgresql-persistent</em> image (see <a data-type="xref" href="#fig0503">Figure 5-3</a>).</p>
+
+<figure><div id="fig0503" class="figure">
+<img src="assets/osfd_0503.png" alt="Database Selection"/>
+<h6><span class="label">Figure 5-3. </span>Database selection</h6>
+</div></figure>
+
+<p>On the following page, you can specify configuration settings for your database such as the amount of disk storage to use, username and password values, and the default database name.  For simplicity sake we are going to use the following values:</p>
+<table style="width: 100%">
+
+<thead>
+<tr>
+<th>Field Name</th>
+<th>What to enter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p>Memory limit</p></td>
+<td><p><strong><code>512Mi</code></strong></p></td>
+<td><p>Since this is a small database, we only need 512 megabytes of memory.</p></td>
+</tr>
+<tr>
+<td><p>Database service name</p></td>
+<td><p><strong><code>postgresql</code></strong></p></td>
+<td><p>The name of the resulting OpenShift service.</p></td>
+</tr>
+<tr>
+<td><p>PostgreSQL user</p></td>
+<td><p><strong><code>insult</code></strong></p></td>
+<td><p>The username that has permission to use the database. If empty, it will be auto-generated.</p></td>
+</tr>
+<tr>
+<td><p>PostgreSQL password</p></td>
+<td><p><strong><code>insult</code></strong></p></td>
+<td><p>The password for the user. If empty, it will be auto-generated.</p></td>
+</tr>
+<tr>
+<td><p>PostgreSQL database name</p></td>
+<td><p><strong><code>insults</code></strong></p></td>
+<td><p>The name of the initial database that will be created.</p></td>
+</tr>
+</tbody>
+</table>
+
+<p>Once you have provided the values in the above table, click the <em>Create</em> button to deploy a pod running your PostgreSQL container.  Once the database has been created, your project overview page should list both your application code pod and your database pod, as shown in <a data-type="xref" href="#fig0504">Figure 5-4</a>.</p>
+
+<figure><div id="fig0504" class="figure">
+<img src="assets/osfd_0504.png" alt="Project Overview"/>
+<h6><span class="label">Figure 5-4. </span>Project overview</h6>
+</div></figure>
+<div data-type="note" epub:type="note"><h6>Note</h6>
+<p>One of the great features of the OpenShift platform is the ability to provide persistent volumes for your running pods.  This ensures that data in your database doesn’t suddenly disappear if the container is restarted.  Another important aspect of persistent volumes is the ability to run both stateful and stateless applications on the platform.  This is sometimes referred to as mode 1 and mode 2 applications as well as legacy and 12-factor applications.</p>
+</div>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect3" data-pdf-bookmark="Linking the database to the application"><div class="sect3" id="idm140645242753552">
+<h3>Linking the database to the application</h3>
+
+<p>When we added the database, the platform stored all of the information needed to connect to the database as system environment variables initially only accessible to the database pods.  The following variables were created in this example:</p>
+
+<pre data-type="programlisting">POSTGRESQL_PORT_5432_TCP_ADDR=172.30.76.249
+POSTGRESQL_PORT=tcp://172.30.76.249:5432
+POSTGRESQL_SERVICE_PORT_POSTGRESQL=5432
+POSTGRESQL_PORT_5432_TCP=tcp://172.30.76.249:5432
+POSTGRESQL_SERVICE_HOST=172.30.76.249
+POSTGRESQL_DATABASE=insults
+POSTGRESQL_PASSWORD=insult
+POSTGRESQL_VERSION=9.4
+POSTGRESQL_PORT_5432_TCP_PORT=5432
+POSTGRESQL_SERVICE_PORT=5432
+POSTGRESQL_PORT_5432_TCP_PROTO=tcp
+POSTGRESQL_USER=insult</pre>
+
+<p>In order to be able to communicate to the database using these environment variables, we need to add them to <code>DeploymentConfig</code> for our insult application.  Adding the environment variables to <code>DeploymentConfig</code> instead of directly in the running pod ensures that any new pod will be started with the variables it needs to connect.  You could certainly just hard code these values in your application code but that is not a best practice! This can be done using the following command:</p>
+
+<pre data-type="programlisting">oc env dc insults -e POSTGRESQL_USER=insult  -e PGPASSWORD=insult
+POSTGRESQL_DATABASE=insults</pre>
+<div data-type="note" epub:type="note"><h6>Note</h6>
+<p>For the password you may notice that we used <em>PGPASSWORD</em> instead of <em>POSTGRESQL_USER_PASSWORD</em>.  This is because the PostgreSQL database expects the password in this variable so you don’t have to provide it when running <em>psql</em> on the command line, which we will just in just a few moments.</p>
+</div>
+
+<p>After you enter the above command, the “truth” of the application state will have changed, meaning that for a deployment to be considered valid, the running pod must contain those environment variables. This means a new rolling deployment will occur and your existing pod will be replaced with a new one.  Pretty awesome stuff!  You could have just as easily modified <code>DeploymentConfig</code> using the web console by editing the <em>.yaml</em> file directly.  In order to modify <em>.yaml</em> files in the web console, browse to the deployment section and then click <em>Edit YAML</em> under the actions button.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect3" data-pdf-bookmark="Importing the database schema"><div class="sect3" id="idm140645242552128">
+<h3>Importing the database schema</h3>
+
+<p>At this point we have our application code deployed and a database running, but the database is empty so we need to fix that!  In the source code repository for the application I have provided a file called <em>insults.sql</em> that contains all of the SQL needed to create our schema.  An excerpt of the SQL is as follows:</p>
+
+<pre data-type="programlisting">DROP TABLE IF EXISTS short_adjective;
+DROP TABLE IF EXISTS long_adjective;
+DROP TABLE IF EXISTS noun;
+
+BEGIN;
+
+CREATE TABLE short_adjective (id serial PRIMARY KEY, string varchar);
+CREATE TABLE long_adjective (id serial PRIMARY KEY, string varchar);
+CREATE TABLE noun (id serial PRIMARY KEY, string varchar);
+
+INSERT INTO short_adjective (string) VALUES ('artless');
+INSERT INTO short_adjective (string) VALUES ('bawdy');
+INSERT INTO short_adjective (string) VALUES ('beslubbering');
+INSERT INTO short_adjective (string) VALUES ('bootless');
+INSERT INTO short_adjective (string) VALUES ('churlish');
+INSERT INTO short_adjective (string) VALUES ('cockered');
+INSERT INTO short_adjective (string) VALUES ('clouted');
+INSERT INTO short_adjective (string) VALUES ('craven');</pre>
+
+<p>We need to import the SQL to our database. We will use the <em>Terminal</em> application provided as part of the web console.</p>
+<div data-type="note" epub:type="note"><h6>Note</h6>
+<p>If you don’t like using the web console, you can also use the <em>oc rsh</em> command to open up a remote shell on the running container.</p>
+</div>
+<ol>
+<li>
+<p>From the project overview screen, click the blue circle for your WildFly server (not your database) to list the pods that are currently running for your application, as shown in <a data-type="xref" href="#fig0505">Figure 5-5</a>.</p>
+
+<figure><div id="fig0505" class="figure">
+<img src="assets/osfd_0505.png" alt="Project Overview"/>
+<h6><span class="label">Figure 5-5. </span>Accessing the list of pods</h6>
+</div></figure>
+</li>
+<li>
+<p>After selecting the blue circle, you will then be shown a list of all the pods that are currently running. In this case, as shown in <a data-type="xref" href="#fig0506">Figure 5-6</a>, you will have only one pod running.</p>
+
+<figure><div id="fig0506" class="figure">
+<img src="assets/osfd_0506.png" alt="Pod List"/>
+<h6><span class="label">Figure 5-6. </span>Pod list</h6>
+</div></figure>
+</li>
+<li>
+<p>Click the pod name and then click the <em>Terminal</em> button near the top of the screen, as shown in <a data-type="xref" href="#fig0507">Figure 5-7</a>.</p>
+
+<figure><div id="fig0507" class="figure">
+<img src="assets/osfd_0507.png" alt="Pod Overview"/>
+<h6><span class="label">Figure 5-7. </span>Pod overview</h6>
+</div></figure>
+
+<p>This will open up a terminal session on the WildFly container that is running inside of the pod (<a data-type="xref" href="#fig0508">Figure 5-8</a>).</p>
+
+<figure><div id="fig0508" class="figure">
+<img src="assets/osfd_0508.png" alt="Pod Terminal"/>
+<h6><span class="label">Figure 5-8. </span>Pod terminal</h6>
+</div></figure>
+</li>
+<li>
+<p>Once you have the terminal open, you can import that schema with the following command:</p>
+
+<pre data-type="programlisting">psql -h $POSTGRESQL_SERVICE_HOST -p $POSTGRESQL_SERVICE_PORT \
+  -U $POSTGRESQL_USER $POSTGRESQL_DATABASE &lt; insults.sql</pre>
+</li>
+
+</ol>
+
+<p>Bam!  You now have several tables created inside of your database that contain a plethora of words to choose from to insult your users.</p>
+<div data-type="note" epub:type="note"><h6>Note</h6>
+<p>When working with the terminal inside of the web console, I find it very useful to set my term type so that I have history and better usability for editing files.  To do this, issue the following command:</p>
+
+<pre data-type="programlisting">export TERM=xterm</pre>
+</div>
+</div></section>
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Adding the Database to the Application"><div class="sect2" id="idm140645242768592">
+<h2>Adding the Database to the Application</h2>
+
+<p>We have this fancy new database created and linked to our application, but we aren’t using it in our source code yet.  In order to use the database we must first add a dependency for the database driver in our maven <em>pom.xml</em> file.  Open up the file in your favorite IDE or editor and add the following section after the <em>&lt;/properties&gt;</em> tag:</p>
+
+<pre data-type="programlisting" data-code-language="xml"><code class="nt">&lt;dependencies&gt;</code>
+	<code class="nt">&lt;dependency&gt;</code>
+	    <code class="nt">&lt;groupId&gt;</code>org.postgresql<code class="nt">&lt;/groupId&gt;</code>
+	    <code class="nt">&lt;artifactId&gt;</code>postgresql<code class="nt">&lt;/artifactId&gt;</code>
+	    <code class="nt">&lt;version&gt;</code>9.4-1200-jdbc41<code class="nt">&lt;/version&gt;</code>
+    <code class="nt">&lt;/dependency&gt;</code>
+<code class="nt">&lt;/dependencies&gt;</code></pre>
+
+<p>Once the dependency for the PostgreSQL driver has been added, we need to modify our <em>InsultGenerator.java</em> source file to connect to and run queries against the new database.  Open this file in your IDE or text editor and replace the contents with the following:</p>
+
+<pre data-type="programlisting" data-code-language="java"><code class="kn">package</code> <code class="n">org</code><code class="o">.</code><code class="na">openshift</code><code class="o">;</code>
+
+<code class="kn">import</code> <code class="nn">java.sql.Connection</code><code class="o">;</code>
+<code class="kn">import</code> <code class="nn">java.sql.DriverManager</code><code class="o">;</code>
+<code class="kn">import</code> <code class="nn">java.sql.ResultSet</code><code class="o">;</code>
+<code class="kn">import</code> <code class="nn">java.sql.Statement</code><code class="o">;</code>
+
+<code class="kd">public</code> <code class="kd">class</code> <code class="nc">InsultGenerator</code> <code class="o">{</code>
+ <code class="kd">public</code> <code class="n">String</code> <code class="nf">generateInsult</code><code class="o">()</code> <code class="o">{</code>
+  <code class="n">String</code> <code class="n">vowels</code> <code class="o">=</code> <code class="s">"AEIOU"</code><code class="o">;</code>
+  <code class="n">String</code> <code class="n">article</code> <code class="o">=</code> <code class="s">"an"</code><code class="o">;</code>
+  <code class="n">String</code> <code class="n">theInsult</code> <code class="o">=</code> <code class="s">""</code><code class="o">;</code>
+
+
+  <code class="k">try</code> <code class="o">{</code>
+   <code class="n">String</code> <code class="n">databaseURL</code> <code class="o">=</code> <code class="s">"jdbc:postgresql://"</code><code class="o">;</code>
+   <code class="n">databaseURL</code> <code class="o">+=</code> <code class="n">System</code><code class="o">.</code><code class="na">getenv</code><code class="o">(</code><code class="s">"POSTGRESQL_SERVICE_HOST"</code><code class="o">);</code>
+   <code class="n">databaseURL</code> <code class="o">+=</code> <code class="s">"/"</code> <code class="o">+</code> <code class="n">System</code><code class="o">.</code><code class="na">getenv</code><code class="o">(</code><code class="s">"POSTGRESQL_DATABASE"</code><code class="o">);</code>
+
+   <code class="n">String</code> <code class="n">username</code> <code class="o">=</code> <code class="n">System</code><code class="o">.</code><code class="na">getenv</code><code class="o">(</code><code class="s">"POSTGRESQL_USER"</code><code class="o">);</code>
+   <code class="n">String</code> <code class="n">password</code> <code class="o">=</code> <code class="n">System</code><code class="o">.</code><code class="na">getenv</code><code class="o">(</code><code class="s">"PGPASSWORD"</code><code class="o">);</code>
+   <code class="n">Connection</code> <code class="n">connection</code> <code class="o">=</code> <code class="n">DriverManager</code><code class="o">.</code><code class="na">getConnection</code><code class="o">(</code><code class="n">databaseURL</code><code class="o">,</code> <code class="n">username</code><code class="o">,</code>
+   <code class="n">password</code><code class="o">);</code>
+
+   <code class="k">if</code> <code class="o">(</code><code class="n">connection</code> <code class="o">!=</code> <code class="kc">null</code><code class="o">)</code> <code class="o">{</code>
+    <code class="n">String</code> <code class="n">SQL</code> <code class="o">=</code> <code class="s">"select a.string AS first, b.string AS second, c.string AS noun</code>
+<code class="s">    from short_adjective a , long_adjective b, noun c ORDER BY random() limit 1"</code><code class="o">;</code>
+    <code class="n">Statement</code> <code class="n">stmt</code> <code class="o">=</code> <code class="n">connection</code><code class="o">.</code><code class="na">createStatement</code><code class="o">();</code>
+    <code class="n">ResultSet</code> <code class="n">rs</code> <code class="o">=</code> <code class="n">stmt</code><code class="o">.</code><code class="na">executeQuery</code><code class="o">(</code><code class="n">SQL</code><code class="o">);</code>
+    <code class="k">while</code> <code class="o">(</code><code class="n">rs</code><code class="o">.</code><code class="na">next</code><code class="o">())</code> <code class="o">{</code>
+     <code class="k">if</code> <code class="o">(</code><code class="n">vowels</code><code class="o">.</code><code class="na">indexOf</code><code class="o">(</code><code class="n">rs</code><code class="o">.</code><code class="na">getString</code><code class="o">(</code><code class="s">"first"</code><code class="o">).</code><code class="na">charAt</code><code class="o">(</code><code class="mi">0</code><code class="o">))</code> <code class="o">==</code> <code class="o">-</code><code class="mi">1</code><code class="o">)</code> <code class="o">{</code>
+      <code class="n">article</code> <code class="o">=</code> <code class="s">"a"</code><code class="o">;</code>
+     <code class="o">}</code>
+     <code class="n">theInsult</code> <code class="o">=</code>  <code class="n">String</code><code class="o">.</code><code class="na">format</code><code class="o">(</code><code class="s">"Thou art %s %s %s %s!"</code><code class="o">,</code> <code class="n">article</code><code class="o">,</code>
+     <code class="n">rs</code><code class="o">.</code><code class="na">getString</code><code class="o">(</code><code class="s">"first"</code><code class="o">),</code> <code class="n">rs</code><code class="o">.</code><code class="na">getString</code><code class="o">(</code><code class="s">"second"</code><code class="o">),</code> <code class="n">rs</code><code class="o">.</code><code class="na">getString</code><code class="o">(</code><code class="s">"noun"</code><code class="o">));</code>
+    <code class="o">}</code>
+    <code class="n">rs</code><code class="o">.</code><code class="na">close</code><code class="o">();</code>
+    <code class="n">connection</code><code class="o">.</code><code class="na">close</code><code class="o">();</code>
+   <code class="o">}</code>
+  <code class="o">}</code> <code class="k">catch</code> <code class="o">(</code><code class="n">Exception</code> <code class="n">e</code><code class="o">)</code> <code class="o">{</code>
+   <code class="k">return</code> <code class="s">"Database connection problem!"</code><code class="o">;</code>
+  <code class="o">}</code>
+  <code class="k">return</code> <code class="n">theInsult</code><code class="o">;</code>
+ <code class="o">}</code>
+<code class="o">}</code></pre>
+
+<p>Don’t worry if you don’t want to type in all of the above source code.  You can find this modified application on <a href="https://github.com/gshipley/book-insultapp-final">GitHub</a>.</p>
+
+<p>Once you have made the changes, committed them, and pushed them to your public GitHub repository, it’s time to start a new build to deploy the new version of the source code.  This can be done by clicking on the <em>Start Build</em> button while looking at the builds in the web console.  Alternatively, you can start a new build using the <em>oc</em> tool with the following command:</p>
+
+<pre data-type="programlisting">oc start-build insults</pre>
+
+<p>Once the build has finished, verify that your application is working by viewing it in the web browser.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Adding a REST Endpoint"><div class="sect1" id="idm140645242490784">
+<h1>Adding a REST Endpoint</h1>
+
+<p>We are on a roll with adding additional functionality to our application so let’s keep this train chugging down the tracks.  The last thing we want to add to our insult generator is the ability to return an insult as a JSON document.  Having an HTTP-based endpoint that provides the response in JSON will allow those that prefer to parse their insult with all the luxury they have come to expect when working with JSON documents.</p>
+
+<p>The first thing we want to do is add a dependency for Java EE that allows us to use JaxRS to generate the results.  Open the <em>pom.xml</em> that we modified previously in this chapter and add the following dependency:</p>
+
+<pre data-type="programlisting" data-code-language="xml"><code class="nt">&lt;dependency&gt;</code>
+    <code class="nt">&lt;groupId&gt;</code>javax<code class="nt">&lt;/groupId&gt;</code>
+    <code class="nt">&lt;artifactId&gt;</code>javaee-api<code class="nt">&lt;/artifactId&gt;</code>
+    <code class="nt">&lt;version&gt;</code>7.0<code class="nt">&lt;/version&gt;</code>
+    <code class="nt">&lt;scope&gt;</code>provided<code class="nt">&lt;/scope&gt;</code>
+<code class="nt">&lt;/dependency&gt;</code></pre>
+
+<p>Now that we have our dependency added to our <em>pom.xml</em> file, it’s time to add two Java classes that will expose the endpoint.  The first one is a simple <em>JaxrsConfig.java</em> file that specifies the application path our services will reside on.  Create a new file called <em>JaxrsConfig.java</em> in the <em>/src/main/java/org/openshift</em> directory and add the following code:</p>
+
+<pre data-type="programlisting" data-code-language="java"><code class="kn">package</code> <code class="n">org</code><code class="o">.</code><code class="na">openshift</code><code class="o">;</code>
+
+<code class="kn">import</code> <code class="nn">javax.ws.rs.ApplicationPath</code><code class="o">;</code>
+<code class="kn">import</code> <code class="nn">javax.ws.rs.core.Application</code><code class="o">;</code>
+
+<code class="nd">@ApplicationPath</code><code class="o">(</code><code class="s">"/api"</code><code class="o">)</code>
+<code class="kd">public</code> <code class="kd">class</code> <code class="nc">JaxrsConfig</code> <code class="kd">extends</code> <code class="n">Application</code><code class="o">{</code>
+<code class="o">}</code></pre>
+
+<p>The last thing we need to do is define our endpoint that will return the insult.  Create a new file named <em>InsultResource.java</em> under the <em>/src/main/java/org/openshift</em> directory with the following source code:</p>
+
+<pre data-type="programlisting" data-code-language="java"><code class="kn">package</code> <code class="n">org</code><code class="o">.</code><code class="na">openshift</code><code class="o">;</code>
+
+<code class="kn">import</code> <code class="nn">java.util.HashMap</code><code class="o">;</code>
+<code class="kn">import</code> <code class="nn">javax.enterprise.context.RequestScoped</code><code class="o">;</code>
+<code class="kn">import</code> <code class="nn">javax.ws.rs.GET</code><code class="o">;</code>
+<code class="kn">import</code> <code class="nn">javax.ws.rs.Path</code><code class="o">;</code>
+<code class="kn">import</code> <code class="nn">javax.ws.rs.Produces</code><code class="o">;</code>
+
+<code class="nd">@RequestScoped</code>
+<code class="nd">@Path</code><code class="o">(</code><code class="s">"/insult"</code><code class="o">)</code>
+<code class="kd">public</code> <code class="kd">class</code> <code class="nc">InsultResource</code> <code class="o">{</code>
+
+  <code class="nd">@GET</code><code class="o">()</code>
+  <code class="nd">@Produces</code><code class="o">(</code><code class="s">"application/json"</code><code class="o">)</code>
+  <code class="kd">public</code> <code class="n">HashMap</code><code class="o">&lt;</code><code class="n">String</code><code class="o">,</code><code class="n">String</code><code class="o">&gt;</code> <code class="n">getInsult</code><code class="o">()</code> <code class="o">{</code>
+  <code class="n">HashMap</code><code class="o">&lt;</code><code class="n">String</code><code class="o">,</code> <code class="n">String</code><code class="o">&gt;</code> <code class="n">theInsult</code> <code class="o">=</code> <code class="k">new</code> <code class="n">HashMap</code><code class="o">&lt;</code><code class="n">String</code><code class="o">,</code> <code class="n">String</code><code class="o">&gt;();</code>
+  <code class="n">theInsult</code><code class="o">.</code><code class="na">put</code><code class="o">(</code><code class="s">"insult"</code><code class="o">,</code> <code class="k">new</code> <code class="n">InsultGenerator</code><code class="o">().</code><code class="na">generateInsult</code><code class="o">());</code>
+  <code class="k">return</code> <code class="n">theInsult</code><code class="o">;</code>
+ <code class="o">}</code>
+<code class="o">}</code></pre>
+
+<p>These two source files will expose an endpoint at the /api/insult URL and listen for GET requests.  Once a request is made, a JSON document will be returned with an insult that is provided by the PostgreSQL database we added earlier in this chapter.</p>
+
+<p>Once you have code added, committed, and pushed to your repository, start a new build on OpenShift.  Once the build has completed, browse to your endpoint and you should see the following JSON response:</p>
+
+<pre data-type="programlisting" data-code-language="json"><code class="p">{</code><code class="nt">"insult"</code><code class="p">:</code><code class="s2">"Thou art a dankish weather-bitten minnow!"</code><code class="p">}</code></pre>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Summary"><div class="sect1" id="idm140645242165664">
+<h1>Summary</h1>
+
+<p>In this chapter, we learned how to add a database to an existing project. Once we added the database, we learned how to link the database to an existing deployment configuration inside of the project.  We also learned how to use the terminal from the web console to import schema into the database. In the next chapter, we look at how to scale up your application to handle more users, and how to automate aspects of the deployment of your application.</p>
+</div></section>
+
+
+
+
+
+
+
+</div></section></body></html>

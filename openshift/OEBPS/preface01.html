@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html><html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml"><head><title>Introduction</title><link rel="stylesheet" type="text/css" href="epub.css"/></head><body data-type="book"><section data-type="preface" epub:type="preface" data-pdf-bookmark="Introduction"><div class="preface" id="idm140645247056640">
+<h1>Introduction</h1>
+
+
+<p>OpenShift has been available since 2011 and has seen great success as a polyglot platform for the deployment of web applications and services. Part of the success of OpenShift derives from the use of containers in conjunction with a Security-Enhanced Linux (SELinux) environment. These technologies enable OpenShift to implement a secure multi tenant environment suitable for the enterprise, as well as OpenShift Online, Red Hat’s own public platform as a service (PaaS) offering.</p>
+
+<p>Technology is always evolving, and to keep up with the latest advances OpenShift has also evolved. The latest version of OpenShift takes advantage of newer technologies such as Docker and Kubernetes, for managing and running applications within containers. Building on Kubernetes and OpenShift’s own magic sauce, OpenShift takes PaaS to a new level, what we like to call a container application platform.</p>
+
+<p>OpenShift offers you the ability to easily deploy your web application code directly using a library of pre-defined image builders, or you can bring your own Docker images. With support in OpenShift for features such as persistent volumes, you are not limited to just running 12-factor or cloud native applications. You can also deploy databases and many legacy applications which you otherwise would not be able to run on a traditional PaaS.</p>
+
+<p>OpenShift is the modern take on PaaS that you can use with your current applications, but which also provides the power and flexibility to meet future needs. This book will bring you up to speed on how OpenShift has changed to meet the new requirements for building, deploying and hosting your applications.</p>
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Who Should Read This Book"><div class="sect1" id="idm140645247373824">
+<h1>Who Should Read This Book</h1>
+
+<p>If you are impatient, this book is for you. It is intended for programmers who want to get started using OpenShift as quickly as possible, but also want to understand a little bit of what they are doing.</p>
+
+<p>We will step you through how to build and deploy your first application, and also introduce you to the main concepts of OpenShift and the tools available for working with OpenShift.</p>
+
+<p>As the title indicates, we are assuming little in the way of background knowledge except:</p>
+
+<ul>
+<li>
+<p>You have some basic programming experience.</p>
+</li>
+<li>
+<p>You know how to create a web application.</p>
+</li>
+<li>
+<p>You know how to use the command line.</p>
+</li>
+<li>
+<p>You can use a text editor on a console.</p>
+</li>
+</ul>
+
+<p>We also assume you are familar with basic Linux or Windows shell commands, and how to install additional software to your computer.</p>
+
+<p>The software you install will provide you with a complete working OpenShift environment that you can use locally for development or testing.</p>
+
+<p>We have used Java and the WildFly application server for the examples in this book. You do not need to be proficient in Java. If you are familar with any of the popular programming languages you will do just fine.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Why We Wrote This Book"><div class="sect1" id="idm140645247492176">
+<h1>Why We Wrote This Book</h1>
+
+<p>We want to enable you to become self-sufficient in the basic use of OpenShift for creating and hosting your web applications, in as few words as possible. Therefore, we will not go into long explanations of the technologies used in OpenShift or different programming paradigms, but instead will give you links where you can go to read more.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Navigating This Book"><div class="sect1" id="idm140645247273152">
+<h1>Navigating This Book</h1>
+
+<p>The aim of this book is to get you up and running on OpenShift as quickly as possible. To that end, we dive into the most crucial content first and fill in the finer details as we go along.</p>
+
+<ul>
+<li>
+<p>Chapters <a href="ch01.html#chapter_dockerkubeopenshift">1</a> and <a href="ch02.html#chapter_terminology">2</a> provide a basic introduction to a container application platform, as well as the basic terms and technologies you will need to understand for the rest of the book.</p>
+</li>
+<li>
+<p><a data-type="xref" href="ch03.html#chapter_installingvm">Chapter 3</a> provides instructions on how you can install a self contained version of the OpenShift environment on your own computer.</p>
+</li>
+<li>
+<p><a data-type="xref" href="ch04.html#chapter_firstapplication">Chapter 4</a> steps you through deploying your first application to OpenShift.</p>
+</li>
+<li>
+<p><a data-type="xref" href="ch05.html#chapter_addingdependencies">Chapter 5</a> adds in a database to the application, providing it with a way of managing application data.</p>
+</li>
+<li>
+<p><a data-type="xref" href="ch06.html#chapter_lifecycle">Chapter 6</a> delves into managing deployments of your application and how to scale it up to handle more users.</p>
+</li>
+<li>
+<p><a data-type="xref" href="ch07.html#chapter_applicationtemplates">Chapter 7</a> introduces application templates, a means of simplifying new application deployments.</p>
+</li>
+<li>
+<p><a data-type="xref" href="ch08.html#chapter_management">Chapter 8</a> covers basic management commands for working with and understanding what your application is doing.</p>
+</li>
+<li>
+<p><a data-type="xref" href="ch09.html#chapter_anydocker">Chapter 9</a> discusses deploying your own Docker images to OpenShift.</p>
+</li>
+</ul>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Online Resources"><div class="sect1" id="idm140645247375888">
+<h1>Online Resources</h1>
+
+<p>In this book you will install a self contained OpenShift environment based on <a href="https://www.openshift.org">OpenShift Origin</a>. This is the upstream Open Source version of OpenShift that Red Hat’s <a href="https://www.openshift.com/enterprise/">OpenShift Enterprise</a>, <a href="https://www.openshift.com/dedicated/">OpenShift Dedicated</a> and <a href="https://www.openshift.com">OpenShift Online</a> products are based on. The all-in-one virtual machine used is available from the <a href="https://www.openshift.org/vm/">OpenShift Origin site</a>.</p>
+
+<p>OpenShift Origin will always include all the latest features, with support being provided by the OpenShift community.</p>
+
+<p>The OpenShift product releases are created as a regular snapshot of the OpenShift Origin project. The product releases do not always have the very latest features, but if you have a commercial Red Hat subscription, the product releases include support from Red Hat.</p>
+
+<p>If you would like to try out the OpenShift Enterprise version, a couple of options are available.</p>
+
+<p>The first is to sign up to the Red Hat developers program at <a href="http://developers.redhat.com">Red Hat Developers page</a>.</p>
+
+<p>This is a free program and allows you to access versions of Red Hat products for personal use on your own computer. One of the products made available through the program is the <a href="http://developers.redhat.com/products/cdk/overview/">Red Hat Container Development Kit</a>.</p>
+
+<p>This includes a version of OpenShift that you can install on your own computer, but which is based on OpenShift Enterprise rather than OpenShift Origin.</p>
+
+<p>A second way of trying out OpenShift Enterprise is via the <a href="https://aws.amazon.com/testdrive/redhat/">Amazon Web Services (AWS) Test Drive program</a>.</p>
+
+<p>This will set you up an OpenShift environment running across a multi node cluster on AWS.</p>
+
+<p>Take a look at more in-depth documentation on OpenShift and how to use it at the <a href="https://docs.openshift.org">OpenShift documentation site</a>.</p>
+
+<p>Check out the <a href="https://blog.openshift.com">OpenShift blog</a>, where regular articles are published on OpenShift.</p>
+
+<p>Want to hear about how others in the OpenShift community are using OpenShift, or wish to share your own experiences, you can join the <a href="http://commons.openshift.org">OpenShift Commons</a>.</p>
+
+<p>If you have questions or issues, you can reach the OpenShift team through <a href="http://stackoverflow.com">Stack Overflow</a>, via email to <a href="mailto:openshift@redhat.com">openshift@redhat.com</a>, on Twitter (@openshift), or in the #openshift channel on IRC’s FreeNode network.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Conventions Used in This Book"><div class="sect1" id="idm140645247352624">
+<h1>Conventions Used in This Book</h1>
+
+<p>The following typographical conventions are used in this book:</p>
+<dl>
+<dt><em>Italic</em></dt>
+<dd>
+<p>Indicates new terms, URLs, email addresses, filenames, and file extensions.</p>
+</dd>
+<dt><code>Constant width</code></dt>
+<dd>
+<p>Used for program listings, as well as within paragraphs to refer to program elements such as variable or function names, databases, data types, environment variables, statements, and keywords.</p>
+</dd>
+<dt><strong><code>Constant width bold</code></strong></dt>
+<dd>
+<p>Shows commands or other text that should be typed literally by the user.</p>
+</dd>
+<dt><em><code>Constant width italic</code></em></dt>
+<dd>
+<p>Shows text that should be replaced with user-supplied values or by values determined by context.</p>
+</dd>
+</dl>
+<div data-type="tip"><h6>Tip</h6>
+<p>This icon signifies a tip, suggestion, or general note.</p>
+</div>
+<div data-type="warning" epub:type="warning"><h6>Warning</h6>
+<p>This icon indicates a warning or caution.</p>
+</div>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Using Code Examples"><div class="sect1" id="idm140645247547968">
+<h1>Using Code Examples</h1>
+
+<p>Supplemental material (code examples, exercises, etc.) is available for download at <a href="https://github.com/gshipley/book-insultapp"><em class="hyperlink">https://github.com/gshipley/book-insultapp</em></a>.</p>
+
+<p>This book is here to help you get your job done. In general, if example code is offered with this book, you may use it in your programs and documentation. You do not need to contact us for permission unless you’re reproducing a significant portion of the code. For example, writing a program that uses several chunks of code from this book does not require permission. Selling or distributing a CD-ROM of examples from O’Reilly books does require permission. Answering a question by citing this book and quoting example code does not require permission. Incorporating a significant amount of example code from this book into your product’s documentation does require permission.</p>
+
+<p>We appreciate, but do not require, attribution. An attribution usually includes the title, author, publisher, and ISBN. For example: “<em>OpenShift for Developers</em> by Grant Shipley and Graham Dumpleton (O’Reilly). Copyright 2016 Rad Hat, Inc., 978-1-491-94300-7.”</p>
+
+<p>If you feel your use of code examples falls outside fair use or the permission given above, feel free to contact us at <a href="permissions@oreilly.com">permissions@oreilly.com</a>.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Safari® Books Online"><div class="sect1" id="idm140645247135872">
+<h1>Safari® Books Online</h1>
+<div data-type="note" epub:type="note" class="safarienabled"><h6>Note</h6>
+<p><a class="orm:hideurl:ital" href="http://my.safaribooksonline.com/?portal=oreilly">Safari Books Online</a> is an on-demand digital library that delivers expert <a class="orm:hideurl" href="http://www.safaribooksonline.com/content">content</a> in both book and video form from the world’s leading authors in technology and business.</p>
+</div>
+
+<p>Technology professionals, software developers, web designers, and business and creative professionals use Safari Books Online as their primary resource for research, problem solving, learning, and certification training.</p>
+
+<p>Safari Books Online offers a range of <a class="orm:hideurl" href="http://www.safaribooksonline.com/subscriptions">product mixes</a> and pricing programs for <a class="orm:hideurl" href="http://www.safaribooksonline.com/organizations-teams">organizations</a>, <a class="orm:hideurl" href="http://www.safaribooksonline.com/government">government agencies</a>, and <a class="orm:hideurl" href="http://www.safaribooksonline.com/individuals">individuals</a>. Subscribers have access to thousands of books, training videos, and prepublication manuscripts in one fully searchable database from publishers like O’Reilly Media, Prentice Hall Professional, Addison-Wesley Professional, Microsoft Press, Sams, Que, Peachpit Press, Focal Press, Cisco Press, John Wiley &amp; Sons, Syngress, Morgan Kaufmann, IBM Redbooks, Packt, Adobe Press, FT Press, Apress, Manning, New Riders, McGraw-Hill, Jones &amp; Bartlett, Course Technology, and dozens <a class="orm:hideurl" href="http://www.safaribooksonline.com/publishers">more</a>. For more information about Safari Books Online, please visit us <a class="orm:hideurl" href="http://www.safaribooksonline.com/">online</a>.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" class="pagebreak-before" data-pdf-bookmark="How to Contact Us"><div class="sect1" id="idm140645247123440">
+<h1>How to Contact Us</h1>
+
+<p>Please address comments and questions concerning this book to the publisher:</p>
+<ul class="simplelist">
+<li>O’Reilly Media, Inc.</li>
+<li>1005 Gravenstein Highway North</li>
+<li>Sebastopol, CA 95472</li>
+<li>800-998-9938 (in the United States or Canada)</li>
+<li>707-829-0515 (international or local)</li>
+<li>707-829-0104 (fax)</li>
+</ul>
+
+<p>To comment or ask technical questions about this book, send email to <a href="bookquestions@oreilly.com">bookquestions@oreilly.com</a>.</p>
+
+<p>For more information about our books, courses, conferences, and news, see our website at <a href="http://www.oreilly.com"><em class="hyperlink">http://www.oreilly.com</em></a>.</p>
+
+<p>Find us on Facebook: <a href="http://facebook.com/oreilly"><em class="hyperlink">http://facebook.com/oreilly</em></a></p>
+
+<p>Follow us on Twitter: <a href="http://twitter.com/oreillymedia"><em class="hyperlink">http://twitter.com/oreillymedia</em></a></p>
+
+<p>Watch us on YouTube: <a href="http://www.youtube.com/oreillymedia"><em class="hyperlink">http://www.youtube.com/oreillymedia</em></a></p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Acknowledgments"><div class="sect1" id="idm140645247110848">
+<h1>Acknowledgments</h1>
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Grant"><div class="sect2" id="idm140645247110016">
+<h2>Grant</h2>
+
+<p>Writing a book of any length takes a considerable amount of time. This is time that is most often stolen from my family. For that reason, I would like to thank my wonderful wife Leah and our four children—Jackson, Emily, Gavin, and Mason. Without their support and understanding, I would not have been able to create this book. I love you all very much.</p>
+
+<p>I would also like to thank the entire OpenShift team at Red Hat, but especially the individuals who work directly on my team: Diane, Graham, Steve, Ryan, Jorge, and Marek. Working with such a fine group of folks makes this job not seem like a job at all and more about fun and pushing new technologies to the limit.</p>
+
+<p>Other people I would like to thank, in no particular order, are as follows:  Ashesh, Matt, Joe, Mike, Jake, Shawn, Sathish, Sam, Corey, Clayton, Dan, Thomas, Keck, Burr, Jakub, Miciah, and everyone else who has made OpenShift such a success. Lastly, I would like to thank Alexa Overbay for her dedication to the project and all of the hard work she puts in to help myself and the OpenShift team stay organized and running smoothly.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Graham"><div class="sect2" id="idm140645247480704">
+<h2>Graham</h2>
+
+<p>I would like to thank Grant and Red Hat for giving me the opportunity to work at a company which values and contributes to Open Source projects. I am a strong believer in Open Source and the good that it can create in the wider community. Through my own projects I have been attempting to improve the options available to Python developers for hosting web applications. I see the OpenShift project as being a very important part of that story and am thankful for the opportunity to work on it. With a family, my wife Wendy and two young children Kara and Caiden, the flexibility of being able to work remotely from home in my role with Red Hat has helped immensely in managing the day to day demands of children working their way through school. It does mean I often work strange hours and occasionally need to travel, but I have a family which is more than tolerant and is supportive of me, for which I am very grateful.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+</div></section></body></html>

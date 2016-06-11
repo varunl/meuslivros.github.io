@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html><html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml"><head><title>Working with Your Application</title><link rel="stylesheet" type="text/css" href="epub.css"/></head><body data-type="book"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 8. Working with Your Application"><div class="chapter" id="chapter_management">
+<h1><span class="label">Chapter 8. </span>Working with Your Application</h1>
+
+
+<p>Applications are great when they are working properly, but inevitably at some point most applications will need to be debugged. You might also need to tweak your application’s build, or see what resources it has available. In this chapter we will dig into various tasks related to working with your application, whether as developer or as part of an operations team. While we have focused on using the OpenShift web console so far, in this chapter, we use the command-line tools so you can become more familiar with them.</p>
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Listing Running Instances"><div class="sect1" id="idm140645241534672">
+<h1>Listing Running Instances</h1>
+
+<p>Information about running instances of your application can be found on the <em>Pods</em> page of the OpenShift web console.</p>
+
+<p>If you want to find out what instances are running from the command line, you can use the <code>oc get pods</code> command:</p>
+
+<pre data-type="programlisting">$ oc get pods
+NAME                    READY     STATUS      RESTARTS   AGE
+helloworld-1-build      0/1       Completed   0          37m
+helloworld-2-build      0/1       Completed   0          33m
+helloworld-3-build      0/1       Completed   0          28m
+helloworld-4-build      0/1       Completed   0          11m
+helloworld-4-cd3y3      1/1       Running     0          9m</pre>
+
+<p>In this list, it is the pods with the <em>Running</em> status that are the instances of your application.</p>
+
+<p>You can get a wealth of information about a specific instance using the <code>oc describe</code> command:</p>
+
+<pre data-type="programlisting">$ oc describe pod/helloworld-4-cd3y3
+Name:       helloworld-4-cd3y3
+Namespace:  wfproject
+Image(s):   172.30.210.155:5000/wfproject/helloworld@sha256:9c941cb...
+Node:       origin/10.0.2.15
+Start Time: Thu, 17 Mar 2016 11:30:08 +1100
+Labels:     app=helloworld,deployment=helloworld-4,deploymentconfig=helloworld
+Status:     Running
+...</pre>
+
+<p>The labels are particularly important here. If you want to be more selective about which pods are shown when running <code>oc get pods</code>, you can use the labels to narrow your search:</p>
+
+<pre data-type="programlisting">$ oc get pods --selector app=helloworld
+NAME                 READY     STATUS    RESTARTS   AGE
+helloworld-4-cd3y3   1/1       Running   0          21m</pre>
+
+<p>Running <code>oc get pods</code> by default shows you the current state of all the pods. If you want to monitor the pods as they are created and destroyed in real time, use the <code>--watch</code> option. This command will show all changes until the command is interrupted.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Container Logs"><div class="sect1" id="idm140645241534048">
+<h1>Container Logs</h1>
+
+<p>When an error occurs within your application, generally the first place you want to look is in the log files. In OpenShift, there are two types of log files: the build logs and the runtime application logs.</p>
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Build Logs"><div class="sect2" id="idm140645241522480">
+<h2>Build Logs</h2>
+
+<p>When OpenShift runs a build, it will capture the output of the steps run. This is the case when using a S2I (Source-to-Image) builder as used for the WildFly application. Build logs will also be available if you used OpenShift to build an arbitrary Docker image from a Dockerfile.</p>
+
+<p>The build logs can be accessed from the OpenShift web console by going to the <em>Builds</em> page for your application. You can view the log live while a build is being run, or after the build is complete.</p>
+
+<p>If you want to access the build logs using the command-line tools, you first need to identify which build you want to see the results for. You can see a list of all the builds that have been completed using the <code>oc get builds</code> command:</p>
+
+<pre data-type="programlisting">$ oc get builds
+NAME              TYPE      FROM          STATUS     STARTED          DURATION
+helloworld-1      Source    Git@ac3eb48   Complete   23 minutes ago   2m8s
+helloworld-2      Source    Git@ac3eb48   Complete   19 minutes ago   2m20s
+helloworld-3      Source    Git@ac3eb48   Complete   15 minutes ago   2m15s
+helloworld-4      Source    Git@master    Running    1 seconds ago    2s</pre>
+
+<p>To look at the logs for a specific build, you would then use the <code>oc logs</code> command. Prefix the name of the build with <em>build/</em> when identifying it:</p>
+
+<pre data-type="programlisting">$ oc logs build/helloworld-3
+W0317 00:11:04.932223       1 builder.go:55] Master version ...
+I0317 00:11:05.026730       1 source.go:197] Downloading "https://..." ...
+I0317 00:11:10.187732       1 install.go:236] Using "assemble" ...
+I0317 00:11:10.187908       1 install.go:236] Using "run" ...
+I0317 00:11:10.187951       1 install.go:236] Using "save-artifacts" ...
+Found pom.xml... attempting to build with 'mvn package -Popenshift ...'
+Apache Maven 3.3.3 ...
+Maven home: /usr/local/apache-maven-3.3.3
+Java version: 1.8.0_71, vendor: Oracle Corporation
+Java home: /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.71-2.b15.el7_2.x86_64/jre
+...</pre>
+
+<p>If a build shows as still running you can use the <code>--follow</code> option to the <code>oc logs</code> command to see updates to the log as they occur.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Application Logs"><div class="sect2" id="idm140645241513088">
+<h2>Application Logs</h2>
+
+<p>Application logs is what your application outputs when it is running. OpenShift will record any output from your application that is sent to the standard output and error streams.</p>
+
+<p>The application logs can be accessed from the OpenShift web console by going to the <em>Pods</em> page and then to the pods for your application.</p>
+
+<p>On the command line, to view the logs you should first list the pods for your application and then use the <code>oc logs</code> command for a specific pod:</p>
+
+<pre data-type="programlisting">$ oc logs helloworld-4-cd3y3
+=========================================================================
+  JBoss Bootstrap Environment
+  JBOSS_HOME: /wildfly
+  JAVA: java
+  JAVA_OPTS: ...</pre>
+
+<p>This will give you the currently collected log output.</p>
+
+<p>As with builds, if you want to monitor the log output live while that instance of your application is still running, you can use the <code>--follow</code> option to <code>oc logs</code>.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Application Startup Failures"><div class="sect2" id="idm140645241506512">
+<h2>Application Startup Failures</h2>
+
+<p>If your application starts up and runs okay then you should always have some logs. But there is one special case you do need to be aware of—when your application fails to start up.</p>
+
+<p>When your application fails to start up and exits, OpenShift will attempt to restart the application. If this keeps occurring, then the pod will be moved into a state called <em>CrashLoopBackOff</em>. You will see that a pod has entered this state when you use <code>oc get pods</code> to get a listing of the pods for your application:</p>
+
+<pre data-type="programlisting">helloworld-5-cqlo4        0/1       CrashLoopBackOff   2          1m</pre>
+
+<p>If you run <code>oc logs</code> on this pod, you will usually see a less than useful message.</p>
+
+<pre data-type="programlisting">$ oc logs helloworld-5-cqlo4
+Error from server: Internal error occurred: Pod "helloworld-5-cqlo4" in
+  namespace "wfproject": container "helloworld" is in waiting state.</pre>
+
+<p>This is a final error message from OpenShift resulting from the successive failures to start your application. This is not the log messages from your application.</p>
+
+<p>In this case, to see the logs from the last attempt to start your application, you should use the <code>--previous</code> option with the <code>oc logs</code> command.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Environment Variables"><div class="sect1" id="idm140645241498528">
+<h1>Environment Variables</h1>
+
+<p>In more traditional deployment environments, you would use a configuration file to customize the behavior of your application. When running an application under Docker, the problem is that you would need to rebuild the image for your application in order to make a change. This is because the configuration file is part of the Docker image.</p>
+
+<p>To avoid needing to rebuild the image, you can use use environment variables set from outside the container. These could be environment variables that are directly understood by your application, or they could be environment variables that control additional command-line arguments supplied to the application server being used.</p>
+
+<p>To see a list of what environment variables will be exported to a container when run by OpenShift you can use the <code>oc set env</code> command with the <code>--list</code> option to query the deployment configuration for your application.</p>
+
+<pre data-type="programlisting">$ oc set env dc/helloworld --list
+# deploymentconfigs helloworld, container helloworld
+PATH=/opt/app-root/src/bin:/opt/app-root/bin:/usr/local/sbin:/usr/local/bin:...
+STI_SCRIPTS_URL=image:///usr/libexec/s2i
+STI_SCRIPTS_PATH=/usr/libexec/s2i
+HOME=/opt/app-root/src
+BASH_ENV=/opt/app-root/etc/scl_enable
+ENV=/opt/app-root/etc/scl_enable
+PROMPT_COMMAND=. /opt/app-root/etc/scl_enable
+WILDFLY_VERSION=10.0.0.Final
+MAVEN_VERSION=3.3.3</pre>
+
+<p>To add or modify an environment variable, <code>oc set env</code> is once again used, but the environment variable name and value are supplied:</p>
+
+<pre data-type="programlisting">oc set env dc/helloworld MYSQL_DATABASE=mysql</pre>
+
+<p>If you want to update the value of more than one environment variable at the same time, each can be listed on the same command line separated by a space.</p>
+
+<p>If you want to change more than one environment variable, then they should all be updated with the one command. This is because the configuration change will by default trigger a redeployment of your application with the new environment variables. Setting the environment variables one at a time would thus cause successive redeployments.</p>
+
+<p>In addition to being able to update the environment variables when your application is run, if using the S2I builder, you can also specify the environment variables to be used when your application is being built. In this case, you need to update the environment variables on the build configuration for your application:</p>
+
+<pre data-type="programlisting">oc set env bc/helloworld MAVEN_ARGS_APPEND='-Dmaven.test.skip=true'</pre>
+
+<p>But be aware that when an environment variable is specified for a build configuration it will also be set when the container is run. This is because the environment variable is saved as part of the image. If an environment variable needs to have a different value at runtime than at build time, it needs to be set separately on the deployment configuration so that it overrides the value inherited from the build configuration.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Editing Configurations"><div class="sect1" id="idm140645241497872">
+<h1>Editing Configurations</h1>
+
+<p>Commands such as <code>oc set env</code> update the configuration for your application without you needing to know the details. Not everything you may need to do with a configuration can be done direct through the command line. Sometimes you may need to edit the configuration yourself.</p>
+
+<p>In a previous chapter we used the <code>oc edit</code> command to add deployment lifecycle hooks. Using the <code>oc edit</code> command on a selected resource would start up an editor; the configuration is displayed within the editor and can be changed from the editor. You could then make changes and save the configuration, with it potentially triggering automatically a rebuild, a redeployment, or some other action.</p>
+
+<p>Since configurations can be edited for many different reasons, we can’t cover them all here. The OpenShift documentation goes into more detail, but there are a few specific resources that can be useful when editing configurations.</p>
+
+<p>The first is the <code>oc types</code> command described back when we were introducing OpenShift. The text output of the <code>oc types</code> command is a quick cheat sheet for understanding the key concepts and types in OpenShift.</p>
+
+<p>To understand what can be set in a configuration, take a look at the <a href="http://red.ht/1WKU0J6">REST API documentation</a>.</p>
+
+<p>A quicker way to get a description of what can be set is to use the <code>oc explain</code> command, which can be used on the name of a resource, or the path to a specific setting. The <code>oc set env</code> command, for example, updates the <code>dc.spec.template.spec.containers.env</code> setting. We can see a description for that by running the following:</p>
+
+<pre data-type="programlisting">$ oc explain dc.spec.template.spec.containers.env
+RESOURCE: env &lt;[]Object&gt;
+
+DESCRIPTION:
+     List of environment variables to set in the container. Cannot be updated.
+
+    EnvVar represents an environment variable present in a Container.
+
+FIELDS:
+   name	&lt;string&gt; -required-
+     Name of the environment variable. Must be a C_IDENTIFIER.
+
+   value	&lt;string&gt;
+     Variable references $(VAR_NAME) are expanded using the previous defined
+     environment variables in the container and any service environment
+     variables. If a variable cannot be resolved, the reference in the input
+     string will be unchanged. The $(VAR_NAME) syntax can be escaped with a
+     double $$, ie: $$(VAR_NAME). Escaped references will never be expanded,
+     regardless of whether the variable exists or not. Defaults to "".
+
+   valueFrom	&lt;Object&gt;
+     Source for the environment variable's value. Cannot be used if value is not
+     empty.</pre>
+
+<p>So we could have added or updated the environment variables by using <code>oc edit</code> instead of <code>oc set env</code>.</p>
+
+<p>If using <code>oc edit</code>, by default the configuration will be provided as YAML. You can also edit it as JSON by supplying the <code>-o json</code> option to <code>oc edit</code>.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Debugging an Application"><div class="sect1" id="idm140645241435360">
+<h1>Debugging an Application</h1>
+
+<p>Even if your application starts up correctly you may find that it doesn’t always behave as expected. This could be due to an issue with the runtime environment, or the configuration, whether that be a configuration file or environment variables.</p>
+
+<p>In this case it can be useful to open up an interactive shell within the container where your application is running.</p>
+
+<p>The command for running an interactive shell is <code>oc rsh</code>, but first you need to identify a running instance of your application. This is done using the <code>oc get pods</code> command, which we covered earlier. You can then use <code>oc rsh</code> on the selected pod:</p>
+
+<pre data-type="programlisting">$ oc rsh helloworld-8-fnzg5
+sh-4.2$ env | grep OPENSHIFT
+OPENSHIFT_BUILD_NAME=helloworld-6
+OPENSHIFT_BUILD_SOURCE=https://github.com/GrahamDumpleton/book-helloworld.git
+OPENSHIFT_BUILD_NAMESPACE=wfproject
+OPENSHIFT_BUILD_REFERENCE=master</pre>
+
+<p>If you do not need an interactive shell and just want to run a command and have it return immediately, you can use <code>oc exec</code>:</p>
+
+<pre data-type="programlisting">$ oc exec helloworld-8-fnzg5 env | grep OPENSHIFT
+OPENSHIFT_BUILD_SOURCE=https://github.com/GrahamDumpleton/book-helloworld.git
+OPENSHIFT_BUILD_REFERENCE=master
+OPENSHIFT_BUILD_NAME=helloworld-6
+OPENSHIFT_BUILD_NAMESPACE=wfproject</pre>
+
+<p>The commands you have available to run within the container depend on what the Docker base image has provided. The ability to create an interactive shell when running <code>oc rsh</code> is dependent on a shell program existing as <em>/bin/sh</em> within the image. Docker base images built with debugging in mind generally still provide you with common tools such as <em>ps</em>, <em>top</em>, and <em>vi</em>. A minimal Docker image may provide very few standard UNIX tools and you may find debugging more difficult, as <code>oc rsh</code> will not work if <em>/bin/sh</em> is missing from the image.</p>
+
+<p>Being able to bring up an interactive shell or run a command in the container your application is running is also obviously dependent on your application being able to run. We mentioned previously the case of where an application may not even start up. Some clues as to what is wrong in those cases can be using the <code>oc logs</code> command, ensuring the <code>--previous</code> option is used if the status of the pods has entered <em>CrashLoopBackOff</em> mode.</p>
+
+<p>To figure out why your application is having issues in this case you will not be able to use <code>oc rsh</code> or <code>oc exec</code>. Instead, use the <code>oc debug</code> command.</p>
+
+<p>Whereas the <code>oc rsh</code> and <code>oc exec</code> commands are executed against a specific running instance of your application, the <code>oc debug</code> command is pointed at the name of the deployment configuration for your application. What the <code>oc debug</code> command will then do is start up an instance of the image for your application, but instead of running the normal application command, it will run an interactive shell instead.</p>
+
+<pre data-type="programlisting">$ oc debug dc/helloworld
+Debugging with pod/debug-helloworld, original command: &lt;image entrypoint&gt;
+Waiting for pod to start ...
+
+Hit enter for command prompt
+
+sh-4.2$</pre>
+
+<p>At this point your application has not been started. You can check that any required environment variables have been set, that any configuration files are correct, and that all your application files are present and correct. You can also start up your application and see why it is failing to start.</p>
+
+<p>If you are using an S2I builder to build and deploy your application, this can usually be done by running the <em>run</em> script from the S2I scripts directory:</p>
+
+<pre data-type="programlisting">sh-4.2$ $STI_SCRIPTS_PATH/run
+=========================================================================
+  JBoss Bootstrap Environment
+  JBOSS_HOME: /wildfly
+  JAVA: java
+  JAVA_OPTS:  ...</pre>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Deleting an Application"><div class="sect1" id="idm140645241421200">
+<h1>Deleting an Application</h1>
+
+<p>Finished working with the example applications in this book and want to remove all traces of them? There are a couple of ways this can be done.</p>
+
+<p>If you only have the one application within the project namespace you are working in, the simplest way is to delete the whole project. This can be done using the <code>oc delete project</code> command.</p>
+
+<pre data-type="programlisting">$ oc delete project wfproject
+project "wfproject" deleted</pre>
+
+<p>If you have other applications in the same project you want to keep, or wish to keep the project around after cleaning up the application, you need to be more selective about what is deleted. This is still a relatively easy task if the labels we mentioned earlier are used.</p>
+
+<p>If you remember correctly, we used the <em>app</em> label of <code>helloworld</code> to list the pods corresponding to the instances of our application. We are going to use this same label to delete our application.</p>
+
+<p>Before we do that, let’s check to see what would be deleted by running the <code>oc get all</code> command with the selector and the <em>app</em> label.</p>
+
+<pre data-type="programlisting">oc get all --selector app=helloworld</pre>
+
+<p>This will output a list of everything that would be deleted if we used the same label. Once you know you aren’t going to delete something you want, you can then run <code>oc delete all</code> with the same selector label:</p>
+
+<pre data-type="programlisting">$ oc delete all --selector app=helloworld
+buildconfig "helloworld" deleted
+imagestream "helloworld" deleted
+deploymentconfig "helloworld" deleted
+route "helloworld" deleted
+service "helloworld" deleted
+pod "helloworld-8-fnzg5" deleted</pre>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Summary"><div class="sect1" id="idm140645241399936">
+<h1>Summary</h1>
+
+<p>In this chapter, we took a quick look at some of the commands you can use to check on the state of your application, what is being logged, how to edit configurations as well as how to debug your application. This only scratches the surface of what you can do using the <code>oc</code> command-line tool. In the next chapter, we’ll cover one further example, which is how to build and deploy an application using a Docker image. For further details on other tasks that can be performed using the <code>oc</code> command, run <code>oc help</code>. You can also use the <code>--help</code> option on specific commands for details about that command as well as examples.</p>
+</div></section>
+
+
+
+
+
+
+
+</div></section></body></html>

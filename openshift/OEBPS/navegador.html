@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+	<head>
+		<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+		<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+		<meta charset="UTF-8">
+	</head>
+	<body>
+		<style>
+		body {
+			margin:0;
+			padding:0;
+		}
+			#header {
+				border: 1px green solid;
+				text-align: center;
+				height:50px;
+			}
+
+			.wrapper{
+			    overflow:hidden;
+			    padding-bottom:10px;
+			}
+
+			.first{
+			    float:left;
+			    width:auto;
+			}
+
+			.second{
+			    overflow:hidden;
+			}
+			iframe {
+			    width:100%
+			}
+
+		</style>
+
+		<div id="header">
+			<span id="title"></span>
+			<br/>
+			<button id="previous" onclick="previous()">Previous</button>
+			<button id="next" onclick="next()">Next</button>
+		</div>
+
+		<div class="wrapper">
+		    <div class="first frame" ><iframe id="index" class="frame" src="indice.html" onload="config()"></iframe></div>
+		    <div class="second frame"><iframe name="book" class="frame" src="assets/cover.png"></iframe></div>
+		</div>
+
+		<script>
+
+		var index = -1;
+
+		var links = [];
+
+		function config(){
+			links = $('#index').contents().find('a');
+	   		links.attr('target','book');
+	
+			links.click(function(){
+				links.css({'font-weight':'normal','font-style': 'normal'});
+				$(this).css({'font-weight': 'bold','font-style': 'italic'});
+				index = links.index($(this));
+				$('#title').html(links[index].innerHTML);
+			})
+
+
+		}
+
+		function next(){
+			if (index==links.length-1) return;
+			index ++;
+			$('#title').html(links[index].innerHTML);
+			links[index].click();
+		}
+
+		function previous(){
+			if (index<=0) return;
+			index --;
+			$('#title').html(links[index].innerHTML);
+			links[index].click();
+		}
+
+		$(function(){
+		    $('.frame').css({'height':($(document).height()-65)+'px'});
+		    $(window).resize(function(){
+		        $('.frame').css({'height':($(document).height()-65)+'px'});
+		    });
+
+
+
+		}); 
+		</script>
+
+	</body>
+</html>

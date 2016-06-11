@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html><html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml"><head><title>Developing and Deploying Your First Application</title><link rel="stylesheet" type="text/css" href="epub.css"/></head><body data-type="book"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Developing and Deploying Your First Application"><div class="chapter" id="chapter_firstapplication">
+<h1><span class="label">Chapter 4. </span>Developing and Deploying <span class="keep-together">Your First Application</span></h1>
+
+
+<p>At this point, you should have a good understanding of the OpenShift platform and have it running locally.  Now comes the good stuff, actually using the platform for application development and deployment.  In this chapter, we are going to create and deploy our first application using the popular open source WildFly application server for Java-based applications.  We will also use a bit of git, since it is the main way OpenShift interacts with source code.  But before we get started, we need to cover a few basics of both Git and WildFly in case you are not familiar with them.</p>
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Understanding the Tools"><div class="sect1" id="idm140645242852128">
+<h1>Understanding the Tools</h1>
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Git"><div class="sect2" id="idm140645242924576">
+<h2>Git</h2>
+
+<p><a href="http://git-scm.com/">Git</a> is a program that provides distributed version control. You may have used Subversion, CVS, or Visual SourceSafe, which are all centralized version control systems. In centralized systems there is a master server and everyone else has a copy of the code that they need to synchronize with the master. With Git, every repository, from the one on your laptop to the one on a remote server, is considered a legitimate master. Everything is kept in sync through patches sent between repositories. You can use Git as a pseudo-centralized version control system by having everyone on the team agree on “the master.” Wikipedia has a <a href="http://bit.ly/1Zign7I">good discussion</a> about some of the differences between centralized and distributed version control systems.</p>
+
+<p>The important thing to keep in mind about Git is that the Git repository on your machine is considered a repository, and you need to commit your changes there first. That means you have to add any new files and commit any changes on your local machine before you can push your changes to any other Git repository.</p>
+
+<p>On OpenShift, in order to take advantage of the S2I builder images, you will need to have your source code in a reachable Git repository. By reachable, we mean that your OpenShift server has the ability to see the repository and clone contents over the network.  This can include both public and private repositories as long as OpenShift can establish a network connection to the Git repository host.  For the work we do here, you will have two Git repositories:</p>
+
+<ul>
+<li>
+<p>A remote repository on GitHub (or any public Git repository of your choice)</p>
+</li>
+<li>
+<p>A local repository on your local machine</p>
+</li>
+</ul>
+
+<p>There are three basic commands you need to work with OpenShift:</p>
+<dl>
+<dt><code>git add</code></dt>
+<dd>
+<p>Add a file to your local Git repository. Even if you have a file in the directory representing your Git repo, it is <em>not</em> considered part of the repository until you add it.</p>
+</dd>
+<dt><code>git commit</code></dt>
+<dd>
+<p>Commit any changes you have made to your local repository.</p>
+</dd>
+<dt><code>git push</code></dt>
+<dd>
+<p>Push the changes from your local repository up to your publicly addressable repository on GitHub.</p>
+</dd>
+</dl>
+
+<p>If you are interested in learning more, you’re in luck; there are <a href="http://bit.ly/1dubZuh">several different</a> decent <a href="http://bit.ly/1mjkIaS">documents</a> to get <a href="http://bit.ly/1r0Je1h">you going</a>. If you are coming from Subversion land, there is even a <a href="http://bit.ly/1gLk81Y">Git introduction for you</a>. The fine people at GitHub have also put together a nice <a href="http://bit.ly/O86g76">collection of resources about Git</a>.</p>
+
+<p>A quick note about the difference between Git and <a href="https://github.com">GitHub</a>. Git is the tool, and GitHub is a site that allows for public and private hosting of Git repositories. GitHub also adds a lot of social features, making it very easy for developers to find and collaborate on code. That said, you can certainly use GitHub with OpenShift while using the automated builder images provided with S2I.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="WildFly"><div class="sect2" id="idm140645242905648">
+<h2>WildFly</h2>
+
+<p>If you are a Java Developer, you are probably familiar with the WildFly application server from Red Hat.  If not, what you need to know is that WildFly is an application server that implements the Java Platform, Enterprise Edition specification, often referred to as Java EE.  What you may not know is that WildFly was formally known as JBoss AS and went through a name change in November of 2014.  This was done to more closely align with the open source community the server is targeted at and to ensure developers were not confused between JBoss AS and JBoss EAP.</p>
+
+<p>WildFly is a free and open source project under the LGPL version 2.1 license.  For this book, we are going to be using version 10 of the WildFly application server that was released in February of 2016.</p>
+<div data-type="note" epub:type="note"><h6>Note</h6>
+<p>We will be using the WildFly server for this example but the code will also work on the popular Tomcat server.</p>
+</div>
+
+<p>For more information on the WildFly application server, refer to the <a href="http://wildfly.org">official website</a>.</p>
+
+<p>If you are not a Java developer, don’t fret, as you can still follow along with the exercises in this book as the main purpose is to learn how to interact with the platform.  The process is almost identical regardless of the programming language or server your application project uses.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Creating Our First Application"><div class="sect1" id="idm140645242899408">
+<h1>Creating Our First Application</h1>
+
+<p>Now that we understand the basic tools we need for our first application, Git and WildFly, it’s time to dig in and start working with the platform. However, we do have to complete one additional step before we actually deploy our first application: we need to fork, or make a copy of, the sample application we will be using in this chapter.</p>
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Creating a Copy of the Sample Application"><div class="sect2" id="idm140645242897744">
+<h2>Creating a Copy of the Sample Application</h2>
+
+<p>In <a data-type="xref" href="ch01.html#chapter_dockerkubeopenshift">Chapter 1</a>, you created an account on the popular GitHub service.  Now we are going to use that account to fork the application code that we will be using to deploy.  As is often standard practice in technical books, the first application we are going to deploy is a simple <em>Hello, world</em> application.  Let’s get started.</p>
+
+<p>Log in to your GitHub account and then point your browser to the <a href="https://github.com/gshipley/book-helloworld">repository for the sample application</a>.</p>
+
+<p>Once the page has loaded, and you are authenticated with your GitHub account, you should see a fork button in the upper righthand corner of the screen as shown in <a data-type="xref" href="#fig0401">Figure 4-1</a>.</p>
+
+<figure><div id="fig0401" class="figure">
+<img src="assets/osfd_0401.png" alt="Fork Project"/>
+<h6><span class="label">Figure 4-1. </span>Fork project</h6>
+</div></figure>
+
+<p>After you fork the application code, you will have a working copy in your account that you are free to modify and use for deployment on the platform.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Creating the Application"><div class="sect2" id="idm140645242889248">
+<h2>Creating the Application</h2>
+
+<p>Now that we have a copy of the source code project in our personal GitHub account, we can create a project and a corresponding pod that will contain our deployed source code.  The first thing we want to do is log in to the web console by opening up the following URL: <a href="https://10.2.2.2:8443"><em class="hyperlink">https://10.2.2.2:8443</em></a>.</p>
+
+<p>When prompted for the username and password, use the following:</p>
+
+<ul>
+<li>
+<p><strong>Username:</strong> user</p>
+</li>
+<li>
+<p><strong>Password:</strong> password</p>
+</li>
+</ul>
+
+<p>Next, click the <em>New Project</em> button, which will drop you in the projection creation flow as shown in <a data-type="xref" href="#fig0402">Figure 4-2</a>.</p>
+
+<figure><div id="fig0402" class="figure">
+<img src="assets/osfd_0402.png" alt="New Project"/>
+<h6><span class="label">Figure 4-2. </span>New project</h6>
+</div></figure>
+
+<p>Enter this information in the fields provided:</p>
+<table style="width: 100%">
+
+<thead>
+<tr>
+<th>Field Name</th>
+<th>What to enter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p>Name</p></td>
+<td><p><strong><code>wfproject</code></strong></p></td>
+<td><p>The name of your project</p></td>
+</tr>
+<tr>
+<td><p>Display Name</p></td>
+<td><p><strong><code>WildFly Project</code></strong></p></td>
+<td><p>The project name that will be displayed in the UI</p></td>
+</tr>
+<tr>
+<td><p>Description</p></td>
+<td><p><strong><code>Application using WildFly server</code></strong></p></td>
+<td><p>Details about your project</p></td>
+</tr>
+</tbody>
+</table>
+<div data-type="note" epub:type="note"><h6>Note</h6>
+<p>Project names have to be unique across the entire OpenShift environment. You can think of a project as a unique namespace for your applications.</p>
+</div>
+
+<p>After you fill in the fields above, click <em>Create</em>. You will then select the type of template you would like to use for your first application.  For this example, click the <em>wildfly:10.0</em> application template. You will then name your application as well as the URL for your GitHub repository that we forked previously in this chapter, as shown in <a data-type="xref" href="#fig0403">Figure 4-3</a>.</p>
+
+<figure><div id="fig0403" class="figure">
+<img src="assets/osfd_0403.png" alt="Select Template"/>
+<h6><span class="label">Figure 4-3. </span>Select template</h6>
+</div></figure>
+
+<p>Enter <strong><code>helloworld</code></strong> as the name, and then paste the URL for your repository on GitHub.  If you are not familiar with GitHub, the repository URL is shown on the repository home page as shown in <a data-type="xref" href="#fig0404">Figure 4-4</a>.</p>
+
+<figure><div id="fig0404" class="figure">
+<img src="assets/osfd_0404.png" alt="GitHub Repo URL"/>
+<h6><span class="label">Figure 4-4. </span>GitHub repo URL</h6>
+</div></figure>
+<div data-type="tip"><h6>Tip</h6>
+<p>Many first-time users of GitHub find that the repository URL is not the same URL displayed in the browser.  A Git repository URL normally ends with the <em>.git</em> extension.</p>
+</div>
+
+<p>Once you have entered in the name and correct repository URL, click the <em>Create</em> button. Then watch the magic begin!</p>
+
+<p>At this point, the process we discussed in <a data-type="xref" href="ch01.html#chapter_dockerkubeopenshift">Chapter 1</a> regarding S2I is executed.  Depending on the speed of your Internet connection, this may take a few minutes as the builder image is downloaded and the source code for the project is compiled. You will know your source code is ready when the indicator for your pod turns blue as shown in <a data-type="xref" href="#fig0405">Figure 4-5</a>.</p>
+
+<figure><div id="fig0405" class="figure">
+<img src="assets/osfd_0405.png" alt="Running Pod"/>
+<h6><span class="label">Figure 4-5. </span>Running pod</h6>
+</div></figure>
+
+<p>Note that the application also has an associated route, which is the DNS name for your application on your local network.  In this specific example, the URL is <em>helloworld-wfproject.apps.10.2.2.2.xip.io</em>.  If you click that URL you will be directed to the running application and will see the following content on the displayed web page:</p>
+<pre>Hello, OpenShift.</pre>
+
+<p>Congratulations!  You are now officially an expert at deploying Java-based projects using Docker-based containers. That wasn’t so bad, was it?</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Making a Code Change and Starting a New Build"><div class="sect1" id="idm140645242888176">
+<h1>Making a Code Change and Starting a New Build</h1>
+
+<p>In the previous section, we deployed a very simple application. It is also important to understand how to modify the code and begin a new build of your project.</p>
+
+<p>If you don’t have the project cloned locally to your machine, do that now.  If you are not familiar with Git, you will want to execute the following command in the directory where you would like the source code to be stored ensuring you replace <em>your_repository_url</em> with the correct <em>.git</em> repo file you used to create the project:</p>
+<pre>git clone your_repository_url</pre>
+
+<p>To see how modifying code works with the platform, open up your favorite editor, or IDE, and edit the following file in the repository:</p>
+<pre>src/main/webapp/index.html</pre>
+
+<p>Find the following line:</p>
+
+<pre data-type="programlisting" data-code-language="html"><code class="nt">&lt;h1&gt;</code>Hello, OpenShift.<code class="nt">&lt;/h1&gt;</code></pre>
+
+<p>Change it to:</p>
+
+<pre data-type="programlisting" data-code-language="html"><code class="nt">&lt;h1&gt;</code>Hello, OpenShift builds.<code class="nt">&lt;/h1&gt;</code></pre>
+
+<p>Now that you have modified some super mission critical source code, it’s time to commit the change to your local repository and then push the change to the remote repository on GitHub. To accomplish this, issue the following commands:</p>
+<pre>git commit -am "Updated index.html to change message."
+git push</pre>
+
+<p>You can verify that the change was reflected in your upstream (GitHub) repository by visiting your project on the GitHub web console.</p>
+
+<p>Now we need to start a new build of our application so OpenShift can deploy the new source. Go to the project overview page inside the OpenShift web console and then click <em>Browse</em> and then <em>Builds</em>. You will see a table listing each of the different types of builds that have been created for your project.  At this point, you should only see one build with the following information:</p>
+<table style="width: 100%">
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Last Build</th>
+<th>Status</th>
+<th>Created</th>
+<th>Type</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p>helloworld</p></td>
+<td><p>#1</p></td>
+<td><p>Complete in one minute, 14 seconds</p></td>
+<td><p>9 minutes ago</p></td>
+<td><p>Source</p></td>
+<td><p>repo URL</p></td>
+</tr>
+</tbody>
+</table>
+
+<p>Note that the name of the build (<em>helloworld</em>) is actually a link.  Click the name and you will be taken to the build overview page as shown in <a data-type="xref" href="#fig0406">Figure 4-6</a>.</p>
+
+<figure><div id="fig0406" class="figure">
+<img src="assets/osfd_0406.png" alt="Build Overview"/>
+<h6><span class="label">Figure 4-6. </span>Build overview</h6>
+</div></figure>
+
+<p>Once you click the <em>Start Build</em> button, a new build will be triggered that will clone the updated source code from the application’s GitHub repository and the remainder of the S2I flow will be executed.  Once the build and deployment are complete, you will be able to see the result of the modifications by clicking the application’s URL displayed on the project overview page in the web console. In this specific example, the URL is <em>helloworld-wfproject.apps.10.2.2.2.xip.io</em>.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Summary"><div class="sect1" id="idm140645242803776">
+<h1>Summary</h1>
+
+<p>In this chapter, we learned how to create and deploy our first application on the OpenShift platform. After we deployed the application, we learned how to make a code change and perform a new build. In the next chapter, we will continue working on the application by looking at adding dependencies for the language runtime as well connecting and using a database on the OpenShift platform.</p>
+</div></section>
+
+
+
+
+
+
+
+</div></section></body></html>

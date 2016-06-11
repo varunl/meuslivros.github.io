@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html><html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml"><head><title>Concepts You Need to Understand</title><link rel="stylesheet" type="text/css" href="epub.css"/></head><body data-type="book"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 2. Concepts You Need to Understand"><div class="chapter" id="chapter_terminology">
+<h1><span class="label">Chapter 2. </span>Concepts You Need to Understand</h1>
+
+
+<p>Now that you understand the bigger picture of where we are going with Docker containers, Kubernetes, and OpenShift, we need to introduce you to some of the key terminology we will use throughout the book.</p>
+
+<p>We cover the basic concepts of Kubernetes and discuss how OpenShift builds on them. In general, you can view Kubernetes as being aimed at Ops teams, providing them with a tool for running containers at scale in production. OpenShift adds to this by also supporting the work of a Dev team and others by making the job of the Ops team easier, which helps to bridge the gap between Dev and Ops and thus enable the latest DevOps philosophy.</p>
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Interacting with OpenShift"><div class="sect1" id="idm140645247171216">
+<h1>Interacting with OpenShift</h1>
+
+<p>The primary grouping concept in Kubernetes is the <em>namespace</em>. Namespaces, as the term suggests, provide a scope for names. More specifically, namespaces provide the scope named resources that describe your application and how it should be deployed. Namespaces are also a way to divide cluster resources between multiple uses. That being said, there is no security between namespaces in Kubernetes; if you are a “user” in a Kubernetes cluster, you can see all the different namespaces and the resources defined in them.</p>
+
+<figure><div id="fig0201" class="figure">
+<img src="assets/osfd_0201.png" alt="OpenShift Access and Control"/>
+<h6><span class="label">Figure 2-1. </span>OpenShift access and control</h6>
+</div></figure>
+
+<p>The first new concept OpenShift adds is <em>project</em>, which effectively wraps a namespace, with access to the namespace being controlled via the project. Access is controlled through an authentication and authorization model based on <em>users</em> and <em>groups</em>. Projects in OpenShift therefore provide the walls between namespaces, ensuring that users, or applications, can only see and access what they are allowed to.</p>
+
+<p>This enables multitenant use of an OpenShift cluster with access privileges determined by the identity of the user or the team they belong to. Users can be assigned to multiple groups and can inherit permissions depending on group membership. Groups often map to teams or functional units within a company, such as developers, QA, or production.</p>
+
+<p>OpenShift provides a number of different ways to interact with an OpenShift cluster. The OpenShift command-line tool <code>oc</code> is the primary way most users interact with OpenShift. The command-line tool talks via a REST API exposed by the OpenShift cluster. We cover installation of the command-line tool in the next chapter.</p>
+
+<p>If you want to avoid using the command line tool, or you want to automate your interactions with the OpenShift cluster, you can always use the REST API directly. Diving into the API is beyond the scope of this book, but we wanted to make sure you know there is an API, since it can be useful when integrating with an existing external system for continuous integration and deployment (CI/CD). You can find documentation on the REST API at <a href="http://red.ht/1WKU0J6">OpenShift’s documentation page</a>.</p>
+
+<p>Finally, OpenShift includes a web console. This provides a web-based GUI for those who would prefer not to use command-line tools. For some tasks, such as the initial deployment of an application, the web console presents a more user-friendly forms-driven interface based on application templates, which can help you get going quicker. We will be using both the command line and the web console throughout the book.</p>
+
+<p>If you are familiar with Kubernetes you may also know of the command-line tool <code>kubectl</code>. In OpenShift this would normally only be used in the setup and internal management of the cluster. Since it is more of an administration tool in the context of OpenShift we will not be discussing it here.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="The Deployed Application"><div class="sect1" id="idm140645247159040">
+<h1>The Deployed Application</h1>
+
+<p>You may be wondering: “Is a namespace the same thing as an application?” OpenShift has no formal concept of an application, thereby allowing an application to be flexible depending on a user’s needs.</p>
+
+<p>You can dedicate one to everything related to just one application. Or, so long as you label all the resources making up an application so you know what goes with what, you can also use the namespace to hold more than one.</p>
+
+<p>What are the different parts that go into making up an application? That is what we will cover now.</p>
+
+<figure><div id="fig0202" class="figure">
+<img src="assets/osfd_0202.png" alt="OpenShift Project (Namespace)"/>
+<h6><span class="label">Figure 2-2. </span>OpenShift project (Namespace)</h6>
+</div></figure>
+
+<p>The most basic unit in OpenShift are <em>pods</em>. A pod is one or more <em>containers</em> guaranteed to be running on the same host. The containers within a pod share a unique IP address. They can communicate with each other via the “localhost” and also all share any <em>volumes</em> (persistent storage). The containers themselves are started from an <em>image</em>, which in our case is a Docker image.</p>
+
+<p>When scaled up, an application will have more than one copy of itself, and each copy will have its own local state. Each copy corresponds to a different instance of a pod with the pods being managed by the <em>replication controller</em>. As each pod has a unique IP, we need an easy way to address the set of all pods as a whole. This is where a <em>service</em> comes into play. The service gets its own IP and a DNS name. When making a connection to a service, OpenShift will automatically route the connection to one of the pods associated with that service.</p>
+
+<p>Although a service has a DNS name, it is still only accessible within the OpenShift cluster and is not accessible externally. To make a service externally accessible, a <em>route</em> needs to be created. Creating a route automatically sets up haproxy or a hardware-based router, with an externally addressable DNS name, exposing the service and load-balancing inbound traffic across the pods.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Build and Deployment Process"><div class="sect1" id="idm140645247148480">
+<h1>Build and Deployment Process</h1>
+
+<p>Getting your application running and managed for you is all well and good, but we need a way of getting the application built and deployed in the first place.</p>
+
+<p>The <em>build configuration</em> contains a description of how to build source code and a base image into a new image—the primary method for delivering changes to your application. Builds can be source based and use S2I builder images for common languages like Java, PHP, Ruby, or Python, or be Docker based and create builds from a Dockerfile. Each build configuration has webhooks that can be triggered automatically by changes to their base images or source code.</p>
+
+<p>The output of the build process is an image, which is stored in an integrated Docker registry ready for distribution out to nodes when the application is deployed. The <em>image stream</em> is how the image and its versions are tracked by OpenShift. If you already have an existing Docker image on an external registry such as Docker Hub, it can also be referenced by an image stream instead of building it locally.</p>
+
+<p>When deploying an application, the <em>deployment configuration</em> is what defines the template for a pod and manages deploying new images or configuration changes whenever those change. A single deployment configuration is usually analogous to a single microservice. A deployment configuration supports a number of different deployment strategies including a complete shutdown then restart, rolling updates, or your own fully customized behaviors. Different strategies support <em>pre</em>, <em>mid</em>, and <em>post</em> hooks, allowing you to perform specific actions at key points of a deployment. The result of a deployment is the replication controller, which then manages your pods and keeps them running.</p>
+
+<p>As you can see, various parts go together to define your application and the build process to create it. But OpenShift manages the creation of all of the parts when using the web console or the command-line tools. If you do need to implement a more customized configuration, you can still jump in and change the configuration and create your own templates to automate future builds and configurations using your customizations.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Online Cheat Sheet"><div class="sect1" id="idm140645247140464">
+<h1>Online Cheat Sheet</h1>
+
+<p>When you move beyond the book and start using OpenShift in your day-to-day activities (development and operations), use the handy online cheat sheet available by running the <code>oc types</code> command. It gives you a quick summary of the different conceptual types and definitions used in OpenShift like those we covered here:</p>
+
+<pre data-type="programlisting" data-code-language="java"><code class="n">$</code> <code class="n">oc</code> <code class="n">types</code>
+<code class="n">Concepts</code> <code class="n">and</code> <code class="n">Types</code>
+
+<code class="n">Kubernetes</code> <code class="n">and</code> <code class="n">OpenShift</code> <code class="n">help</code> <code class="n">developers</code> <code class="n">and</code> <code class="n">operators</code> <code class="n">build</code><code class="o">,</code> <code class="n">test</code><code class="o">,</code> <code class="n">and</code> <code class="n">deploy</code>
+<code class="n">applications</code> <code class="n">in</code> <code class="n">a</code> <code class="n">containerized</code> <code class="n">cloud</code> <code class="n">environment</code><code class="o">.</code> <code class="n">Applications</code> <code class="n">may</code> <code class="n">be</code> <code class="n">composed</code>
+<code class="n">of</code> <code class="n">all</code> <code class="n">of</code> <code class="n">the</code> <code class="n">components</code> <code class="n">below</code><code class="o">,</code> <code class="n">although</code> <code class="n">most</code> <code class="n">developers</code> <code class="n">will</code> <code class="n">be</code> <code class="n">concerned</code> <code class="n">with</code>
+<code class="n">Services</code><code class="o">,</code> <code class="n">Deployments</code><code class="o">,</code> <code class="n">and</code> <code class="n">Builds</code> <code class="k">for</code> <code class="n">delivering</code> <code class="n">changes</code><code class="o">.</code>
+
+<code class="nl">Concepts:</code>
+
+<code class="o">*</code> <code class="nl">Containers:</code>
+    <code class="n">A</code> <code class="n">definition</code> <code class="n">of</code> <code class="n">how</code> <code class="n">to</code> <code class="n">run</code> <code class="n">one</code> <code class="n">or</code> <code class="n">more</code> <code class="n">processes</code> <code class="n">inside</code> <code class="n">of</code> <code class="n">a</code> <code class="n">portable</code> <code class="n">Linux</code>
+    <code class="n">environment</code><code class="o">.</code> <code class="n">Containers</code> <code class="n">are</code> <code class="n">started</code> <code class="n">from</code> <code class="n">an</code> <code class="n">Image</code> <code class="n">and</code> <code class="n">are</code> <code class="n">usually</code> <code class="n">isolated</code>
+    <code class="n">from</code> <code class="n">other</code> <code class="n">containers</code> <code class="n">on</code> <code class="n">the</code> <code class="n">same</code> <code class="n">machine</code><code class="o">.</code>
+
+<code class="o">...</code></pre>
+
+<p>Also make use of the <code>oc help</code> command and the <code>--help</code> option to see descriptions and examples and learn how to use the command in question.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Summary"><div class="sect1" id="idm140645247251936">
+<h1>Summary</h1>
+
+<p>In this chapter, we covered key terminology you need to understand, and we explained which of those concepts originate in Kubernetes versus OpenShift. In the next chapter, we will describe how you can install the OpenShift software on your system.</p>
+</div></section>
+
+
+
+
+
+
+
+</div></section></body></html>
