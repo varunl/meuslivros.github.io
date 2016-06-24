@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Practical example</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Practical example"><div class="titlepage"><div><div><h1 class="title"><a id="ch04lvl1sec20"/>Practical example</h1></div></div></div><p>Now that we have covered the authorization code grant in detail it's time to do a practical example.</p><p>We will make an example<a id="id157" class="indexterm"/> web application that will use Dropbox as its authorization server and will implement the authorization<a id="id158" class="indexterm"/> code grant.</p><p>The web example application is based on Java technologies, namely, Spring MVC and JSP, and uses the Google GSON library for JSON parsing and Apache HTTP Client for making HTTP requests. The example is concise, elegant, and explained in detail so that developers familiar with other technologies should have no problem understanding it. When we open the root folder of the Example Application, important files that are part of it are as follows:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">src\main\webapp\WEB-INF\pages\home.jsp</code>: This is the main page displayed when the Example Application is opened</li><li class="listitem" style="list-style-type: disc"><code class="literal">src\main\webapp\WEB-INF\pages\error.jsp</code>: This is the page that we show when an error occurs</li><li class="listitem" style="list-style-type: disc"><code class="literal">src\main\java\example\authorization\MainController.java</code>: This contains the Java logic of the Example Application.</li></ul></div><p>Additionally, for added clarity we will check out cURL statements of the same HTTP requests that are performed in Java. cURL is a popular command line tool that is used for transferring data over various protocols, and it is often used as an HTTP client.</p><p>We will make an authorization request with Dropbox and, once the user has authorized the request, we will get the access token and then make a request to the Dropbox API in order to get the name of the user who authorized the request and display it.</p><p>First thing we have to do is to<a id="id159" class="indexterm"/> register the client application at Dropbox. Client registration is covered in <a class="link" href="ch03.html" title="Chapter&#xA0;3.&#xA0;First Step for Your Application">Chapter 3</a>, <span class="emphasis"><em>First Step for Your Application</em></span>. In the case of Dropbox, registration<a id="id160" class="indexterm"/> is done on the following URL:</p><p>
+<a class="ulink" href="https://www.dropbox.com/developers/apps">https://www.dropbox.com/developers/apps</a>
+</p><p>The main entry point to the application for the user is the <code class="literal">main.jsp</code> page, consisting of HTML markup, where the important code is in the <a id="id161" class="indexterm"/>
+<code class="literal">body</code> tag:</p><div class="informalexample"><pre class="programlisting">&lt;body&gt;
+    &lt;p&gt;&lt;a href="${authEndpoint}"&gt;Authorize&lt;/a&gt;&lt;/p&gt;
+
+    &lt;p&gt;Authentication code is: &lt;span&gt;${code}&lt;/span&gt;&lt;/p&gt;
+
+    &lt;p&gt;Access token is: &lt;span&gt;${accessToken}&lt;/span&gt;&lt;/p&gt;
+
+    &lt;p&gt;Your Dropbox username is: ${userName}.&lt;/p&gt;
+&lt;/body&gt;</pre></div><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="tip11"/>Tip</h3><p>
+<span class="strong"><strong>Downloading the example code</strong></span>
+</p><p>You can download the example code files for all Packt books you have purchased from your account at <a class="ulink" href="http://www.packtpub.com">http://www.packtpub.com</a>. If you purchased this book elsewhere, you can visit <a class="ulink" href="http://www.packtpub.com/support">http://www.packtpub.com/support</a> and register to have the files e-mailed directly to you.</p></div></div><p>The values for the <code class="literal">authEndpoint</code>, <code class="literal">code</code>, <code class="literal">accessToken</code>, and <code class="literal">userName</code> variables are separated, each in its own paragraph, and their values are supplied from the Spring Controller, which we'll analyze next. At this moment, let's see what these variables represent. These variables are explained as follows:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">The first paragraph contains the link for initiating authorization, where the <code class="literal">href</code> attribute<a id="id162" class="indexterm"/> specifies the endpoint to which the end user is redirected. The <code class="literal">href</code> attribute value is specified in the <a id="id163" class="indexterm"/><code class="literal">authEndpoint</code> variable.</li><li class="listitem" style="list-style-type: disc">In the second paragraph, the value of the authorization code is shown with the help of the <code class="literal">code</code> variable<a id="id164" class="indexterm"/>. This field will be empty when the client application is not authorized.</li><li class="listitem" style="list-style-type: disc">The third paragraph contains the <code class="literal">accessToken</code> variable<a id="id165" class="indexterm"/> that shows the value of the access token. This field will be empty when the client application is not authorized.</li><li class="listitem" style="list-style-type: disc">The last paragraph contains the <code class="literal">userName</code> variable<a id="id166" class="indexterm"/> that will show the name of the user of the authorized Dropbox account. This field will be empty when the client application is not authorized. When the client application has the access token, then it can make<a id="id167" class="indexterm"/> API requests to the server in order to retrieve the information.</li></ul></div><p>Now let's switch to the <code class="literal">MainController</code> controller<a id="id168" class="indexterm"/>, in which the rest of the code is stored.</p><p>In it, first we define variables <a id="id169" class="indexterm"/>and their values for the endpoints and the client identifier and secret:</p><div class="informalexample"><pre class="programlisting">String authEndpoint = "https://www.dropbox.com/1/oauth2/authorize";
+String tokenEndpoint = "https://api.dropbox.com/1/oauth2/token";
+String accountInfoEndpoint = "https://api.dropbox.com/1/account/info";
+
+String clientId = "insertValue";
+String clientSecret = "insertValue";
+String redirectURI = "http://localhost:8090/cb";</pre></div><p>When the application is opened in the browser, the following controller handles the request:</p><div class="informalexample"><pre class="programlisting">@RequestMapping(value = "/", method = RequestMethod.GET)
+public String mainPage(ModelMap model) {
+
+  String authRequest = authEndpoint.concat("?response_type=code")
+      .concat("&amp;client_id=").concat(clientId)
+      .concat("&amp;redirect_uri=").concat(redirectURI)
+      .concat("&amp;state=1234");
+
+  model.addAttribute("authEndpoint", authRequest);
+  return "main";
+}</pre></div><p>We can see that it performs concatenations and builds the requested endpoint with the appropriate parameters. This value is put in the <code class="literal">model</code> parameter<a id="id170" class="indexterm"/> and, by doing this, it is accessible to be used as the <code class="literal">href</code> field in the HTML rendered in the browser. When the user clicks on the authenticate link, the end user will be redirected to the location.</p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="tip12"/>Tip</h3><p>The assigned <code class="literal">state</code> in the request is set to <code class="literal">1234</code>. This serves just as an example and in real world scenarios a securely random value should be generated and used.</p></div></div><p>The URL endpoint that is requested when the user clicks on authenticate, when represented as a CURL statement, has the following form:</p><div class="informalexample"><pre class="programlisting">curl -d response_type=code \
+  -d client_id=insertValue \
+  -d redirect_uri=http://localhost:8090/cb \
+  -d state=1234
+  https://www.dropbox.com/1/oauth2/authorize</pre></div><p>Next, the user approves the authorization in Dropbox, and when redirected back the callback controller handles the request. <a id="id171" class="indexterm"/>Because we're running the Example Application on a local environment, we have set the callback/redirection endpoint to <code class="literal">http://localhost:8090/cb</code> in the <code class="literal">redirectURI</code> variable<a id="id172" class="indexterm"/>. The <code class="literal">localhost</code> parameter tells the browser that it should search for a locally hosted address; <code class="literal">8090</code> is the port on which the Example Application<a id="id173" class="indexterm"/> is running, and <code class="literal">/cb</code> is the handle we use for the redirection.</p><p>When the callback handler is requested by Dropbox's authorization server, the following code handles that:</p><div class="informalexample"><pre class="programlisting">@RequestMapping(value = "/cb", method = RequestMethod.GET)
+public String callbackHandler(@RequestParam(value = "code", required = true) String code,
+    ModelMap model)
+    throws IOException {
+  //..
+}</pre></div><p>Note the use of the <code class="literal">@RequestParam</code> annotation, by which we instruct Spring Framework automatically to extract the value of the <code class="literal">code</code> parameter<a id="id174" class="indexterm"/> from the URL into a String. By doing the extraction we have the value of the authorization code available to us and we can use it in the method body.</p><p>Let's see what's going inside the method. First we add the value of the authorization code to the <code class="literal">model</code> parameter<a id="id175" class="indexterm"/>, in order to display it to the user.</p><div class="informalexample"><pre class="programlisting">model.addAttribute("code", code);</pre></div><p>Next, we define the request URL in a series of concatenations of the endpoint variable and required parameters, resulting in the <code class="literal">tokenRequest</code> variable<a id="id176" class="indexterm"/>. We use this variable to perform a request for the access token,<a id="id177" class="indexterm"/> by defining a HTTP POST request with it and executing it with the help of the HTTP client.</p><div class="informalexample"><pre class="programlisting">String tokenRequest =
+    tokenEndpoint
+    .concat("?grant_type=authorization_code")
+    .concat("&amp;client_id=").concat(clientId)
+    .concat("&amp;client_secret=").concat(clientSecret)
+    .concat("&amp;redirect_uri=")
+    .concat(URLEncoder.encode(redirectURI, "UTF-8"))
+    .concat("&amp;code=").concat(code);
+
+HttpPost getAccessTokenRequest = new HttpPost(tokenRequest);
+getAccessTokenRequest.addHeader("Accept", "application/json");
+
+DefaultHttpClient httpClient = new DefaultHttpClient();
+HttpResponse response = httpClient.execute(getAccessTokenRequest);</pre></div><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note05"/>Note</h3><p>We also specify a request header named accept, telling Dropbox that we expect a JSON as a response. Note that this is Dropbox specific, showing the nature of OAuth 2.0 where the implementation of the protocol may have additional customizations by the services that support it.</p></div></div><p>Next we create an HTTP client<a id="id178" class="indexterm"/> and execute this request, which when finished stores the result into the<a id="id179" class="indexterm"/> <code class="literal">HttpResponse</code> object.</p><p>This request, when represented as a CURL statement, has the following form:</p><div class="informalexample"><pre class="programlisting">curl &#x2013;X POST \
+  -d grant_type=authorization_code \
+  -d client_id=insertValue \
+  -d client_id=insertValue \
+  -d redirect_uri=http://localhost:8090/cb \
+  -d code=code
+  https://www.dropbox.com/1/oauth2/token</pre></div><p>If the response has a status code different from HTTP 200, it means that some error has occurred, so we display an error message to the user. The check is done using the following code:</p><div class="informalexample"><pre class="programlisting">if (response.getStatusLine().getStatusCode() != 200) {
+  return handleError(response, model);
+}</pre></div><p>If it's an error we stop the flow and execute <code class="literal">handleError</code>, a custom method by which we show an error page to the user with a description.</p><div class="informalexample"><pre class="programlisting">private String handleError(HttpResponse response, ModelMap model) {
+  model.addAttribute("errorMessage",
+      "Error. HTTP status code: " + response.getStatusLine().getStatusCode()
+      + "\nReason: " + response.getStatusLine().getReasonPhrase());
+
+  return "error";
+}</pre></div><p>If it's an error, Spring Framework will return the <code class="literal">error.jsp</code> page; if it's not an error we continue. The content of the response is converted into an object called <code class="literal">AccessTokenResponse</code>, <a id="id180" class="indexterm"/>with the<a id="id181" class="indexterm"/> help of the GSON library, as shown in the following code:</p><div class="informalexample"><pre class="programlisting">final Gson gson = new Gson();
+Reader streamReader = new InputStreamReader(response.getEntity().getContent());
+AccessTokenResponse atResponse = gson.fromJson(streamReader, AccessTokenResponse.class);
+
+model.addAttribute("accessToken", atResponse.access_token);</pre></div><p>We define <code class="literal">AccessTokenResponse</code> inside <code class="literal">MainController,</code> as shown in the following code:</p><div class="informalexample"><pre class="programlisting">private static class AccessTokenResponse {
+  String access_token;
+  String token_type;
+  String expires_in;
+  String uid;
+  // ..
+}</pre></div><p>And GSON will convert the<a id="id182" class="indexterm"/> data from the HTTP response we have provided into an instance of this custom class, by using the <a id="id183" class="indexterm"/>
+<code class="literal">fromJson</code> method.</p><p>Now that we have the access token, we can make requests to the Dropbox API with it on behalf of the user.</p><div class="informalexample"><pre class="programlisting">HttpGet getAccountInfoRequest = new HttpGet(accountInfoEndpoint);
+getAccountInfoRequest.addHeader("Accept", "application/json");
+getAccountInfoRequest.addHeader("Authorization", "Bearer " + atResponse.access_token);
+response = httpClient.execute(getAccountInfoRequest);</pre></div><p>With the "Accept" header we specify that JSON is expected as a response data format, and we add one more header named "Authorization". As a value of the authorization header we specify the access token and this way Dropbox will authorize the request and will know on behalf of which user it is made.</p><p>Again we make the check that the HTTP status of the response is not different from 200, and convert the response with GSON<a id="id184" class="indexterm"/> into a new object named <code class="literal">AccountInfoResponse,</code> as shown in the following code:</p><div class="informalexample"><pre class="programlisting">streamReader =
+  new InputStreamReader(response.getEntity().getContent());
+AccountInfoResponse aiResponse =
+  gson.fromJson(streamReader, AccountInfoResponse.class);
+
+model.addAttribute("userName", aiResponse.display_name);</pre></div><p>We define <code class="literal">AccountInfoResponse</code> as well by using the following code:</p><div class="informalexample"><pre class="programlisting">private static class AccountInfoResponse {
+  String display_name;
+  String uid;
+  // ..
+}</pre></div><p>To check the Dropbox's API, go to</p><p>
+<a class="ulink" href="https://www.dropbox.com/developers/core/docs#account-info">https://www.dropbox.com/developers/core/docs#account-info</a>
+</p><p>and see that there are more<a id="id185" class="indexterm"/> fields in the JSON response besides <code class="literal">display_name</code>, but we don't have to define them if we don't plan to use them.</p><p>By adding the value for <code class="literal">userName</code> to the <code class="literal">model</code> parameter<a id="id186" class="indexterm"/> everything planned for this example was done, so we finish it with the line</p><div class="informalexample"><pre class="programlisting">return "main";</pre></div><p>where Spring Framework returns the <code class="literal">main.jsp</code> page to the user, with all the data we supplied in the <code class="literal">model</code> parameter.</p><p>In the end, after the user approves the authorization, the callback handler processes the response, gets the access token, and gets the account information from Dropbox. The client application may look like<a id="id187" class="indexterm"/> the following<a id="id188" class="indexterm"/> screenshot:</p><div class="mediaobject"><img src="graphics/5594OS_04_03.jpg" alt="Practical example"/></div></div></body></html>

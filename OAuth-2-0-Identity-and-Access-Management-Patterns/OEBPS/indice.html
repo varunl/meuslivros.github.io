@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" profile="http://www.idpf.org/epub/30/profile/content/"><head><title>OAuth 2.0 Identity and Access Management Patterns</title></head><body>
+  
+  
+  <nav id="toc" epub:type="toc"><h1>Contents</h1><ol>
+<li id="id286448480"><a href="index.html">OAuth 2.0 Identity and Access Management Patterns</a><ol>
+<li id="toc"><a href="toc.html">Table of Contents</a></li>
+<li id="id286448500"><a href="pr01.html">OAuth 2.0 Identity and Access Management Patterns</a></li>
+<li id="id286691997"><a href="pr02.html">Credits</a></li>
+<li id="id286697257"><a href="pr03.html">About the Author</a></li>
+<li id="id286697289"><a href="pr04.html">About the Reviewers</a></li>
+<li id="id286697317"><a href="pr05.html">www.PacktPub.com</a><ol>
+<li id="id286697323"><a href="pr05.html#ch00lvl1sec01">Support files, eBooks, discount offers and more</a><ol>
+<li id="id286697379"><a href="pr05.html#ch00lvl2sec01">Why Subscribe?</a></li>
+<li id="id286697411"><a href="pr05.html#ch00lvl2sec02">Free Access for Packt account holders</a></li></ol></li></ol></li>
+<li id="id286697428"><a href="pr06.html">Preface</a><ol>
+<li id="id286697448"><a href="pr06.html#ch00lvl1sec02">What this book covers</a></li>
+<li id="id286697575"><a href="pr06s02.html">What you need for this book</a></li>
+<li id="id286697586"><a href="pr06s03.html">Who this book is for</a></li>
+<li id="id286697596"><a href="pr06s04.html">Conventions</a></li>
+<li id="id286697664"><a href="pr06s05.html">Reader feedback</a></li>
+<li id="id286697688"><a href="pr06s06.html">Customer support</a><ol>
+<li id="id286697699"><a href="pr06s06.html#ch00lvl2sec03">Downloading the example code</a></li>
+<li id="id286697719"><a href="pr06s06.html#ch00lvl2sec04">Errata</a></li>
+<li id="id286697742"><a href="pr06s06.html#ch00lvl2sec05">Piracy</a></li>
+<li id="id286697763"><a href="pr06s06.html#ch00lvl2sec06">Questions</a></li></ol></li></ol></li>
+<li id="id286697814"><a href="ch01.html">1. Need for OAuth 2.0</a><ol>
+<li id="id286697866"><a href="ch01.html#ch01lvl1sec08">Why OAuth 2.0?</a></li>
+<li id="id286697995"><a href="ch01s02.html">Benefits of OAuth 2.0</a><ol>
+<li id="id286698023"><a href="ch01s02.html#ch01lvl2sec07">API security</a></li>
+<li id="id286698085"><a href="ch01s02.html#ch01lvl2sec08">Internal enterprise applications</a></li>
+<li id="id286722331"><a href="ch01s02.html#ch01lvl2sec09">Service integration and authorization delegation</a></li>
+<li id="id286722448"><a href="ch01s02.html#ch01lvl2sec10">Federated identity</a></li>
+<li id="id286722523"><a href="ch01s02.html#ch01lvl2sec11">Easier service monitoring</a></li></ol></li>
+<li id="id286722590"><a href="ch01s03.html">Summary</a></li></ol></li>
+<li id="id286722606"><a href="ch02.html">2. Terms You Need To Know</a><ol>
+<li id="id286722620"><a href="ch02.html#ch02lvl1sec11">Roles</a><ol>
+<li id="id286722648"><a href="ch02.html#ch02lvl2sec12">Resource owner</a></li>
+<li id="id286457368"><a href="ch02.html#ch02lvl2sec13">Authorization server</a></li>
+<li id="id286457400"><a href="ch02.html#ch02lvl2sec14">Resource server</a></li>
+<li id="id286722885"><a href="ch02.html#ch02lvl2sec15">Client</a></li></ol></li>
+<li id="id286722968"><a href="ch02s02.html">Authorization flow</a><ol>
+<li id="id286722997"><a href="ch02s02.html#ch02lvl2sec16">Abstract example</a></li>
+<li id="id286723217"><a href="ch02s02.html#ch02lvl2sec17">OAuth 2.0 grant flows</a></li></ol></li>
+<li id="id286723422"><a href="ch02s03.html">Tokens</a><ol>
+<li id="id286723468"><a href="ch02s03.html#ch02lvl2sec18">Access token</a></li>
+<li id="id286723905"><a href="ch02s03.html#ch02lvl2sec19">Refresh token</a></li></ol></li>
+<li id="id286723992"><a href="ch02s04.html">Clients and endpoints</a><ol>
+<li id="id286724023"><a href="ch02s04.html#ch02lvl2sec20">Client types and profiles</a></li>
+<li id="id286724248"><a href="ch02s04.html#ch02lvl2sec21">Endpoints</a></li></ol></li>
+<li id="id286750803"><a href="ch02s05.html">Access scope</a></li>
+<li id="id286750905"><a href="ch02s06.html">Summary</a></li></ol></li>
+<li id="id286750920"><a href="ch03.html">3. First Step for Your Application</a><ol>
+<li id="id286750938"><a href="ch03.html#ch03lvl1sec17">Client registration</a></li>
+<li id="id286751562"><a href="ch03s02.html">Summary</a></li></ol></li>
+<li id="id286751577"><a href="ch04.html">4. OAuth for Web Server Applications</a><ol>
+<li id="id286751606"><a href="ch04.html#ch04lvl1sec19">Authorization code grant</a><ol>
+<li id="id286752048"><a href="ch04.html#ch04lvl2sec22">Requesting the authorization code</a><ol>
+<li id="id286752105"><a href="ch04.html#ch04lvl3sec01">Making the request</a></li>
+<li id="id286752483"><a href="ch04.html#ch04lvl3sec02">Successful authorization</a></li>
+<li id="id286752590"><a href="ch04.html#ch04lvl3sec03">Authorization error</a></li></ol></li>
+<li id="id286753048"><a href="ch04.html#ch04lvl2sec23">Requesting the access token</a><ol>
+<li id="id286753094"><a href="ch04.html#ch04lvl3sec04">Making the request</a></li>
+<li id="id286753323"><a href="ch04.html#ch04lvl3sec05">Successful response</a></li></ol></li></ol></li>
+<li id="id286753398"><a href="ch04s02.html">Practical example</a></li>
+<li id="id286754572"><a href="ch04s03.html">Summary</a></li></ol></li>
+<li id="id286754588"><a href="ch05.html">5. OAuth for Client-side Applications</a><ol>
+<li id="id286754609"><a href="ch05.html#ch05lvl1sec23">Implicit grant</a></li>
+<li id="id286754864"><a href="ch05s02.html">Requesting authorization</a><ol>
+<li id="id286755156"><a href="ch05s02.html#ch05lvl2sec24">Successful authorization</a></li>
+<li id="id286755332"><a href="ch05s02.html#ch05lvl2sec25">Authorization error</a></li></ol></li>
+<li id="id286755691"><a href="ch05s03.html">Practical example</a></li>
+<li id="id286756371"><a href="ch05s04.html">Summary</a></li></ol></li>
+<li id="id286756387"><a href="ch06.html">6. OAuth for Mobile Applications</a><ol>
+<li id="id286756404"><a href="ch06.html#ch06lvl1sec28">Custom URL scheme</a><ol>
+<li id="id286756558"><a href="ch06.html#ch06lvl2sec26">Android</a></li>
+<li id="id286756630"><a href="ch06.html#ch06lvl2sec27">iOS</a></li></ol></li>
+<li id="id286756857"><a href="ch06s02.html">Implicit grant example</a><ol>
+<li id="id286756926"><a href="ch06s02.html#ch06lvl2sec28">Requesting authorization</a></li>
+<li id="id286757016"><a href="ch06s02.html#ch06lvl2sec29">Successful authorization</a></li>
+<li id="id286757085"><a href="ch06s02.html#ch06lvl2sec30">Authorization error</a></li></ol></li>
+<li id="id286757149"><a href="ch06s03.html">Summary</a></li></ol></li>
+<li id="id286757164"><a href="ch07.html">7. OAuth for Trusted Applications</a><ol>
+<li id="id286757185"><a href="ch07.html#ch07lvl1sec31">Resource owner password credentials grant</a><ol>
+<li id="id286757401"><a href="ch07.html#ch07lvl2sec31">Requesting authorization</a></li>
+<li id="id286757661"><a href="ch07.html#ch07lvl2sec32">Successful authorization</a></li>
+<li id="id286757853"><a href="ch07.html#ch07lvl2sec33">Authorization error</a></li></ol></li>
+<li id="id286758160"><a href="ch07s02.html">Client credentials grant</a><ol>
+<li id="id286758317"><a href="ch07s02.html#ch07lvl2sec34">Requesting authorization</a></li>
+<li id="id286758498"><a href="ch07s02.html#ch07lvl2sec35">Successful authorization</a></li>
+<li id="id286758721"><a href="ch07s02.html#ch07lvl2sec36">Authorization error</a></li></ol></li>
+<li id="id286758786"><a href="ch07s03.html">Practical example</a><ol>
+<li id="id286759575"><a href="ch07s03.html#ch07lvl2sec37">Resource owner password credentials grant</a></li>
+<li id="id286759925"><a href="ch07s03.html#ch07lvl2sec38">Client credentials grant</a></li></ol></li>
+<li id="id286760402"><a href="ch07s04.html">Summary</a></li></ol></li>
+<li id="id286760418"><a href="ch08.html">8. Security Considerations</a><ol>
+<li id="id286760444"><a href="ch08.html#ch08lvl1sec35">What is there to be protected</a></li>
+<li id="id286760531"><a href="ch08s02.html">OAuth 2.0 security features</a><ol>
+<li id="id286760560"><a href="ch08s02.html#ch08lvl2sec39">Scope</a></li>
+<li id="id286760681"><a href="ch08s02.html#ch08lvl2sec40">Token lifetime</a></li>
+<li id="id286760736"><a href="ch08s02.html#ch08lvl2sec41">The refresh token</a></li>
+<li id="id286760964"><a href="ch08s02.html#ch08lvl2sec42">Authorization code</a></li>
+<li id="id286761065"><a href="ch08s02.html#ch08lvl2sec43">Redirect URI</a></li>
+<li id="id286761191"><a href="ch08s02.html#ch08lvl2sec44">State</a></li>
+<li id="id286761376"><a href="ch08s02.html#ch08lvl2sec45">Client identifier</a></li></ol></li>
+<li id="id286761477"><a href="ch08s03.html">Security considerations</a><ol>
+<li id="id286761490"><a href="ch08s03.html#ch08lvl2sec46">Use TLS</a></li>
+<li id="id286761638"><a href="ch08s03.html#ch08lvl2sec47">Ensure web server application protection</a></li>
+<li id="id286761889"><a href="ch08s03.html#ch08lvl2sec48">Ensure mobile and desktop application protection</a></li>
+<li id="id286762108"><a href="ch08s03.html#ch08lvl2sec49">Utilize the state parameter</a></li>
+<li id="id286762244"><a href="ch08s03.html#ch08lvl2sec50">Use refresh tokens when available</a></li>
+<li id="id286762348"><a href="ch08s03.html#ch08lvl2sec51">Request the needed scope only</a></li></ol></li>
+<li id="id286762401"><a href="ch08s04.html">Summary</a></li></ol></li>
+<li id="id286762416"><a href="ch09.html">9. Additional Security with SAML</a><ol>
+<li id="id286762434"><a href="ch09.html#ch09lvl1sec39">SAML (2.0)</a></li>
+<li id="id286762534"><a href="ch09s02.html">OAuth 2.0 assertions</a><ol>
+<li id="id286762797"><a href="ch09s02.html#ch09lvl2sec52">Other assertion based specifications</a></li></ol></li>
+<li id="id286762836"><a href="ch09s03.html">OAuth 2.0 SAML bearer assertion grant flow</a><ol>
+<li id="id286763010"><a href="ch09s03.html#ch09lvl2sec53">Preparing assertion</a></li>
+<li id="id286763433"><a href="ch09s03.html#ch09lvl2sec54">Requesting authorization</a></li>
+<li id="id286763687"><a href="ch09s03.html#ch09lvl2sec55">Successful authorization</a></li>
+<li id="id286763802"><a href="ch09s03.html#ch09lvl2sec56">Authorization error</a></li></ol></li>
+<li id="id286763960"><a href="ch09s04.html">OAuth 2.0 SAML assertions for client authentication</a><ol>
+<li id="id286764035"><a href="ch09s04.html#ch09lvl2sec57">Requesting the access token</a></li>
+<li id="id286764327"><a href="ch09s04.html#ch09lvl2sec58">Authentication error</a></li></ol></li>
+<li id="id286764475"><a href="ch09s05.html">Summary</a></li></ol></li>
+<li id="id286764490"><a href="ch10.html">10. Common Tools and Libraries</a><ol>
+<li id="id286764507"><a href="ch10.html#ch10lvl1sec45">Tools</a><ol>
+<li id="id286764518"><a href="ch10.html#ch10lvl2sec59">OAuth 2.0 Playground</a></li>
+<li id="id286764626"><a href="ch10.html#ch10lvl2sec60">RESTClient</a></li>
+<li id="id286764699"><a href="ch10.html#ch10lvl2sec61">Postman</a></li></ol></li>
+<li id="id286764774"><a href="ch10s02.html">Libraries</a><ol>
+<li id="id286764814"><a href="ch10s02.html#ch10lvl2sec62">C#</a></li>
+<li id="id286764873"><a href="ch10s02.html#ch10lvl2sec63">Clojure</a></li>
+<li id="id286765019"><a href="ch10s02.html#ch10lvl2sec64">Go</a></li>
+<li id="id286765131"><a href="ch10s02.html#ch10lvl2sec65">Java</a></li>
+<li id="id286765212"><a href="ch10s02.html#ch10lvl2sec66">JavaScript</a></li>
+<li id="id286765301"><a href="ch10s02.html#ch10lvl2sec67">Objective-C</a></li>
+<li id="id286765529"><a href="ch10s02.html#ch10lvl2sec68">Perl</a></li>
+<li id="id286765682"><a href="ch10s02.html#ch10lvl2sec69">PHP</a></li>
+<li id="id286765884"><a href="ch10s02.html#ch10lvl2sec70">Python</a></li>
+<li id="id286766024"><a href="ch10s02.html#ch10lvl2sec71">Ruby</a></li>
+<li id="id286766101"><a href="ch10s02.html#ch10lvl2sec72">Scala</a></li></ol></li>
+<li id="id286766295"><a href="ch10s03.html">Summary</a></li></ol></li>
+<li id="id286766317"><a href="apa.html">A. OAuth 2.0 Resources</a><ol>
+<li id="id286766331"><a href="apa.html#ch10lvl1sec49">OAuth 2.0 specification</a></li>
+<li id="id286766414"><a href="apas02.html">OAuth WG mailing list</a></li>
+<li id="id286766497"><a href="apas03.html">OAuth 2.0 Threat Model and Security Considerations</a></li>
+<li id="id286766536"><a href="apas04.html">The OAuth 2.0 Authorization Framework - Bearer Token Usage</a></li>
+<li id="id286766573"><a href="apas05.html">Assertion Framework for OAuth 2.0 Client Authentication and Authorization Grants</a></li>
+<li id="id286766611"><a href="apas06.html">SAML 2.0 Profile for OAuth 2.0 Client Authentication and Authorization Grants</a></li>
+<li id="id286766700"><a href="apas07.html">OAuth website</a></li></ol></li>
+<li id="backindex"><a href="backindex.html">Index</a></li></ol></li></ol></nav>
+</body></html>

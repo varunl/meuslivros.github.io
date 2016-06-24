@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="bookid">
+  <metadata xmlns:opf="http://www.idpf.org/2007/opf">
+  <dc:creator></dc:creator>
+    <dc:identifier id="bookid"></dc:identifier>
+    <dc:title></dc:title>
+    <dc:publisher xmlns:dc="http://purl.org/dc/elements/1.1/"></dc:publisher>
+    <dc:language xmlns:dc="http://purl.org/dc/elements/1.1/"></dc:language>
+    <meta name="cover" content="cover-image"/>
+  </metadata>
+  <manifest>
+    <item href="../0000Cover.jpg" id="prioritorised_cover" media-type="image/jpeg"/>
+    <item id="ncxtoc" media-type="application/x-dtbncx+xml" href="toc.ncx"/>
+    <item media-type="text/css" id="css" href="epub.css"/>
+    <item id="cover" href="cover.html" media-type="application/xhtml+xml"/>
+    <item id="toc" href="toc.html" media-type="application/xhtml+xml"/>
+    <item id="id286448480" href="index.html" media-type="application/xhtml+xml"/>
+    <item id="cover-image" href="cover/cover.jpg" media-type="image/jpeg"/>
+    <item id="id286448500" href="pr01.html" media-type="application/xhtml+xml"/>
+    <item id="id286691997" href="pr02.html" media-type="application/xhtml+xml"/>
+    <item id="id286697257" href="pr03.html" media-type="application/xhtml+xml"/>
+    <item id="id286697289" href="pr04.html" media-type="application/xhtml+xml"/>
+    <item id="id286697317" href="pr05.html" media-type="application/xhtml+xml"/>
+    <item id="id286697360" href="graphics/PacktLibLogo.jpg" media-type="image/jpeg"/>
+    <item id="id286697428" href="pr06.html" media-type="application/xhtml+xml"/>
+    <item id="id286697575" href="pr06s02.html" media-type="application/xhtml+xml"/>
+    <item id="id286697586" href="pr06s03.html" media-type="application/xhtml+xml"/>
+    <item id="id286697596" href="pr06s04.html" media-type="application/xhtml+xml"/>
+    <item id="id286697664" href="pr06s05.html" media-type="application/xhtml+xml"/>
+    <item id="id286697688" href="pr06s06.html" media-type="application/xhtml+xml"/>
+    <item id="id286697814" href="ch01.html" media-type="application/xhtml+xml"/>
+    <item id="id286697995" href="ch01s02.html" media-type="application/xhtml+xml"/>
+    <item id="id286722590" href="ch01s03.html" media-type="application/xhtml+xml"/>
+    <item id="id286722606" href="ch02.html" media-type="application/xhtml+xml"/>
+    <item id="id286722873" href="graphics/5594OS_02_01.jpg" media-type="image/jpeg"/>
+    <item id="id286722968" href="ch02s02.html" media-type="application/xhtml+xml"/>
+    <item id="id286723422" href="ch02s03.html" media-type="application/xhtml+xml"/>
+    <item id="id286723992" href="ch02s04.html" media-type="application/xhtml+xml"/>
+    <item id="id286750803" href="ch02s05.html" media-type="application/xhtml+xml"/>
+    <item id="id286750905" href="ch02s06.html" media-type="application/xhtml+xml"/>
+    <item id="id286750920" href="ch03.html" media-type="application/xhtml+xml"/>
+    <item id="id286751027" href="graphics/5594OS_03_01.jpg" media-type="image/jpeg"/>
+    <item id="id286751060" href="graphics/5594OS_03_02.jpg" media-type="image/jpeg"/>
+    <item id="id286751143" href="graphics/5594OS_03_03.jpg" media-type="image/jpeg"/>
+    <item id="id286751404" href="graphics/5594OS_03_04.jpg" media-type="image/jpeg"/>
+    <item id="id286751463" href="graphics/5594OS_03_05.jpg" media-type="image/jpeg"/>
+    <item id="id286751562" href="ch03s02.html" media-type="application/xhtml+xml"/>
+    <item id="id286751577" href="ch04.html" media-type="application/xhtml+xml"/>
+    <item id="id286751739" href="graphics/5594OS_04_01.jpg" media-type="image/jpeg"/>
+    <item id="id286752427" href="graphics/5594OS_04_02.jpg" media-type="image/jpeg"/>
+    <item id="id286753398" href="ch04s02.html" media-type="application/xhtml+xml"/>
+    <item id="id286754564" href="graphics/5594OS_04_03.jpg" media-type="image/jpeg"/>
+    <item id="id286754572" href="ch04s03.html" media-type="application/xhtml+xml"/>
+    <item id="id286754588" href="ch05.html" media-type="application/xhtml+xml"/>
+    <item id="id286754746" href="graphics/5594OS_05_01.jpg" media-type="image/jpeg"/>
+    <item id="id286754864" href="ch05s02.html" media-type="application/xhtml+xml"/>
+    <item id="id286755691" href="ch05s03.html" media-type="application/xhtml+xml"/>
+    <item id="id286756362" href="graphics/5594_01.jpg" media-type="image/jpeg"/>
+    <item id="id286756371" href="ch05s04.html" media-type="application/xhtml+xml"/>
+    <item id="id286756387" href="ch06.html" media-type="application/xhtml+xml"/>
+    <item id="id286756857" href="ch06s02.html" media-type="application/xhtml+xml"/>
+    <item id="id286757149" href="ch06s03.html" media-type="application/xhtml+xml"/>
+    <item id="id286757164" href="ch07.html" media-type="application/xhtml+xml"/>
+    <item id="id286757336" href="graphics/5594OS_07_01.jpg" media-type="image/jpeg"/>
+    <item id="id286758160" href="ch07s02.html" media-type="application/xhtml+xml"/>
+    <item id="id286758268" href="graphics/5594OS_07_02.jpg" media-type="image/jpeg"/>
+    <item id="id286758786" href="ch07s03.html" media-type="application/xhtml+xml"/>
+    <item id="id286759870" href="graphics/5594OS_07_03.jpg" media-type="image/jpeg"/>
+    <item id="id286760353" href="graphics/5594OS_07_04.jpg" media-type="image/jpeg"/>
+    <item id="id286760402" href="ch07s04.html" media-type="application/xhtml+xml"/>
+    <item id="id286760418" href="ch08.html" media-type="application/xhtml+xml"/>
+    <item id="id286760531" href="ch08s02.html" media-type="application/xhtml+xml"/>
+    <item id="id286761477" href="ch08s03.html" media-type="application/xhtml+xml"/>
+    <item id="id286762401" href="ch08s04.html" media-type="application/xhtml+xml"/>
+    <item id="id286762416" href="ch09.html" media-type="application/xhtml+xml"/>
+    <item id="id286762534" href="ch09s02.html" media-type="application/xhtml+xml"/>
+    <item id="id286762836" href="ch09s03.html" media-type="application/xhtml+xml"/>
+    <item id="id286762972" href="graphics/5594OS_09_01.jpg" media-type="image/jpeg"/>
+    <item id="id286763960" href="ch09s04.html" media-type="application/xhtml+xml"/>
+    <item id="id286764475" href="ch09s05.html" media-type="application/xhtml+xml"/>
+    <item id="id286764490" href="ch10.html" media-type="application/xhtml+xml"/>
+    <item id="id286764774" href="ch10s02.html" media-type="application/xhtml+xml"/>
+    <item id="id286766295" href="ch10s03.html" media-type="application/xhtml+xml"/>
+    <item id="id286766317" href="apa.html" media-type="application/xhtml+xml"/>
+    <item id="id286766414" href="apas02.html" media-type="application/xhtml+xml"/>
+    <item id="id286766497" href="apas03.html" media-type="application/xhtml+xml"/>
+    <item id="id286766536" href="apas04.html" media-type="application/xhtml+xml"/>
+    <item id="id286766573" href="apas05.html" media-type="application/xhtml+xml"/>
+    <item id="id286766611" href="apas06.html" media-type="application/xhtml+xml"/>
+    <item id="id286766700" href="apas07.html" media-type="application/xhtml+xml"/>
+    <item id="backindex" href="backindex.html" media-type="application/xhtml+xml"/>
+    <item id="id-note" href="graphics/note.jpg" media-type="image/jpeg"/>
+    <item id="id-reference" href="graphics/reference.jpg" media-type="image/jpeg"/>
+    <item id="id-list" href="graphics/list.jpg" media-type="image/jpeg"/>
+    <item id="id-activity" href="graphics/activity.jpg" media-type="image/jpeg"/>
+    <item id="id-action" href="graphics/action.jpg" media-type="image/jpeg"/>
+  </manifest>
+  <spine toc="ncxtoc">
+    <itemref idref="cover" linear="yes"/>
+    <itemref idref="toc"/>
+    <itemref idref="id286448480"/>
+    <itemref idref="id286448500"/>
+    <itemref idref="id286691997"/>
+    <itemref idref="id286697257"/>
+    <itemref idref="id286697289"/>
+    <itemref idref="id286697317"/>
+    <itemref idref="id286697428"/>
+    <itemref idref="id286697575"/>
+    <itemref idref="id286697586"/>
+    <itemref idref="id286697596"/>
+    <itemref idref="id286697664"/>
+    <itemref idref="id286697688"/>
+    <itemref idref="id286697814"/>
+    <itemref idref="id286697995"/>
+    <itemref idref="id286722590"/>
+    <itemref idref="id286722606"/>
+    <itemref idref="id286722968"/>
+    <itemref idref="id286723422"/>
+    <itemref idref="id286723992"/>
+    <itemref idref="id286750803"/>
+    <itemref idref="id286750905"/>
+    <itemref idref="id286750920"/>
+    <itemref idref="id286751562"/>
+    <itemref idref="id286751577"/>
+    <itemref idref="id286753398"/>
+    <itemref idref="id286754572"/>
+    <itemref idref="id286754588"/>
+    <itemref idref="id286754864"/>
+    <itemref idref="id286755691"/>
+    <itemref idref="id286756371"/>
+    <itemref idref="id286756387"/>
+    <itemref idref="id286756857"/>
+    <itemref idref="id286757149"/>
+    <itemref idref="id286757164"/>
+    <itemref idref="id286758160"/>
+    <itemref idref="id286758786"/>
+    <itemref idref="id286760402"/>
+    <itemref idref="id286760418"/>
+    <itemref idref="id286760531"/>
+    <itemref idref="id286761477"/>
+    <itemref idref="id286762401"/>
+    <itemref idref="id286762416"/>
+    <itemref idref="id286762534"/>
+    <itemref idref="id286762836"/>
+    <itemref idref="id286763960"/>
+    <itemref idref="id286764475"/>
+    <itemref idref="id286764490"/>
+    <itemref idref="id286764774"/>
+    <itemref idref="id286766295"/>
+    <itemref idref="id286766317"/>
+    <itemref idref="id286766414"/>
+    <itemref idref="id286766497"/>
+    <itemref idref="id286766536"/>
+    <itemref idref="id286766573"/>
+    <itemref idref="id286766611"/>
+    <itemref idref="id286766700"/>
+    <itemref idref="backindex"/>
+  </spine>
+  <guide>
+    <reference href="cover.html" type="cover" title="Cover"/>
+  </guide>
+</package>
+
+

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Practical example</title><link rel="stylesheet" href="epub.css" type="text/css"/><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/></head><body id="page"><div class="section" title="Practical example"><div class="titlepage"><div><div><h1 class="title"><a id="ch07lvl1sec33"/>Practical example</h1></div></div></div><p>Now we will work out a practical example for both grants covered in this chapter.</p><p>Due to the fact that these<a id="id287" class="indexterm"/> two grants are less popular and are suitable for less use cases and scenarios, compared to the authorization code grant and<a id="id288" class="indexterm"/> the client credentials grant,<a id="id289" class="indexterm"/> they can be found in fewer cases.</p><p>One of the service providers that uses OAuth 2.0 for authorization of its API and supports these two grants is <span class="strong"><strong>Zendesk</strong></span>
+<a id="id290" class="indexterm"/>, a cloud-based customer service software solution. Among other services, they also offer an API on which client applications can be made and have implemented all four grants defined in the OAuth 2.0 specification.</p><p>We will create an example web application that will use Zendesk as its authorization server. It will contain<a id="id291" class="indexterm"/> implementations of both password grant flow and client credentials grant flow, and when executed it will request two tokens, one by using each grant. When opened in the browser, it will display the values of both access tokens.</p><p>It will be based on the same Java technologies as the example application for the authorization code grant: Spring MVC and JSP as the main components, Google GSON library for JSON parsing, and Apache HTTP client for making HTTP requests. As with the previous examples, this one is also concise, elegant, and explained in detail so that developers familiar with other<a id="id292" class="indexterm"/> technologies should have no problem understanding it.</p><p>When we open the root folder <a id="id293" class="indexterm"/>of the example application, the important files that are a part of it are the following:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc"><code class="literal">src\main\webapp\WEB-INF\pages\home.jsp</code>: This is the main page displayed when the example application is opened</li><li class="listitem" style="list-style-type: disc"><code class="literal">src\main\webapp\WEB-INF\pages\error.jsp</code>: This is the page that we show when an error occurs</li><li class="listitem" style="list-style-type: disc"><code class="literal">src\main\java\example\password\MainController.java</code>: This file contains the Java logic of this example application, for both grants</li></ul></div><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note06"/>Note</h3><p>The example application can be downloaded from <a class="ulink" href="http://www.packtpub.com">http://www.packtpub.com</a>, containing all the files and instructions on how to compile and start them.</p></div></div><p>Additionally, for added clarity we will check out cURL statements of the same HTTP requests that are performed in Java. cURL is a popular command line tool that is used for transferring data over various protocols, and it is often used as an HTTP client.</p><p>Moving on, first thing we<a id="id294" class="indexterm"/> have to do is register a client application at Zendesk. For this purpose we will create a trial account, and register the client application at the following URL (where <code class="literal">user_id</code> is replaced with the one that was chosen when creating the account, also referred to as <code class="literal">subdomain</code>):</p><p>
+<code class="literal">https://USER_ID.zendesk.com/settings/api#oauth_clients</code>
+</p><p>For more information on this process, client registration is covered in <a class="link" href="ch03.html" title="Chapter&#xA0;3.&#xA0;First Step for Your Application">Chapter 3</a>, <span class="emphasis"><em>First Step for Your Application</em></span>.</p><p>Let's start with the code. The main entry point of the application for the user is the <code class="literal">main.jsp</code> page, consisting of HTML markup, where the important code is in the <code class="literal">body</code> tag:</p><div class="informalexample"><pre class="programlisting">&lt;body&gt;
+    &lt;p&gt;Access token from Password Grant flow is:
+      &lt;span&gt;${accessTokenPWGrant}&lt;/span&gt;
+    &lt;/p&gt;
+    &lt;p&gt;Access token from Client Credentials Grant flow is:
+      &lt;span&gt;${accessTokenCCGrant}&lt;/span&gt;
+    &lt;/p&gt;
+&lt;/body&gt;</pre></div><p>The values for the variables <code class="literal">accessTokenPWGrant</code> and <code class="literal">accessTokenCCGrant</code> are separated in their respective<a id="id295" class="indexterm"/> paragraphs, and their values are supplied from the spring controller that we'll analyze next. At this moment, let's see what they represent:</p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem" style="list-style-type: disc">The variable <code class="literal">accessTokenPWGrant</code> <a id="id296" class="indexterm"/>will show the value of the retrieved access token by using the password grant flow</li><li class="listitem" style="list-style-type: disc">The variable <code class="literal">accessTokenCCGrant</code> <a id="id297" class="indexterm"/>will show the value of the retrieved access token by using the client credentials grant flow</li></ul></div><p>The rest of the code resides in the <code class="literal">MainController</code> Java class<a id="id298" class="indexterm"/>. First, we define the needed variables and their values in it:</p><div class="informalexample"><pre class="programlisting">String clientId = "insertValue";  // client identifier
+String clientSecret = "insertValue";  // client secret
+String user_id = "insertValue";    // user/organization id
+String username = "insertValue";  // account log-in email
+String password = "insertValue";  // account log-in password</pre></div><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="note07"/>Note</h3><p>We update the values of these variables with real ones in order that the example works properly. The same goes for the cURL statement examples.</p></div></div><p>The only<a id="id299" class="indexterm"/> endpoint defined is<a id="id300" class="indexterm"/> the one used for requesting the token:</p><div class="informalexample"><pre class="programlisting">String tokenEndpoint =
+  "https://" + user_id +".zendesk.com/oauth/tokens";</pre></div><p>Notice that we don't need to specify authorization and redirect/callback endpoints; these two flows don't need them.</p><p>Next, we define a class named <code class="literal">AccessTokenResponse</code> <a id="id301" class="indexterm"/>that will be used by GSON to convert the response from the request for access token into an instance of this class, providing a far easier way to use the response data:</p><div class="informalexample"><pre class="programlisting">private static class AccessTokenResponse {
+  String access_token;
+  String token_type;
+  String expires_in;
+  String scope;
+  String refresh_token;
+  // ..
+}</pre></div><p>All the fields that may be part of the response are specified. If they don't exist in the actual response from the server they will be <code class="literal">null</code> when the object is created by GSON. We can also add additional custom fields, if there are any.</p><p>When the application is opened in the browser, the following code handles the request:</p><div class="informalexample"><pre class="programlisting">@RequestMapping(value = "/", method = RequestMethod.GET)
+public String mainPage(ModelMap model)
+  throws IOException {
+
+  model.addAttribute("accessTokenPWGrant",
+    getATWithPasswordGrantFlow().access_token);
+  model.addAttribute("accessTokenCCGrant",
+    getATWithClientCredentialsGrantFlow().access_token);
+  return "main";
+}</pre></div><p>We're using Spring's <code class="literal">@RequestMapping</code> annotation<a id="id302" class="indexterm"/> to map the main URL <code class="literal">/</code> to the <code class="literal">mainPage</code> handler method<a id="id303" class="indexterm"/>. Because this page is opened in a browser, it's mapped to the HTTP GET request method.</p><p>Inside the <code class="literal">mainPage</code> handler method, we get an instance of the <code class="literal">AccessTokenResponse</code> two times, for both flows, the first time by executing the <code class="literal">getATWithPasswordGrantFlow</code> method<a id="id304" class="indexterm"/> and the second time by executing the<a id="id305" class="indexterm"/> <code class="literal">getATWithClientCredentialsGrantFlow</code> method.</p><p>For both methods, once<a id="id306" class="indexterm"/> we get the <code class="literal">AccessTokenResponse</code> we get the value of the <code class="literal">access_token</code> field and put it in <code class="literal">model</code>. The first time it is put in as a value for the variable named <code class="literal">accessTokenPWGrant</code> and the <a id="id307" class="indexterm"/>second for the one named <code class="literal">accessTokenCCGrant</code>. By putting them in <code class="literal">model</code>, they are accessible to be used and displayed in HTML, which is rendered and served to the browser.</p><p>The next step is to define the code <a id="id308" class="indexterm"/>in these two methods by implementing the flows so that in the end they will return an access token response.</p><div class="section" title="Resource owner password credentials grant"><div class="titlepage"><div><div><h2 class="title"><a id="ch07lvl2sec37"/>Resource owner password credentials grant</h2></div></div></div><p>When we call the <code class="literal">getATWithPasswordGrantFlow</code> method<a id="id309" class="indexterm"/> in <code class="literal">mainPage</code>, we execute the whole password grant flow inside it <a id="id310" class="indexterm"/>and as a<a id="id311" class="indexterm"/> response of that method we get an instance of <code class="literal">AccessTokenResponse</code>:</p><div class="informalexample"><pre class="programlisting">model.addAttribute("accessTokenPWGrant",
+  getATWithPasswordGrantFlow().access_token);</pre></div><p>Let's see this method in detail:</p><div class="informalexample"><pre class="programlisting">private AccessTokenResponse getATWithPasswordGrantFlow()
+    throws IOException {
+
+  String tokenRequest =
+    tokenEndpoint.concat("?grant_type=password")
+      .concat("&amp;client_id=").concat(clientId)
+      .concat("&amp;client_secret=").concat(clientSecret)
+      .concat("&amp;username=")
+      .concat(URLEncoder.encode(username, "UTF-8"))
+      .concat("&amp;password=")
+      .concat(URLEncoder.encode(password, "UTF-8"));
+
+  HttpPost getAccessTokenRequest =
+    new HttpPost(tokenRequest);
+  getAccessTokenRequest.addHeader(
+    "Accept",
+    "application/json");
+
+  DefaultHttpClient httpClient =
+    new DefaultHttpClient();
+  HttpResponse response =
+    httpClient.execute(getAccessTokenRequest);
+
+  if (response.getStatusLine().getStatusCode() != 200) {
+    printError(response);
+    return null;
+  }
+
+  final Gson gson = new Gson();
+  Reader streamReader =
+    new InputStreamReader(
+      response.getEntity().getContent());
+  AccessTokenResponse atResponse =
+    gson.fromJson(
+      streamReader,
+      AccessTokenResponse.class);
+
+  return atResponse;
+}</pre></div><p>We can see that it consists of several parts:</p><div class="orderedlist"><ol class="orderedlist arabic"><li class="listitem">First, we define the request URL in a series of concatenations of the token endpoint variable and the required parameters and their values, resulting in <code class="literal">tokenRequest</code>. During that process for some values that are concatenated, we use <code class="literal">URLEncoder.encode</code> in order to make sure that all characters are encoded properly (such as special characters in a password).</li><li class="listitem">Next, with this token request URL, we create an HTTP POST request object and add a request header to it named <code class="literal">Accept</code> with value <code class="literal">application/json</code>, telling Zendesk that we expect a JSON format as a response. </li><li class="listitem">Now that the <code class="literal">HttpPost</code> request object<a id="id312" class="indexterm"/> is created, we create an HTTP client and execute it. We store the result of the execution in an <code class="literal">HttpResponse</code> object<a id="id313" class="indexterm"/>, named <code class="literal">response</code>.</li><li class="listitem">Next, we check the response. If the response has an HTTP status code different than <code class="literal">200</code>, then it means that an error occurred, so we print the reason in console and exit the method by <a id="id314" class="indexterm"/>returning <code class="literal">null</code>. If there's no error, then we move on.</li><li class="listitem">We create a GSON object so that we are able to use it, then we read the body of the response into a <code class="literal">streamReader</code>, and finally call <code class="literal">gson.fromJson</code> to deserialize the data into an instance of <code class="literal">AccessTokenResponse</code>.</li><li class="listitem">In the end, we make a return statement, supplying the access token response.</li></ol></div><p>The HTTP request that is <a id="id315" class="indexterm"/>constructed and executed in the previous steps, when represented as a cURL statement has the following form:</p><div class="informalexample"><pre class="programlisting">curl &#x2013;X POST \
+  -H "Accept: application/json" \
+  -d "grant_type=password" \
+  -d "client_id=insertValue" \
+  -d "client_secret=insertValue" \
+  -d "username=insertValue" \ 
+  -d "password=insertValue" \ 
+  https://USER_ID.zendesk.com/oauth/tokens</pre></div><p>If we run the client application, it may look like the following screenshot:</p><div class="mediaobject"><img src="graphics/5594OS_07_03.jpg" alt="Resource owner password credentials grant"/></div><p>Here, the access token was successfully obtained with the use of the password grant, and its value is displayed on the page.</p><p>Next, we'll get the second access token, utilizing the client credentials grant flow, as shown in the screenshot in <a id="id316" class="indexterm"/>the following<a id="id317" class="indexterm"/> section.</p></div><div class="section" title="Client credentials grant"><div class="titlepage"><div><div><h2 class="title"><a id="ch07lvl2sec38"/>Client credentials grant</h2></div></div></div><p>As with the <a id="id318" class="indexterm"/>previous grant, here <a id="id319" class="indexterm"/>we proceed in the same fashion: we call the <code class="literal">getATWithClientCredentialsGrantFlow</code> method<a id="id320" class="indexterm"/> in <code class="literal">mainPage</code>, we execute the whole client credentials grant flow inside it, and we get an instance of <code class="literal">AccessTokenResponse</code> as a response.</p><div class="informalexample"><pre class="programlisting">model.addAttribute("accessTokenCCGrant",
+  getATWithClientCredentialsGrantFlow().access_token);</pre></div><p>Let's see this method in detail:</p><div class="informalexample"><pre class="programlisting">private AccessTokenResponse getATWithClientCredentialsGrantFlow()
+    throws IOException {
+
+  String tokenRequest =
+    tokenEndpoint
+      .concat("?grant_type=client_credentials")
+      .concat("&amp;client_id=").concat(clientId)
+      .concat("&amp;client_secret=").concat(clientSecret)
+      .concat("&amp;user_id=").concat(user_id);
+
+  HttpPost getAccessTokenRequest =
+    new HttpPost(tokenRequest);
+  getAccessTokenRequest.addHeader(
+    "Accept",
+    "application/json");
+
+  DefaultHttpClient httpClient =
+    new DefaultHttpClient();
+  HttpResponse response =
+    httpClient.execute(getAccessTokenRequest);
+
+  if (response.getStatusLine().getStatusCode() != 200) {
+    printError(response);
+    return null;
+  }
+
+  final Gson gson = new Gson();
+  Reader streamReader =
+    new InputStreamReader(
+      response.getEntity().getContent());
+  AccessTokenResponse atResponse =
+    gson.fromJson(
+      streamReader,
+      AccessTokenResponse.class);
+      
+  return atResponse;
+}</pre></div><p>There are two differences in the code compared to the previous grant. The first difference is in the parameters that are a part of the request URL. In the password grant flow we had<a id="id321" class="indexterm"/> the<a id="id322" class="indexterm"/> following parameters: <code class="literal">client_id</code>, <code class="literal">client_secret</code>, <code class="literal">username</code>, and <code class="literal">password</code>. In this flow, for client credentials, we have the following parameters: <code class="literal">client_id</code>, <code class="literal">client_secret</code>, and <code class="literal">user_id</code>. The second difference is also in the parameters: in the password grant flow we set the value of the <code class="literal">grant_type</code> parameter<a id="id323" class="indexterm"/> to <code class="literal">password</code>, and in the client credentials grant flow we set it to <code class="literal">client_credentials</code>.</p><div class="note" title="Note" style=""><div class="inner"><h3 class="title"><a id="tip23"/>Tip</h3><p>The parameter <a id="id324" class="indexterm"/>
+<code class="literal">user_id</code> is a custom one from Zendesk, and it is not part of the OAuth 2.0 specification. This is just another example showing us that implementations of various OAuth 2.0 flows may vary and they are not identical between service providers. And this is why we are always encouraged to read the developer documentation provided by the service for which we're developing a client application.</p></div></div><p>The HTTP request that is constructed <a id="id325" class="indexterm"/>and executed in the previous steps, when represented as a cURL statement, has the following form:</p><div class="informalexample"><pre class="programlisting">curl &#x2013;X POST \
+  -H "Accept: application/json" \
+  -d "grant_type=password" \
+  -d "client_id=insertValue" \
+  -d "client_secret=insertValue" \
+  -d "user_id=USER_ID " \
+  https://USER_ID.zendesk.com/oauth/tokens</pre></div><p>In the end, if we run the client application, it may<a id="id326" class="indexterm"/> look like the following screenshot:</p><div class="mediaobject"><img src="graphics/5594OS_07_04.jpg" alt="Client credentials grant"/></div><p>The client application successfully shows the values of the obtained access tokens for both grant flows that <a id="id327" class="indexterm"/>we have learned <a id="id328" class="indexterm"/>about.</p></div></div></body></html>
