@@ -1,0 +1,2875 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title dir="ltr">8 Architecture of Microservice-based Systems</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body dir="ltr" class="calibre">
+<div class="calibre6">
+<h2 id="chapter-8" class="calibre1">8 Architecture of Microservice-based Systems</h2>
+
+<p class="calibre3">This chapter discusses how Microservices should behave from the
+outside and how the entire Microservice system can be developed.
+<a href="part0013.html#chapter-9">Chapter 9</a> will show possible communication technologies,
+which are another important technology
+component. <a href="part0014.html#chapter-10">Chapter 10</a> focuses on the architecture of
+individual Microservices.</p>
+
+<p class="calibre3"><a href="part0012.html#section8-1">Section 8.1</a> describes what the domain architecture of a Microservice
+system should look like. <a href="part0012.html#section8-2">Section 8.2</a> presents appropriate tools to
+visualize and manage the architecture. <a href="part0012.html#section8-3">Section 8.3</a> shows how the
+architecture can be adapted in a stepwise manner. Only the constant adaptation of the
+software architecture ensures that the system remains maintainable in the long run
+and can be developed further. <a href="part0012.html#section8-4">Section 8.4</a> depicts which goals and
+which approaches are important to enable further development.</p>
+
+<p class="calibre3">Subsequently, a number of approaches for the architecture of a
+Microservice-based system are explained. <a href="part0012.html#section8-6">Section 8.6</a>
+introduces Event-driven Architecture. This approach allows for
+architectures that are very loosely coupled. <a href="part0012.html#section8-5">Section 8.5</a>
+discusses the special challenges which arise when a legacy
+application is supposed to be supplemented or replaced by
+Microservices.</p>
+
+<p class="calibre3">Finally <a href="part0012.html#section8-7">8.7</a> deals with the topic which technical aspects
+are relevant for the architecture of a Microservice-based system. Some
+of these aspects are presented in depth in the following sections:
+mechanisms for coordination and configuration
+(<a href="part0012.html#section8-8">section 8.8</a>), for Service Discovery
+(<a href="part0012.html#section8-9">section 8.9</a>), Load Balancing
+(<a href="part0012.html#section8-10">section 8.10</a>), scalability
+(<a href="part0012.html#section8-11">section 8.11</a>), security (<a href="part0012.html#section8-12">section 8.12</a>)
+and finally documentation and metadata (<a href="part0012.html#section8-13">section 8.13</a>).</p>
+
+<h3 id="section8-1" class="calibre2">8.1 Domain Architecture</h3>
+
+<p class="calibre3">The domain architecture of a Microservice-based system determines
+which Microservices within the system should implement which domain.
+It defines how the entire domain is split into different areas,
+which are each implemented by one Microservice and thus one team. To devise such an 
+architecture presents a central challenge when introducing
+Microservices. After all, it is an important motivation for the use of
+Microservices that changes to the domain can ideally be
+implemented by just one team by changing only one Microservice – so that little
+coordination and communication across teams is required. In this way,
+Microservices support the scaling of the software development since
+even large teams need little communication and thus can still work
+productively.</p>
+
+<p class="calibre3">To really achieve this, a central point is the design of a domain architecture for the
+Microservices, in which changes are really limited to
+single Microservices and thus individual teams. When the
+distribution into Microservices does not support this, changes will
+require additional coordination and communication. In such a case the
+Microservice-based approach cannot bring its advantages fully to bear.</p>
+
+<h5 id="leanpub-auto-strategic-design-and-domain-driven-design" class="calibre15">Strategic Design and Domain-Driven Design</h5>
+
+<p class="calibre3"><a href="part0007.html#section4-3">Section 4.3</a> discussed already the distribution of
+Microservices based on Strategic Designs, which are taken from
+Domain-driven Design. A central element is here that the Microservices are
+distributed into contexts – i.e. areas which present each a separate
+functionality.</p>
+
+<p class="calibre3">Often architects develop a Microservice architecture based on entities
+from a domain model. A certain Microservice implements the logic for a
+certain type of entity. In such a case there is for
+instance one Microservice for customers, one for items and one for
+deliveries. This approach conflicts with the idea of <em class="calibre20">Bounded Context</em>,
+according to which a uniform modeling of data is impossible. Moreover,
+this approach isolates changes very badly. When a process is supposed
+to be modified and for this reason entities have likewise to be
+adapted, the change is distributed across different Microservices. Thus,
+changing the order process will concern also the entity modeling for
+customers, items and deliveries. When that is the case, the three
+Microservices for the different entities have to be changed in addition to
+the Microservice for the order process. To avoid this, it can be sensible
+to keep certain parts of the data for customers, items and deliveries in
+the Microservice for the order process. This limits changes to the
+order process even in that case to only one Microservice when the data
+modeling has to be modified.</p>
+
+<p class="calibre3">However, there can still be services dedicated to the administration
+of certain entities. For instance, it can be necessary to administrate
+at least the most fundamental data of a certain business entity in a
+service. Thus, a service can definitely administrate the client data,
+but leave specific client data such as a bonus program number to other
+Microservices – for example to the Microservice for the order process,
+which likely has to know this number.</p>
+
+<h5 id="leanpub-auto-example-otto-shop" class="calibre15">Example Otto Shop</h5>
+
+<p class="calibre3">An example – i.e. the
+<a href="http://dev.otto.de/2013/04/14/architekturprinzipien-2/">architecture of the Otto shop</a>
+– illustrates this concept. There are on the one hand services like user,
+order or product, which are rather oriented towards data, and on the
+other hand areas like tracking, search &amp; navigation and
+personalization, which are not geared to data, but to functionalities.
+Exactly such a domain design should be aimed at in a
+Microservice-based system.</p>
+
+<p class="calibre3">A domain architecture requires a precise understanding of the
+domain. The domain architecture comprises not only the
+division of the system into Microservices, but also the
+dependencies. A dependency arises when a dependent Microservice uses
+another one – for instance by calling the Microservice, by using
+elements from the UI of the Microservice or by replicating its data.
+Such a dependency means that changes to a Microservice can influence
+also the Microservice that is dependent on it. If the Microservice
+modifies for instance its interface, the dependent Microservice has to
+be adapted to these changes. Also new requirements concerning the
+dependent Microservice might necessitate that the other Microservice
+modifies its interface. If the dependent Microservice needs more data
+to implement the requirements, the other Microservice has to offer
+these data and to adjust its interface accordingly.</p>
+
+<p class="calibre3">For Microservices such dependencies cause disadvantages beyond
+software architecture: After all, Microservices can be implemented by
+different teams. In that case a change to an interface necessitates
+also collaboration between teams – this, however, is laborious and
+time-consuming.</p>
+
+<h5 id="leanpub-auto-managing-dependencies" class="calibre15">Managing Dependencies</h5>
+
+<p class="calibre3">Managing dependencies between Microservices is central for the
+architecture of the system. Having too many dependencies will preclude
+that Microservices can be changed in isolation – which disagrees with
+the aim to develop Microservices independently of each other. Here,
+the two fundamental rules for good architecture apply:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">There should be a <strong class="calibre19">loose coupling</strong> between components such as
+Microservices. This means that they should have only few dependencies
+on other Microservices. This makes it easier to modify them since
+changes will only affect an individual Microservice.</li>
+  <li class="calibre14">Within a component such as a Microservice the constituent parts
+should work closely together. This is referred to as
+having <strong class="calibre19">high cohesion</strong>. This ensures that all constituent parts
+within a Microservice really belong together.</li>
+</ul>
+
+<p class="calibre3">When these two prerequisites are not given, it will be hardly possible
+to change an individual Microservice in an isolated manner, and changes
+will have to be coordinated across multiple teams and Microservices –
+this is just what Microservice-based architectures are supposed to
+avoid. However, this is actually rather a symptom: The fundamental
+problem is how the domain-based split of the functionalities between
+the Microservices was done – obviously functionalities, which would
+have belonged together in one Microservice, have been distributed
+across different Microservices. An order process, for instance, has
+also to generate a bill. These two functionalities are so different
+that they have to be distributed into at least two Microservices.
+However, when each modification of the order process affects also the
+Microservice, which creates the bills, the domain-based modeling is
+not optimal and should be adjusted. The functionalities have to be
+distributed differently to the Microservices, as we will see.</p>
+
+<h5 id="leanpub-auto-unintended-domain-based-dependencies" class="calibre15">Unintended Domain-Based Dependencies</h5>
+
+<p class="calibre3">Not only a high number of dependencies poses a problem. Certain
+domain-based dependencies can simply be nonsensical. It is for
+instance surprising when in an E-commerce system the team
+responsible for product search suddenly has an interface with the
+Microservice for billing - because that should not be the case from
+a domain-based point of view. However, especially concerning the domains
+there are continuously surprises for laypersons. When a
+dependency is not meaningful from a domain-based point of view,
+something regarding the functionality of the Microservices has to be
+wrong. Maybe the Microservice implements features which belong into
+other Microservices from a domain-based perspective. Perhaps in the
+context of product search a scoring of the customer is required, which
+is implemented as part of billing. In that case one should consider
+whether this functionality is really implemented in the right
+Microservice. To keep the system maintainable in the long run, such
+dependencies have to be questioned and, if necessary, removed from the
+system. For instance, the scoring can be moved into an new independent Microservice or
+transferred into another existing Microservice.</p>
+
+<h5 id="leanpub-auto-cyclic-dependencies" class="calibre15">Cyclic Dependencies</h5>
+
+<p class="calibre3">Cyclic dependencies can present additional problems for a comprehensive
+architecture. Let us assume that the Microservice for the order
+process calls the Microservice for billing (see <a href="part0012.html#Fig20">Fig. 20</a>).
+The Microservice for billing fetches data from the order process
+Microservice. When the Microservice for the order process is changed,
+modifications to the Microservice for billing might be necessary since
+this Microservice fetches data from the Microservice for the order
+process. Conversely, changes to the billing Microservice entail
+changes to the order Microservice as this Microservice calls the
+billing Microservice. For this reason, cyclic dependencies are
+problematic: The components cannot be changed anymore in isolation,
+contrary to the underlying aim for a split into separate components. In
+case of Microservices especially much emphasis is laid on the
+independence, which is violated in this case. In addition to the
+necessary coordination of changes it can happen that the deployment
+has to be coordinated. When a new version of the one Microservice is
+rolled out, a new version of the other Microservice might have to be
+rolled out as well, if they have a cyclic dependency.</p>
+
+
+<figure id="Fig20" class="image">
+  <img src="../images/00022.jpeg" alt="Fig. 20: Cyclic dependency" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 20: Cyclic dependency</figcaption>
+</figure>
+
+
+<p class="calibre3">The remainder of the chapter shows approaches which allow to build
+Microservice-based architectures in such a way that they have a sound
+structure from a domain-based perspective. Metrics like cohesion and
+loose coupling can confirm that the architecture is really
+fitting. In the context of approaches like Event-driven Architecture
+(<a href="part0012.html#section8-6">section 8.6</a>) Microservices have hardly any direct technical
+dependencies since they send only messages. Who is sending the
+messages and who is processing them, can hardly be determined from the
+code so that the metrics look very good. However, from a domain-based
+perspective the system can still be much too complicated, since the
+domain-based dependencies are not examined by the metrics.
+Domain-based dependencies arise when two Microservices exchange
+messages. However, this is hardly ascertainable by code analysis so
+that the metrics will always look quite good. Thus metrics can only
+hint at problems. By just optimizing the metrics, the symptoms are
+optimized, but the underlying problems remain unsolved. Even worse:
+Even systems with good metrics can have architectural weaknesses.
+Therefore the metric looses it value to determine the quality of a
+software system.</p>
+
+<p class="calibre3">A special problem in the case of Microservices is that dependencies
+between Microservices can also influence the independent deployment.
+If a Microservice requires a new version of another Microservice
+because it uses, for instance, a new version of an interface, the
+deployment will also be dependent: The Microservice has to be deployed
+before the dependent Microservice can be deployed. In extreme cases
+this can result in a large number of Microservices that have to be
+coordinately deployed – this is just what is supposed to be avoided.
+Microservices should be deployed independently of each other.
+Therefore, dependencies between Microservices can present an even
+greater problem than would be the case for modules within a Deployment
+Monolith.</p>
+
+<h3 id="section8-2" class="calibre2">8.2 Architecture Management</h3>
+
+<p class="calibre3">For a domain architecture it is critical which Microservices
+there are and what the communication relationships between the
+Microservices look like. Also in other systems the relationships
+between the components are very important. When domain-based
+components are mapped on modules, classes, Java packages, JAR files or
+DLLs, specific tools can determine the relationships between the
+components and control the adherence to certain rules. This is
+achieved by a static code analysis.</p>
+
+<h5 id="leanpub-auto-tools-for-architecture-management" class="calibre15">Tools for Architecture Management</h5>
+
+<p class="calibre3">If no such architecture management happens, unintended dependencies
+will rapidly creep in. The architecture will get more and more complex
+and hard to understand. Only with the help of architecture management
+tools developers and architects will be able to keep track of the
+system. Within a development environment developers view only
+individual classes. The dependencies between classes can only be found
+in the source code and are not readily discernible.</p>
+
+
+<figure id="Fig21" class="image">
+  <img src="../images/00023.jpeg" alt="Fig. 21: Screenshot of the Architecture Management Tool Structure 101" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 21: Screenshot of the Architecture Management Tool Structure 101</figcaption>
+</figure>
+
+
+<p class="calibre3"><a href="part0012.html#Fig21">Fig. 21</a> depicts the analysis of a Java project by the
+architecture management tool Structure 101. The image shows classes
+and Java packages, which contain classes. A Levelized Structure Map
+(LSM) presents an overview of them. Classes and packages which are
+further at the top of the LSM use classes and packages which are
+depicted further to the bottom of the LSM. To simplify the diagram, these relationships are not indicated there.</p>
+
+<h5 id="leanpub-auto-cycle-free-software" class="calibre15">Cycle-Free Software</h5>
+
+<p class="calibre3">Architectures should be free of cycles. Cyclic dependencies mean that
+two artifacts are using each other reciprocally. In the screenshot
+such cycles are presented by dashed lines. They always run from bottom
+to top. The reciprocal relationship in the cycle would be running from
+top to bottom and is thus not depicted.</p>
+
+<p class="calibre3">Apart from cycles also packages which are located at a wrong
+position are relevant. There is, for instance, a package <em class="calibre20">util</em>
+that according to its name is supposed to contain helper classes.
+However, it is not located at the very bottom of the diagram. Thus, it
+has to have dependencies to packages or classes which are further down
+– which should not be the case. Helper classes should be independent
+from other system components and thus be depicted at the very bottom
+of an LSM.</p>
+
+<p class="calibre3">Architecture management tools like Structure 101 cannot only analyze
+architectures, but with this tool architects can also define
+prohibited relationships between packages and classes. If a developer
+violates these rules, he/she will obtain an error message and can
+modify the code.</p>
+
+<p class="calibre3">With the help of tools like Structure 101 the architecture of a system
+can easily be visualized. The compiled code has only to be loaded into
+the tool for analysis. In that way the visualization of the
+architecture is easily ensured.</p>
+
+<h5 id="leanpub-auto-microservices-and-architecture-management" class="calibre15">Microservices and Architecture Management</h5>
+
+<p class="calibre3">For Microservices the problem is much larger: Relationships between
+Microservices are not as easy to determine as the relationships
+between code components. After all, the Microservices can even be
+implemented in different technologies. They communicate only via the
+network. Their relationships elude any management at code level since
+they appear only indirectly in the code. However, if the relationships
+between Microservices are unknown, architecture management becomes
+impossible.</p>
+
+<p class="calibre3">There are different possibilities to visualize and manage the
+architecture:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Each Microservice can bring a documentation along (compare <a href="part0012.html#section8-13">section
+8.13</a>), which lists all used Microservices. This documentation has to
+adhere to a predetermined format, which enables visualization.</li>
+  <li class="calibre14">The communication infrastructure can deliver the necessary data. If
+a Service Discovery (<a href="part0012.html#section8-9">section 8.9</a>) is used, it will be aware of all
+Microservices and will know which Microservices have access to which other
+Microservices. These data can then be used for the visualization of
+the relationships between the Microservices.</li>
+  <li class="calibre14">If the access between Microservices is safeguarded by a firewall,
+the rules of the firewall will at least tell which Microservice can
+communicate with which other Microservice. This can also be used as
+basis for a visualization of relationships.</li>
+  <li class="calibre14">Traffic within the network also reveals which Microservices
+communicate with which other Microservices. Tools like Packetbeat
+(compare <a href="part0016.html#section12-3">section 12.3</a>) can be very helpful here. They visualize the
+relationships between Microservices based on the recorded network
+traffic.</li>
+  <li class="calibre14">The distribution into Microservices should correspond to the
+distribution into teams. If two teams can hardly work independently of
+each other any more, this is likely due to a problem in the
+architecture: The Microservices of the two teams depend so strongly on
+each other that they can now only be modified together. The involved
+teams probably know already due to the increased communication
+requirement which Microservices are problematic. To verify the problem,
+an architecture management tool or a visualization can be used.
+However, manually collected information might even be sufficient.</li>
+</ul>
+
+<h5 id="leanpub-auto-tools" class="calibre15">Tools</h5>
+
+<p class="calibre3">Different tools are useful to evaluate data about dependencies:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">There are versions of <a href="http://structure101.com">Structure 101</a> which
+can use custom data structures as input. One still has to write an
+appropriate importer. Structure 101 will then recognize cyclic
+dependencies and can depict the dependencies graphically.</li>
+  <li class="calibre14">
+<a href="http://gephi.github.io/">Gephi</a> can generate complex graphs, which
+are helpful for visualizing the dependencies between Microservices.
+Also here a custom importer has to be written for importing the
+dependencies between the Microservices from an appropriate source into
+Gephi.</li>
+  <li class="calibre14">
+<a href="http://jqassistant.org/">jQAssistant</a> is based on the graph database neo4j. It can be
+ extended by a custom importer. Then the data model can be checked
+  according to rules.</li>
+</ul>
+
+<p class="calibre3">For all these tools custom development is necessary. It is not
+possible to analyze a Microservice-based architecture just like that,
+there is always some extra effort required. Since
+communication between Microservices cannot be standardized, it will
+likely also in the future not be possible to avoid custom
+developments.</p>
+
+<h5 id="leanpub-auto-is-architecture-management-important" class="calibre15">Is Architecture Management Important?</h5>
+
+<p class="calibre3">The architecture management of Microservices is important as it is
+the only way to prevent chaos in the relationships between the
+Microservices. Microservices are a special challenge in this respect:
+With modern tools a Deployment Monolith can be quite easily and
+rapidly analyzed. For Microservice-based architectures there are not
+even tools which can analyze the entire structure in a simple manner.
+The teams first have to create the necessary prerequisites for an
+analysis. Changing the relationships between Microservices is
+difficult – as the next section will show. Therefore, it is even more important to
+constantly review the architecture of the Microservices in order to be
+able to correct arising problems as early as possible. It is in favor
+of Microservice-based architectures that the architecture is also
+reflected in the organization. Problems with communication thus will
+point out architectural problems. Even without a formal architecture
+management architectural problems often become obvious.</p>
+
+<p class="calibre3">On the other hand, experiences with complex Microservice-based systems teach
+that in such systems nobody understands the entire architecture.
+However, this is also not necessary since most changes are limited to
+individual Microservices. If a certain use case is supposed to
+be changed, which involves multiple Microservices, it is sufficient to
+understand this interaction and the involved Microservices. A global
+understanding is not absolutely necessary. This is a consequence of the
+independence of the individual Microservices.</p>
+
+<h5 id="leanpub-auto-context-map" class="calibre15">Context Map</h5>
+
+<p class="calibre3"><em class="calibre20">Context Maps</em> present a possibility to get an overview of the
+architecture of a Microservice-based system<sup id="fnref-DDD" class="calibre32"><a rel="footnote" href="part0007.html#fn-DDD">1</a></sup>. They illustrate
+which domain models are used by which Microservices and visualize thus
+the different Bounded Contexts (compare <a href="part0007.html#section4-3">section 4.3</a>).
+The <em class="calibre20">Bounded Contexts</em> do not only influence the internal data
+presentation in the Microservices. Also in the case of calls between
+Microservices data are exchanged. They have to be in line with some
+type of model. However, the data models underlying communication can
+be distinct from the internal representations. If a Microservice for
+instance is supposed to identify recommendations for customers of an
+E-commerce shop, complex models can be employed internally for this,
+which contain a lot of information about customers, products and orders
+and correlate them in complex ways. To the outside these models are
+presumably much simpler.</p>
+
+
+<figure id="Fig22" class="image">
+  <img src="../images/00024.jpeg" alt="Fig. 22: An example for a Context Map" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 22: An example for a Context Map</figcaption>
+</figure>
+
+
+<p class="calibre3"><a href="part0012.html#Fig22">Fig. 22</a> shows an example for a <em class="calibre20">Context Map</em>:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The registration registers the basic data of each customer. The order
+process also uses this data format to communicate with registration.</li>
+  <li class="calibre14">In the order process the customer’s basic data is supplemented by
+data such as billing and delivery address to obtain the customer order
+data. This corresponds to a <em class="calibre20">Shared Kernel</em> (compare
+<a href="part0007.html#section4-3">section 4.3</a>). The order process shares the kernel of
+the customer data with the registration process.</li>
+  <li class="calibre14">The delivery and the billing Microservice use customer order data
+for communication, the delivery Microservice uses it even for the internal
+representation of the customer. Thus this model is a kind of standard
+model for the communication of customer data.</li>
+  <li class="calibre14">Billing uses an old mainframe data model. Therefore,
+customer order data for the outside communication are decoupled from
+internal representation by an <em class="calibre20">Anti-corruption Layer</em>. The data model
+represents namely a very bad abstraction, which should by no means
+affect other Microservices.</li>
+</ul>
+
+<p class="calibre3">In this model it stands out that the internal data representation in
+registration propagates to the order process. There it serves as basis
+for the customer order data. This model is used in delivery as
+internal data model as well as in the communication with billing and
+delivery. Accordingly, the model is hard to change since it is used by
+so many services. If this model was to be changed, all these services
+would have to be modified.</p>
+
+<p class="calibre3">However, there are also advantages associated with this. If all these
+services had to implement the same change to the data model, only a
+single change would be necessary to update all Microservices at once.
+Nevertheless, this disagrees with the idea that changes should always
+concern only a single Microservice. If the change remains limited to
+the model, the shared model is advantageous since all automatically
+use the current modeling. However, when the change entails changes in
+the Microservices, now multiple Microservices have to be modified –
+and coordinately brought into production. This conflicts with an
+independent deployment of Microservices.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-7" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">Download a tool for the analysis of architectures. Candidates are
+<a href="http://structure101.com">Structure 101</a>,
+<a href="http://gephi.github.io/">Gephi</a>
+or <a href="http://jqassistant.org">jQAssistant</a>. Use
+this tool to get an overview of an existing code basis. Which
+possibilities are there to insert your own dependency graphs into the tool?
+This would allow to also analyze the dependencies within a
+Microservice-based architecture with this tool.</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3"><a href="https://github.com/adrianco/spigo">spigo</a> is a simulation for the
+communication between Microservices. It can be used to get an
+impression of more complex Microservice-based architectures.</p>
+
+</aside>
+
+<h3 id="section8-3" class="calibre2">8.3 Techniques to Adjust the Architecture</h3>
+
+<p class="calibre3">Microservices are first of all interesting for software which is
+subject to many changes. Due to the distribution into Microservices
+the system disaggregates into deployment units, which can be further
+developed independently of each other. This way each Microservice can
+implement its own stream of stories or requirements. Consequently,
+multiple changes can be worked on in parallel without much need for
+coordination.</p>
+
+<p class="calibre3">Experience teaches that the architecture of a system is subject to
+changes. A certain distribution into domain-based components might
+seem sensible at first. However, once the architect gets to know the
+domain better, he/she might come to the conclusion that another
+distribution would be better. New requirements are hard to implement
+with the old architecture since it was devised based on different
+premises. This is especially frequent for agile processes, which
+entail less planning and more flexibility.</p>
+
+<h5 id="leanpub-auto-where-does-bad-architecture-come-from" class="calibre15">Where Does Bad Architecture Come from?</h5>
+
+<p class="calibre3">A system with a bad architecture does normally not come into being
+because the wrong architecture has been chosen at the outset. Based on
+the information available at the start of the project the architecture
+is often good and consistent. The problem is frequently that the
+architecture is not modified when there are new insights, which suggest
+changes to the architecture. The symptom was already mentioned in the
+last section: New requirements cannot be rapidly and easily
+implemented anymore. To that end the architecture would have to be
+changed. When this pressure to introduce changes is ignored for too
+long, the architecture will not fit at all anymore at some point. The
+permanent adjustment and modification of the architecture are
+essential prerequisites for keeping the architecture in a really
+sustainable state.</p>
+
+<p class="calibre3">This section shows which techniques allow to change the interplay
+between Microservices in order to adapt the architecture to the entire
+system.</p>
+
+<h5 id="leanpub-auto-changes-in-microservices" class="calibre15">Changes in Microservices</h5>
+
+<p class="calibre3">Within a Microservice adjustments are easy. The Microservices are small
+and manageable. It is no big deal to adjust structures. And if the
+architecture of an individual Microservice is completely insufficient,
+it can be rewritten since it is not very large. Within a Microservice
+it is also easy to move components or to restructure the code in
+another manner. The term Refactoring <sup id="fnref-Refactoring" class="calibre32"><a rel="footnote" href="part0012.html#fn-Refactoring">2</a></sup> denotes techniques which
+serve to improve the code structure. Many of them even automate
+development tools. This allows for an easy adjustment of the code of
+an individual Microservice.</p>
+
+<h5 id="leanpub-auto-changes-to-the-overall-architecture" class="calibre15">Changes to the Overall Architecture</h5>
+
+<p class="calibre3">However, when the split of the functionalities between the
+Microservices is not in line any more with the requirements, changing
+just one Microservice will not be sufficient. To achieve the necessary
+adjustment of the complete architecture, functionalities have to be
+moved between Microservices. There can be different reasons for this:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The Microservice is too large and has to be divided. Indications for
+this can be that the Microservice is hardly intelligible anymore or
+even that large that a single team is not sufficient to develop it
+further. Another indication can be that the Microservice comprises
+more than one <em class="calibre20">Bounded Context</em>.</li>
+  <li class="calibre14">A functionality belongs really into another Microservice. An
+indication for that can be that certain parts of a Microservice
+communicate a lot with another Microservice. In that case the
+Microservices do not have a loose coupling anymore. Such intense
+communication can imply that the component belongs into another
+Microservice. Likewise, a low cohesion in a Microservice can suggest
+that the Microservice should be divided. In that case there are areas
+in a Microservice which depend little on each other. Consequently,
+they do not really have to be in one Microservice.</li>
+  <li class="calibre14">Functionalities should be used by multiple Microservices. This can
+for instance become necessary when a Microservice has to use logic
+from another Microservice due to a new functionality.</li>
+</ul>
+
+<p class="calibre3">There are three main challenges: Microservices have to be split, code
+has to be moved from one Microservice into another, and multiple
+Microservices are supposed to use the same code.</p>
+
+<h5 id="leanpub-auto-shared-libraries" class="calibre15">Shared Libraries</h5>
+
+<p class="calibre3">If two Microservices are supposed to use code together, the code can
+be transferred into a shared library (compare <a href="part0012.html#Fig23">Fig. 23</a>). The code is
+removed from the Microservice and packaged in a way that allows it to
+be used by the other Microservices. A prerequisite for this is that
+the Microservices are written in technologies that enable the use of a
+shared library. This is the case when they are written in the same
+language or at least use the same platform – e.g. JVM (Java Virtual
+Machine) or .NET Common Language Runtime (CLR).</p>
+
+
+<figure id="Fig23" class="image">
+  <img src="../images/00025.jpeg" alt="Fig. 23: Shared library" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 23: Shared library</figcaption>
+</figure>
+
+
+<p class="calibre3">A shared library means that the Microservices become dependent on each
+other. Work on the library has to be coordinated. Features for both
+Microservices have to be implemented in the library. Via the
+backdoor each Microservice notices changes which are really meant for
+the other Microservice. This can result in errors. Therefore, the
+teams have to coordinate the development of the library and the
+changes to the library. Under certain conditions changes to a library
+can necessitate that a Microservice has to be newly deployed – for
+instance because a security gap has been closed in the library.</p>
+
+<p class="calibre3">Moreover, via the library the Microservices might obtain additional
+code dependencies to 3rd party libraries. In a Java JVM, 3rd party
+libraries can only be present in one version. When the shared library
+requires a certain version of a 3rd party library, also the
+Microservice has to use this specific version and cannot use a
+different one. Besides, libraries often have a certain programming
+model. In that way libraries can provide code, which can be called, or
+a framework, in which custom code can be integrated, which is then
+called by the framework. The library might pursue an asynchronous model
+or a synchronous model. Such approaches can fit more or less well to a
+respective Microservice.</p>
+
+<p class="calibre3">Microservices do not focus on the reuse of code since this leads
+to new dependencies between the Microservices. An important aim of
+Microservices is independence so that code reuse often causes more
+disadvantages than advantages. This is a renunciation of the ideal of
+code recycling. Developers in the nineties still pinned their hopes on code
+reuse in order to increase productivity. Moving code into a
+library also has advantages. Errors and security gaps have to be
+corrected only once. The Microservices use always the current library
+version and thus automatically get the solutions for the errors.</p>
+
+<p class="calibre3">Another problem associated with code reuse is that it requires a
+detailed understanding of the code – especially in the case of
+frameworks, into which the custom code has to embed itself. This kind of
+reuse is known as whitebox reuse: The internal code structures
+have to be known – not only the interface. This type of reuse requires
+a detailed understanding of the code which is to be reused which sets
+a high hurdle for the reuse.</p>
+
+<p class="calibre3">An example can be a library which facilitates the generation of
+metrics for the system monitoring. It will be used in the billing
+Microservice. Other teams also want to use the code. Therefore, the
+code is extracted into a library. Since it is technical code, it is
+not modified in case of domain-based changes. Therefore, the library
+does not influence the independent deployment and the independent
+development of domain-based features. The library was supposed to be
+turned into an internal open source project (compare
+<a href="part0017.html#section13-7">section 13.7</a>).</p>
+
+<p class="calibre3">However, to transfer domain code into a shared library is problematic, as
+it might introduce deployment dependencies into Microservices. When,
+for instance, the modeling of a customer is implemented in a library,
+then each change to the data structure has to be passed on to all
+Microservices, and they all have to be newly deployed. Besides, a
+uniform modeling of a data structure like customer is anyhow hardly
+possible due to <em class="calibre20">Bounded Context</em>.</p>
+
+<h5 id="leanpub-auto-transfer-code" class="calibre15">Transfer Code</h5>
+
+<p class="calibre3">Another option for changing the architecture is to transfer code from
+one Microservice to another. This is sensible when thereby a loose
+coupling and a high cohesion of the entire system can be ensured.
+When two Microservices communicate a lot, the loose coupling is not
+ensured. When the part of the Microservice is transferred which
+communicates a lot with the other Microservice, this problem can be
+solved.</p>
+
+<p class="calibre3">This approach is similar to the removal into a shared library.
+However, the code is no common dependency, which solves the problem of
+coupling between the Microservices. However, it is possible that the
+Microservices have to have a common interface in order to still be
+able to use the functionalities after the code transfer. This is a
+blackbox dependency: Only the interface has to be known, but not the
+internal code structures.</p>
+
+<p class="calibre3">In addition, it is possible to transfer the code into another
+Microservice, while keeping it in the original Microservice. This
+causes redundancies. Errors will then have to be corrected in both
+versions. And the two versions can develop into different directions.
+However, on the other hand the Microservices are independent,
+especially in regards to deployment.</p>
+
+<p class="calibre3">The technological limitations are still the same as for a shared
+library – the two Microservices have to use similar technologies
+because otherwise the code cannot be transferred. However, in a pinch
+the code can also be rewritten in a new programming language or with a
+different programming model. Microservices are not very large. The
+code which has to be rewritten is only a part of a Microservice.
+Consequently, the required effort is manageable.</p>
+
+<p class="calibre3">However, there is the problem that the size of that Microservice
+into which the code is transferred increases. Thus the danger
+increases that the Microservice turns into a monolith over time.</p>
+
+<p class="calibre3">One example: The Microservice for the order process frequently calls
+the billing Microservice in order to calculate the price for the
+delivery. Both services are written in the same programming language.
+The code is transferred from the one Microservice into the other. From
+a domain perspective it turns out that the calculation of delivery
+costs rather belongs into the order process Microservice. The code
+transfer is only possible when both services use the same platform and
+programming language. Moreover, the communication across Microservices
+has to be replaced by local communication.</p>
+
+
+<figure id="Fig24" class="image">
+  <img src="../images/00026.jpeg" alt="Fig. 24: Transfer Code" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 24: Transfer Code</figcaption>
+</figure>
+
+
+<h5 id="leanpub-auto-reuse-or-redundancy" class="calibre15">Reuse or Redundancy?</h5>
+
+<p class="calibre3">Instead of attributing shared code to one or the other Microservice,
+the code can also be maintained in both Microservices. At first this
+sounds dangerous – after all, the code will then be redundant in two
+places, and bug fixes have accordingly to be performed in both places.
+Most of the time developers try to avoid such situations. An
+established best practice is “Don’t Repeat Yourself” (DRY). Each
+decision and consequently all code should only be stored at exactly
+one place in the system. In Microservice-based architectures
+redundancy has a decisive advantage: The two Microservices stay
+independent of each other and can be independently deployed and
+independently developed further. In this way the central
+characteristic of Microservices is preserved.</p>
+
+<p class="calibre3">Moreover, it is questionable whether a system can be built without any
+redundancies at all. Especially in the beginning of object-orientation
+many projects invested a lot of effort to transfer shared code into
+shared frameworks and libraries. This was meant to decrease the
+expenditure associated with the creation of the individual projects.
+In reality the code to be reused was often difficult to understand and
+thus hard to use. A redundant implementation in the different projects
+might have been the better alternative. It can be less laborious to
+implement code several times than to design it in a reusable manner
+and to actually reuse it.</p>
+
+<p class="calibre3">There are of course successful reuses of code: Hardly any project can
+get along nowadays without open source libraries. At this level code
+reuse is taking place all the time. This approach can be a good
+template for the reuse of code between Microservices. However, this
+has effects on the organization. <a href="part0017.html#section13-7">Section 13.7</a>
+discusses organization and thereby also code reuse according to an
+open source model.</p>
+
+<h5 id="leanpub-auto-shared-service" class="calibre15">Shared Service</h5>
+
+<p class="calibre3">Instead of transferring the code into a library, it can also be moved
+into a new Microservice (compare <a href="part0012.html#Fig25">Fig. 25</a>). Thereby the
+typical advantages of a Microservice-based architecture ensue: The
+technology of the new Microservice does not matter. As long as it uses
+the universally defined communication technologies and can be operated
+like the other Microservices, its internal structure can be arbitrary
+– to the point of programming language.</p>
+
+
+<figure id="Fig25" class="image">
+  <img src="../images/00027.jpeg" alt="Fig. 25: Shared Microservice" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 25: Shared Microservice</figcaption>
+</figure>
+
+
+<p class="calibre3">The use of a Microservice is simpler than the use of a library. Only
+the interface of the Microservice has to be known – the internal
+structure does not matter. Moving code into a new service
+decreases the average size of a Microservice – and therefore the
+intelligibility and replaceability of the Microservices. However, the
+transfer replaces local calls with calls via the network. Changes for
+new features might not be limited to one Microservice anymore.</p>
+
+<p class="calibre3">In software development big modules are often a problem. So
+transferring code into new Microservices can be a good option for
+keeping the modules small. Besides, the new Microservice can be
+further developed by the team which was already responsible for the
+original Microservice. This will facilitate the close coordination of
+new and old Microservices since the required communication happens
+within only one team.</p>
+
+<p class="calibre3">The split into two Microservices has also the consequence that a call
+to the Microservice-based system is not processed by just one single
+Microservice, but by several Microservices. These Microservices call
+each other. Some of those Microservices will not have a UI, but are
+pure backend services.</p>
+
+<p class="calibre3">To illustrate this, let us turn again to the order process, which
+frequently calls the billing Microservice for calculating the delivery
+costs. The calculation of delivery costs can also be separated into an
+Microservice by itself. This is even possible when the billing service and
+the order process Microservice use different platforms and
+technologies. However, a new interface will have to be established,
+which enables the new delivery cost Microservice to communicate with
+the remainder of the billing service.</p>
+
+<h5 id="leanpub-auto-spawn-a-new-microservice" class="calibre15">Spawn a New Microservice</h5>
+
+<p class="calibre3">In addition, it is also possible to use part of the code of a certain
+Microservice to generate a new Microservice (compare <a href="part0012.html#Fig26">Fig. 26</a>). The
+advantages and disadvantages are identical to the scenario in which
+code is transferred into a shared Microservice. However, the
+motivation is different in this case: The size of the Microservices is
+meant to be reduced to increase their maintainability or maybe to
+transfer the responsibility for a certain functionality to another
+team. Here, the new Microservice is not supposed to be shared by
+multiple other Microservices.</p>
+
+
+<figure id="Fig26" class="image">
+  <img src="../images/00028.jpeg" alt="Fig. 26: Spawning a new Microservice" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 26: Spawning a new Microservice</figcaption>
+</figure>
+
+
+<p class="calibre3">For instance, the service for the registration might have become too
+complex in the meantime. Therefore, it is distributed into multiple
+services, which each handle certain user groups. A technical
+distribution would also be possible – for instance according to CQRS
+(compare <a href="part0014.html#section10-2">section 10.2</a>), Event Sourcing
+(<a href="part0014.html#section10-3">section 10.3</a>) or Hexagonal Architecture
+(<a href="part0014.html#section10-4">section 10.4</a>).</p>
+
+<h5 id="leanpub-auto-rewriting" class="calibre15">Rewriting</h5>
+
+<p class="calibre3">Finally, an additional possibility to handle Microservices, whose
+structure does not fit anymore, is to rewrite them. Due to the small
+size of Microservices and because of their use via defined interfaces
+this possibility is much more feasible with Microservices than in the
+case of other architectural approaches. In the end, not the entire
+system has to be rewritten, but just a part. It is also possible to
+implement the new Microservice in a different programming language,
+which is maybe better suited for this purpose. Rewriting Microservices
+can also be advantageous since new insights about the domain can leave
+their mark on the new implementation in this manner.</p>
+
+<h5 id="leanpub-auto-a-growing-number-of-microservices" class="calibre15">A Growing Number of Microservices</h5>
+
+<p class="calibre3">The experience with Microservice-based systems teaches that during the
+time a project is running new Microservices will permanently be
+generated. This entails a higher effort for the infrastructure and the
+operation of the system. The number of deployed services will increase
+all the time. For classical projects such a development is unusual and
+appears therefore problematic. However, as this section demonstrated,
+the generation of new Microservices is the best alternative for the
+shared use of logic and for the ongoing development of a system.
+Besides the growing number of Microservices ensures that the average
+size of individual Microservices stays constant. Consequently, the
+positive characteristics of Microservices are preserved.</p>
+
+<p class="calibre3">Generating new Microservices should be as easy as possible as this
+allows to preserve the properties of the Microservice system.
+Potential for optimization is mainly present when it comes to
+establishing Continuous Delivery pipelines, a build infrastructure
+and the required server for the new Microservice. Once these things
+are automated, new Microservices can be generated comparably easily.</p>
+
+<h5 id="leanpub-auto-microservice-based-systems-are-hard-to-modify" class="calibre15">Microservice-based Systems Are Hard to Modify</h5>
+
+<p class="calibre3">This section has shown that it is difficult to adjust the overall
+architecture of a Microservice-based system. New Microservices have to
+be generated. This entails changes to the infrastructure and the need
+for additional Continuous Delivery pipelines. Shared code in libraries
+is rarely a sensible option.</p>
+
+<p class="calibre3">In a Deployment Monolith such changes would be easy to introduce:
+Often the integrated development environments even automatize the
+transfer of code or other structural changes. Due to automation the
+changes are less laborious and less prone to errors. Besides, there
+are no effects whatsoever on the infrastructure or Continuous Delivery
+pipelines in the case of Deployment Monoliths.</p>
+
+<p class="calibre3">Thus, changes are difficult at the level of the entire system –
+because it is hard to transfer functionalities between different
+Microservices. In the end, this is exactly the effect, which was
+termed “strong modularization” and listed as advantage in
+<a href="part0002.html#section1-2">section 1.2</a>: To cross the boundaries between
+Microservices is difficult so that the architecture at the level
+between the Microservices will also remain intact in the long-run.
+However, this entails as well that the architecture is hard to adjust
+at this level.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-8" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">A developer has written a helper class, which facilitates the
+interaction with a logging framework, which is also used by other
+teams. It is not very large and complex.</p>
+
+  <ul class="calibre16">
+    <li class="calibre14">Should it be used by other teams?</li>
+    <li class="calibre14">Should the helper class be turned into a library or an independent
+Microservice or should the code simply be copied?</li>
+  </ul>
+
+</aside>
+
+<h3 id="section8-4" class="calibre2">8.4 Growing Microservice-based Systems</h3>
+
+<p class="calibre3">Microservices primarily have advantages in very dynamical
+environments. Due to the independent deployment of individual
+Microservices, teams can work in parallel on different features without
+much need for coordination. This is especially advantageous when it is
+unclear which features are really meaningful and experiments on the
+market are necessary to identify the promising approaches.</p>
+
+<h5 id="leanpub-auto-planning-architecture" class="calibre15">Planning Architecture?</h5>
+
+<p class="calibre3">Especially in such an environment it is hardly possible to plan a good
+split of the domain logic into Microservices right from the start.
+The architecture has to adjust to the facts.</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The split according to domain aspects is even more important
+for Microservices than in the context of a classical architecture
+approach. This is due to the fact that the domain-based distribution
+influences also the distribution into teams and therefore the
+independent working of the teams – the central advantage of
+Microservices (<a href="part0012.html#section8-1">section 8.1</a>).</li>
+  <li class="calibre14">
+<a href="part0012.html#section8-2">Section 8.2</a> demonstrated that tools for architecture
+management cannot readily be used in Microservice-based architectures.</li>
+  <li class="calibre14">As <a href="part0012.html#section8-3">section 8.3</a> discussed, it is difficult to modify the architecture
+of Microservices – especially in comparison to Deployment Monoliths.</li>
+  <li class="calibre14">Microservices are especially advantageous in dynamic environments –
+where it is even more difficult to determine a meaningful architecture
+right from the start.</li>
+</ul>
+
+<p class="calibre3">The architecture has to be changeable, however, this is difficult due
+to the technical facts. This section shows how the architecture of a
+Microservice-based system can nevertheless be modified and developed
+further in a stepwise manner.</p>
+
+<h5 id="leanpub-auto-start-big" class="calibre15">Start Big</h5>
+
+<p class="calibre3">One possibility to handle this inherent problem is to start out with
+several big systems, which are subsequently step by step fragmented
+into Microservices. <a href="part0007.html#section4-1">Section 4.1</a> defined as upper limit
+for the size of a Microservice the amount of code which an individual
+team can still handle. At least at the outset of a project it is hard
+to violate this upper limit. The same is true for the other upper
+limits: modularization and replaceability.</p>
+
+<p class="calibre3">When the entire project consists only of one or few Microservices,
+functionalities are still easy to move since the transfer will mostly
+occur within one service rather than between services. Step by step
+more people can be moved into the project so that additional teams
+can be assembled. In parallel the system can be distributed into
+progressively more Microservices to allow the teams to work
+independently of each other. Such a ramp-up is also for organizational
+reasons a good approach since the teams can be assembled in a
+stepwise manner.</p>
+
+<p class="calibre3">Of course, it would also be possible to start off with a Deployment
+Monolith. However, starting with a monolith has a decisive
+disadvantage: There is the danger that dependencies and problems creep
+into the architecture, which preclude a later distribution into
+Microservices. Besides, in that case there will be only one Continuous
+Delivery pipeline. When the monolith gets distributed into
+Microservices, the teams will have to generate new Continuous Delivery
+pipelines. This can be very laborious, especially when the Continuous
+Delivery pipeline for the Deployment Monolith had been generated
+manually. In that case all the additional Continuous Delivery
+pipelines would likewise have to be manually generated in a laborious
+manner.</p>
+
+<p class="calibre3">When the projects start from the beginning with multiple
+Microservices, this problem is avoided. There is no monolith which
+later would have to be distributed, and there anyhow has to be an
+approach for the generation of new Continuous Delivery pipelines. Thus
+the teams can from the start work independently on their own
+Microservices. Over the course of the project the initial
+Microservices are distributed into additional smaller Microservices.</p>
+
+<p class="calibre3">Start Big corresponds to the observation that the number of
+Microservices will increase over the course of the project. In line
+with this it is sensible to start with few big Microservices and to
+spawn new Microservices in a stepwise manner. Thereby the most
+current insights can always be integrated into the distribution into
+Microservices. It is just not possible to define the perfect
+architecture right from the start. Instead the teams should adapt the
+architecture step by step to the new circumstances and insights and
+have the courage to implement the necessary changes.</p>
+
+
+<figure id="Fig27" class="image">
+  <img src="../images/00029.jpeg" alt="Fig. 27: Start Big: From few Microservices originate progressively more Microservices." class="calibre17"/>
+  <figcaption class="calibre18">Fig. 27: Start Big: From few Microservices originate progressively more Microservices.</figcaption>
+</figure>
+
+
+<p class="calibre3">This approach results in a uniform technology stack – this will facilitate operation and deployment. For developers it is also easier to work on other Microservices.</p>
+
+<h5 id="leanpub-auto-start-small" class="calibre15">Start Small?</h5>
+
+<p class="calibre3">It is also imaginable to start with a distribution into a large number
+of Microservices and to use this distribution as basis for further
+development. However, the distribution of the services is very
+difficult. “Building Microservices” <sup id="fnref-BuildingMicroservices" class="calibre32"><a rel="footnote" href="part0012.html#fn-BuildingMicroservices">3</a></sup> provides
+an example where a team was supposed to develop a tool for the support
+of Continuous Delivery as a Microservice-based system. The team was very
+familiar with the domain, had already created products in this area
+and thus chose an architecture, which distributed the system early on
+into numerous Microservices. However, as the new product was supposed
+to be offered in the cloud, the architecture was, for subtle reasons,
+not suitable in some respects. To implement changes got difficult
+because modifications for features had to be introduced in multiple
+Microservices. To solve this problem and make it easier to change the
+software, the Microservices were united again into a monolith. One
+year later the team distributed the monolith again into Microservices
+and thereby decided the final architecture. This example demonstrates
+that a too early distribution into Microservices can be problematic –
+even if a team knows the domain very well.</p>
+
+<h5 id="leanpub-auto-limits-of-technology" class="calibre15">Limits of Technology</h5>
+
+<p class="calibre3">However, this is in the end a limitation of the technology. If it were
+easier to move functionalities between Microservices (compare
+<a href="part0012.html#section8-4">section 8.4</a>), the split into Microservices could be
+corrected. In that case it would be much less risky to start off with
+a split into small Microservices. When all Microservices use the same
+technology, it is easier to transfer functionalities between them.
+<a href="part0020.html#chapter-15">Chapter 15</a> discusses technologies for Nanoservices,
+which are based on a number of compromises, but in exchange allow for
+smaller services and an easier transfer of functionalities.</p>
+
+<h5 id="leanpub-auto-replaceability-as-a-quality-criterion" class="calibre15">Replaceability as a Quality Criterion</h5>
+
+<p class="calibre3">An advantage of the Microservice approach is the replaceability of the
+Microservices. This is only possible when the Microservices do not
+grow beyond a certain size and internal complexity. One aim during the
+continued development of Microservices is to maintain the
+replaceability of Microservices. Then a Microservice can be replaced
+by a different implementation – for instance in the case that its
+further development is not feasible anymore due to its bad structure.
+In addition, replaceability is a meaningful aim to preserve the
+intelligibility and maintainability of the Microservice. If the
+Microservice is not replaceable anymore, it is probably also not
+intelligible anymore and therefore hard to develop any further.</p>
+
+<h5 id="leanpub-auto-the-gravity-of-monoliths" class="calibre15">The Gravity of Monoliths</h5>
+
+<p class="calibre3">One problem is that large Microservices attract modifications and new
+features. They cover already several features; therefore, it seems a
+good idea to implement new features also in this service. This is true
+in the case of too large Microservices, but even more so for
+Deployment Monoliths. A Microservices-based architecture can be aimed
+at replacing a monolith. However, in that case the monolith contains
+so many functionalities, that care is needed not to introduce too many
+changes into the monolith. For this purpose, Microservices can be
+created, even if they contain hardly any functionalities at the
+beginning. To introduce changes and extensions to the monolith is
+exactly the course of action that has rendered the maintenance of the
+Deployment Monolith impossible and led to its replacement by
+Microservices.</p>
+
+<h5 id="leanpub-auto-keep-splitting" class="calibre15">Keep Splitting</h5>
+
+<p class="calibre3">As mentioned, most architectures do not have the problem that they
+were originally planned in a way that did not fit the task. In most
+cases the problem is rather that the architecture did not keep up with
+the changes in the environment. A Microservice-based architecture also
+has to be constantly adjusted, otherwise it will at some point not be
+able anymore to support the requirements. To these adjustments belong
+a management of the domain-based split as well as of the size
+of the individual Microservices. This is the only way to ensure that
+the advantages of the Microservice-based architecture are maintained
+over time. Since the code amount of a system usually increases, the
+number of Microservices will grow as well in order to keep the average
+size constant. Thus an elevation of the number of Microservices is not
+a problem, but rather a good sign.</p>
+
+<h5 id="leanpub-auto-global-architecture" class="calibre15">Global Architecture?</h5>
+
+<p class="calibre3">However, not only the size of Microservices can be a problem. The
+dependencies of the Microservices can also cause problems (compare
+<a href="part0012.html#section8-1">section 8.1</a>). Such problems can be solved most of the
+time by adjusting a number of Microservices – i.e. those which have
+problematic dependencies. This requires only contributions from the
+teams, which work on these Microservices. These teams are also the
+ones to spot the problems, because they will be affected by the bad
+architecture and the greater need for coordination. By modifying the
+architecture, they are able to solve these issues. In that case there
+is no need for a global management of dependencies. Metrics like a
+high number of dependencies or cyclic dependencies can only be an
+indication for a problem. Whether such metrics indeed indicate a
+problem can only be solved by evaluating them together with the
+involved teams. If the problematic components are, for instance, not
+going to be developed any further in the future, it does not matter
+whether the metrics indicate a problem. Maybe there have for other
+reasons never been problems during development. Even if there is a
+global architecture management, it can only work effectively in close
+cooperation with the different teams.</p>
+
+<h3 id="leanpub-auto-dont-miss-the-exit-point-or-how-to-avoid-the-erosion-of-a-microservice-lars-gentsch" class="calibre2">Don’t Miss the Exit Point or How to Avoid the Erosion of a Microservice (Lars Gentsch)</h3>
+
+<p class="calibre3">by Lars Gentsch, E-Post Development GmbH</p>
+
+<p class="calibre3">Practically, it is not too difficult to develop a Microservice. But how can you ensure that the Microservice remains a Microservice and does not secretly become a monolith? An example shall illustrate at which point a service starts to develop into the wrong direction and which measures are necessary to ensure that the Microservice remains a Microservice.</p>
+
+<p class="calibre3">Let’s envision a small web application for customer registration. This scenario can be found in nearly every web application. A customer wants to buy a product in an Internet shop (Amazon, Otto etc.) or to register for a video-on-demand portal (Amazon Prime, Netflix etc.). As a first step the customer is led through a small registration workflow. He/she is asked for his/her username, a password, the email address and the street address. This is a small self-contained functionality, which is very well suited for a Microservice.</p>
+
+<p class="calibre3">Technologically this service has probably a very simple structure. It consists of two or three HTML pages or an AngularJS-Single Page App, a bit of CSS, some Spring Boot and a MySQL database. Maven is used to build the application.</p>
+
+<p class="calibre3">When data are entered, they are concomitantly validated, transferred into the domain model and put into the database for persistence. How can the Microservice grow step-by-step into a monolith?</p>
+
+<h5 id="leanpub-auto-incorporation-of-new-functionality" class="calibre15">Incorporation of New Functionality</h5>
+
+<p class="calibre3">Via the shop or the video-on-demand portal items and content are supposed to be delivered, which are only allowed to be accessed by people who are of age. For this purpose the age of the customer has to be verified. One possibility to do this is to store the birth date of the client together with other data and to incorporate an external service for the age verification.</p>
+
+<p class="calibre3">Thus, the data model of our service has to be extended by the birth date. More interesting is the incorporation of the external service. To achieve this, a client for an external API has to be written, which should also be able to handle error situations like the non-availability of the provider.</p>
+
+<p class="calibre3">It is highly probable that the initiation of the age verification is an asynchronous process so that our service might be forced to implement a callback interface. So the Microservice must store data about the state of the process. When was the age verification process initiated? Is it necessary to remind the customer via email? Was the verification process successfully completed?</p>
+
+<h5 id="leanpub-auto-what-is-happening-to-the-microservice-here" class="calibre15">What is Happening to the Microservice here?</h5>
+
+<ol class="calibre13">
+  <li value="1" class="calibre14">The customer data are extended by the birthdate. That is not problematic.</li>
+  <li value="2" class="calibre14">In addition to customer data there are now process data. Attention: Here process data are mixed with domain data.</li>
+  <li value="3" class="calibre14">In addition to the original CRUD functionality of the service, some kind of workflow is now required. Synchronous processing is mixed with asynchronous processing.</li>
+  <li value="4" class="calibre14">An external system is incorporated. The testing effort for the registration Microservice increases. An additional system and its behavior have to be simulated during test.</li>
+  <li value="5" class="calibre14">The asynchronous communication with the external system has other demands in regards to scaling. While the registration Microservice requires estimated ten instances due to load and failover, the incorporation of the age verification can be operated in a fail-safe and stable manner with just two instances. Thus, different run time requirements are mixed here.</li>
+</ol>
+
+<p class="calibre3">As the example demonstrates, a per se small requirement like the incorporation of an age verification can have tremendous consequences for the size of the Microservice.</p>
+
+<h5 id="leanpub-auto-criteria-arguing-for-a-new-microservice-instead-of-extending-an-existing-one" class="calibre15">Criteria Arguing for a new Microservice Instead of Extending an Existing One:</h5>
+
+<ol class="calibre13">
+  <li value="1" class="calibre14">Introduction of different data models and data (domain vs. process data)</li>
+  <li value="2" class="calibre14">Intermixture of synchronous and asynchronous data processing </li>
+  <li value="3" class="calibre14">Incorporation of additional services</li>
+  <li value="4" class="calibre14">Different load scenarios for different aspects within one service</li>
+</ol>
+
+<p class="calibre3">The example of the registration service could be further extended: Also the verification of the customer’s street address could be performed by an external provider. This is common in order to ensure the existence of the denoted address. Another scenario is the manual clearance of a customer in case of double registration. The incorporation of a solvency check or customer scoring upon registration is likewise a frequent scenario.</p>
+
+<p class="calibre3">All these domain-based aspects belong in principle to the customer registration and tempt developers and architects to integrate the corresponding requirements into the existing Microservice. Thereby the Microservice grows into more than just one Microservice.</p>
+
+<h5 id="leanpub-auto-how-to-recognize-whether-the-initiation-of-a-new-microservice-should-have-occurred-already" class="calibre15">How to Recognize Whether the Initiation of a new Microservice Should Have Occurred Already?</h5>
+
+<ol class="calibre13">
+  <li value="1" class="calibre14">The service can only be sensibly developed further as Maven multi modul project or Gradle multi module project.</li>
+  <li value="2" class="calibre14">Tests have to be divided into test groups and have to be parallelized for execution since the run time of the tests surpasses five minutes (violation of the “fast feedback” principle).</li>
+  <li value="3" class="calibre14">The configuration of the service is grouped by domain within the configuration file or the file is divided into single configuration files to improve the overview.</li>
+  <li value="4" class="calibre14">A complete build of the service takes long enough to make a coffee break. Fast feedback cycles are not possible anymore (violation of the “fast feedback” principle). </li>
+</ol>
+
+<h5 id="leanpub-auto-conclusion-1" class="calibre15">Conclusion</h5>
+
+<p class="calibre3">As the example of the registration Microservice illustrates, it is a
+big challenge to let a Microservice remain a Microservice and not give
+in to the temptation to integrate new functionalities into an existing
+Microservice due to time pressure. This holds even true when the
+functionalities clearly belong, like in the example, to the same
+domain.</p>
+
+<p class="calibre3">What can prophylactically be done to prevent the erosion of a
+Microservice? In principle, it has to be as simple as possible to
+create new services including their own data storage. Frameworks like
+Spring Boot, Grails and Play make a relevant contribution to this. The
+allocation of project templates like Maven archetypes and the use of
+container deployments with Docker are additional measures to simplify
+the generation and configuration of new Microservices as well as their
+way into the production environment as much as possible. By reducing
+the “expenditure” for the setting up of a new service the inhibition
+threshold for the introduction of a new Microservice decreases clearly
+and thus the temptation to implement new functionalities into existing
+services.</p>
+
+<h3 id="section8-5" class="calibre2">8.5 Microservices and Legacy Applications</h3>
+
+<p class="calibre3">The transformation of a legacy application into a Microservice-based
+architecture is a scenario which is frequently met with in practice.
+Completely new developments are rather rare, and Microservices first of
+all promise advantages for long term maintenance. This is especially
+interesting for applications which are already on the brink of not
+being maintainable anymore. Besides the distribution into
+Microservices allows for an easier handling of Continuous Delivery:
+Instead of deploying and testing a monolith in an automated fashion
+small Microservices can be deployed and tested. The expenditure for
+this is by far lower. A Continuous Delivery pipeline for a
+Microservice is not very complex – however, for a Deployment Monolith
+the expenditure can be very large. This advantage is sufficient for
+many companies to justify the effort of migrating to Microservices.</p>
+
+<p class="calibre3">In comparison to building up completely new systems there are some important
+differences when migrating from a Deployment Monolith to
+Microservices:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">For a legacy system the functionality is clear from the domain
+perspective. This can be a good basis for generating a clean
+domain architecture for the Microservices. Especially such a
+clean domain-based division is very important for Microservices.</li>
+  <li class="calibre14">However, there is already a large amount of code in existence. The
+code is often of bad quality. There are few tests, and deployment
+times are often much too long. Microservices should remove these
+problems. Accordingly, the challenges in this area are often
+significant.</li>
+  <li class="calibre14">Likewise it is well possible that the module boundaries in the
+legacy application do not answer to the <em class="calibre20">Bounded Context</em> idea (compare
+<a href="part0007.html#section4-3">section 4.3</a>). In that case migrating to a Microservice-based
+architecture is a challenge because the domain-based design of the
+application has to be changed.</li>
+</ul>
+
+<h5 id="leanpub-auto-breaking-up-code" class="calibre15">Breaking up Code?</h5>
+
+<p class="calibre3">In a simple approach the code of the legacy application can be split
+into several Microservices. This can be problematic when the legacy
+application does not have a good domain architecture, which is
+often the case. The code can be especially easily split into
+Microservices when the Microservices are geared to the existing
+modules of the legacy application. However, when those have a bad
+domain-based split, this bad division will be passed on to the
+Microservice-based architecture. And the consequences of a bad
+domain-based design are even more profound in a Microservice-based
+architecture: The design influences also the communication between
+teams. Besides, the initial design is hard to change later on in a
+Microservice-based architecture.</p>
+
+<h5 id="leanpub-auto-supplementing-legacy-applications" class="calibre15">Supplementing Legacy Applications</h5>
+
+<p class="calibre3">However, it is also possible to get by without a division of the
+legacy application. An essential advantage of Microservices is that
+the modules are distributed systems. Due to that the module boundaries
+are at the same time the boundaries of processes which communicate via
+the network. This has advantages for the distribution of a legacy
+application: It is not at all necessary to know the internal
+structures of the legacy application or, based on that, to perform a
+split into Microservices. Instead Microservices can supplement
+or modify the legacy application at the interface. For this it is very
+helpful when the system to be replaced is already built in a SOA
+(<a href="part0010.html#section7-2">section 7.2</a>). If there are individual services, they can be
+supplemented by Microservices.</p>
+
+<h5 id="leanpub-auto-enterprise-integration-patterns" class="calibre15">Enterprise Integration Patterns</h5>
+
+<p class="calibre3"><a href="http://www.eaipatterns.com/toc.html">Enterprise Integration Patterns</a>
+<sup id="fnref-EAI" class="calibre32"><a rel="footnote" href="part0012.html#fn-EAI">4</a></sup> offer an inspiration for possible integrations of legacy applications and Microservices:</p>
+
+<p class="calibre3">Designing, Building, and Deploying Messaging Solutions,
+Addison-Wesley Longman, 2003, ISBN 978-0-32120-068-6</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<em class="calibre20">Message Router</em> describes that certain messages go to another
+service. A Microservice can select some messages which are processed
+then by the Microservice instead of by the legacy application. Thereby
+the Microservice-based architecture does not have to newly implement
+the entire logic at once, but can at first select some parts.</li>
+  <li class="calibre14">A special router is the <em class="calibre20">Content Based Router</em>. It determines based
+on the content of a message where the message is supposed to be sent.
+This allows to send specific messages to a specific Microservice –
+even if the message differs only in one field.</li>
+  <li class="calibre14">The <em class="calibre20">Message Filter</em> avoids that a Microservice receives
+uninteresting messages. For that it just filters all messages out the
+Microservice is not supposed to get.</li>
+  <li class="calibre14">A <em class="calibre20">Message Translator</em> translates a message into another format.
+Thereby the Microservices architecture can use other data formats and
+does not necessarily have to employ the formats used by the legacy
+application.</li>
+  <li class="calibre14">The <em class="calibre20">Content Enricher</em> can supplement data in the messages. If a
+Microservice requires supplementary information in addition to the
+data of the legacy application, the <em class="calibre20">Content Enricher</em> can add this
+information without the legacy application or the Microservice
+noticing anything.</li>
+  <li class="calibre14">The <em class="calibre20">Content Filter</em> achieves the opposite: Certain data are removed
+from the messages so that the Microservice obtains only the
+information which is relevant for it.</li>
+</ul>
+
+
+<figure id="Fig28" class="image">
+  <img src="../images/00030.jpeg" alt="Fig. 28: Supplementing legacy applications by a *Message Router*" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 28: Supplementing legacy applications by a <em class="calibre20">Message Router</em></figcaption>
+</figure>
+
+
+<p class="calibre3"><a href="part0012.html#Fig28">Fig. 28</a> shows a simple example: A Message Router takes calls
+and sends them to a Microservice or the legacy system. This allows to
+implement certain functionalities in Microservices. These
+functionalities are also still present in the legacy system – but are
+not used there anymore. In this way the Microservices are largely
+independent of the structures within the legacy system. For instance,
+Microservices can start off with processing orders for certain customers
+or certain items. Thereby they do not have to implement all
+special cases.</p>
+
+<p class="calibre3">The patterns can serve as inspiration how a legacy application can be
+supplemented by Microservices. There are numerous additional patterns
+– the list provides only a glimpse of the entire catalog. Like in
+other cases the patterns can be implemented in different ways:
+Actually, they focus on messaging systems. But it is possible to
+implement them with synchronous communication mechanisms – even though
+less elegant. For instance, a REST service can take a POST message,
+supplement it with additional data and finally send it to another
+Microservice. That would then be a <em class="calibre20">Content Enricher</em>.</p>
+
+<p class="calibre3">To implement such patterns, the sender has to be uncoupled from the
+recipient. This enables the integration of additional steps into the
+processing of requests without the sender noticing anything. In case
+of a messaging approach this is easily possible as the sender knows
+only one queue in which he/she places the messages. The sender does not
+know who fetches the messages. However, in the case of synchronous
+communication via REST or SOAP the message is sent directly to the
+recipient. Only by Service Discovery (compare
+<a href="part0012.html#section8-9">section 8.9</a>) the sender gets uncoupled from the
+recipient. Then one service can be replaced by another service without
+need to change the senders. This allows for an easier implementation
+of the patterns. When the legacy application is supplemented by a
+<em class="calibre20">Content Enricher</em>, this <em class="calibre20">Content Enricher</em> instead of the legacy
+application is registered in the Service Discovery, but no sender has
+to be modified. To introduce Service Discovery can therefore be a
+first step towards a Microservices architecture, since it allows to
+supplement or replace individual services of the legacy application
+without having to modify the users of the legacy application.</p>
+
+<h5 id="leanpub-auto-limiting-integration" class="calibre15">Limiting Integration</h5>
+
+<p class="calibre3">Especially for legacy applications it is important that the
+Microservices are not too dependent on the legacy application. Often
+it is especially the bad structure of the old application which is the
+reason why the application is supposed to be replaced in the first place. Therefore,
+certain dependencies should not be allowed at all. When Microservices
+directly access the database of the legacy application, the
+Microservices are dependent on the internal data representation of the
+legacy application. Besides neither the legacy application nor the
+Microservices can still change the schema since such changes have to
+be implemented in Microservices and legacy application. The shared use
+of a database in legacy application and Microservices has to be
+avoided on all accounts. However, to replicate the data of the legacy
+application into an separate database schema is of course still an option.</p>
+
+<h5 id="leanpub-auto-advantages-2" class="calibre15">Advantages</h5>
+
+<p class="calibre3">It is an essential advantage of such an approach that the
+Microservices are largely independent of the architecture of the
+legacy application. And the replacement of a legacy application is
+mostly initiated because its architecture is not sustainable any more.
+Besides, this allows to supplement systems by Microservices, which are
+actually not at all meant to be extended. Though, for instance,
+standard solutions in the area of CRM, E-commerce or ERP are
+internally extensible, their extension by external interfaces can be a
+welcome alternative since such a supplement is often easier. Moreover,
+such systems often attract functionalities, which do not really belong
+there. A distribution into a different deployment unit via a
+Microservice ensures a permanent and clear delimitation.</p>
+
+<h5 id="leanpub-auto-integration-via-ui-and-data-replication" class="calibre15">Integration via UI and Data Replication</h5>
+
+<p class="calibre3">However, this approach only tackles the problem on the level of logic
+integration. <a href="part0013.html#chapter-9">Chapter 9</a> describes another level of
+integration, namely data replication. This allows a Microservice to
+access also comprehensive datasets of a legacy application with good
+performance. It is important that the replication does not happen
+based on the data model of the legacy application. In that case the
+data model of the legacy application would practically not be changeable
+anymore since it is also used by the Microservice. An integration
+based on the use of the same database would be even worse. Also at the
+level of UI integrations are possible. Especially links in web
+applications are attractive since they cause only few changes in the
+legacy application.</p>
+
+<h5 id="leanpub-auto-content-management-systems" class="calibre15">Content Management Systems</h5>
+
+<p class="calibre3">In this manner Content Management Systems (CMS), for instance, which
+often contain many functionalities, can be supplemented by
+Microservices. CMS contain the data of a website and administrate the
+content so that editors can modify it. The Microservices take over the
+handling of certain URLs. Similar to a <em class="calibre20">Message Router</em> an HTTP request
+can be sent to a Microservice instead of to the CMS. Or the
+Microservice changes elements of the CMS like in the case of a <em class="calibre20">Content
+Enricher</em> or modifies the request like in the case of a <em class="calibre20">Message
+Translator</em>. Lastly, the Microservices could store data in the CMS and
+thereby use it as a kind of database. Besides JavaScript representing
+the UI of a Microservice can be delivered into the CMS. In that case
+the CMS turns into a tool for the delivery of code in a browser.</p>
+
+<p class="calibre3">Some examples could be:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">A Microservice can import content from certain sources. Each
+source can have its own Microservice.</li>
+  <li class="calibre14">The functionality which allows a visitor of the web page e.g.
+to follow an author can be implemented in a separate
+Microservice. The Microservice can either have its own URL and be
+integrated via links or it modifies the pages, which the CMS delivers.</li>
+  <li class="calibre14">While an author is still known in the CMS, there is other logic
+which is completely separate from the CMS. This could be vouchers or
+E-commerce functionalities. Also in this case a Microservice can
+appropriately supplement the system.</li>
+</ul>
+
+<p class="calibre3">Especially in the case of CMS systems, which create static HTML,
+Microservices-based approaches can be useful for dynamic content. The
+CMS moves into the background and is only necessary for certain
+content. There is a monolithic deployment of the CMS content while
+the Microservices can be deployed much more rapidly and in an
+independent manner. In this context the CMS is like a legacy
+application.</p>
+
+<h5 id="leanpub-auto-conclusion-2" class="calibre15">Conclusion</h5>
+
+<p class="calibre3">The integrations all have the advantage that the Microservices are not
+bound to the architecture or the technology decisions of the legacy
+application. This provides the Microservices with a decisive advantage
+compared to a modifications of the legacy application. However, the
+migration away from the legacy application using this approach poses a
+challenge at the level of architecture: In effect, Microservice-based
+systems have to have a well structured domain-based design to enable
+the implementation of features within one Microservice and by an
+individual team. In case of a migration, which follows the outlined
+approach, this cannot always be put into effect since the migration is
+influenced by the interfaces of the legacy application. Therefore, the
+design cannot always be as clear-cut as desirable. Besides,
+domain-based features will still be also implemented in the legacy
+application until a large part of the migration has been completed.
+During this time the legacy application cannot be finally removed.
+When the Microservices confine themselves to transforming the
+messages, the migration can take a very long time.</p>
+
+<h5 id="leanpub-auto-no-big-bang" class="calibre15">No Big Bang</h5>
+
+<p class="calibre3">The outlined approaches suggest that the existing legacy application
+is supplemented in a stepwise manner by Microservices or that
+individual parts of the legacy application are replaced by
+Microservices. This type of approach has the advantage that the risk
+is minimized. Replacing the entire legacy application in one single
+step entails a high risk due to the size of the legacy application. In
+the end, all functionalities have to be represented in the
+Microservices. In this process numerous mistakes can creep in. In
+addition, the deployment of Microservices is complex as they all have to
+be brought into production in a concerted manner in order to replace
+the legacy application in one step. A stepwise replacement nearly
+imposes itself in the case of Microservices since they can be deployed
+independently and supplement the legacy application. Thereby the
+legacy application can be replaced by Microservices in a stepwise
+manner.</p>
+
+<h5 id="leanpub-auto-legacy--infrastructure" class="calibre15">Legacy = Infrastructure</h5>
+
+<p class="calibre3">Part of a legacy application can also simply be continued to be used
+as infrastructure for the Microservices. For example, the database of
+the legacy application can also be used for the Microservices. It is
+important that the schemas of the Microservices are separate from each
+other and also from the legacy application. After all, the
+Microservices should not be closely coupled.</p>
+
+<p class="calibre3">The use of the database of the legacy application does not have to be
+mandatory for the Microservices. Microservices can definitely also use
+other solutions. However, the existing database is established in
+regards to operation or backup. Using this database can also for the
+Microservices present an advantage. The same is true for other
+infrastructure components. A CMS for
+instance can likewise serve as common infrastructure, to which
+functionalities are added from the different Microservices and into
+which the Microservices can also deliver content.</p>
+
+<h5 id="leanpub-auto-other-qualities" class="calibre15">Other Qualities</h5>
+
+<p class="calibre3">The so far introduced migration approaches focus on enabling the
+domain-based division into Microservices in order to facilitate the
+long-term maintenance and continued development of the system.
+However, Microservices have many additional advantages. When migrating
+it is important to understand which advantage motivates the migration
+to Microservices because depending on this motivation an entirely
+different strategy might be adopted. Microservices offer for instance
+also increased robustness and resilience since the communication with
+other services is taken care of accordingly (compare
+<a href="part0014.html#section10-5">section 10.5</a>). If the legacy application currently has
+a deficit in this area or a distributed architecture already exists,
+which has to be optimized in respect to these points, appropriate
+technology and architecture approaches can be defined without
+necessarily requiring that the application has to divided into
+Microservices.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-9" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">Do research on the remaining Patterns of Enterprise Integration:</p>
+
+  <ul class="calibre16">
+    <li class="calibre14">Can they be meaningfully employed when dealing with Microservices?
+In which context?</li>
+    <li class="calibre14">Can they really only be implemented with messaging systems?</li>
+  </ul>
+
+</aside>
+
+<h3 id="leanpub-auto-hidden-dependencies-oliver-wehrens" class="calibre2">Hidden Dependencies (Oliver Wehrens)</h3>
+
+<p class="calibre3">by Oliver Wehrens, E-Post Development GmbH</p>
+
+<p class="calibre3">In the beginning there is the monolith. Often it is sensible and
+happens naturally that software is created as a monolith. The code is
+clearly arranged, and the business domain is just coming into being.
+In that case it is better when everything has a common base. There is
+a UI, business logic and a database. Refactoring is simple, deployment
+is easy, and everybody can still understand the entire code.</p>
+
+<p class="calibre3">Over time the amount of code grows, and it gets hard to see through.
+Not everybody knows all parts of the code anymore. The compiling takes
+longer, and the unit and integration tests invite developers to take a
+coffee break. In case of a relatively stable business domain and a
+very large code basis many projects will consider at this point the
+option to distribute the functionality into multiple Microservices.</p>
+
+<p class="calibre3">Depending on the status of the business and the understanding of the
+business/product owners the necessary tasks will be completed. Source
+code is distributed, Continuous Delivery pipelines are created and
+server provisioned. During this step no new features are developed.
+The not negligible effort is justified just by the hope that in future
+features will be faster and more independently created by other teams.
+Developers are going to be very assured of this, other stakeholders
+often have to be convinced first.</p>
+
+<p class="calibre3">In principle everything has been done to reach a better
+architecture. There are different teams which have independent source
+code. They can bring their software at any time into production and
+independent of other teams.</p>
+
+<p class="calibre3">Almost.</p>
+
+<h5 id="leanpub-auto-the-database" class="calibre15">The Database</h5>
+
+<p class="calibre3">Every developer has a more or less pronounced affinity to the
+database. In my experience many developers view the database as
+necessary evil, which is somewhat cumbersome to refactor. Often tools
+are being used which generate the database structure for the
+developers (e.g. Liquibase or Flyway in the JVM area). Tools and
+libraries (Object Relation Mapper) render it very easy to persist
+objects. A few annotations later and the domain is saved in the
+database.</p>
+
+<p class="calibre3">All these tools remove the database from the typical developers,
+who “only” want to write their code. This has sometimes the
+consequence that there is not much attention given to the database
+during the development process. For instance, indices which were not
+created will slow down searches on the database. This will not show
+up in a typical test, which does not work with large data amounts, and
+thus go like that into production.</p>
+
+<p class="calibre3">Let’s take the fictional case of an online shoe shop. The company
+requires a service which allows users to log in. A user service is
+created containing the typical fields like ID, first name, family
+name, address and password. To now offer fitting shoes to the users,
+only a selection of shoes in their actual size is supposed to be
+displayed. The size is registered in the welcome mask. What could be
+more sensible than to store this data in the already existing user
+service? Everybody is sure: These are user-associated data, and this
+is the right location.</p>
+
+<p class="calibre3">Now the shoe shop expands and starts to sell additional types of
+clothing. Dress size, collar size and all other related data are now
+also stored in the user service.</p>
+
+<p class="calibre3">Several teams are employed in the company. The code gets progressively
+more complex. It is the point in time, where the monolith is split
+into domain-based services. The refactoring in the source code works
+well, and a soon the monolith is split apart into many Microservices.</p>
+
+<p class="calibre3">Unfortunately, it turns out that it is still not easy to introduce
+changes. The team in charge of shoes wants to accept different
+currencies because of international expansion and has to modify the
+structure of the billing data including the address format. During the
+upgrade the database is blocked. Meanwhile no dress size or favorite
+color can be changed. Moreover, the address data are used in different
+standard forms of other services and thus cannot be changed without
+coordination and effort. Therefore the feature cannot be implemented
+promptly.</p>
+
+<p class="calibre3">Even though the code is well separated, the teams are indirectly
+coupled via the database. To rename columns in the user service
+database is nearly impossible because nobody knows anymore in detail
+who is using which columns. Consequently, the teams do workarounds.
+Either fields with the name ‘Userattribute1’ are created, which then
+are mapped onto the right description in the code, or separations are
+introduced into the data like ‘#Color:Blue#Size:10’. Nobody except the
+involved team knows what is meant by ‘Userattribute1’, and it is
+difficult to generate an index on ‘#Color:#Size. Database structure
+and code are progressively harder to read and to maintain.</p>
+
+<p class="calibre3">It has to be essential for every software developer to think about how
+to persist the data. This means: not only about the database
+structures, but also about where which data is stored. Is the table
+respectively database the place where these data should be located? From a
+business domain perspective do these data have connections to other
+data? In order to remain flexible in the long term, it is worthwhile
+to carefully consider these questions every time. Typically, databases
+and tables are not created very often. However, they are a component
+which is very hard to modify later. Besides, databases and tables are
+often the origin of a hidden interdependence between services. In
+general, it has to apply that data can only be used by exactly one
+service via direct database access. All other services, which want to
+use the data, may only access it via the public interfaces of the
+service.</p>
+
+<h3 id="section8-6" class="calibre2">8.6 Event-driven Architecture</h3>
+
+<p class="calibre3">Microservices can call each other in order to implement shared logic.
+For example, at the end of the order process the Microservice for
+billing as well as the Microservice for the order execution can be
+called to create the bill and make sure that the ordered
+items are indeed delivered.</p>
+
+
+<figure id="Fig29" class="image">
+  <img src="../images/00031.jpeg" alt="Fig. 29: Calls between Microservices" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 29: Calls between Microservices</figcaption>
+</figure>
+
+
+<p class="calibre3">This requires that the order process knows the service for the billing
+and for the delivery. If a completed orders necessitates additional
+steps, the order service also has to call the services responsible for
+these steps.</p>
+
+<p class="calibre3">Event-driven Architecture (EDA) enables a different modeling: When
+the order processing has been successfully finished, the order
+process will send an event. It is an event emitter. This event signals
+to all interested Microservices (event consumers) that there is a new
+successful order. Thus, one Microservice can now print a bill, and
+another Microservice can initiate a delivery.</p>
+
+
+<figure id="Fig30" class="image">
+  <img src="../images/00032.jpeg" alt="Fig. 30: Event-driven Architecture" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 30: Event-driven Architecture</figcaption>
+</figure>
+
+
+<p class="calibre3">This procedure has a number of advantages:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">When other Microservices are also interested in orders, they can
+easily register. Modifying the order process is not necessary anymore.</li>
+  <li class="calibre14">Likewise, it is imaginable that also other Microservices trigger
+identical events – again without changes to the order process.</li>
+  <li class="calibre14">The processing of events is temporally unlinked. It can happen later
+on.</li>
+</ul>
+
+<p class="calibre3">At the architectural level Event-driven Architectures have the
+advantage that they allow for a very loose coupling and thus facilitate
+changes. The Microservices need to know only very little about each
+other. However, the coupling requires that logic is integrated and
+therefore implemented in different Microservices. Thereby a split into
+Microservice with UI and Microservices with logic can arise. That is
+not desirable. Changes to the business logic entail often changes to
+logic and UI. These are then separate Microservices. The change cannot
+readily take place in only one Microservice anymore and thus gets more
+complex.</p>
+
+<p class="calibre3">Technically, such architectures can be implemented without a lot of
+effort via messaging (compare <a href="part0013.html#section9-4">section 9.4</a>).
+Microservices within such an architecture can very easily implement
+CQRS (<a href="part0014.html#section10-2">section 10.2</a>) or Event Sourcing
+(<a href="part0014.html#section10-3">section 10.3</a>).</p>
+
+<h3 id="section8-7" class="calibre2">8.7 Technical Architecture</h3>
+
+<p class="calibre3">To define a technology stack, with which the system can be built, is
+one of the main parts of an architecture. For individual Microservices
+this is likewise a very important task. However, the focus of this
+chapter is the Microservice-based system in its entirety. Of course, a
+certain technology can be bindingly defined for all Microservices.
+This has advantages: In that case the teams can exchange knowledge
+about the technology. Refactorings are simpler because members of one
+team can easily help out in other teams.</p>
+
+<p class="calibre3">However, defining standard technologies is not mandatory: If
+they are not defined, there will be a plethora of different
+technologies and frameworks. However, since typically only one team is
+in contact with each technology, such an approach can be acceptable.
+Generally, Microservice-based architectures aim for the largest
+possible independence. In respect to the technology stack this
+independence translates into the ability to use different technology
+stacks and to independently make technology decisions. However, this
+freedom can also be restricted.</p>
+
+<h5 id="leanpub-auto-technical-decisions-for-the-entire-system" class="calibre15">Technical Decisions for the Entire System</h5>
+
+<p class="calibre3">Nevertheless, at the level of the entire system there are some
+technical decisions to make. However, other aspects are more important
+for the technical architecture of the Microservice-based system
+than the technology stack for the implementation:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">As discussed in the last section, there might be technologies
+which can be used by all Microservices - for instances databases for
+data storage. Using these technologies does not necessarily have to be
+mandatory.  However, especially in the case of persistence technologies, like for example databases, backups and disaster recovery concepts
+have to exist so that at least these technical solutions have to be
+obligatory. The same is true for other basic systems such as CMS for
+instance, which likewise have to be used by all Microservices.</li>
+  <li class="calibre14">The Microservices have to adhere to certain standards in respect
+to monitoring, logging and deployment. Thereby, it can be ensured that
+the plethora of Microservices can still be operated in a uniform
+manner. Without such standards this is hardly possible anymore in case
+of a larger number of Microservices.</li>
+  <li class="calibre14">Additional aspects relate to configuration
+(<a href="part0012.html#section8-8">section 8.8</a>), Service Discovery
+(<a href="part0012.html#section8-9">section 8.9</a>) and security
+(<a href="part0012.html#section8-12">section 8.12</a>).</li>
+  <li class="calibre14">Resilience (<a href="part0014.html#section10-5">section 10.5</a>) and Load Balancing
+(<a href="part0012.html#section8-10">section 8.10</a>) are concepts which have to be
+implemented in a Microservice. Still the overall architecture can
+demand that each Microservice takes precautions in this area.</li>
+  <li class="calibre14">An additional aspect is the communication of the Microservices with
+each other (compare <a href="part0013.html#chapter-9">chapter 9</a>). For the system in its
+entirety a communication infrastructure has to be defined to which
+also the Microservices adhere.</li>
+</ul>
+
+<p class="calibre3">The overall architecture does not necessarily restrict the choice of
+technologies. For logging, monitoring and deployment an interface
+could be defined. So there can be a standard according to which all
+Microservices log messages in the same manner and hand them over to a
+common log infrastructure. However, the Microservices do not
+necessarily have to use the same technologies for this. Similarly, it
+can be defined how data can be handed to the monitoring system and
+which data are relevant for the monitoring. A Microservice has to
+hand over the data to the monitoring, but a technology does not
+necessarily have to be prescribed. For deployment a completely
+automated Continuous Delivery pipeline can be demanded, which deploys
+software or deposits it into a repository in a certain manner. Which
+specific technology is used, is again a question for the developers of the
+respective Microservice to decide. Practically, there are advantages when all
+Microservices employ the same technology. This reduces complexity, and
+there will also be more experience how to deal with the employed
+technology. However, in case of specific requirements, it is still
+possible to use a different technical solution when for this special
+case the advantages of such a solution predominate. This is an
+essential advantage of the technology freedom of Microservice-based
+architectures.</p>
+
+<h5 id="leanpub-auto-sidecar" class="calibre15">Sidecar</h5>
+
+<p class="calibre3">Even if certain technologies for implementing the
+demands on Microservices are rigidly defined, it will
+still be possible to integrate other technologies. Therefore, the
+concept of a Sidecar can be very useful. This is a process which
+integrates into the Microservices-based architecture via standard
+technologies and offers an interface which enables another process to
+use these features. This process can be implemented in an entirely
+different technology so that the technology freedom is preserved.
+<a href="part0012.html#Fig31">FIg. 31</a> illustrates this concept: The Sidecar uses standard
+technologies and renders them accessible for another Microservice in
+an optional technology. The Sidecar is an independent process, and therefore
+can be called for instance via REST so that Microservices in arbitrary
+technologies can use the Sidecar. <a href="part0019.html#section14-12">Section 14.12</a> shows
+a concrete example for a Sidecar.</p>
+
+
+<figure id="Fig31" class="image">
+  <img src="../images/00033.jpeg" alt="Fig. 31: A Sidecar renders all standard technologies accessible via a simple interface." class="calibre17"/>
+  <figcaption class="calibre18">Fig. 31: A Sidecar renders all standard technologies accessible via a simple interface.</figcaption>
+</figure>
+
+
+<p class="calibre3">With this approach also such Microservices can be integrated into the
+architecture whose technological approach otherwise would
+exclude the use of the general technical basis for configuration,
+Service Discovery and security as the client component is not
+available for the entire technology.</p>
+
+<p class="calibre3">In some regards the definition of the technology stack also affects
+other fields. The definition of technologies across all Microservices
+also affects the organization or can be the product of a certain
+organization (compare <a href="part0017.html#chapter-13">chapter 13</a>).</p>
+
+<h5 id="leanpub-auto-try-and-experiment-10" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">A Microservices-based architecture is supposed to be defined.</p>
+
+  <ul class="calibre16">
+    <li class="calibre14">Which technical aspects could it comprise?</li>
+    <li class="calibre14">Which aspects would you prescribe to the teams? Why?</li>
+    <li class="calibre14">Which aspects should the teams decide on their own? Why?</li>
+  </ul>
+
+  <p class="calibre3">In the end, the question is how much freedom one allows the teams to
+have. There are numerous possibilities – ranging from complete freedom
+up to the prescription of practically all aspects. However, some areas
+can only be centrally defined – the communication protocols for
+example. <a href="part0017.html#section13-3">Section 13.3</a> discusses in more detail who
+should make which decisions in a Microservice-based project.</p>
+
+</aside>
+
+<h3 id="section8-8" class="calibre2">8.8 Configuration and Coordination</h3>
+
+<p class="calibre3">Configuring Microservice-based systems is laborious. They comprise a
+plethora of Microservices, which all have to be provided with the
+appropriate configuration parameters.</p>
+
+<p class="calibre3">Some tools can store the configuration values and make them available
+to all Microservices. Ultimately, these are solutions in key/value
+stores, which save a certain value under a certain key:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<a href="https://zookeeper.apache.org/"><em class="calibre20">Zookeeper</em></a> is a simple hierarchical
+system, which can be replicated onto multiple servers in a cluster.
+Updates arrive in an orderly fashion at the clients. This can also be
+used in a distributed environment, for instance for synchronization.
+Zookeeper has a consistent data model: All nodes have always the same
+data. The project is implemented in Java and is under Apache license.</li>
+  <li class="calibre14">
+<a href="https://github.com/coreos/etcd"><em class="calibre20">etcd</em></a> originates from the
+Docker/CoreOS environment. It offers an HTTP interface with JSON as
+data format. etcd is implemented in Go and also under Apache license.
+Similar to Zookeeper, etcd also has a consistent data model and can be
+used for distributed coordination. For instance, etcd allows to
+implement a locking in a distributed system.</li>
+  <li class="calibre14">
+<a href="http://cloud.spring.io/spring-cloud-config/"><em class="calibre20">Spring Cloud Config</em></a>
+likewise has a REST-API. The configuration data can be provided by a
+Git backend. Thereby Spring Cloud Config directly supports data
+versioning. The data can also be encrypted to protect passwords. The
+system is well integrated into the Java framework Spring and can be
+used without additional effort in Spring systems since Spring itself
+provides already configuration mechanisms. Spring Cloud Config is
+written in Java and is under Apache license. Spring Cloud
+Config does not offer support for synchronizing different distributed
+components.</li>
+</ul>
+
+<h5 id="leanpub-auto-consistency-as-problem" class="calibre15">Consistency as Problem</h5>
+
+<p class="calibre3">Some of the configuration solutions offer consistent data. This means
+that all nodes return the same data in case of a call. This is in a
+sense an advantage. However, according to the CAP theorem a node can
+only return an inconsistent response in case of a network failure – or
+none at all. In the end, without a network connection the node cannot
+know whether other nodes have already received other values. If the
+system allows only consistent responses, there can be no response at
+all in this situation. For certain scenarios this is highly sensible.</p>
+
+<p class="calibre3">For instance, only one client should execute a certain code at a
+given time – for example in order to initiate a payment exactly once.
+The therefore necessary locking can be done by the configuration
+system: Within the configuration system there is a variable, which
+upon entering this code has to be set. Only in that case the code may
+be executed. In the end, it is better when the configuration system
+does not return a response so that not by chance two clients execute
+the code in parallel.</p>
+
+<p class="calibre3">However, for configurations such strict requirements regarding
+consistency are often not necessary. Maybe it is better when a system
+gets an old value rather than that is does not get any value at all.
+However, in the case of CAP different compromises are possible. etcd
+for instance returns under certain conditions rather an incorrect
+response than no response at all.</p>
+
+<h5 id="leanpub-auto-immutable-server" class="calibre15">Immutable Server</h5>
+
+<p class="calibre3">Another problem associated with the centralized storage of
+configuration data is that the Microservices do not only depend on the
+state of their own file system and the contained files, but also on
+the state of the configuration server. Therefore, a Microservice now
+cannot be exactly replicated anymore – for this also the state of the
+configuration server is relevant. This makes the reproduction of
+errors and the search for errors in general more difficult.</p>
+
+<p class="calibre3">In addition, the configuration server is in opposition to the concept
+of Immutable Server. In this approach every software change leads to a
+new installation of the software. Ultimately, the old server is
+terminated upon an update, and a new server with an entirely new
+installation of the software is started. However, in case of an
+external configuration server a part of the configuration will not be
+present on the server, and therefore the server is after all
+changeable in the end by adjusting the configuration. However, exactly
+this is not supposed to happen. To prevent it, a configuration can be
+made in the server itself instead of the configuration server. In that
+case configuration changes can only be implemented by rolling out a
+new server.</p>
+
+<h5 id="leanpub-auto-alternative-installation-tools" class="calibre15">Alternative: Installation tools</h5>
+
+<p class="calibre3">The installation tools (discussed in <a href="part0016.html#section12-4">section 12.4</a>)
+represent a completely different approach for the configuration of
+individual Microservices. These tools support not only the
+installation of software, but also the configuration. For the
+configuration configuration files can for instance be generated, which
+can subsequently be read by Microservices. The Microservice itself
+does not notice the central configuration since it reads only a
+configuration file. Still, these approaches support all scenarios,
+which typically occur in a Microservices-based architecture. Thus,
+this approach allows a central configuration and is not in opposition
+to Immutable Server as the configuration is completely transferred to
+the server.</p>
+
+<h3 id="section8-9" class="calibre2">8.9 Service Discovery</h3>
+
+<p class="calibre3">Service Discovery ensures that Microservices can find each other. This
+is in a sense a very simple task: For instance, a configuration file
+detailing the IP address and the port of the Microservice can be
+delivered on all computers. Typical configuration management systems
+enable the rollout of such files. However, this approach is not
+sufficient:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Microservices can come and go. This does not only happen due to
+server failures, but also because of new deployments or the scaling of
+the environment by the start of new servers. Service Discovery has to
+be dynamic. A fixed configuration is not sufficient.</li>
+  <li class="calibre14">Due to Service Discovery the calling Microservices are not so
+closely coupled anymore to the called Microservice. This has positive
+effects for scaling: A client is not bound to a concrete server
+instance anymore, but can contact different instances – depending on
+the current load of the different servers.</li>
+  <li class="calibre14">When all Microservices have a common approach for Service Discovery,
+a central registry of all Microservices arises. This can be helpful
+for an architecture overview (compare <a href="part0012.html#section8-2">section 8.2</a>). Or
+monitoring information can be retrieved by all systems.</li>
+</ul>
+
+<p class="calibre3">In systems, which employ messaging, Service Discovery can be
+dispensable. Messaging systems already decouple
+sender and recipient. Both know only the shared channel via which
+they communicate. However, they do not know the identity of their
+communication partner. The flexibility, which Service Discovery
+offers, is then provided by the decoupling via the channels.</p>
+
+<h5 id="leanpub-auto-service-discovery--configuration" class="calibre15">Service Discovery = Configuration?</h5>
+
+<p class="calibre3">In principle it is conceivable to implement Service Discovery by
+configuration solutions (compare <a href="part0012.html#section8-8">section 8.8</a>). In the
+end, only the information which service is reachable at which location is supposed
+to be transferred. However, configuration mechanisms are in effect the
+wrong tools for this. For a Service Discovery a high availability is
+more important than for a configuration server. In the worst case
+a failure of Service Discovery can have the consequence that
+communication between Microservices gets impossible. Consequently, the
+trade-off between consistency and availability is different compared
+to configuration systems. Therefore, configuration systems should only
+be used for Service Discovery when they offer an appropriate
+availability. This can have consequences for the necessary
+architecture of the Service Discovery system.</p>
+
+<h5 id="leanpub-auto-technologies-1" class="calibre15">Technologies</h5>
+
+<p class="calibre3">There are many different technologies for Service Discovery:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">One example is <a href="http://www.zytrax.com/books/dns/"><em class="calibre20">DNS</em></a> (Domain Name System). This protocol ensures
+that a host name like <em class="calibre20">www.ewolff.com</em> can be resolved to an IP address.
+DNS is an essential component of the Internet and has clearly proven
+its scalability and availability. DNS is hierarchically organized:
+There is a DNS server which administrates the <em class="calibre20">.com</em> domain. This
+DNS-Server knows which DNS server administrates the subdomain
+<em class="calibre20">ewolff.com</em>, and the DNS server of this subdomain finally knows the
+IP address of <em class="calibre20">www.ewolff.com</em>. In this way a namespace can be
+hierarchically organized, and different organizations can administrate
+different parts of the namespace. If a server
+named <em class="calibre20">server.ewolff.com</em> is supposed to be created, this can be
+easily done by a change in the DNS server of the domain <em class="calibre20">ewolff.com</em>.
+This independence fits well to the concept of Microservices, which
+especially focus on independence in regards to their architecture. To
+ensure reliability there are always several servers, which
+administrate a domain. In order to reach scalability DNS supports
+caching so that calls do not have to implement the entire resolution
+of a name via multiple DNS servers, but can be served by a cache. This
+does not only promote performance, but also reliability.</li>
+</ul>
+
+<p class="calibre3">For Service Discovery it is not sufficient to resolve the name of a
+     server into an IP address. In addition, there has to be a network port for
+     each service. Therefore, the DNS has SRV records. These contain the
+     information on which computer and port the service is
+     reachable. In addition, a priority and a weight can be set for a
+     certain server. These values can be used to select one of the servers
+     and thereby to prefer powerful servers. Via this approach, DNS offers
+     reliability and Load Balancing onto multiple servers.
+     Advantages of DNS are apart from scalability also the availability of
+     many different implementations and the broad support in different
+     programming languages.</p>
+
+<ul class="calibre16">
+  <li class="calibre14">A frequently used implementation for a DNS server is
+<a href="https://www.isc.org/downloads/bind/"><em class="calibre20">BIND</em></a>. BIND runs on different
+operating systems (Linux, BSD, Windows, Mac OS X), is written in the
+programming language C and is under an open source license.</li>
+  <li class="calibre14">
+<a href="https://github.com/Netflix/eureka"><em class="calibre20">Eureka</em></a> is part of the Netflix
+stack. It is written in Java and is under Apache license. The example
+application in this book uses Eureka for Service Discovery (compare
+<a href="part0019.html#section14-8">section 14.8</a>). For every service Eureka stores under
+the service name a host and a port, under which the service is
+available. Eureka can replicate the information about the services
+onto multiple Eureka servers in order to increase the availability.
+Eureka is a REST service. A Java library for the clients belongs to
+Eureka. Via the Sidecar concept (<a href="part0012.html#section8-7">section 8.7</a>) this
+library can also be used by systems, which are not written in Java.
+The Sidecar takes over the communication with the Eureka server, which
+then offers Service Discovery to the Microservice. On the clients the
+information from the server can be held in a cache so that calls are
+possible without communication with the server. The server regularly
+contacts the registered services to determine which services failed.
+Eureka can be used as basis for Load Balancing since several instances
+can be registered for one service. The load can then be distributed
+onto these instances. Eureka was originally designed for the Amazon
+Cloud.</li>
+  <li class="calibre14">
+<a href="http://www.consul.io"><em class="calibre20">Consul</em></a> is a key/value store and fits
+therefore also into the area of configuration servers
+(<a href="part0012.html#section8-8">section 8.8</a>). Apart from consistency it can also
+optimize in regards to
+<a href="https://aphyr.com/posts/316-call-me-maybe-etcd-and-consul">availability</a>.
+Clients can register with the server and react to certain events. In
+addition to a DNS interface it also has a HTTP/JSON interface. It can
+check whether services are still available by executing health checks.
+Consul is written in Go and is under the Mozilla open source license.
+Besides, Consul can create configuration files from templates. Thereby
+a system expecting services in a configuration file can likewise be
+configured by Consul.</li>
+</ul>
+
+<p class="calibre3">Every Microservice-based architecture should use a Service Discovery
+system. It forms the basis for the administration of a large number of
+Microservices and for additional features like Load Balancing. If there is
+only a small number of Microservices, it is still imaginable to get
+along without Service Discovery. However, for a large system Service
+Discovery is indispensable. Since the number of Microservices
+increases over time, Service Discovery should be integrated into the
+architecture right from the start. Besides, practically each system
+uses at least the name resolution of hosts, which is already a simple
+Service Discovery.</p>
+
+<h3 id="section8-10" class="calibre2">8.10 Load Balancing</h3>
+
+<p class="calibre3">It is one of the advantages of Microservices that each individual
+service can be independently scaled. To distribute the load between
+the instances, multiple instances, which share the load, can simply be
+registered in a messaging solution (compare <a href="part0013.html#section9-4">9.4</a>). The
+actual distribution of the individual messages is then performed by the
+messaging solution. Messages can either be distributed to one of the
+receivers (Point-to-Point) or to all receivers (Publish/Subscribe).</p>
+
+<h5 id="leanpub-auto-resthttp" class="calibre15">REST/HTTP</h5>
+
+<p class="calibre3">In case of REST and HTTP a load balancer has to be used. The load
+balancer has the function to behave to the outside like a single
+instance, but to distribute requests to multiple instances. Besides, a
+load balancer can be useful during deployment: Instances of the new
+version of the Microservice can initially start without getting load.
+Afterwards the load balancer can be reconfigured in a way that the new
+Microservices are put into operation. In doing so the load can also be
+increased in a stepwise manner. This decreases the risk of a system
+failure.</p>
+
+<p class="calibre3"><a href="part0012.html#Fig32">Fig. 32</a> illustrates the principle of a proxy-based load
+balancer: The client sends its requests to a load balancer running on
+another server. This load balancer is responsible for sending each
+request to one of the known instances. There the request is processed.</p>
+
+
+<figure id="Fig32" class="image">
+  <img src="../images/00034.jpeg" alt="Fig. 32: Proxy-based Load Balancer" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 32: Proxy-based Load Balancer</figcaption>
+</figure>
+
+
+<p class="calibre3">This approach is common for websites and relatively easy to implement.
+The load balancer retrieves information from the service instances to
+determine the load of the different instances. In addition, the load
+balancer can remove a server from the Load Balancing when the node
+does not react to requests anymore.</p>
+
+<p class="calibre3">On the other hand, this approach has the disadvantage that the entire
+traffic for one kind of service has to be directed via a load
+balancer. Thereby the load balancer can turn into a bottleneck.
+Besides, a failure of the load balancer results in the failure of a
+Microservice.</p>
+
+<h5 id="leanpub-auto-central-load-balancer" class="calibre15">Central Load Balancer</h5>
+
+<p class="calibre3">A central load balancer for all Microservices is not only not to be
+recommended for these reasons but also because of the configuration.
+The configuration of the load balancer gets very complex when only one
+load balancer is responsible for many Microservices. Besides, the
+configuration has to be coordinated between all Microservices.
+Especially when deploying a new version of a Microservice a
+modification of the load balancer can be sensible in order to put the
+new Microservice only after a comprehensive test under load. The need
+for coordination between Microservices should especially be avoided in
+regards to deployment to ensure the independent deployment of
+Microservices. In case of such a reconfiguration one has to make sure
+that the load balancer supports a dynamic reconfiguration and for
+instance does not lose information regarding sessions if the
+Microservice uses sessions. Also for this reason it cannot be
+recommended to implement stateful Microservices.</p>
+
+<h5 id="leanpub-auto-a-load-balancer-pro-microservice" class="calibre15">A Load Balancer pro Microservice</h5>
+
+<p class="calibre3">There should be one load balancer per Microservice, which distributes
+the load between the instances of the Microservice. This allows the
+individual Microservices to independently distribute load, and
+different configurations per Microservice are possible. Likewise, it
+is simple to appropriately reconfigure the load balancer upon the
+deployment of a new version. However, in case of a failure of the load
+balancers the Microservice will not be available anymore.</p>
+
+<h5 id="leanpub-auto-technologies-2" class="calibre15">Technologies</h5>
+
+<p class="calibre3">For Load Balancing there are different approaches:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The Apache httpd web server supports Load Balancing with the
+<a href="http://httpd.apache.org/docs/2.2/mod/mod_proxy_balancer.html">extension mod_proxy_balancer</a>.</li>
+  <li class="calibre14">The web server <a href="http://nginx.org/en/docs/http/load_balancing.html">nginx</a> can likewise be configured in a way that it
+supports Load Balancing. To use a web server as load balancer has the
+advantage that it can also deliver static websites, CSS and images.
+Besides, the number of technologies will be reduced.</li>
+  <li class="calibre14">
+<a href="http://www.haproxy.org/">HAProxy</a> is a solution for Load Balancing and high availability. It does not support HTTP, but all TCP-based protocols.</li>
+  <li class="calibre14">Cloud providers frequently also offer load balancer. Amazon for
+instance offers
+<a href="http://aws.amazon.com/de/elasticloadbalancing/">Elastic Load Balancing</a>.
+This can be combined with Auto Scaling so that higher loads
+automatically trigger the start of new instances, and thereby the
+application automatically scales with load.</li>
+</ul>
+
+<h5 id="leanpub-auto-service-discovery" class="calibre15">Service Discovery</h5>
+
+<p class="calibre3">Another possibility for Load Balancing is Service Discovery
+(<a href="part0012.html#Fig33">Fig. 33</a>) (compare <a href="part0012.html#section8-9">section 8.9</a>). When the
+Service Discovery returns different nodes for a service, the load can
+be distributed across several nodes. However, this approach allows
+redirecting to another node only in the case that a new Service
+Discovery is performed. This makes it difficult to achieve a fine
+granular Load Balancing. For a new node it will therefore take some
+time until it gets a sufficient share of load. Finally, the failure of
+a node is hard to correct because a new Service Discovery would be
+necessary for that. It is useful that in case of DNS it can be stated
+for a set of data how long the data is valid (time-to-live).
+Afterwards the Service Discovery has to be run again. This allows a
+simple Load Balancing via DNS solutions and also with Consul. However,
+unfortunately this time-to-live is often not completely correctly
+implemented.</p>
+
+
+<figure id="Fig33" class="image">
+  <img src="../images/00035.jpeg" alt="Fig. 33: Load Balancing with Service Discovery" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 33: Load Balancing with Service Discovery</figcaption>
+</figure>
+
+
+<p class="calibre3">Load Balancing with Service Discovery is simple because Service
+Discovery anyhow has to be present in a Microservice-based system.
+Therefore, the Load Balancing does not introduce additional software
+components. Besides avoiding a central load balancer has the
+positive effect that there is no bottle neck and no central component
+whose failure would have tremendous consequences.</p>
+
+<h5 id="leanpub-auto-client-based-load-balancing" class="calibre15">Client-based Load Balancing</h5>
+
+<p class="calibre3">The client itself can also use a load balancer. The load balancer can
+be implemented as a part of the code of the Microservice or it can come as
+a proxy-based load balancer such as nginx or Apache httpd, which runs
+on the same computer as the Microservice. In that case there is no
+bottle neck because each client has its own load balancer, and the
+failure of an individual load balancer has hardly consequences.
+However, configuration changes have to be passed on to all load
+balancers, which can cause quite a lot of network traffic and load.</p>
+
+
+<figure id="Fig34" class="image">
+  <img src="../images/00036.jpeg" alt="Fig. 34: Client-based Load Balancing" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 34: Client-based Load Balancing</figcaption>
+</figure>
+
+
+<p class="calibre3"><a href="https://github.com/Netflix/ribbon">Ribbon</a> is an implementation of
+client-based Load Balancing. It is a library which is written in Java
+and can use Eureka to find service instances. Alternatively, a list of
+servers can be handed over to Ribbon. Ribbon implements different
+algorithms for Load Balancing. Especially when using it in combination
+with Eureka, the individual load balancer does not need to be
+configured anymore. Because of the Sidecar concept Ribbon can also be
+used by Microservices which are not implemented in Java. The example
+system uses Ribbon (compare <a href="part0019.html#section14-11">section 14.11</a>).</p>
+
+<p class="calibre3">Consul offers the possibility to define a template for configuration
+files of load balancers. This allows to feed the load balancer
+configuration with data from Service Discovery. A client-based Load
+Balancing can be implemented by defining a template for each client,
+into which Consul writes all service instances. This process can be
+regularly repeated. In this manner a central system configuration is
+again possible and a client-based Load Balancing relatively simple to
+implement.</p>
+
+<h5 id="leanpub-auto-load-balancing-and-architecture" class="calibre15">Load Balancing and Architecture</h5>
+
+<p class="calibre3">It is hardly sensible to use more than one kind of Load Balancing
+within a single Microservice-based system. Therefore, this decision should
+be made once for the entire system. Load Balancing and Service
+Discovery have a number of contact points. Service Discovery knows all
+service instances; Load Balancing distributes the loads between the
+instances. Both technologies have to work together. Thus the technology
+decisions in this area will influence each other.</p>
+
+<h3 id="section8-11" class="calibre2">8.11 Scalability</h3>
+
+<p class="calibre3">To be able to cope with high loads, Microservices have to scale.
+Scalability means that a system can process more load when it gets
+more resources.</p>
+
+<p class="calibre3">There are two different kinds of scalability:</p>
+
+<dl class="calibre37">
+  <dt class="calibre6">Horizontal scalability</dt>
+  <dd class="calibre38">means that more resources are used, which each process part of the
+load, i.e. the number of resources increases.</dd>
+  <dt class="calibre6">Vertical scalability</dt>
+  <dd class="calibre38">means that more powerful resources are employed to handle a higher
+load. Here, an individual resource will process more load, while the
+number of resources stays constant.</dd>
+</dl>
+
+
+<figure id="Fig35" class="image">
+  <img src="../images/00037.jpeg" alt="Fig. 35: Horizontal and vertical scaling" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 35: Horizontal and vertical scaling</figcaption>
+</figure>
+
+
+<p class="calibre3">Horizontal scalability is often the better choice since the limit for
+the possible number of resources and therefore the limit for the
+scalability is very high. Besides, it is cheaper to buy more resources
+than more powerful ones. One fast computer is often more expensive
+than many slow ones.</p>
+
+<h5 id="leanpub-auto-scaling-microservices-and-load-balancing" class="calibre15">Scaling, Microservices and Load Balancing</h5>
+
+<p class="calibre3">Microservices employ mostly horizontal scaling where the load is
+distributed across several Microservice instances via Load Balancing.
+The Microservices themselves have to be stateless for this. More
+precisely: They should not have any state, which is specific for an
+individual user, because then the load can only be distributed to
+nodes, which have the respective state. The state for a user can be
+stored in a database or alternatively be put into an external storage
+(e.g. In-Memory-Store), which can be accessed by all Microservices.</p>
+
+<h5 id="leanpub-auto-dynamic-scaling" class="calibre15">Dynamic Scaling</h5>
+
+<p class="calibre3">Scalability means only that the load can be distributed to multiple
+nodes. How the system really reacts to the load, is not defined. In
+the end it is more important that the system really adapts to an
+increasing load. For that it is necessary that, depending on the load,
+a Microservice starts new instances, onto which the load can be
+distributed. This allows the Microservice to also cope with high
+loads. This process has to be automated as manual processes would be
+too laborious.</p>
+
+<p class="calibre3">There are different places in the Continuous Deployment pipeline
+(<a href="part0016.html#chapter-12">chapter 12</a>) where it is necessary to start a
+Microservice to test the services. For that a suitable deployment
+system such as Chef or Puppet can be used. Alternatively, a new
+virtual machine or a new Docker container with the Microservice is
+simply started. This mechanism can also be used for dynamic scaling.
+It only has additionally to register the new instances with the Load
+Balancing. However, the instance should be able to handle the
+production load right from the start: Therefore, the caches should
+for instance already be filled with data.</p>
+
+<p class="calibre3">Dynamic scaling is especially simple with Service Discovery: The
+Microservice has to register with the Service Discovery. The Service
+Discovery can configure the load balancer in a way that it distributes
+load to the new instance.</p>
+
+<p class="calibre3">The dynamic scaling has to be performed based on a metric. When the
+response time of a Microservice is too long or the number of requests
+is very high, new instances have to be started. The dynamic scaling
+can be part of a monitoring (compare <a href="part0016.html#section12-3">section 12.3</a>)
+since the monitoring should enable the reaction to extraordinary metric
+values. Most monitoring infrastructures offer the possibility to react
+to metric values by calling a script. The script can start additional
+instances of the Microservice. This is fairly easy to do with most
+cloud and virtualization environments. Environments like the Amazon
+Cloud offer suitable solutions for automatic scaling, which work in a
+similar manner. However, a home-grown solution is not very complicated
+since the scripts run anyhow only every few minutes so that failures
+are tolerable, at least for a limited time. Since the scripts are part
+of the monitoring, they will have a similar availability like the
+monitoring and should therefore be sufficiently available.</p>
+
+<p class="calibre3">Especially in the case of cloud infrastructures it is important to
+shut the instances down again in case of low load because every
+running instance costs money in a cloud. Also here scripts can serve
+as reaction to certain metric values.</p>
+
+<h5 id="leanpub-auto-microservices-advantages-for-scaling" class="calibre15">Microservices: Advantages for Scaling</h5>
+
+<p class="calibre3">In regards to scaling, Microservices have first of all the advantage
+that they can be scaled independently of each other. In case of a
+Deployment Monolith only the entire monolith can be started as more
+instances. The fine granular scaling does not appear to be an
+especially striking advantage at first glance, however, to run an
+entire E-commerce shop in many instances just to speed up the search,
+causes high expenditures: A lot of hardware is needed, a complex
+infrastructure has to be built up, and system parts are held
+available, which are not used at all. These system parts render the
+deployment and monitoring more complex. The possibilities for dynamic
+scaling depend critically on the size of the services and on the speed
+with which new instances can be started. In this area Microservices
+possess clear advantages.</p>
+
+<p class="calibre3">In most cases Microservices have already an automated deployment,
+which is also very easy to implement. In addition, there is already a
+monitoring. Without automated deployment and monitoring a
+Microservice-based system can hardly be operated. If there is in
+addition load balancing, then it is only a script which is still
+missing for automated scaling. Therefore Microservices represent an
+excellent basis for dynamic scaling.</p>
+
+<h5 id="leanpub-auto-sharding" class="calibre15">Sharding</h5>
+
+<p class="calibre3">Sharding means that the administrated data amount is divided and that
+each instance gets the responsibility for part of the data. For
+example, an instance can be responsible for the customers A-E or for
+all customers whose customer number ends with the number 9. Sharding
+is a variation of horizontal scaling: More servers are used. However,
+not all servers are equal, but every server is responsible for a
+different subset of the dataset. In case of Microservices this type of
+scaling is easy to implement since the domain is anyhow distributed
+across multiple Microservices. Every Microservice can then shard its
+data and via this sharding scale horizontally. A Deployment Monolith
+is hardly scalable in this manner because it handles all the data.
+When the Deployment Monolith administrates customers and items, it can
+hardly be sharded for both types of data. In order to really implement
+sharding the Load Balancer has of course to distribute the load
+appropriately to the shards.</p>
+
+<h5 id="leanpub-auto-scalability-throughput-and-response-times" class="calibre15">Scalability, Throughput and Response Times</h5>
+
+<p class="calibre3">Scalability means that more load can be processed by more resources.
+The throughput increases – i.e. the number of processed requests per
+unit of time. However, the response time stays constant in the best
+case – depending on circumstances it might rise, but not to such an
+extent that the system causes errors or gets too slow for the user.</p>
+
+<p class="calibre3">When faster response times are required, horizontal scaling does not
+help. However, there are some approaches to optimize the response time
+of Microservices:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The Microservices can be deployed on faster computers. This is
+vertical scaling. Then the Microservices can process the individual
+requests more rapidly. Because of the automated deployment vertical
+scaling is relatively simple to implement. The service has only to be
+deployed on faster hardware.</li>
+  <li class="calibre14">Calls via the network have a long latency. Therefore, a possible
+optimization can be to forego such calls. Instead caches can be used,
+or the data can be replicated. Caches can often very easily be
+integrated into the existing communication. For REST, for instance, a
+simple HTTP cache is sufficient.</li>
+  <li class="calibre14">If the domain architecture of Microservices is well designed,
+a request should only be processed in one Microservice so that no
+communication via the network is necessary. In case of a good
+domain architecture the logic for processing a request is
+implemented in one Microservice so that changes to the logic
+only require changes to one Microservice. In that case Microservices
+do not have longer response times than Deployment Monoliths. In
+regards to an optimization of response times Microservices have the
+disadvantage that their communication via the network causes rather
+longer response times. However, there are means to counteract this
+effect.</li>
+</ul>
+
+<h3 id="section8-12" class="calibre2">8.12 Security</h3>
+
+<p class="calibre3">In a Microservice-based architecture each Microservice has to know
+which user triggered the current call and wants to use the system.
+Therefore, a uniform security architecture has to exist: After all,
+Microservices can work together for a request, and for each part of
+the processing of the request another Microservice might be
+responsible. Thus the security structure has to be defined at the
+level of the entire system. This is the only way to ensure that the
+access of a user is uniformly treated in the entire system in regards
+to security.</p>
+
+<p class="calibre3">Security comprises two essential aspects: Authentication and
+authorization. Authentication is the process, which validates the
+identity of the user. Authorization denotes the decision whether a
+certain user is allowed to execute a certain action. Both processes
+are independent of each other: The validation of the user identity in
+the context of authentication is not directly related to
+authorization.</p>
+
+<h5 id="leanpub-auto-security-and-microservices" class="calibre15">Security and Microservices</h5>
+
+<p class="calibre3">In a Microservice-based architecture the individual Microservices
+should not perform authentication. It does not make much sense for
+each Microservice to validate user name and password. For
+authentication a central server has to be used. For authorization an
+interplay is necessary: Often there are user groups or roles which
+have to be centrally administered. However, whether a certain user
+group or role is allowed to use certain features of a Microservice
+should be decided by the concerned Microservice. Thereby changes to
+the authorization of a certain Microservice can be limited to the
+implementation of this Microservice.</p>
+
+<h5 id="leanpub-auto-oauth2" class="calibre15">OAuth2</h5>
+
+<p class="calibre3">One possible solution for this challenge is OAuth2. This protocol is
+also widely used in the internet. Google, Microsoft, Twitter, XING or
+Yahoo all offer support for this protocol.</p>
+
+
+<figure id="Fig36" class="image">
+  <img src="../images/00038.jpeg" alt="Fig. 36: The OAuth2 protocol" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 36: The OAuth2 protocol</figcaption>
+</figure>
+
+
+<p class="calibre3"><a href="part0012.html#Fig36">Fig. 36</a> shows the workflow of the OAuth2 protocol as defined
+by the <a href="http://tools.ietf.org/html/rfc6749">standard</a>:</p>
+
+<ol class="calibre13">
+  <li value="1" class="calibre14">The client inquires of the Resource Owner whether it might execute
+a certain action. For example, the application can request access to
+the profile or certain data in a social network which the Resource
+Owner stored there. The Resource Owner is usually the user of the
+system.</li>
+  <li value="2" class="calibre14">If the Resource Owner grants the client access, the client
+receives a respective response from the Resource Owner.</li>
+  <li value="3" class="calibre14">The client uses the response of the Resource Owner to put a
+request to the authorization server. In the example the authorization
+server would be located in the social network.</li>
+  <li value="4" class="calibre14">The authorization server returns an access token.</li>
+  <li value="5" class="calibre14">With this access token the client can now call a Resource Server
+and there obtain the necessary information. For the call the token can
+for instance be put into an HTTP header.</li>
+  <li value="6" class="calibre14">The Resource Server answers the requests.</li>
+</ol>
+
+<h5 id="leanpub-auto-possible-authorization-grants" class="calibre15">Possible Authorization Grants</h5>
+
+<p class="calibre3">The interaction with the authorization server can work in different ways:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">In case of the <em class="calibre20">Password Grant</em> the client shows an HTML form to the
+user in step 1. The Resource Owner can enter user name and password.
+In step 3 this information is used by the client to obtain the access
+token from the authorization server via an HTTP POST. This approach
+has the disadvantage that the client processes user name and password.
+The client can be insecurely implemented, and then these data are
+endangered.</li>
+  <li class="calibre14">In case of the <em class="calibre20">Authorization Grant</em> the client directs the user in
+step 1 to a web page, which the authorization server displays. There
+the user can choose whether he/she permits the access. If that is the
+case, the client will obtain in step 2 an authorization code via an
+HTTP-URL. In this way the authorization server can be sure that the
+correct client obtains the code since the server chooses the URL. In
+step 3 the client can then generate the access token with this
+authorization code via an HTTP POST. The approach is mainly
+implemented by the authorization server and thus very easy to use by a
+client. In this scenario the client would be a web application on the
+server: It will obtain the code from the authorization server and is
+the only one able to turn it via the HTTP POST into an access token.</li>
+  <li class="calibre14">In case of <em class="calibre20">Implicit</em> the procedure resembles the Authorization Grant.
+After the redirect to the authorization server in step 1 the client
+directly gets an access token via an HTTP redirect. This allows the
+browser or a mobile application to immediately readout the access
+token. Step 3 and 4 are omitted. However, here the access token is not
+as well protected against attacks since the authorization server does
+not directly send it to the client. This approach is sensible when
+JavaScript code on the client or a mobile application is supposed to
+use the access token.</li>
+  <li class="calibre14">In case of <em class="calibre20">Client Credentials</em> the client uses in step 1 a
+credential, which the client knows, to obtain the access token from
+the authorization server. Thereby the client can access the data
+without additional information from the Resource Owner. For example, a
+statistics software could readout and analyze customer data in this
+manner.</li>
+</ul>
+
+<p class="calibre3">Via the access token the client can access resources. The access token
+has to be protected: When unauthorized people obtain access to the
+access token, they can thereby trigger all actions, which the Resource
+Owner can also trigger. Within the token itself some information can
+be encoded. For instance, in addition to the real name of the Resource
+Owner the token can also contain information, which assigns certain
+rights to the user or the membership to certain user groups.</p>
+
+<h5 id="leanpub-auto-json-web-token-jwt" class="calibre15">JSON Web Token (JWT)</h5>
+
+<p class="calibre3">JSON Web Token (JWT) is a standard for the information, which is
+contained in an access token. JSON serves as data structure. For the
+validation of the access token a digital signature with JWS (JSON Web
+Signature) can be used. Likewise the access token can be encrypted
+with JSON Web Encryption (JWE). The access token can contain
+information about the issuer of the access token, the Resource Owner,
+the validity interval or the addressee of the access token. Individual
+data can also be contained in the access token. The access token is
+optimized for use as HTTP header by an encoding of the JSON with
+BASE64. These headers are normally subject to size restrictions.</p>
+
+<h5 id="leanpub-auto-oauth2-jwt-and-microservices" class="calibre15">OAuth2, JWT and Microservices</h5>
+
+<p class="calibre3">In a Microservice-based architecture the user can initially
+authenticate via one of the OAuth2 approaches. Afterwards the user can
+use the web page of a Microservice or call a Microservice via REST.
+With each further call every Microservice can hand over the access
+token to other Microservices. Based on the access token the
+Microservices can decide whether a certain access is granted or not.
+For that the validity of the token can first be checked. In case of
+JWT the token only has to be decrypted and the signature of the
+authorization server has to be checked. Subsequently, it can be
+decided based on the information of the token whether the user may use
+the Microservice as he/she intends. Information from the token can be
+used for that. For instance, it is possible to store the affiliation
+with certain user groups directly in the token.</p>
+
+<p class="calibre3">It is important that it is not defined in the access token, which
+access to which Microservice is allowed. The access token is issued by
+the authorization server. If the information about the access was
+available in the authorization server, every modification of the
+access rights would have to occur in the authorization server – and
+not in the Microservices. This limits the changeability of the
+Microservices since modifications to the access rights would require
+changes of the authorization server as central component. The
+authorization server should only administer the assignment to user
+groups and the Microservices should then allow or prohibit access
+based on such information from the token.</p>
+
+<h5 id="leanpub-auto-technologies-3" class="calibre15">Technologies</h5>
+
+<p class="calibre3">In principle, other technical approaches than OAuth2 could also be
+used as long as they employ a central server for authorization and use
+a token for regulating the access to individual Microservices. One
+example is <a href="http://tools.ietf.org/html/rfc4556">Kerberos</a>, which has a
+relatively long history. However, it is not as well tuned to REST like
+OAuth2. Other alternatives are
+<a href="https://www.oasis-open.org/committees/security/">SAML and SAML 2.0</a>.
+They define a protocol, which uses XML and HTTP to perform
+authorization and authentication.</p>
+
+<p class="calibre3">Finally, signed cookies can be created by a home-grown security
+service. Via a cryptographic signature it can be determined whether
+the cookie has really been issued by the system. The cookie can then
+contain the rights or groups of the user. Microservices can examine
+the cookie and restrict the access if necessary. There is the risk
+that the cookie is stolen. However, for that to occur the browser has
+to be compromised or the cookie has to be transferred via a non
+encrypted connection. This is often acceptable as risk.</p>
+
+<p class="calibre3">With a token approach it is possible that Microservices do not have to
+handle the authorization of the caller, but still can restrict the
+access to certain user groups or roles.</p>
+
+<p class="calibre3">There are good reasons for the use of OAuth2:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">There are numerous libraries for practically all established
+programming languages, which implement
+<a href="http://oauth.net/2/">OAuth2 or an OAuth2 server</a>. The decision for
+OAuth2 hardly restricts the technology choice for Microservices.</li>
+  <li class="calibre14">Between the Microservices only the access token still has to be
+transferred. This can occur in a standardized manner via an HTTP
+header when REST is used. In case of different communication protocols
+similar mechanisms can be exploited. Also in this area OAuth2 hardly
+limits the technology choice.</li>
+  <li class="calibre14">Via JWT information can be placed into the token, which the
+authorization server communicates to the Microservices in order for
+them to allow or prohibit access. Therefore, also in this area the
+interplay between the individual Microservice and the shared
+infrastructure is simple to implement – with standards, which are widely
+supported.</li>
+</ul>
+
+<p class="calibre3"><a href="http://cloud.spring.io/spring-cloud-security/">Spring Cloud Security</a>
+offers especially for Java-based Microservices a good basis for
+implementing OAuth2 systems.</p>
+
+<h5 id="leanpub-auto-additional-security-measures" class="calibre15">Additional Security Measures</h5>
+
+<p class="calibre3">OAuth2 solves first of all the problem of authentication and
+authorization – primarily for human users. There are additional
+measures for securing a Microservice-based system:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The communication between the Microservices can be protected by
+SSL/TLS against wiretapping. All communication is then encrypted.
+Infrastructures like REST or messaging systems mostly support such
+protocols.</li>
+  <li class="calibre14">Apart from authentication with OAuth2 certificates can be used to
+authenticate clients. A certificate authority creates the certificates.
+They can be used to verify digital signatures. This makes it possible
+to authenticate a client based on its digital signature. Since SSL/TLS
+supports certificates, at least at this level the use of certificates
+and authentication via certificates is possible.</li>
+  <li class="calibre14">API keys represent a similar concept. They are given to external
+clients to enable them to use the system. Via the API key the external
+clients authenticate themselves and can obtain the appropriate rights.
+In case of OAuth2 this can be implemented with Client Credential.</li>
+  <li class="calibre14">Firewalls can be used to protect the communication between
+Microservices. Normally firewalls secure a system against unauthorized
+access from outside. A firewall for the communication between the
+Microservices prevents that all Microservices are endangered if an
+individual Microservice has been successfully taken over. In this way
+the intrusion can be restricted to one Microservice.</li>
+  <li class="calibre14">Finally, there should be an intrusion detection to detect
+unauthorized access to the system. This topic is closely related to
+monitoring. The monitoring system can also be used to trigger an
+appropriate alarm in case of an intrusion.</li>
+  <li class="calibre14">
+<a href="http://martinfowler.com/bliki/Datensparsamkeit.html">Datensparsamkeit</a>
+is also an interesting concept. It is derived from the data security
+field and states that only those data are to be saved, which are absolutely
+necessary. Form a security perspective this results in the advantage
+that collecting lots of data is avoided. This makes the system less
+attractive for attacks, and in addition the consequences of a security
+breach will not be as bad.</li>
+</ul>
+
+<h5 id="leanpub-auto-hashicorp-vault" class="calibre15">Hashicorp Vault</h5>
+
+<p class="calibre3"><a href="https://www.vaultproject.io/">Hashicorp Vault</a> is a tool, which
+solves many problems in the area of Microservice security. It
+offers the following features:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Secrets like passwords, API Keys, keys for encryption or
+certificates can be saved. This can be useful to allow users to
+administrate their secrets. In addition also Microservices can be
+equipped with certificates in such a manner as to protect their
+communication with each other or with external servers.</li>
+  <li class="calibre14">Secrets are given via a lease to services. Besides, they can be
+equipped with an access control. This helps to limit the problem in
+case of a compromised service. Secrets can for instance also be
+declared invalid.</li>
+  <li class="calibre14">Data can be immediately encrypted or decrypted with the keys without
+the Microservices themselves having to save these keys.</li>
+  <li class="calibre14">Access is made traceable by an audit. This allows to trace who got
+which secret and at which time.</li>
+  <li class="calibre14">In the background Vault can use HSMs, SQL databases or Amazon IAM to
+store secrets. In addition, it can for instance also generate new
+access keys for the Amazon Cloud by itself.</li>
+</ul>
+
+<p class="calibre3">In this manner Vault takes care of handling keys and thereby relieves
+Microservices of this task. It is a big challenge to really handle
+keys securely. It is difficult to implement something like that in a
+really secure manner.</p>
+
+<h5 id="leanpub-auto-additional-security-goals" class="calibre15">Additional Security Goals</h5>
+
+<p class="calibre3">In regards to a software architecture security comes in very different
+shapes. Approaches like OAuth2 only help to achieve confidentiality.
+They prevent that data is accessible for unauthorized users. However,
+even this confidentiality is not entirely safeguarded by OAuth2 on its
+own: The communication in the network likewise has to be protected
+against wiretapping – for instance via HTTPS or other kinds of
+encryption.</p>
+
+<p class="calibre3">Additional security aspects are:</p>
+
+<dl class="calibre37">
+  <dt class="calibre6">Integrity</dt>
+  <dd class="calibre38">means that there are no unnoticed changes to the data. Every
+Microservice has to solve this problem. For instance, data can be
+signed to ensure that they have not been manipulated in some way. The
+concrete implementation has to be performed by each Microservice.</dd>
+  <dt class="calibre6">Confidentiality</dt>
+  <dd class="calibre38">ensures that modifications cannot be denied. This can be achieved by
+signing the changes introduced by different users by keys that are
+specific for the individual user. Then it is clear that exactly one
+specific user has modified the data. The overall security
+architecture has to provide the keys; the signing is then the task of
+each individual service.</dd>
+  <dt class="calibre6">Data security</dt>
+  <dd class="calibre38">is ensured as long as no data are lost. This issue
+can be handled by backup solutions and highly available storage
+solutions. This problem has to be addressed by the Microservices
+since it is within their responsibility as part of their data storage.
+However, the shared infrastructure can offer certain databases, which
+are equipped with appropriate backup and disaster recovery mechanisms.</dd>
+  <dt class="calibre6">Availability</dt>
+  <dd class="calibre38">means that a system is available. Also here the Microservices have
+to contribute individually. However, since especially in the case of
+Microservice-based architectures one has to deal with the possibility
+of failures of individual Microservices, Microservice-based systems
+are often well prepared in this area. Resilience
+(<a href="part0014.html#section10-5">section 10.5</a>) is for instance useful for this.</dd>
+</dl>
+
+<p class="calibre3">These aspects are often not considered when devising security measures
+– however, the failure of a service has often even more dramatic
+consequences than the unauthorized access to data. One danger is
+Denial of Service attacks, which result in such an overloading of
+servers that they cannot perform any sensible work anymore. The
+technical hurdles for this are often shockingly low, and the defense
+against such attacks is frequently very difficult.</p>
+
+<h3 id="section8-13" class="calibre2">8.13 Documentation and Metadata</h3>
+
+<p class="calibre3">To keep the overview in a Microservice-based architecture certain information about each Microservice has to be available. Therefore, the Microservice-based architecture has to define how Microservices can provide such information. Only when all Microservices provide this information in a uniform way, the information can be easily collected. Possible information of interest is for instance:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Fundamental information like the name of the service and the
+responsible contact person.</li>
+  <li class="calibre14">Information about the source code: Where the code can be found in
+the version control and which libraries have been used. The used
+libraries can be interesting in order to compare open source licenses
+of the libraries with the company policies or to identify in case of a
+security gap in a library the affected Microservices. For such
+purposes the information has to be available even if the decision
+about the use of a certain library rather concerns only one 
+Microservice. The decision itself can be made largely independently by
+the responsible team.</li>
+  <li class="calibre14">Another interesting information is with which other Microservices
+the Microservice works together. This information is central for the
+architecture management (compare <a href="part0012.html#section8-2">section 8.2</a>).</li>
+  <li class="calibre14">In addition, information about configuration parameters or about
+feature toggles might be interesting. Feature toggles can switch
+features on or off. This is useful for activating new features only in
+production when their implementation is really finished, or for
+avoiding the failure of a service by deactivating certain features.</li>
+</ul>
+
+<p class="calibre3">It is not sensible to document all components of the Microservices or
+to unify the entire documentation. A unification only makes sense for
+information, which is relevant outside of the team implementing the
+Microservice. Whenever it is necessary to manage the interplay of
+Microservices or to check licenses, the relevant information has to be
+available outside of the responsible team. These questions have to be
+solved across Microservices. Each team can create additional
+documentation about their own Microservices. However, this
+documentation is only relevant for this one team and therefore does
+not have to be standardized.</p>
+
+<h5 id="leanpub-auto-outdated-documentation" class="calibre15">Outdated Documentation</h5>
+
+<p class="calibre3">A common problem concerning the documentation of any software is that
+the documentation gets easily outdated and then documents a state
+which is not up to date anymore. Therefore, the documentation should
+be versioned together with the code. Besides, the documentation should
+be created from information, which is anyhow present in the system.
+For instance, the list of all used libraries can be taken from the
+build system since exactly this information is needed during the
+compilation of the system. Which other Microservices are used can be
+obtained from Service Discovery. This information can for instance be
+used to create firewall rules when a firewall is supposed to be used
+to protect the communication between the Microservices. In summary,
+the documentation does not have to be maintained separately, but 
+results from the anyhow available information.</p>
+
+<h5 id="leanpub-auto-access-to-documentation" class="calibre15">Access to Documentation</h5>
+
+<p class="calibre3">The documentation can be part of the artifacts which are created
+during the build. In addition, there can be a run-time interface which
+allows to read out metadata. Such an interface can correspond to the
+otherwise common interfaces for monitoring and for instance provide
+JSON documents via HTTP. In this way, the metadata are only an
+additional information Microservices provide at run-time.</p>
+
+<p class="calibre3">In a service template it can exemplarily be shown how the
+documentation is created. The service template can then form the basis
+for the implementation of new Microservices. When the service template
+already contains this aspect, it facilitates the implementation of a
+standard-conform documentation. In addition, at least the formal
+characteristics of the documentation can be checked by a test.</p>
+
+<h3 id="section8-14" class="calibre2">8.14 Conclusion</h3>
+
+<p class="calibre3">The domain architecture of a Microservice-based system is
+essential because it influences not only the structure of the system,
+but also the organization (<a href="part0012.html#section8-1">section 8.1</a>). Unfortunately, especially for
+Microservices tools for dependency management are rare so that teams
+have to develop home-made solutions. However, often an understanding
+of the implementation of the individual business processes will be
+sufficient and an overview of the entire architecture is not really
+necessary (<a href="part0012.html#section8-2">section 8.2</a>).</p>
+
+<p class="calibre3">For an architecture to be successful it has to be permanently adjusted
+to the changing requirements. For Deployment Monoliths there are
+numerous refactoring techniques to achieve this. Such possibilities do
+also exist for Microservices – however without the support of tools
+and with much higher hurdles (<a href="part0012.html#section8-3">section 8.3</a>). Still
+Microservice-based systems can be sensibly developed further – for
+instance by starting initially with few large Microservices and
+creating over time more and more Microservices
+(<a href="part0012.html#section8-4">section 8.4</a>). An early distribution into many
+Microservices entails the risk to end up with a wrong distribution.</p>
+
+<p class="calibre3">A special case is the migration of a legacy application to a
+Microservice-based architecture (<a href="part0012.html#section8-5">section 8.5</a>). In this
+case, the code base of the legacy application can be divided into
+Microservices - however this can lead to a bad architecture due to the
+often bad structure of the legacy application. Alternatively, the
+legacy application can be supplemented by Microservices, which replace
+functionalities of the legacy application in a stepwise manner.</p>
+
+<p class="calibre3">Event-driven Architecture (<a href="part0012.html#section8-6">section 8.6</a>) can serve to
+uncouple the logic in the Microservices. This allows an easy
+extensibility of the system.</p>
+
+<p class="calibre3">Defining the technological basis is one of the tasks of an architecture
+(<a href="part0012.html#section8-7">section 8.7</a>). In case of Microservice-based systems
+this does not relate to the definition of a shared technology stack
+for implementation, but to the definition of shared communication
+protocols, interfaces, monitoring and logging. Additional technical
+functions of the entire system are coordination and configuration
+(<a href="part0012.html#section8-8">section 8.8</a>). In this area tools can be selected, which all
+Microservices have to employ. Alternatively, one can do without a
+central configuration and instead leave each Microservice to bring along
+its own configuration.</p>
+
+<p class="calibre3">For Service Discovery (<a href="part0012.html#section8-9">section 8.9</a>) likewise a certain
+technology can be chosen. A solution for Service Discovery is in any
+case sensible for a Microservice-based system – except messaging is
+used for communication. Based on Service Discovery Load Balancing
+can be introduced (<a href="part0012.html#section8-10">section 8.10</a>) to distribute the
+load across the instances of the Microservices. Service Discovery
+knows all instances, the load balancing distributes the load to these
+instances. Load Balancing can be implemented via a central load
+balancer, via Service Discovery or via one load balancer per client.
+This provides the basis for scalability
+(<a href="part0012.html#section8-11">section 8.11</a>). This allows a Microservice to process
+more load by scaling up.</p>
+
+<p class="calibre3">Microservices have a significantly higher technical complexity than
+Deployment Monoliths. Operating systems, networks, load balancer,
+Service Discovery and communication protocols all become part of the
+architecture. Developers and architects of Deployment Monoliths are
+largely spared from these aspects. Thus architects have to deal with
+entirely different technologies and have to carry out architecture at
+an entirely different level.</p>
+
+<p class="calibre3">In the area of security a central component has to take over at least
+authentication and parts of authorization. The Microservices should
+then settle the details of access (<a href="part0012.html#section8-12">section 8.12</a>). In
+order to obtain certain information from a system, which is composed
+of many Microservices, the Microservices have to possess a
+standardized documentation (<a href="part0012.html#section8-13">section 8.13</a>). This
+documentation can for instance provide information about the used
+libraries – to compare them with open source license regulations or to
+remove security issues when a library has a security gap.</p>
+
+<p class="calibre3">The architecture of a Microservice-based system is different from
+classical applications. Many decisions are only made in the
+Microservices, while topics like monitoring, logging or Continuous
+Delivery are standardized for the entire system.</p>
+
+<h5 id="leanpub-auto-essential-points-5" class="calibre15">Essential Points</h5>
+
+<ul class="calibre16">
+  <li class="calibre14">Refactoring between Microservices is laborious. Therefore, it is
+hard to change the architecture at this level. Accordingly, the
+continued development of the architecture is a central point.</li>
+  <li class="calibre14">An essential part of the architecture is the definition of
+overarching technologies for configuration and coordination, Service
+Discovery, Load Balancing, security, documentation and meta data.</li>
+</ul>
+
+<div class="calibre6">
+  <ol class="calibre13">
+    <li id="fn-DDD" value="1" class="calibre14">Eric Evans: Domain-Driven Design: Tackling Complexity in the Heart of Software, Addison-Wesley,2003, ISBN 978-0-32112-521-7<a rel="rev-footnote" href="part0007.html#fnref-DDD">↩</a>
+</li>
+    <li id="fn-Refactoring" value="2" class="calibre14">Martin Fowler: Refactoring: Improving the Design of Existing Code, Addison-Wesley, 1999, ISBN 978-0201485677<a rel="rev-footnote" href="part0012.html#fnref-Refactoring">↩</a>
+</li>
+    <li id="fn-BuildingMicroservices" value="3" class="calibre14">Sam Newman: Building Microservices: Designing Fine-Grained Systems, O’Reilley Media, 2015, ISBN978-1-4919-5035-7<a rel="rev-footnote" href="part0012.html#fnref-BuildingMicroservices">↩</a>
+</li>
+    <li id="fn-EAI" value="4" class="calibre14">Gregor Hohpe, Bobby Woolf: Enterprise Integration Patterns:<a rel="rev-footnote" href="part0012.html#fnref-EAI">↩</a>
+</li>
+  </ol>
+</div>
+
+
+
+</div>
+</body></html>

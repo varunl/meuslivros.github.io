@@ -1,0 +1,1902 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title dir="ltr">14 Example for a Microservices-based Architecture</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body dir="ltr" class="calibre">
+<div class="calibre6">
+<h2 id="chapter-14" class="calibre1">14 Example for a Microservices-based Architecture</h2>
+
+<p class="calibre3">This chapter provides an example for an implementation of a
+Microservices-based architecture. It aims at demonstrating concrete
+technologies in order to lay the foundation for experiments. The
+example application has a very simple domain architecture containing a few
+compromises. <a href="part0019.html#section14-1">Section 14.1</a> deals with this topic in
+detail.</p>
+
+<p class="calibre3">For a real system with a comparable low complexity as the
+presented example application an approach without Microservices would be better
+suited. However, the low complexity makes the example application easy to
+understand and simple to extend. Some aspects of a Microservice
+environment, such as security, documentation, monitoring or logging,
+are not illustrated in the example application – but these aspects can be
+relatively easily addressed with some experiments.</p>
+
+<p class="calibre3"><a href="part0019.html#section14-2">Section 14.2</a> explains the technology stack of the
+example application. The build tools are described in
+<a href="part0019.html#section14-3">section 14.3</a>. <a href="part0019.html#section14-4">Section 14.4</a> deals with
+Docker as technology for the deployment. Docker needs to run in a Linux
+environment. <a href="part0019.html#section14-5">Section 14.5</a> describes Vagrant as a tool
+for generating such environments. <a href="part0019.html#section14-6">Section 14.6</a>
+introduces Docker Machine as alternative tool for the generation of a
+Docker environment, which can be combined with Docker Compose for the
+coordination of several Docker Containers
+(<a href="part0019.html#section14-7">section 14.7</a>). The implementation of Service
+Discovery is discussed in <a href="part0019.html#section14-8">section 14.8</a>. The
+communication between the Microservices and the user interface is the
+main topic of <a href="part0019.html#section14-9">section 14.9</a>. Thanks to Resilience
+other Microservices are not affected if a single Microservice fails. In the
+example application resilience is implemented with Hystrix
+(<a href="part0019.html#section14-10">section 14.10</a>). Load Balancing
+(<a href="part0019.html#section14-11">section 14.11</a>), which can distribute the load onto
+several instances of a Microservice, is closely related to
+that. Possibilities for the integration of Non-Java-technologies are
+detailed in <a href="part0019.html#section14-12">section 14.12</a>, and testing is discussed
+in <a href="part0019.html#section14-13">section 14.13</a>.</p>
+
+<p class="calibre3">The code of the example application can be found at
+<a href="https://github.com/ewolff/microservice">https://github.com/ewolff/microservice</a>. It is Apache-licensed, and
+can, accordingly, be used and extended freely for any purpose.</p>
+
+<h3 id="section14-1" class="calibre2">14.1 Domain Architecture</h3>
+
+<p class="calibre3">The example application has a simple web interface, with which users can submit
+orders. There are three Microservices (<a href="part0019.html#Fig69">Fig. 69</a>):</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<strong class="calibre19">Catalog</strong> keeps track of products. Items can be added or
+   deleted.</li>
+  <li class="calibre14">
+<strong class="calibre19">Customer</strong> performs the same task in regards to customers: It can
+   register new customers or delete existing ones.</li>
+  <li class="calibre14">
+<strong class="calibre19">Order</strong> cannot only show orders, but also create new orders.</li>
+</ul>
+
+
+<figure id="Fig69" class="image">
+  <img src="../images/00071.jpeg" alt="Fig. 69: Architecture of the example application" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 69: Architecture of the example application</figcaption>
+</figure>
+
+
+<p class="calibre3">For the orders the Microservice “Order” needs access to the two other
+Microservices, “Customer” and “Catalog”. The communication is achieved
+via REST. However, this interface is only meant for the internal
+communication between the Microservices. The user can interact with
+all three Microservices via the HTML-/HTTP-interface.</p>
+
+<h5 id="leanpub-auto-separate-data-storages" class="calibre15">Separate Data Storages</h5>
+
+<p class="calibre3">The data storages of the three Microservices are completely
+separate. Only the respective Microservice knows the information
+about the business objects. The Microservice “Order” saves only
+the primary keys of the items and customers, which are necessary for
+the access via the REST interface. A real system should rather use
+artificial keys as the internal primary keys otherwise get visible to
+the outside. These are internal details of the data storage that
+should be hidden. To expose
+the primary keys, the class <strong class="calibre19">SpringRestDataConfig</strong> within the
+Microservices configures Spring Data Rest accordingly.</p>
+
+<h5 id="leanpub-auto-lots-of-communication" class="calibre15">Lots of Communication</h5>
+
+<p class="calibre3">Whenever an order needs to be shown, the Microservice “Customer” is
+called for the customer data and the Microservice “Catalog” for each
+line of the order in order to determine the price of the item. This
+can have a negative influence on the response times of the
+application as the display of the order cannot take place before all
+requests have been answered by the other Microservices. As the
+requests to the other services take place synchronously and
+sequentially, latencies will add up. This problem can be solved
+by using asynchronous parallel requests.</p>
+
+<p class="calibre3">In addition a lot of computing power is needed to marshal the data for
+sending and receiving. This is acceptable in case of such a small
+example  application. When such an application is supposed to run in production,
+alternatives have to be considered.</p>
+
+<p class="calibre3">This problem can for instance be solved by caching. This is 
+relatively easy as customer data will not change frequently. Items can
+change more often – still, by far not so fast that caching would pose
+a problem. Only the amount of data can interfere with this
+approach. The use of Microservices has the advantage that such a cache
+can be implemented relatively simply at the interface of the
+Microservices, or even at the level of HTTP, if this protocol is
+used. An HTTP Cache, like the one used
+for websites, can be added to REST Services in a transparent manner and
+without much programming effort.</p>
+
+<h5 id="leanpub-auto-bounded-context-1" class="calibre15">Bounded Context</h5>
+
+<p class="calibre3">Caching will solve the problem of too long response times
+technically. However, very long response times can also be a sign for
+a fundamental problem. <a href="part0007.html#section4-3">Section 4.3</a> argued that a
+Microservice should contain a <em class="calibre20">Bounded Context</em>. A specific domain model
+is only valid in a <em class="calibre20">Bounded Context</em>. The modularization into
+Microservices in this example contradicts this idea: The domain model
+is used to modularize the system into the Microservices “Order” for orders, “Catalog”
+for items and “Customer” for customers. In principle the data of these
+entities should be modularized in different <em class="calibre20">Bounded Context</em>s.</p>
+
+<p class="calibre3">The
+described modularization implements in spite of low domain complexity
+a system consisting of three Microservices. In this manner the example application
+is easy to understand while still having several Microservices and
+demonstrating the communication between Microservices. In a real
+system the Microservice “Order” can also handle information about
+the items that is relevant for the order process such as the price. If
+necessary, the service can replicate the data from another
+Microservice into its own database in order to access it
+efficiently. This is an alternative to the aforementioned
+caching. There are different possibilities how the domain models can
+be modularized into the different <em class="calibre20">Bounded Context</em>s “Order” and
+“Customer” resp. “Catalog”.</p>
+
+<p class="calibre3">This design can cause errors: When an order has been put into the
+system and afterwards the price of the item is changed, the price of
+the order changes as well – that should not happen. In case the item
+is deleted, there is even an error when displaying the order. In
+principle the information concerning the item and the customer should
+become part of the order. In that case the historical data of the
+orders including customer and item data would be transferred into the
+service “Order”.</p>
+
+<h5 id="leanpub-auto-dont-modularize-microservices-by-data" class="calibre15">Don’t Modularize Microservices by Data!</h5>
+
+<p class="calibre3">It is important to understand the problem inherent in
+architecting a Microservices system by domain model. Often the task of a global architecture is misunderstood:
+The team designs a domain model, which comprises for instance objects
+such as customers, order and items. Based on this model Microservices
+are defined. That is how the modularization into Microservices
+could have come about in the example application, resulting in a huge amount of
+communication. A modularization based on processes such as ordering,
+customer registration and product search might be more
+advantageous. Each process could be a <em class="calibre20">Bounded Context</em> that has its own
+domain model for the most important domain objects. For product
+search the categories of items might be the most relevant while for
+the ordering process data like weight and size might matter more.</p>
+
+<p class="calibre3">The modularization by data can also be advantageous in a real
+system. When the Microservice “Order” gets too big in combination with
+the handling of customer and product data, it is sensible to modularize
+data handling. In addition the data can be used by other
+Microservices. When devising the architecture for a system, there is
+rarely a single right way of doing things. The best approach depends
+on the system and the properties the system should have.</p>
+
+<h3 id="section14-2" class="calibre2">14.2 Basic Technologies</h3>
+
+<p class="calibre3">Microservices in the example application are implemented with Java. Basic functionalities for the
+example  application are provided by the
+<a href="http://projects.spring.io/spring-framework/">Spring Framework</a>. This
+framework offers not only Dependency Injection, but also a
+Web-Framework, which allows for the implementation of REST-based
+services.</p>
+
+<h5 id="leanpub-auto-hsql-database" class="calibre15">HSQL Database</h5>
+
+<p class="calibre3">The database HSQLDB handles and stores data. It is an In-Memory
+database, which is written in Java. The database stores the data only
+in RAM so that all data are lost upon restarting the application. In
+line with this, this database is not really suited for production use, even
+if it can write data to a hard disk. On the other hand it is not
+necessary to install an additional database server, which keeps the
+example application easy. The database runs in the respective Java
+application.</p>
+
+<h5 id="leanpub-auto-spring-data-rest" class="calibre15">Spring Data REST</h5>
+
+<p class="calibre3">The Microservices use
+<a href="http://projects.spring.io/spring-data-rest/">Spring Data REST</a> in
+order to provide the domain objects with little effort via REST and to
+write them into the database. Handing objects out directly means that
+the internal data representation leaks into the interface between
+the services. Changing the data structures is very difficult as the
+clients need to be adjusted as well. However, Spring Data REST can
+hide certain data elements and can be configured flexibly so that the
+tight coupling between the internal model and the interface can be
+decoupled if necessary.</p>
+
+<h5 id="leanpub-auto-spring-boot" class="calibre15">Spring Boot</h5>
+
+<p class="calibre3"><a href="http://projects.spring.io/spring-boot/">Spring Boot</a> facilitates
+Spring further. Spring Boot renders the generation of a
+Spring system very easy: With Spring Boot Starters predefined packages
+are available, which contain everything that is necessary for a certain
+type of application. Spring Boot can generate WAR files, which can be
+installed on a Java application or web server. In addition it is
+possible to run the application without an application or web server. The
+result of the build is a JAR file in that case, which can be run with a Java
+Runtime Environment (JRE). The JAR file contains everything for
+running the application and also the necessary code to deal with HTTP
+requests. This approach is by far less demanding and simpler than the
+use of an application server
+<a href="https://jaxenter.com/java-application-servers-dead-112186.html">https://jaxenter.com/java-application-servers-dead-112186.html</a>.</p>
+
+<p class="calibre3">A simple example for a Spring Boot application is shown in
+<a href="part0019.html#Listing1">Listing 1</a>. The main program <strong class="calibre19">main</strong> hands the control over
+to Spring Boot. The class is passed in as a parameter so
+that the application can be called. The annotation
+<strong class="calibre19">@SpringBootApplication</strong> makes sure that Spring Boot generates a suitable
+environment. For example a web server is started, and an environment
+for a Spring web application is generated as the application is a web
+application. Because of <strong class="calibre19">@RestController</strong> the Spring Framework
+instantiates the class and calls methods for the processing of REST
+requests. <strong class="calibre19">@RequestMapping</strong> shows which method is supposed to handle
+which request. Upon requests of the URL “/” the method <strong class="calibre19">hello()</strong> is
+called, which returns as result the sign chain “hello” in the HTTP
+body. In a <strong class="calibre19">@RequestMapping</strong> annotation URL templates such as “/customer/{id}” can
+be used. Then a URL like “/customer/42” can be cut into separate
+parts and the 42 bound to a parameter annotated with
+<strong class="calibre19">@PathVariable</strong>. As dependency the application uses only
+spring-boot-starter-web pulling all necessary libraries for the
+application along, for instance the web server, the Spring Framework
+and additional dependent classes. <a href="part0019.html#section14-3">Section 14.3</a> will
+discuss this topic in more detail.</p>
+
+<figure class="code" id="Listing1">
+  <figcaption class="calibre39">Listing 1: A simple Spring Boot REST service</figcaption>
+
+<div class="highlight"><pre class="calibre40"><code class="lineno"> 1 </code><code class="nd">@RestController</code>
+<code class="lineno"> 2 </code><code class="nd">@SpringBootApplication</code>
+<code class="lineno"> 3 </code><code class="kd">public</code> <code class="kd">class</code> <code class="nc">ControllerAndMain</code> <code class="o">{</code>
+<code class="lineno"> 4 </code>
+<code class="lineno"> 5 </code> <code class="nd">@RequestMapping</code><code class="o">(</code><code class="s">"/"</code><code class="o">)</code>
+<code class="lineno"> 6 </code> <code class="kd">public</code> <code class="n">String</code> <code class="nf">hello</code><code class="o">()</code> <code class="o">{</code>
+<code class="lineno"> 7 </code>  <code class="kd">return</code> <code class="s">"hello"</code><code class="o">;</code>
+<code class="lineno"> 8 </code> <code class="o">}</code>
+<code class="lineno"> 9 </code>
+<code class="lineno">10 </code> <code class="kd">public</code> <code class="kd">static</code> <code class="kt">void</code> <code class="nf">main</code><code class="o">(</code><code class="n">String</code><code class="o">[]</code> <code class="n">args</code><code class="o">)</code> <code class="o">{</code>
+<code class="lineno">11 </code>  <code class="n">SpringApplication</code><code class="o">.</code><code class="na">run</code><code class="o">(</code><code class="n">ControllerAndMain</code><code class="o">.</code><code class="na">class</code><code class="o">,</code>
+<code class="lineno">12 </code>  <code class="n">args</code><code class="o">);</code>
+<code class="lineno">13 </code> <code class="o">}</code>
+<code class="lineno">14 </code>
+<code class="lineno">15 </code><code class="o">}</code>
+</pre></div>
+
+</figure>
+
+<h5 id="leanpub-auto-spring-cloud" class="calibre15">Spring Cloud</h5>
+
+<p class="calibre3">Finally the example application uses
+<a href="http://projects.spring.io/spring-cloud/">Spring Cloud</a> to gain easy
+access to the Netflix Stack. <a href="part0019.html#Fig70">Fig70</a> shows an overview.</p>
+
+
+<figure id="Fig70" class="image">
+  <img src="../images/00072.jpeg" alt="Fig. 70: Overview of Spring Cloud" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 70: Overview of Spring Cloud</figcaption>
+</figure>
+
+
+<p class="calibre3">Spring Cloud offers via the Spring Cloud Connectors access to the PaaS
+(Platform as a Service) Heroku and Cloud Foundry. Spring Cloud for
+Amazon Web Services offers an interface for services from the Amazon
+Cloud. This part of Spring Cloud is responsible for the name of the
+project, but not helpful for the implementation of Microservices.</p>
+
+<p class="calibre3">However, the other sub projects of Spring Cloud provide a very good
+basis for the implementation of Microservices:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<strong class="calibre19">Spring Cloud Security</strong> supports the implementation of security
+mechanisms as typically required for Microservices, among those 
+Single Sign On into a Microservices environment. That way a user can
+use each of the Microservices without having to log in anew every
+time. In addition the user token is transferred automatically for all
+calls to other REST services to ensure that those calls can
+also work with the correct user rights.</li>
+  <li class="calibre14">
+<strong class="calibre19">Spring Cloud Config</strong> can be used to centralize and dynamically
+   adjust the configuration of
+   Microservices. <a href="part0016.html#section12-4">Section 12.4</a> already presented
+   technologies, which configure Microservices during deployment. To
+   be able to reproduce the state of a server at any time, a new server should be started with a
+   new Microservice instance in case
+   of a configuration change instead of dynamically adjusting an
+   existing server. If a server is dynamically adjusted, there is no
+   guarantee that new servers are generated with the right
+   configuration as they are configured via a different
+   way. Because of these disadvantages the example application refrains from
+   using this technology.</li>
+  <li class="calibre14">
+<strong class="calibre19">Spring Cloud Bus</strong> can send dynamic configuration changes for
+   Spring Cloud Config. Moreover, the Microservices can communicate
+   via Spring Cloud Bus. However, the example application does not
+   use this technology because Spring Cloud Config is not used and
+   the Microservices communicate via REST.</li>
+  <li class="calibre14">
+<strong class="calibre19">Spring Cloud Sleuth</strong> enables distributed tracing with tools like
+Zipkin or Htrace. It can also use a central log storage with
+ELK (see <a href="part0016.html#section12-2">section 12.2</a>).</li>
+  <li class="calibre14">
+<strong class="calibre19">Spring Cloud Zookeeper</strong> support Apache Zookeeper (see
+<a href="part0012.html#section8-8">section 8.8</a>). This technology can be used to
+coordinate and configure distributed services.</li>
+  <li class="calibre14">
+<strong class="calibre19">Spring Cloud Consult</strong> facilitates Services Discovery using Consul
+(see <a href="part0012.html#section8-9">section 8.9</a>).</li>
+  <li class="calibre14">
+<strong class="calibre19">Spring Cloud Cluster</strong> implements leader election and stateful
+patterns using technologies like Zookeeper or Consul. It can also
+used the NoSQL datastore Redis or the Hazelcast cache.</li>
+  <li class="calibre14">Finally <strong class="calibre19">Spring Cloud Stream</strong> supports messaging using Redis,
+Rabbit or Kafka.</li>
+</ul>
+
+<h5 id="leanpub-auto-spring-cloud-netflix" class="calibre15">Spring Cloud Netflix</h5>
+
+<p class="calibre3">Spring Cloud Netflix offers simple access to Netflix Stack, which has
+been especially designed for the implementation of Microservices. The
+following technologies are part of this stack:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<strong class="calibre19">Zuul</strong> can implement routing of requests to different services.</li>
+  <li class="calibre14">
+<strong class="calibre19">Ribbon</strong> serves as Load Balancer.</li>
+  <li class="calibre14">
+<strong class="calibre19">Hystrix</strong> assists with implementing resilience in Microservices.</li>
+  <li class="calibre14">
+<strong class="calibre19">Turbine</strong> can consolidate monitoring data from different Hystrix
+servers.</li>
+  <li class="calibre14">
+<strong class="calibre19">Feign</strong> is an option for an easier implementation of REST
+clients. It is not limited to Microservices. It is not used in the
+example application.</li>
+  <li class="calibre14">
+<strong class="calibre19">Eureka</strong> can be used for Service Discovery.</li>
+</ul>
+
+<p class="calibre3">These technologies are the ones that influence the implementation of
+the example application most.</p>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-try-and-experiment-28" class="calibre34">Try and Experiment</h5>
+
+  <p class="calibre3">For an introduction into Spring it is worthwhile to check out the
+Spring Guides at <a href="https://spring.io/guides/">https://spring.io/guides/</a>. They show in detail how
+Spring can be used to implement REST services or to realize messaging
+solutions via JMS. An introduction into Spring Boot can be found at
+<a href="https://spring.io/guides/gs/spring-boot/">https://spring.io/guides/gs/spring-boot/</a>. Working your way through
+these guides provides you with the necessary know-how for understanding
+the additional examples in this chapter.</p>
+
+</aside>
+
+<h3 id="section14-3" class="calibre2">14.3 Build</h3>
+
+<p class="calibre3">The example project is built with the tool
+<a href="http://maven.apache.org/">Maven</a>. The installation of the tool is
+described at <a href="https://maven.apache.org/download.cgi">https://maven.apache.org/download.cgi</a>. The command
+<strong class="calibre19">mvn package</strong> in the directory <strong class="calibre19">microservice/microservice-demo</strong>
+can be
+used to download all dependent libraries from the Internet and to
+compile the application.</p>
+
+<p class="calibre3">The configuration of the projects for Maven is saved in files named
+<strong class="calibre19">pom.xml</strong>. The example project has a Parent-POM in the directory
+<strong class="calibre19">microservice-demo</strong>. It contains the universal settings for all modules
+and in addition a list of the example project modules. Each
+Microservice is such a module, and some infrastructure servers are
+modules as well. The individual modules have their own <strong class="calibre19">pom.xml</strong>, which
+contains the module name among other information. In addition they contain the
+dependencies, i.e. the Java libraries they use.</p>
+
+<figure class="code" id="Listing2">
+  <figcaption class="calibre39">Listing 2: Part of pom.xml including dependencies</figcaption>
+
+<div class="highlight"><pre class="calibre40"><code class="lineno"> 1 </code>...
+<code class="lineno"> 2 </code><code class="kd">&lt;dependencies&gt;</code>
+<code class="lineno"> 3 </code>
+<code class="lineno"> 4 </code> <code class="kd">&lt;dependency&gt;</code>
+<code class="lineno"> 5 </code>    <code class="kd">&lt;groupId&gt;</code>org.springframework.cloud<code class="kd">&lt;/groupId&gt;</code>
+<code class="lineno"> 6 </code>    <code class="kd">&lt;artifactId&gt;</code>spring-cloud-starter-eureka<code class="kd">&lt;/artifactId&gt;</code>
+<code class="lineno"> 7 </code>  <code class="kd">&lt;/dependency&gt;</code>
+<code class="lineno"> 8 </code>
+<code class="lineno"> 9 </code>  <code class="kd">&lt;dependency&gt;</code>
+<code class="lineno">10 </code>    <code class="kd">&lt;groupId&gt;</code>org.springframework.boot<code class="kd">&lt;/groupId&gt;</code>
+<code class="lineno">11 </code>    <code class="kd">&lt;artifactId&gt;</code>
+<code class="lineno">12 </code>	  spring-boot-starter-data-jpa
+<code class="lineno">13 </code>	<code class="kd">&lt;/artifactId&gt;</code>
+<code class="lineno">14 </code>  <code class="kd">&lt;/dependency&gt;</code>
+<code class="lineno">15 </code>...
+<code class="lineno">16 </code><code class="kd">&lt;/dependencies&gt;</code>
+<code class="lineno">17 </code>...
+</pre></div>
+
+</figure>
+
+<p class="calibre3"><a href="part0019.html#Listing2">Listing 2</a> shows a part of a <strong class="calibre19">pom.xml</strong>, which lists the
+dependencies of the module. Depending on the nature of the Spring
+Cloud features the project is using, additional entries have to be
+added in this part of the <strong class="calibre19">pom.xml</strong> usually with the <strong class="calibre19">groupId
+org.springframework.cloud</strong>. </p>
+
+<p class="calibre3">The build process results in one JAR file per Microservice, which contains
+the compiled code, the configuration and all necessary libraries. Java
+can directly start such JAR files. Although the Microservices can be
+accessed via HTTP, they do not have to be deployed on an application
+or web server. This part of the infrastructure is also contained in
+the JAR file.</p>
+
+<p class="calibre3">As the projects are built with Maven, they can be imported into all
+usual Java IDEs (Integrated Development Environment) for further
+development. IDEs simplify code changes tremendously.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-29" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-download-and-compile-the-example" class="calibre34">Download and Compile the Example</h5>
+
+  <p class="calibre3">Download the example provided at
+<a href="https://github.com/ewolff/microservice">https://github.com/ewolff/microservice</a>. Install Maven, see
+<a href="https://maven.apache.org/download.cgi">https://maven.apache.org/download.cgi</a>. In the sub directory
+<strong class="calibre19">microservices-demo</strong> execute the command <strong class="calibre19">mvn package</strong>. This will
+build the complete project.</p>
+
+</aside>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-create-a-continuous-integration-server-for-the-project" class="calibre34">Create a Continuous Integration Server for the Project</h5>
+
+  <p class="calibre3"><a href="https://github.com/ewolff/user-registration">https://github.com/ewolff/user-registration</a> is an example project
+for a Continuous Delivery project. This contains in sub directory
+<strong class="calibre19">ci-setup</strong> a setup for a Continuous Integration Server (Jenkins)
+with static code analysis (Sonarqube) and Artifactory for the handling
+of binary artefacts. Integrate the Microservices project into this
+infrastructure so that a new built is triggered upon each change.</p>
+
+  <p class="calibre3">The
+next section (<a href="part0019.html#section14-4">14.4</a>) will discuss Vagrant in more
+detail. This tool is used for the Continuous Integration Servers. It
+simplifies the generation of test environments greatly.</p>
+
+</aside>
+
+<h3 id="section14-4" class="calibre2">14.4 Deployment Using Docker</h3>
+
+<p class="calibre3">Deploying Microservices is very easy:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Java has to be installed on the server.</li>
+  <li class="calibre14">The JAR file, which resulted from the build, has to be copied to
+the server.</li>
+  <li class="calibre14">A separate configuration file <strong class="calibre19">application.properties</strong> can be
+ created for further configurations. It is automatically read
+ out by Spring Boot and can be used for additional configurations. An
+ <strong class="calibre19">application.properties</strong> containing default values
+ is comprised in the JAR file.</li>
+  <li class="calibre14">Finally a Java process has to start the application out of the JAR
+file.</li>
+</ul>
+
+<p class="calibre3">Each Microservice starts within its own Docker Container. As discussed
+in <a href="part0016.html#section12-6">section 12.6</a>, Docker uses Linux Containers. In this
+manner the Microservice cannot interfere with processes in other Docker
+Containers and has a completely independent file system. The Docker
+Image is the basis for this file system. However, all Docker Containers
+share the Linux Kernel. This saves resources. In comparison to an operating
+system process a Docker Container has virtually no additional
+overhead.</p>
+
+<figure class="code" id="Listing3">
+  <figcaption class="calibre39">Listing 3: Dockerfile for a Microservice used in the example application</figcaption>
+
+<div class="highlight"><pre class="calibre40"><code class="lineno">1 </code>FROM java
+<code class="lineno">2 </code>CMD /usr/bin/java -Xmx400m -Xms400m \
+<code class="lineno">3 </code>  -jar /microservice-demo/microservice-demo-catalog\
+<code class="lineno">4 </code>  /target/microservice-demo-catalog-0.0.1-SNAPSHOT.jar
+<code class="lineno">5 </code>EXPOSE 8080
+</pre></div>
+
+</figure>
+
+<p class="calibre3">A file called <strong class="calibre19">Dockerfile</strong> defines the composition of a Docker
+Container. <a href="part0019.html#Listing3">Listing 3</a> shows a Dockerfile for a Microservice used in the
+example application:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<strong class="calibre19">FROM</strong> determines the base image used by the Docker Container. A
+Dockerfile for the image java is contained in the example
+project. It generates a minimal Docker image with only a JVM installed.</li>
+  <li class="calibre14">
+<strong class="calibre19">CMD</strong> defines the command executed at the start of the Docker
+Container. In the case of this example it is a simple command
+line. This line starts a Java application out of the JAR file
+generated by the build.</li>
+  <li class="calibre14">Docker Containers are able to communicate with the outside via
+ network ports. <strong class="calibre19">EXPOSE</strong> determines which ports are accessible
+ from outside. In the example the application receives HTTP requests
+ via port 8080.</li>
+</ul>
+
+<h3 id="section14-5" class="calibre2">14.5 Vagrant</h3>
+
+<p class="calibre3">Docker runs exclusively under Linux as it uses Linux
+Containers. However, there are solutions for other operating systems,
+which start a virtual Linux machine and thus allow the use of
+Docker. This is largely transparent so that the use is practically
+identical to the use under Linux. But in addition all Docker Containers
+need to be built and started.</p>
+
+<p class="calibre3">To make installing and handling Docker as easy as possible, the
+example application uses Vagrant. <a href="part0019.html#Fig71">Fig. 71</a> shows how Vagrant
+works:</p>
+
+
+<figure id="Fig71" class="image">
+  <img src="../images/00073.jpeg" alt="Fig. 71: How Vagrant works" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 71: How Vagrant works</figcaption>
+</figure>
+
+
+<p class="calibre3">To configure Vagrant a single file is necessary, the
+Vagrantfile. <a href="part0019.html#Listing4">Listing 4</a> shows the Vagrantfile of the example
+application:</p>
+
+<figure class="code" id="Listing4">
+  <figcaption class="calibre39">Listing 4: Vagrantfile from the example application</figcaption>
+
+<div class="highlight"><pre class="calibre40"><code class="lineno"> 1 </code><code class="no">Vagrant</code><code class="o">.</code><code class="n">configure</code><code class="n">(</code><code class="s">"2"</code><code class="n">)</code> <code class="kd">do</code> <code class="o">|</code><code class="n">config</code><code class="o">|</code>
+<code class="lineno"> 2 </code>  <code class="n">config</code><code class="o">.</code><code class="n">vm</code><code class="o">.</code><code class="n">box</code> <code class="o">=</code> <code class="s">" ubuntu/trusty64"</code>
+<code class="lineno"> 3 </code>  <code class="n">config</code><code class="o">.</code><code class="n">vm</code><code class="o">.</code><code class="n">synced_folder</code> <code class="s">"../microservice-demo"</code><code class="n">,</code>
+<code class="lineno"> 4 </code>    <code class="s">"/microservice-demo"</code><code class="n">,</code> <code class="ss">create</code><code class="n">:</code> <code class="kp">true</code>
+<code class="lineno"> 5 </code>   <code class="n">config</code><code class="o">.</code><code class="n">vm</code><code class="o">.</code><code class="n">network</code> <code class="s">"forwarded_port"</code><code class="n">,</code>
+<code class="lineno"> 6 </code>     <code class="ss">guest</code><code class="n">:</code> <code class="o">8080</code><code class="n">,</code> <code class="ss">host</code><code class="n">:</code> <code class="o">18080</code>
+<code class="lineno"> 7 </code>   <code class="n">config</code><code class="o">.</code><code class="n">vm</code><code class="o">.</code><code class="n">network</code> <code class="s">"forwarded_port"</code><code class="n">,</code>
+<code class="lineno"> 8 </code>     <code class="ss">guest</code><code class="n">:</code> <code class="o">8761</code><code class="n">,</code> <code class="ss">host</code><code class="n">:</code> <code class="o">18761</code>
+<code class="lineno"> 9 </code>   <code class="n">config</code><code class="o">.</code><code class="n">vm</code><code class="o">.</code><code class="n">network</code> <code class="s">"forwarded_port"</code><code class="n">,</code>
+<code class="lineno">10 </code>	 <code class="ss">guest</code><code class="n">:</code> <code class="o">8989</code><code class="n">,</code> <code class="ss">host</code><code class="n">:</code> <code class="o">18989</code>
+<code class="lineno">11 </code>
+<code class="lineno">12 </code>  <code class="n">config</code><code class="o">.</code><code class="n">vm</code><code class="o">.</code><code class="n">provision</code> <code class="s">"docker"</code> <code class="kd">do</code> <code class="o">|</code><code class="n">d</code><code class="o">|</code>
+<code class="lineno">13 </code>    <code class="n">d</code><code class="o">.</code><code class="n">build_image</code> <code class="s">"--tag=java /vagrant/java"</code>
+<code class="lineno">14 </code>    <code class="n">d</code><code class="o">.</code><code class="n">build_image</code> <code class="s">"--tag=eureka /vagrant/eureka"</code>
+<code class="lineno">15 </code>    <code class="n">d</code><code class="o">.</code><code class="n">build_image</code>
+<code class="lineno">16 </code>	  <code class="s">"--tag=customer-app /vagrant/customer-app"</code>
+<code class="lineno">17 </code>    <code class="n">d</code><code class="o">.</code><code class="n">build_image</code>
+<code class="lineno">18 </code>	  <code class="s">"--tag=catalog-app /vagrant/catalog-app"</code>
+<code class="lineno">19 </code>    <code class="n">d</code><code class="o">.</code><code class="n">build_image</code> <code class="s">"--tag=order-app /vagrant/order-app"</code>
+<code class="lineno">20 </code>    <code class="n">d</code><code class="o">.</code><code class="n">build_image</code> <code class="s">"--tag=turbine /vagrant/turbine"</code>
+<code class="lineno">21 </code>    <code class="n">d</code><code class="o">.</code><code class="n">build_image</code> <code class="s">"--tag=zuul /vagrant/zuul"</code>
+<code class="lineno">22 </code>  <code class="kd">end</code>    
+<code class="lineno">23 </code>  <code class="n">config</code><code class="o">.</code><code class="n">vm</code><code class="o">.</code><code class="n">provision</code> <code class="s">"docker"</code><code class="n">,</code> <code class="ss">run</code><code class="n">:</code> <code class="s">"always"</code> <code class="kd">do</code> <code class="o">|</code><code class="n">d</code><code class="o">|</code>
+<code class="lineno">24 </code>    <code class="n">d</code><code class="o">.</code><code class="n">run</code> <code class="s">"eureka"</code><code class="n">,</code>
+<code class="lineno">25 </code>      <code class="ss">args</code><code class="n">:</code> <code class="s">"-p 8761:8761"</code><code class="o">+</code>
+<code class="lineno">26 </code>	   <code class="s">" -v /microservice-demo:/microservice-demo"</code>
+<code class="lineno">27 </code>    <code class="n">d</code><code class="o">.</code><code class="n">run</code> <code class="s">"customer-app"</code><code class="n">,</code>
+<code class="lineno">28 </code>      <code class="ss">args</code><code class="n">:</code> <code class="s">"-v /microservice-demo:/microservice-demo"</code><code class="o">+</code>
+<code class="lineno">29 </code>	   <code class="s">" --link eureka:eureka"</code>
+<code class="lineno">30 </code>    <code class="n">d</code><code class="o">.</code><code class="n">run</code> <code class="s">"catalog-app"</code><code class="n">,</code>
+<code class="lineno">31 </code>      <code class="ss">args</code><code class="n">:</code> <code class="s">"-v /microservice-demo:/microservice-demo"</code><code class="o">+</code>
+<code class="lineno">32 </code>	   <code class="s">" --link eureka:eureka"</code>
+<code class="lineno">33 </code>    <code class="n">d</code><code class="o">.</code><code class="n">run</code> <code class="s">"order-app"</code><code class="n">,</code>
+<code class="lineno">34 </code>      <code class="ss">args</code><code class="n">:</code> <code class="s">"-v /microservice-demo:/microservice-demo"</code><code class="o">+</code>
+<code class="lineno">35 </code>	   <code class="s">" --link eureka:eureka"</code>
+<code class="lineno">36 </code>    <code class="n">d</code><code class="o">.</code><code class="n">run</code> <code class="s">"zuul"</code><code class="n">,</code>
+<code class="lineno">37 </code>      <code class="ss">args</code><code class="n">:</code> <code class="s">"-v /microservice-demo:/microservice-demo"</code><code class="o">+</code>
+<code class="lineno">38 </code>	   <code class="s">" -p 8080:8080  --link eureka:eureka"</code>
+<code class="lineno">39 </code>    <code class="n">d</code><code class="o">.</code><code class="n">run</code> <code class="s">"turbine"</code><code class="n">,</code>
+<code class="lineno">40 </code>      <code class="ss">args</code><code class="n">:</code> <code class="s">"-v /microservice-demo:/microservice-demo"</code><code class="o">+</code>
+<code class="lineno">41 </code>	   <code class="s">" --link eureka:eureka"</code>
+<code class="lineno">42 </code>  <code class="kd">end</code>
+<code class="lineno">43 </code>
+<code class="lineno">44 </code><code class="kd">end</code>
+</pre></div>
+
+</figure>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<strong class="calibre19">config.vm.box</strong> selects a base image – in this case a
+Ubuntu-14.04 Linux installation (Trusty Tahr).</li>
+  <li class="calibre14">
+<strong class="calibre19">config.vm.synced_folder</strong> mounts the directory containing the
+results of the Maven build into the virtual machine. In this
+manner the Docker Containers can directly make use of the build
+results.</li>
+  <li class="calibre14">The ports of the virtual machine can be linked to the ports of the
+ computer running the virtual machine. The <strong class="calibre19">config.vm.network</strong>
+ settings can be used for that. In this manner applications in the
+ Vagrant virtual machine become accessible as if running
+ directly on the computer.</li>
+  <li class="calibre14">
+<strong class="calibre19">config.vm.provision</strong> starts the part of the configuration, which
+deals with the software provisioning within the virtual
+machine. Docker serves as provisioning tool and is automatically installed
+within the virtual machine.</li>
+  <li class="calibre14">Finally <strong class="calibre19">d.build_image</strong> generates the Docker images using
+ Dockerfiles. First the base image java is created. Images for the three
+ Microservices customer-app, catalog-app and order-app follow.
+ The images for the Netflix technologies servers belong to
+ the infrastructure: Eureka for Service Discovery, Turbine for
+ monitoring and Zuul for routing of client requests.</li>
+  <li class="calibre14">Vagrant starts the individual images using <strong class="calibre19">d.run</strong>. This step is
+   not only performed when provisioning the virtual machine, but
+   also when the system is started anew (<strong class="calibre19">run: “always”</strong>). The option
+   <strong class="calibre19">–v</strong> mounts the directory <strong class="calibre19">/microservice-demo</strong> into each Docker
+   Container so that the Docker Container can directly execute the
+   compiled code. <strong class="calibre19">-p</strong> links a port of the Docker Container to a port
+   of virtual machine. This link allows to access the Docker
+   Container Eureka under the host name eureka from within the other
+   Docker Containers.</li>
+</ul>
+
+<p class="calibre3">In the Vagrant setup the JAR files containing the application code are
+not contained in the Docker image. The directory
+<strong class="calibre19">/microservice-demo</strong> does not belong to the Docker Container. It
+resides on the host running the Docker Containers i.e. the Vagrant
+VM. It would also be possible to copy these files into the Docker
+image.  Afterwards the resulting image could be copied on a repository
+server and downloaded from there. Then the Docker Container would
+contain all necessary files to run the Microservice. A deployment in
+production then only needs to start the Docker images on a production
+server. This approach is used in the Docker Machine setup (see
+<a href="part0019.html#section14-6">section 14.6</a>).</p>
+
+<h5 id="leanpub-auto-networking-in-the-example-application" class="calibre15">Networking in the Example Application</h5>
+
+<p class="calibre3"><a href="part0019.html#Fig72">Fig. 72</a> shows how the individual Microservices of the example
+application communicate via the network. All Docker Containers are
+accessible in the network via IP addresses from
+the 172.17.0.0/16 range. Docker generates such a network automatically 
+and connects all Docker Containers to the network. Within the network all
+ports are accessible that are defined in the Dockerfiles using
+EXPOSE. The Vagrant virtual machine is also connected to this
+network. Via the Docker links (compare <a href="part0019.html#Listing4">Listing 4</a>) all Docker Containers
+know the Eureka container and can access it under the host name
+<strong class="calibre19">eureka</strong>. The other Microservices have to be looked up via Eureka. All
+further communication takes place via the IP address.</p>
+
+<p class="calibre3">In addition the -p-Option in
+the <strong class="calibre19">d.run</strong> entries for the Docker Containers in Listing 4 has
+connected the ports to the Vagrant virtual
+machine. These Containers can be accessed via these ports of the
+Vagrant virtual machine. To reach them also from the computer running
+the Vagrant virtual machine there is a port mapping, which links the
+ports to the local computer. This is accomplished via the
+<strong class="calibre19">config.vm.network</strong> entries in Vagrantfile. The port 8080 of the Docker
+Container “zuul” can for instance be accessed via the port 8080 in the
+Vagrant virtual machine. This port can be reached from the local
+computer via the port 18080. So the URL http://localhost:18080/ accesses
+this Docker Container.</p>
+
+
+<figure id="Fig72" class="image">
+  <img src="../images/00074.jpeg" alt="Fig. 72: Network and ports of the example application" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 72: Network and ports of the example application</figcaption>
+</figure>
+
+
+<h5 id="leanpub-auto-try-and-experiment-30" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-run-the-example-application" class="calibre34">Run the Example Application</h5>
+
+  <p class="calibre3">The example application does not need
+much effort to make it run. A running example application lays the
+foundation for the experiments described later in this chapter.</p>
+
+  <p class="calibre3">One remark: The <strong class="calibre19">Vagrantfile</strong> defines how much RAM and how
+many CPUs the virtual machines gets. The settings <strong class="calibre19">v.memory</strong> and
+<strong class="calibre19">v.cpus</strong>, which are not shown in the Listing, deal with
+this. Depending on the used computer, the values should be
+increased if a lot of RAM or many CPUs are present. Whenever the values
+can be increased, they should be elevated in order to speed the
+application up.</p>
+
+  <p class="calibre3">The installation of Vagrant is described in
+<a href="http://docs.vagrantup.com/v2/installation/index.html">http://docs.vagrantup.com/v2/installation/index.html</a>. Vagrant needs a
+virtualization solution like VirtualBox. The installation of
+VirtualBox is explained at <a href="https://www.virtualbox.org/wiki/Downloads">https://www.virtualbox.org/wiki/Downloads</a>. Both
+tools are free.</p>
+
+  <p class="calibre3">The example can only be started once the code has been
+compiled. Instructions how to compile the code can be found in the
+experiment described in <a href="part0019.html#section14-3">section 14.3</a>. Afterwards you can change into
+the directory <strong class="calibre19">docker-vagrant</strong> and start the example demo using the command
+<strong class="calibre19">vagrant up</strong>.</p>
+
+  <p class="calibre3">To interact with the different Docker Containers you have to log into
+the virtual machine via the command <strong class="calibre19">vagrant ssh</strong>. This command has to be
+executed within the sub directory <strong class="calibre19">docker-vagrant</strong>. For this to be
+possible a ssh client has to be installed on the computer. On Linux
+and Mac OS X such a client is usually already present. In Windows
+installing git will bring an ssh client along as described at
+<a href="http://git-scm.com/download/win">http://git-scm.com/download/win</a>. Afterwards <strong class="calibre19">vagrant ssh</strong> should
+work.</p>
+
+</aside>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-investigate-docker-containers" class="calibre34">Investigate Docker Containers</h5>
+
+  <p class="calibre3">Docker contains several useful commands:</p>
+
+  <ul class="calibre16">
+    <li class="calibre14">
+<strong class="calibre19">docker ps</strong> provides an overview of the running Docker Containers.</li>
+    <li class="calibre14">The command <strong class="calibre19">docker log “name of Docker Container”</strong> shows the
+logs.</li>
+    <li class="calibre14">
+<strong class="calibre19">docker log -f “name of Docker Container”</strong> provides
+incessantly the up-to-date log information of the Container.</li>
+    <li class="calibre14">
+<strong class="calibre19">docker kill “name of the Docke Container”</strong> terminates a Docker Container.</li>
+    <li class="calibre14">
+<strong class="calibre19">docker rm “name of the Docker Container”</strong> deletes all data. For
+that all Containers first needs to be stopped.</li>
+  </ul>
+
+  <p class="calibre3">After starting the application the log files of the individual Docker
+Containers can be looked at.</p>
+
+</aside>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-update-docker-containers" class="calibre34">Update Docker Containers</h5>
+
+  <p class="calibre3">A Docker Container can be terminated (<strong class="calibre19">docker kill</strong>)
+ and the data of the Container deleted (<strong class="calibre19">docker rm</strong>). The commands
+have to be executed inside the Vagrant virtual machine. <strong class="calibre19">vagrant provision</strong>
+starts the missing Docker Containers again. This command has to be
+executed on the host running Vagrant. If you want to change the
+Docker Container, simply delete it, compile the code again and
+generate the system anew using <strong class="calibre19">vagrant provision</strong>.</p>
+
+  <p class="calibre3">Additional Vagrant commands:</p>
+
+  <ul class="calibre16">
+    <li class="calibre14">
+<strong class="calibre19">vagrant halt</strong> terminates the virtual machine.</li>
+    <li class="calibre14">
+<strong class="calibre19">vagrant up</strong> starts it again.</li>
+    <li class="calibre14">
+<strong class="calibre19">vagrant destroy</strong> destroys the virtual machine and all saved data.</li>
+  </ul>
+
+</aside>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-store-data-on-disk" class="calibre34">Store Data on Disk</h5>
+  <p class="calibre3">Right now the Docker Container does not save the data so that it
+ is lost upon restarting. The used HSQLDB database can also save
+     the data into a file. To achieve that a suitable HSQLDB URL has
+     to be used, see
+     <a href="http://hsqldb.org/doc/guide/dbproperties-chapt.html#dpc_connection_url">http://hsqldb.org/doc/guide/dbproperties-chapt.html#dpc_connection_url</a>
+     . Spring Boot can read the JDBC URL out of the
+     <strong class="calibre19">application.properties</strong> file, see
+<a href="http://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-sql.html#boot-features-connect-to-production-database">http://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-sql.html#boot-features-connect-to-production-database</a>
+     . Now the Container can be restarted without data loss. But what happens if the
+     Docker Container has to be generated again? Docker can save data
+     also outside of the Container itself, compare
+     <a href="https://docs.docker.com/userguide/dockervolumes/">https://docs.docker.com/userguide/dockervolumes/</a>. These options
+     provide a good basis for further experiments. Also another
+     database than HSQLDB can be used such as MySQL. For that purpose
+     another Docker Container has to be installed, which contains the
+     database. In addition to adjusting the JDBC URL a JDBC driver
+     has to be added to the project.</p>
+
+</aside>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-how-is-the-java-docker-image-built" class="calibre34">How is the Java Docker Image Built?</h5>
+
+  <p class="calibre3">The Docker file is more
+complex than the ones discussed
+here. <a href="https://docs.docker.com/reference/builder/">https://docs.docker.com/reference/builder/</a>
+demonstrates which commands are available in
+Dockerfiles. Try to understand the structure of the
+Dockerfiles.</p>
+
+</aside>
+
+<h3 id="section14-6" class="calibre2">14.6 Docker Machine</h3>
+
+<p class="calibre3">Vagrant serves to install environments on a developer laptop. In
+addition to Docker Vagrant can use e.g. simple shell scripts for
+deployment. However, for production environments this solution is
+unsuitable. <a href="https://docs.docker.com/machine/">Docker Machine</a> is specialized in Docker. It supports
+many more virtualization solutions as well as some Cloud providers.</p>
+
+<p class="calibre3"><a href="part0019.html#Fig73">Fig. 73</a> demonstrates how Docker Machine builds a Docker
+environment: First, using a virtualization solution like VirtualBox a
+virtual machine is installed. This virtual machine is based on
+boot2docker, a very lightweight Linux designed specifically as a running environment for
+Docker Containers. On that Docker Machine installs a current version
+of Docker. A command like
+<strong class="calibre19">docker-machine create  –driver virtualbox dev</strong> generates
+for instance a new environment with the name dev running
+on a VirtualBox computer.</p>
+
+
+<figure id="Fig73" class="image">
+  <img src="../images/00075.jpeg" alt="Fig. 73: Docker Machine" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 73: Docker Machine</figcaption>
+</figure>
+
+
+<p class="calibre3">The Docker tool now can communicate with this environment. The Docker
+command line tools use a REST interface to communicate with the Docker
+server. Accordingly, the command line tool just has to be configured
+in a way that allows it to communicate with the server in a suitable
+manner. In Linux or Mac OS X the command
+<strong class="calibre19">eval “$(docker-machine env dev)”</strong> is sufficient to configure the Docker appropriately. For
+Windows PowerShell the command
+<strong class="calibre19">docker-machine.exe env –shell powershell dev</strong> must be used and in
+Windows
+cmd <strong class="calibre19">docker-machine.exe env –shell cmd dev</strong> .</p>
+
+<p class="calibre3">Docker Machine renders it thus very easy to install one or several
+Docker environments. All the environments can be handled by Docker
+Machine and accessed by the Docker command line tool. As Docker
+Machine also supports technologies like Amazon Cloud or VMware
+vSphere, it can be used to generate production environments.</p>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-try-and-experiment-31" class="calibre34">Try and Experiment</h5>
+
+  <p class="calibre3">The example application can also run in an environment created by Docker Machine.</p>
+
+  <p class="calibre3">The installation of Docker Machine is described at
+<a href="https://docs.docker.com/machine/#installation">https://docs.docker.com/machine/#installation</a>. Docker Machine
+requires a virtualization solution like VirtualBox. How to install
+VirtualBox can be found at
+<a href="https://www.virtualbox.org/wiki/Downloads">https://www.virtualbox.org/wiki/Downloads</a>.  Using 
+<strong class="calibre19">docker-machine create –virtualbox-memory “4096” –driver virtualbox dev</strong> 
+a Docker
+environment called <strong class="calibre19">dev</strong> can now be created on a Virtual Box. Without any further
+configuration the storage space is set to 1 GB, which is not
+sufficient for a larger number of Java Virtual Machines.</p>
+
+  <p class="calibre3"><strong class="calibre19">docker-machine</strong> without parameters displays a help text, and
+<strong class="calibre19">docker-machine create</strong> shows the options for the generation of a
+new
+environment. <a href="https://docs.docker.com/machine/get-started-cloud/">https://docs.docker.com/machine/get-started-cloud/</a>
+demonstrates how Docker Machine can be used in a Cloud. This means
+that the example application can also easily be started in a Cloud
+environment.</p>
+
+  <p class="calibre3">At the end of your experiments <strong class="calibre19">docker-machine rm</strong> deletes the
+environment</p>
+
+</aside>
+
+<h3 id="section14-7" class="calibre2">14.7 Docker Compose</h3>
+
+<p class="calibre3">A Microservice-based system comprises typically several Docker
+Containers. These have to be generated together and need to be put
+into production simultaneously.</p>
+
+<p class="calibre3">This can be achieved with
+<a href="http://docs.docker.com/compose/">Docker Compose</a>. It enables the
+definition of Docker Containers, which each house one service. YAML
+serves as format.</p>
+
+<figure class="code" id="Listing5">
+  <figcaption class="calibre39">Listing 5: Docker compose configuration for the example application</figcaption>
+
+<div class="highlight"><pre class="calibre40"><code class="lineno"> 1 </code><code class="n">eureka</code><code class="n">:</code>
+<code class="lineno"> 2 </code>  <code class="n">build</code><code class="n">:</code> <code class="n">../microservice-demo/microservice-demo-eureka-server</code>
+<code class="lineno"> 3 </code>  <code class="n">ports</code><code class="n">:</code>
+<code class="lineno"> 4 </code>    <code class="n">-</code> <code class="s">"8761:8761"</code>
+<code class="lineno"> 5 </code><code class="n">customer</code><code class="n">:</code>
+<code class="lineno"> 6 </code>  <code class="n">build</code><code class="n">:</code> <code class="n">../microservice-demo/microservice-demo-customer</code>
+<code class="lineno"> 7 </code>  <code class="n">links</code><code class="n">:</code>
+<code class="lineno"> 8 </code>   <code class="n">-</code> <code class="n">eureka</code>
+<code class="lineno"> 9 </code><code class="n">catalog</code><code class="n">:</code>
+<code class="lineno">10 </code>  <code class="n">build</code><code class="n">:</code> <code class="n">../microservice-demo/microservice-demo-catalog</code>
+<code class="lineno">11 </code>  <code class="n">links</code><code class="n">:</code>
+<code class="lineno">12 </code>   <code class="n">-</code> <code class="n">eureka</code>
+<code class="lineno">13 </code><code class="n">order</code><code class="n">:</code>
+<code class="lineno">14 </code>  <code class="n">build</code><code class="n">:</code> <code class="n">../microservice-demo/microservice-demo-order</code>
+<code class="lineno">15 </code>  <code class="n">links</code><code class="n">:</code>
+<code class="lineno">16 </code>   <code class="n">-</code> <code class="n">eureka</code>
+<code class="lineno">17 </code><code class="n">zuul</code><code class="n">:</code>
+<code class="lineno">18 </code>  <code class="n">build</code><code class="n">:</code> <code class="n">../microservice-demo/microservice-demo-zuul-server</code>
+<code class="lineno">19 </code>  <code class="n">links</code><code class="n">:</code>
+<code class="lineno">20 </code>   <code class="n">-</code> <code class="n">eureka</code>
+<code class="lineno">21 </code>  <code class="n">ports</code><code class="n">:</code>
+<code class="lineno">22 </code>    <code class="n">-</code> <code class="s">"8080:8080"</code>
+<code class="lineno">23 </code><code class="n">turbine</code><code class="n">:</code>
+<code class="lineno">24 </code>  <code class="n">build</code><code class="n">:</code> <code class="n">../microservice-demo/microservice-demo-turbine-server</code>
+<code class="lineno">25 </code>  <code class="n">links</code><code class="n">:</code>
+<code class="lineno">26 </code>   <code class="n">-</code> <code class="n">eureka</code>
+<code class="lineno">27 </code>  <code class="n">ports</code><code class="n">:</code>
+<code class="lineno">28 </code>    <code class="n">-</code> <code class="s">"8989:8989"</code>
+</pre></div>
+
+</figure>
+
+<p class="calibre3"><a href="part0019.html#Listing5">Listing 5</a> shows the configuration of the example
+application. It consists of the different services. <strong class="calibre19">build</strong> references
+the directory containing the Dockerfile. The Dockerfile is used
+to generate the image for the service. <strong class="calibre19">links</strong> defines which additional
+Docker Containers the respective Container should be able to
+access. All Containers can access the Eureka Container under the name
+<strong class="calibre19">eureka</strong>. In contrast to the Vagrant configuration there is no Java
+base image, which contains only a Java installation. This is
+because, Docker Compose supports only containers which really offer a
+service. Therefore this base image has to be downloaded from the
+Internet. Besides, in case of the Docker Compose containers the JAR
+files are copied into the Docker images so that the images contain
+everything for starting the Microservices.</p>
+
+
+<figure id="Fig74" class="image">
+  <img src="../images/00076.jpeg" alt="Fig. 74: Network for Docker Compose" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 74: Network for Docker Compose</figcaption>
+</figure>
+
+
+<p class="calibre3">The resulting system is very similar to the Vagrant system
+(<a href="part0019.html#Fig74">Fig. 74</a>). The Docker containers are linked via their own private
+network. From the outside only Zuul can be accessed for the processing of
+requests and Eureka for the dashboard. The are running directly on a
+host that then can be accessed from the outside.</p>
+
+<p class="calibre3">Using <strong class="calibre19">docker-compose build</strong> the system is created based on the
+Docker Compose configuration. Thus the suitable Images are
+generated. <strong class="calibre19">docker-compose up</strong> then starts the system. Docker
+Compose uses the same settings as the Docker command line tool.  So it
+can also work together with Docker Machine. Thus it is transparent
+whether the system is generated on a local virtual machine or
+somewhere in the Cloud.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-32" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-run-the-example-with-docker-compose" class="calibre34">Run the Example with Docker Compose</h5>
+
+  <p class="calibre3">The example application possesses a suitable Docker Compose
+configuration. Upon the generation of an environment with Docker
+Machine Docker Compose can be used to create the Docker
+containers. README.md in the directory docker describes the
+necessary procedure.</p>
+
+</aside>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-scale-the-application" class="calibre34">Scale the Application</h5>
+
+  <p class="calibre3">Have a look at the <strong class="calibre19">docker-compose scale</strong> command. It can
+scale the environment. Services can be restarted, logs can be
+analyzed and finally stopped. Once you have started the application,
+you can test these functionalities.</p>
+
+</aside>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-cluster-environments-for-docker" class="calibre34">Cluster Environments for Docker</h5>
+
+  <p class="calibre3">Mesos (<a href="http://mesos.apache.org/">http://mesos.apache.org/</a>) together with Mesosphere
+(<a href="http://mesosphere.com/">http://mesosphere.com/</a>), Kubernetes (<a href="http://kubernetes.io/">http://kubernetes.io/</a>) or
+CoreOS (<a href="http://coreos.com/">http://coreos.com/</a>) offers similar options as Docker Compose
+and Docker Machine, however they are meant for servers and server
+clusters. The Docker Compose and Docker Machine configurations can
+provide a good basis for running the application on these platforms.</p>
+
+</aside>
+
+<h3 id="section14-8" class="calibre2">14.8 Service Discovery</h3>
+
+<p class="calibre3"><a href="part0012.html#section8-9">Section 8.9</a> introduced the general principles of
+Service Discovery. The example application uses
+<a href="https://github.com/Netflix/Eureka">Eureka</a> for Service Discovery.</p>
+
+<p class="calibre3">Eureka is a REST-based server,  which allows services to register
+themselves so
+that other services can request their location in the network. In essence, each service
+can register a URL under its name. Other services can find the URL by
+the name of the service. Using this URL other services can
+then send REST messages to this service.</p>
+
+<p class="calibre3">Eureka supports replication onto several servers and caches on the
+client. This makes the system fail-safe against the failure of individual
+Eureka servers and allows to answer requests rapidly. Changes to data
+have to be replicated to all servers. Accordingly, it can take some
+time till they are really updated everywhere. During this time the
+data is inconsistent: Each server has a different version of the data.</p>
+
+<p class="calibre3">In addition Eureka supports Amazon Web Services because Netflix uses
+it in this environment. Eureka can for instance quite easily be
+combined with Amazon’s scaling.</p>
+
+<p class="calibre3">Eureka monitors the registered services and removes them from the
+server list if they cannot be reached anymore by the Eureka server.</p>
+
+<p class="calibre3">Eureka is the basis for many other services of the Netflix Stack and
+for Spring Cloud. Through a uniform Service Discovery other aspects
+such as routing can easily be implemented.</p>
+
+<h5 id="leanpub-auto-eureka-client" class="calibre15">Eureka Client</h5>
+
+<p class="calibre3">For a Spring Boot application to be able to register with a Eureka
+server and to find other Microservices, the application has to be
+annotated with <strong class="calibre19">@EnableDiscoveryClient</strong> or
+<strong class="calibre19">@EnableEurekaClient</strong>. In addition a dependency from
+<strong class="calibre19">spring-cloud-starter-eureka</strong> has to be included in the
+<strong class="calibre19">pom.xml</strong>. The application registers automatically with the Eureka
+server and can access other Microservices. The example application accesses other
+Microservices via a load
+balancer. This is described in detail in <a href="part0019.html#section14-11">section 14.11</a>.</p>
+
+<h5 id="leanpub-auto-configuration" class="calibre15">Configuration</h5>
+
+<p class="calibre3">Configuring the application is necessary to define for instance the
+Eureka server to be used. The file <strong class="calibre19">application.properties</strong> (<a href="part0019.html#Listing6">Listing 6</a>)
+is used for that. Spring Boot reads it out automatically
+in order to configure the application. This mechanism can also be used
+to configure one’s own code. In the example application the
+values serve to configure the Eureka client:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The first line defines the Eureka-Server. The example application
+ uses the Docker link, which provides the Eureka server under the
+ host name “eureka”.</li>
+  <li class="calibre14">
+<strong class="calibre19">leaseRenewalIntervalInSeconds</strong> determines how often data are
+updated between client and server. As the data have to be held
+locally in a cache on each client, a new service first needs to
+create its own cache and replicate it onto the server. Afterwards
+the data are replicated onto the clients. Within a test environment
+it is important to track system changes rapidly so that the example
+application uses five seconds instead of the preset value of 30
+seconds. In production with many clients this value should be
+increased. Otherwise the updates of information will use a lot of
+resources, even though the information remains essentially
+unchanged.</li>
+  <li class="calibre14">
+<strong class="calibre19">spring.application.name</strong> serves as name for the service during
+the registration at Eureka. During registration the name is
+converted into capital letters. This service would thus be known by
+Eureka under the name “CUSTOMER”.</li>
+  <li class="calibre14">There can be several instances of each service to achieve fail over
+ and load balancing. The <strong class="calibre19">instanceId</strong> has to be
+ unique for each instance of a service. Because of that it
+ contains a random number, which ensures unambiguousness.</li>
+  <li class="calibre14">
+<strong class="calibre19">preferIpAddress</strong> makes sure that Microservices register with
+their IP address and not with their host name. In a Docker
+environment host names are unfortunately not easily resolvable by
+other hosts. This problem is circumvented by the use of IP
+addresses.</li>
+</ul>
+
+<figure class="code" id="Listing6">
+  <figcaption class="calibre39">Listing 6: Part of <strong class="calibre19">application.properties</strong> with Eureka configuration</figcaption>
+
+<div class="highlight"><pre class="calibre40"><code class="lineno">1 </code>eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka/
+<code class="lineno">2 </code>eureka.instance.leaseRenewalIntervalInSeconds=5
+<code class="lineno">3 </code>spring.application.name=catalog
+<code class="lineno">4 </code>eureka.instance.metadataMap.instanceId=catalog:<code class="cp">${</code><code class="n">random</code><code class="o">.</code><code class="n">value</code><code class="cp">}</code>
+<code class="lineno">5 </code>eureka.instance.preferIpAddress=true
+</pre></div>
+
+</figure>
+
+<h5 id="leanpub-auto-eureka-server" class="calibre15">Eureka Server</h5>
+
+<p class="calibre3">The Eureka server (<a href="part0019.html#Listing7">Listing 7</a>) is a simple Spring Boot
+application, which turns into a Eureka server via the
+<strong class="calibre19">@EnableEurekaServer</strong> annotation. In addition the server needs a dependency on
+<strong class="calibre19">spring-cloud-starter-eureka-server</strong>.</p>
+
+<figure class="code" id="Listing7">
+  <figcaption class="calibre39">Listing 7: Eureka Server</figcaption>
+
+<div class="highlight"><pre class="calibre40"><code class="lineno">1 </code><code class="nd">@EnableEurekaServer</code>
+<code class="lineno">2 </code><code class="nd">@EnableAutoConfiguration</code>
+<code class="lineno">3 </code><code class="kd">public</code> <code class="kd">class</code> <code class="nc">EurekaApplication</code> <code class="o">{</code>
+<code class="lineno">4 </code>  <code class="kd">public</code> <code class="kd">static</code> <code class="kt">void</code> <code class="nf">main</code><code class="o">(</code><code class="n">String</code><code class="o">[]</code> <code class="n">args</code><code class="o">)</code> <code class="o">{</code>
+<code class="lineno">5 </code>    <code class="n">SpringApplication</code><code class="o">.</code><code class="na">run</code><code class="o">(</code><code class="n">EurekaApplication</code><code class="o">.</code><code class="na">class</code><code class="o">,</code>
+<code class="lineno">6 </code>     <code class="n">args</code><code class="o">);</code>
+<code class="lineno">7 </code>  <code class="o">}</code>
+<code class="lineno">8 </code><code class="o">}</code>
+</pre></div>
+
+</figure>
+
+<p class="calibre3">The Eureka server offers a dashboard, which shows the registered
+services. In the example application this can be found at
+http://localhost:18761/ (Vagrant) or on Docker host under
+port 8761 (Docker Compose). Fig. 75 shows a screenshot of the Eureka Dashboards for the
+example application. The three Microservices and the Zuul-Proxy, which
+is discussed in the next section, are present on the dashboard.</p>
+
+
+<figure id="Fig75" class="image">
+  <img src="../images/00077.jpeg" alt="Fig. 75: Eureka Dashboard" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 75: Eureka Dashboard</figcaption>
+</figure>
+
+
+<h3 id="section14-9" class="calibre2">14.9 Communication</h3>
+
+<p class="calibre3"><a href="part0013.html#chapter-9">Chapter 9</a> explained how Microservices communicate with each other and
+can be integrated. The example application uses REST for internal
+communication. The REST end points can be contacted from outside,
+however the web interface the system offers is of far greater
+importance. The REST implementation uses HATEOAS. The list containing
+all orders for instance contains links to the individual orders. This
+is automatically implemented by Spring Data REST. However,
+there are no links to the customer and the items of the order.</p>
+
+<p class="calibre3">Using HATEOAS can go further: The JSON can contain a link to an
+HTML document for each order – and vice versa. In this way a
+JSON-REST-based service can generate links to HTML pages to display or modify
+data. Such HTML code can for instance present an
+item in an order. As the catalog team provides the HTML code for the
+item, the catalog team itself can introduce changes to the
+presentation – even if the items are displayed in another module.</p>
+
+<p class="calibre3">REST
+is also of use here: HTML and JSON are really only representations of
+the same resource that can be addressed by a URL. Via Content
+Negotiation the right resource representation as JSON or HTML can be
+selected (compare <a href="part0013.html#section9-2">section 9.2</a>).</p>
+
+<h5 id="leanpub-auto-zuul-routing" class="calibre15">Zuul: Routing</h5>
+
+<p class="calibre3">The <a href="https://github.com/Netflix/zuul">Zuul</a> Proxy transfers incoming
+requests to the respective Microservices.
+The Zuul Proxy is a separate Java process. To the outside only one URL
+is visible, however internally the calls are processed by different
+Microservices. This allows the system to internally change the
+structure of the Microservices, while still offering a URL to the
+outside. In addition Zuul can provide web resources. In the
+example Zuul provides the first HTML page viewed by the user.</p>
+
+
+<figure id="Fig76" class="image">
+  <img src="../images/00078.jpeg" alt="Fig. 76: Zuul-Proxy in the example application" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 76: Zuul-Proxy in the example application</figcaption>
+</figure>
+
+
+<p class="calibre3">Zuul needs to know which requests to transfer to which
+Microservice. Without additional configuration Eureka will forward a request to a URL
+starting with “/customer” to the
+Microservice called CUSTOMER. This renders the internal
+Microservice names visible to the outside. But this routing can also
+be configured differently. Moreover Zuul filters can change the
+requests in order to implement general aspects in the system. There is
+for instance an integration with Spring Cloud Security to pass on
+security tokens to the Microservices. Such filters can also be used to
+pass on certain requests to specific servers. This allows for instance to
+transfer requests to servers having additional analysis options for
+investigating error situations. In addition a part of a Microservice
+functionality can be replaced by another Microservice.</p>
+
+<p class="calibre3">Implementing the Zuul-Proxy server with Spring Cloud is very easy and 
+analogous to the Eureka server presented in
+<a href="part0019.html#Listing7">Listing 7</a>. Instead of <strong class="calibre19">@EnableEurekaServer</strong> it is <strong class="calibre19">@EnableZuulProxy</strong>, which
+activates the Zuul-Proxy. As additional dependency
+<strong class="calibre19">spring-cloud-starter-zuul</strong> has to be added to the application, for
+instance within the Maven build configuration, which then integrates
+the remaining dependencies of Zuul into the application.</p>
+
+<p class="calibre3">A Zuul server represents an alternative to a Zuul Proxy. It does not
+have routing built-in, but uses filters instead. A Zuul server is
+activated by <strong class="calibre19">@EnableZuulServer</strong>.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-33" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-add-links-to-customer-and-items" class="calibre34">Add Links to Customer and Items</h5>
+
+  <p class="calibre3">Extend the application so that an order contains also links to the
+customer and to the items and thus implements HATEOAS better.
+Supplement the JSON documents for customer, items and orders with links
+to the forms.</p>
+
+</aside>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-use-the-catalog-service-to-show-items-in-orders" class="calibre34">Use the Catalog Service to Show Items in Orders</h5>
+
+  <p class="calibre3">Change the order presentation so that HTML from the
+Catalog service is used for items. To do so, you have to insert
+suitable JavaScript code into the order component, which loads HTML
+code from the Catalog.</p>
+
+</aside>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-implement-zuul-filters" class="calibre34">Implement Zuul Filters</h5>
+
+  <p class="calibre3">Implement your own Zuul filter (compare
+<a href="https://github.com/Netflix/zuul/wiki/Writing-Filters">https://github.com/Netflix/zuul/wiki/Writing-Filters</a>).
+The filter can for instance only release the requests.
+Introduce an additional routing to an external URL. For instance
+/google could redirect to http://google.com/. Compare the</p>
+
+  <p class="calibre3"><a href="http://projects.spring.io/spring-cloud/docs/1.0.3/spring-cloud.html">Spring Cloud reference documentation</a>
+.</p>
+
+</aside>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-authentication-and-authorization" class="calibre34">Authentication and Authorization</h5>
+
+  <p class="calibre3">Insert an authentication and
+authorization with Spring Cloud Security. Compare
+<a href="http://cloud.spring.io/spring-cloud-security/">http://cloud.spring.io/spring-cloud-security/</a>.</p>
+
+</aside>
+
+<h3 id="section14-10" class="calibre2">14.10 Resilience</h3>
+
+<p class="calibre3">Resilience means that Microservices can deal with the failure of other
+Microservices. Even if a called Microservice is not available, they will still work. <a href="part0014.html#section10-5">Section10.5</a> presented this
+topic.</p>
+
+<p class="calibre3">The example application implements Resilience with
+<a href="https://github.com/Netflix/Hystrix/">Hystrix</a>. This library protects
+calls so that no problems arise if a system fails. When a call is
+protected by Hystrix, it is executed in a different thread than the call
+itself. This thread is taken from a distinct thread pool. This makes it
+comparatively easy to implement a timeout during a call.</p>
+
+<h5 id="leanpub-auto-circuit-breaker-1" class="calibre15">Circuit Breaker</h5>
+
+<p class="calibre3">In addition Hystrix implements a Circuit Breaker. If a call causes an
+error, the Circuit
+Breaker will open after a certain number of errors. In that case
+subsequent calls are not directed to the called system anymore, but
+generate an error immediately. After a sleep window the Circuit
+Breaker closes so that calls are directed to the actual
+system again. The exact behavior can be
+<a href="https://github.com/Netflix/Hystrix/wiki/Configuration">configured</a>.
+In the
+configuration the error threshold percentage can be determined. That
+is the percentage of calls which have to
+cause an error within the time window for the Circuit
+Breaker to open. Also the sleep window can be defined, in which
+the Circuit Breaker is open and not sending calls to the system.</p>
+
+<h5 id="leanpub-auto-hystrix-with-annotations" class="calibre15">Hystrix with Annotations</h5>
+
+<p class="calibre3">Spring Cloud uses Java Annotations from the project hystrix-javanica for
+the configuration of Hystrix. This project is part of
+<a href="https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib">hystrix-contrib</a>
+. The annotated methods are protected according to the setting in the Annotation. Without this
+approach Hystrix commands would have to be written, which is a lot
+more effort than just adding some
+Annotations to a Java method.</p>
+
+<p class="calibre3">To be able to use Hystrix within a Spring Cloud application, the
+application has to be annotated with <strong class="calibre19">@EnableCircuitBreaker</strong>
+resp. <strong class="calibre19">@EnableHystrix</strong>. Moreover, the project needs to contain a
+dependency to <strong class="calibre19">spring-cloud-starter-hystrix</strong>.</p>
+
+<p class="calibre3"><a href="part0019.html#Listing8">Listing 8</a> shows a section from the class <strong class="calibre19">CatalogClient</strong> of the Order
+Microservice from the example application. The method <strong class="calibre19">findAll()</strong> is annotated
+with <strong class="calibre19">@HystrixCommand</strong>. This activates the processing in a different
+thread and the Circuit Breaker. The Circuit Breaker can be configured
+– in the example the number of calls, which have to cause an error in order to
+open the Circuit Breaker, is set to 2. In addition
+the example defines a <strong class="calibre19">fallbackMethod</strong>. Hystrix calls this method if
+the original method generates an error. The logic in <strong class="calibre19">findAll()</strong> saves the
+last result in a cache, which is returned by the <strong class="calibre19">fallbackMethod</strong>
+without calling the real system. In this way a reply can still be
+returned when the called Microservice fails, however this reply might no
+longer be up-to-date.</p>
+
+<figure class="code" id="Listing8">
+  <figcaption class="calibre39">Listing 8: Example for a method protected by Hystrix</figcaption>
+
+<div class="highlight"><pre class="calibre40"><code class="lineno"> 1 </code><code class="nd">@HystrixCommand</code><code class="o">(</code>
+<code class="lineno"> 2 </code> <code class="n">fallbackMethod</code> <code class="o">=</code> <code class="s">"getItemsCache"</code><code class="o">,</code>
+<code class="lineno"> 3 </code> <code class="n">commandProperties</code> <code class="o">=</code> <code class="o">{</code>
+<code class="lineno"> 4 </code> <code class="nd">@HystrixProperty</code><code class="o">(</code>
+<code class="lineno"> 5 </code>  <code class="n">name</code> <code class="o">=</code> <code class="s">"circuitBreaker.requestVolumeThreshold"</code><code class="o">,</code> 
+<code class="lineno"> 6 </code>  <code class="n">value</code> <code class="o">=</code> <code class="s">"2"</code><code class="o">)</code> <code class="o">})</code>
+<code class="lineno"> 7 </code><code class="kd">public</code> <code class="n">Collection</code><code class="o">&lt;</code><code class="n">Item</code><code class="o">&gt;</code> <code class="nf">findAll</code><code class="o">()</code> <code class="o">{</code>
+<code class="lineno"> 8 </code>  <code class="kd">this</code><code class="o">.</code><code class="na">itemsCache</code> <code class="o">=</code> <code class="o">...</code>
+<code class="lineno"> 9 </code>  <code class="o">...</code>
+<code class="lineno">10 </code>  <code class="kd">return</code> <code class="n">pagedResources</code><code class="o">.</code><code class="na">getContent</code><code class="o">();</code>
+<code class="lineno">11 </code><code class="o">}</code>
+<code class="lineno">12 </code>
+<code class="lineno">13 </code><code class="kd">private</code> <code class="n">Collection</code><code class="o">&lt;</code><code class="n">Item</code><code class="o">&gt;</code> <code class="nf">getItemsCache</code><code class="o">()</code> <code class="o">{</code>
+<code class="lineno">14 </code>  <code class="kd">return</code> <code class="n">itemsCache</code><code class="o">;</code>
+<code class="lineno">15 </code><code class="o">}</code>
+</pre></div>
+
+</figure>
+
+<h5 id="leanpub-auto-monitoring-with-the-hystrix-dashboard" class="calibre15">Monitoring with the Hystrix Dashboard</h5>
+
+<p class="calibre3">Whether a Circuit Breaker is currently open or closed, gives an
+indication of how well a system is running. Hystrix offers data to
+monitor this. A Hystrix system provides such data as a
+stream of JSON documents via HTTP. The Hystrix Dashboard can
+visualize the data in a web interface. The dashboard presents all
+Circuit Breakers along with the number of requests and their state
+(open/closed) (<a href="part0019.html#Fig77">Fig. 77</a>). In addition it displays the state of the
+thread pools.</p>
+
+
+<figure id="Fig77" class="image">
+  <img src="../images/00079.jpeg" alt="Fig. 77: Example for a Hystrix Dashboard" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 77: Example for a Hystrix Dashboard</figcaption>
+</figure>
+
+
+<p class="calibre3">A Spring Boot Application needs to have the annotation
+<strong class="calibre19">@EnableHystrixDashboard</strong> and a dependency to
+<strong class="calibre19">spring-cloud-starter-hystrix-dashboard</strong> to be able to display a
+Hystrix Dashboard. That way any Spring Boot application might in
+addition show a Hystrix Dashboard or the dashboard can be implemented in an
+application by itself.</p>
+
+<h5 id="leanpub-auto-turbine" class="calibre15">Turbine</h5>
+
+<p class="calibre3">In a complex Microservices environment it is not useful that each
+instance of a
+Microservice visualizes the information concerning the state of its
+Hystrix Circuit Breaker. The state of all Circuit Breakers in the
+entire system should be summarized on a single dashboard. To visualize
+the data of the different Hystrix systems on one dashboard there is
+the Turbine
+project. <a href="part0019.html#Fig78">Fig. 78</a> illustrates the approach Turbine
+takes: The different streams of the Hystrix enabled Microservices are provided
+at URLs like http://&lt;host:port&gt;/hystrix.stream. The Turbine server
+requests them and provides them in a consolidated manner at the URL
+http://&lt;host:port&gt;/turbine.stream. This URL can be used by the
+dashboard in order to display the information of all Circuit Breakers
+of the different Microservice instances.</p>
+
+
+<figure id="Fig78" class="image">
+  <img src="../images/00080.jpeg" alt="Fig. 78: Turbine consolidates Hystrix monitoring data." class="calibre17"/>
+  <figcaption class="calibre18">Fig. 78: Turbine consolidates Hystrix monitoring data.</figcaption>
+</figure>
+
+
+<p class="calibre3">Turbine runs in a separate process. With Spring Boot the Turbine
+server is a simple application, which is annotated with <strong class="calibre19">@EnableTurbine</strong>
+and <strong class="calibre19">@EnableEurekaClient</strong>. In the example application it has the additional
+annotation <strong class="calibre19">@EnableHystrixDashboard</strong> so that it also displays the
+Hystrix Dashboard. It also needs a dependency on
+<strong class="calibre19">spring-cloud-starter-turbine</strong>.</p>
+
+<p class="calibre3">Which data are consolidated by the Turbine server is determined by the
+configuration of the application. <a href="part0019.html#Listing9">Listing 9</a> shows the configuration of
+the Turbine servers of the example project. It serves as a
+configuration for a Spring Boot application just like
+<strong class="calibre19">application.properties</strong> files, but is written in YAML. The
+configuration sets the value “ORDER” for
+<strong class="calibre19">turbine.aggregator.clusterConfig</strong>. This is the application name in
+Eureka. <strong class="calibre19">turbine.aggregator.appConfig</strong> is the name of the data stream in
+the Turbine server. In the Hystrix Dashboard a URL like
+http://172.17.0.10:8989/turbine.stream?cluster=ORDER has to be used in
+visualize the data stream. Part of the URL is the IP-Adresse of the
+Turbine server, which can be found in the Eureka Dashboard. The
+dashboard accesses the Turbine server via the network between the
+Docker containers.</p>
+
+<figure class="code" id="Listing9">
+  <figcaption class="calibre39">Listing 9: Configuration application.yml</figcaption>
+
+<div class="highlight"><pre class="calibre40"><code class="lineno">1 </code><code class="n">turbine</code><code class="n">:</code>
+<code class="lineno">2 </code> <code class="n">aggregator</code><code class="n">:</code>
+<code class="lineno">3 </code>  <code class="n">clusterConfig</code><code class="n">:</code> <code class="n">ORDER</code>
+<code class="lineno">4 </code> <code class="n">appConfig</code><code class="n">:</code> <code class="n">order</code>
+</pre></div>
+
+</figure>
+
+<h5 id="leanpub-auto-try-and-experiment-34" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-terminate-microservices" class="calibre34">Terminate Microservices</h5>
+
+  <p class="calibre3">Using the example application generate a number of orders. Find the
+name of the Catalog Docker Container using <strong class="calibre19">docke ps</strong>. Stop the
+Catalog Docker Container with
+<strong class="calibre19">docker kill</strong>. This use is protected by
+Hystrix. What happens?</p>
+
+  <p class="calibre3">What happens if the Customer Docker Container is terminated as well?
+The use of this Microservice is not protected by Hystrix.</p>
+
+</aside>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-add-hystrix-to-customer-microservice" class="calibre34">Add Hystrix to Customer Microservice</h5>
+
+  <p class="calibre3">Protect the use of the Customer Docker Container also with Hystrix. In
+order to do so change the class <strong class="calibre19">CustomerClient</strong> from the
+Order project. <strong class="calibre19">CatalogClient</strong> can serve as a template.</p>
+
+</aside>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-change-hystrix-configuration" class="calibre34">Change Hystrix Configuration</h5>
+
+  <p class="calibre3">Change the configuration of Hystrix for the
+Catalog Microservice. There are several
+<a href="https://github.com/Netflix/Hystrix/wiki/Configuration">configuration options</a>.
+<a href="part0019.html#Listing8">Listing 8</a> (CatalogClient from the Order-Project) shows the use of the
+Hystrix annotations. Other time intervals for opening and closing
+of the Circuit Breakers are for instance a possible change.</p>
+
+</aside>
+
+<h3 id="section14-11" class="calibre2">14.11 Load Balancing</h3>
+
+<p class="calibre3">For Load Balancing the example application uses
+<a href="https://github.com/Netflix/ribbon/wiki">Ribbon</a>. Many Load
+Balancers are proxy-based. In this model the clients send all calls to
+a Load Balancer. The Load Balancer runs as a distinct server and
+forwards the request to a web server – often depending on the current
+load of the web servers.</p>
+
+<p class="calibre3">Ribbon implements a different model called Client Side Load Balancing: The client has all the
+information to communicate with the right server. The client calls the
+server directly and distributes the load by itself to different
+servers. In the architecture there is no bottle neck as there is no
+central server all calls would have to pass. In conjunction with data
+replication by Eureka Ribbon is quite resilient: As long as the client
+runs, it can send requests. The failure of a Proxy Load Balancer
+would stop all calls to the server.</p>
+
+<p class="calibre3">Dynamic scaling is very simple within this system: A new instance is
+started, enlists itself at Eureka and then the Ribbon Clients redirect
+load to the instance.</p>
+
+<p class="calibre3">As already discussed in the section dealing with Eureka
+(<a href="part0019.html#section14-8">Section 14.8</a>), data can be inconsistent over the different servers. Because
+data are not up-to-date, servers can be contacted, which really should
+be left out by the Load Balancing.</p>
+
+<h5 id="leanpub-auto-ribbon-with-spring-cloud" class="calibre15">Ribbon with Spring Cloud</h5>
+
+<p class="calibre3">Spring Cloud simplifies the use of Ribbon. The application has to
+be annotated with <strong class="calibre19">@RibbonClient</strong>. While doing so, a name for the
+application can be defined. In addition the application needs to have
+a dependency on <strong class="calibre19">spring-cloud-starter-ribbon</strong>. In that case an instance
+of a Microserve can be accessed using code like in
+<a href="part0019.html#Listing10">Listing 10</a>. For
+that purpose the code uses the Eureka name of the Microservice.</p>
+
+<figure class="code" id="Listing10">
+  <figcaption class="calibre39">Listing  10: Determining a server with Ribbon Load Balancing</figcaption>
+
+<div class="highlight"><pre class="calibre40"><code class="lineno">1 </code><code class="n">ServiceInstance</code> <code class="n">instance</code>
+<code class="lineno">2 </code> <code class="o">=</code> <code class="n">loadBalancer</code><code class="o">.</code><code class="na">choose</code><code class="o">(</code><code class="s">"CATALOG"</code><code class="o">);</code>
+<code class="lineno">3 </code><code class="n">String</code> <code class="n">url</code> <code class="o">=</code> <code class="s">"http://"</code> <code class="o">+</code>
+<code class="lineno">4 </code> <code class="n">instance</code><code class="o">.</code><code class="na">getHost</code><code class="o">()</code> <code class="o">+</code> <code class="s">":"</code> <code class="o">+</code>
+<code class="lineno">5 </code> <code class="n">instance</code><code class="o">.</code><code class="na">getPort</code><code class="o">()</code> <code class="o">+</code>
+<code class="lineno">6 </code> <code class="s">"/catalog/"</code><code class="o">;</code>
+</pre></div>
+
+</figure>
+
+<p class="calibre3">The use can also be transparent to a large extent. To illustrate this
+<a href="part0019.html#Listing11">Listing 11</a> shows the use of <strong class="calibre19">RestTemplates</strong> with
+Ribbon. This is a Spring class, which can be used to call REST
+services. In the Listing the <strong class="calibre19">RestTemplate</strong> of Spring is
+injected into the object as it is annotated with <strong class="calibre19">@Autowired</strong>. The
+call in <strong class="calibre19">callMicroservice()</strong> looks like it is contacting a server
+called “stores”. In reality this name is used to search a server at
+Eureka, and to this server the REST call is sent. This is done via
+Ribbon so that the load is also distributed across the available servers.</p>
+
+<figure class="code" id="Listing11">
+  <figcaption class="calibre39">Listing  11: Using Ribbon with RestTemplate</figcaption>
+
+<div class="highlight"><pre class="calibre40"><code class="lineno"> 1 </code><code class="nd">@RibbonClient</code><code class="o">(</code><code class="n">name</code> <code class="o">=</code> <code class="s">"ribbonApp"</code><code class="o">)</code>
+<code class="lineno"> 2 </code> <code class="err">…</code> <code class="c">// Left out other Spring Cloud / Boot Annotations</code>
+<code class="lineno"> 3 </code><code class="kd">public</code> <code class="kd">class</code> <code class="nc">RibbonApp</code> <code class="o">{</code>
+<code class="lineno"> 4 </code> 
+<code class="lineno"> 5 </code> <code class="nd">@Autowired</code>
+<code class="lineno"> 6 </code>   <code class="kd">private</code> <code class="n">RestTemplate</code> <code class="n">restTemplate</code><code class="o">;</code>
+<code class="lineno"> 7 </code> 
+<code class="lineno"> 8 </code>   <code class="kd">public</code> <code class="kt">void</code> <code class="nf">callMicroservice</code><code class="o">()</code> <code class="o">{</code>
+<code class="lineno"> 9 </code>     <code class="n">Store</code> <code class="n">store</code> <code class="o">=</code> <code class="n">restTemplate</code><code class="o">.</code>
+<code class="lineno">10 </code>      <code class="nf">getForObject</code><code class="o">(</code><code class="s">"http://stores/store/1"</code><code class="o">,</code> <code class="n">Store</code><code class="o">.</code><code class="na">class</code><code class="o">);</code>
+<code class="lineno">11 </code>   <code class="o">}</code>
+<code class="lineno">12 </code> 
+<code class="lineno">13 </code> <code class="o">}</code>
+</pre></div>
+
+</figure>
+
+<h5 id="leanpub-auto-try-and-experiment-35" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-load-balance-to-an-additional-service-instance" class="calibre34">Load Balance to an Additional Service Instance</h5>
+
+  <p class="calibre3">The Order Microservice distributes the load onto several instances of
+ the Customer and Catalog Microservice – if several instances
+ exist. Without further measures, only a single instance is started.
+ The Order Microservice shows in the log which Catalog or
+ Customer Microservice it contacts. Initiate an order and observe which
+ Services are contacted.</p>
+
+  <p class="calibre3">Afterwards start an additional Catalog Microservice. You can do that using the command:
+ <strong class="calibre19">docker run -v /microservice-demo:/microservice-demo –link eureka:eureka catalog-app</strong>
+in Vagrant. For Docker Compose <strong class="calibre19">docker-compose scale catalog=2</strong>
+should be enough.
+ Verify whether the container is running and observe the log output.</p>
+
+  <p class="calibre3">For reference: Try and Experiment in <a href="part0019.html#section14-4">section 14.4</a>
+shows the main commands for using
+Docker. <a href="part0019.html#section14-7">Section 14.7</a> shows how to use Docker Compose.</p>
+
+</aside>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-create-data" class="calibre34">Create Data</h5>
+
+  <p class="calibre3">Create a new dataset with a new item. Is the item always displayed
+ in the selection of items? Hint: The database runs within the
+process of the Microservice – i.e. each Microservice instance
+possesses its own database.</p>
+
+</aside>
+
+<h3 id="section14-12" class="calibre2">14.12 Integrating Other Technologies</h3>
+
+<p class="calibre3">Spring Cloud and the entire Netflix Stack are based on Java. Thus, it
+seems impossible for other programming languages and
+platforms to use this infrastructure. However, there is a solution:
+The application can be supplied with a sidecar. The sidecar is written in
+Java and uses Java libraries to integrate into
+a Netflix-based infrastructure. The sidecar for instance takes care of
+registration and finding other Microservices in Eureka. Netflix
+itself offers for this purpose the
+<a href="http://githib.com/Netflix/Prana/">Prana project</a>. The Spring
+Cloud solution is explained in
+<a href="http://projects.spring.io/spring-cloud/docs/1.0.3/spring-cloud.html#_polyglot_support_with_sidecar">the documentation</a>.
+The sidecar
+runs in a distinct process and serves as an interface between the
+Microservice itself and the Microservice infrastructure. In this
+manner other programming languages and platforms can be easily
+integrated into a Netflix or Spring Cloud environment.</p>
+
+<h3 id="section14-13" class="calibre2">14.13 Tests</h3>
+
+<p class="calibre3">The example application contains test applications for the developers of Microservices. These
+do not need a
+Microservice infrastructure or additional Microservices – in contrast
+to the production system. This allows developers to run
+each Microservice without a complex infrastructure.</p>
+
+<p class="calibre3">The class <strong class="calibre19">OrderTestApp</strong> in the Order project contains such a test
+application. The applications contain their own configuration file
+<strong class="calibre19">application-test.properties</strong> with specific settings within the directory
+<strong class="calibre19">src/test/resources</strong>. The settings prevent that the applications
+register with the Service Discovery Eureka. Besides they contain
+different URLs for the dependent Microservices. This configuration is
+automatically used by the test application as it uses a Spring
+profile called “test”. All JUnit tests use these settings as well so that they can
+run without dependent services.</p>
+
+<h5 id="leanpub-auto-stubs-1" class="calibre15">Stubs</h5>
+
+<p class="calibre3">The URLs for the dependent Microservices in the test application and
+the JUnit tests point to Stubs. These are simplified Microservices,
+which only offer a part of the functionalities. They run within the
+same Java process as the real Microservices or JUnit tests. So
+only a single Java process has to be started for the development of a
+Microservice, analogous to the usual way of developing with Java. The
+Stubs can be implemented differently – for instance using a different
+programming language or even a web server, which returns certain static
+documents representing the test data (compare
+<a href="part0015.html#section11-6">section 11.6</a>). Such approaches might be better suited
+for real-life applications.</p>
+
+<p class="calibre3">Stubs facilitate development. If each developer needs to use a
+complete environment including all Microservices during development, a
+tremendous amount of hardware resources and a lot of effort to keep
+the environment continuously up-to-date would be necessary. The Stubs
+circumvent this problem as no dependent Microservices are needed
+during development. Due to the stubs the effort to start a
+Microservice is hardly bigger than the one for a regular Java
+application.</p>
+
+<p class="calibre3">In a real project the teams can implement Stubs together
+with the real Microservices. The Customer team can
+implement in addition to the real service a stub for the
+Customer Microservice, which is used by the other Microservices for
+development. This ensures that the stub largely resembles the
+Microservice and is  updated if the original service is
+changed. The Stub can be taken care of in a different Maven projects, which
+can be used by the other teams.</p>
+
+<h5 id="leanpub-auto-consumer-driven-contract-test" class="calibre15">Consumer-driven Contract Test</h5>
+
+<p class="calibre3">It has to be ensured that the Stubs behave like the Microservices
+they simulate. In addition a Microservice has to define the
+expectations regarding the interface of a different Microservice. This
+is achieved by Consumer-driven Contract Tests (compare
+<a href="part0015.html#section11-7">section 11.7</a>). These are written by the team, which uses the Microservices. In
+the example this is the team, which is responsible for the
+Order Microservice. In the Order Microservice the Consumer-driven
+Contract Tests are found in the classes
+<strong class="calibre19">CatalogConsumerDrivenContractTest</strong> and
+<strong class="calibre19">CustomerConsumerDrivenContractTest</strong>. They run there to test the stubs
+of the Customer and Catalog Microservice for correctness.</p>
+
+<p class="calibre3">Even more important than the correct functioning of the stubs is the
+correct functioning of the Microservices themselves. For that reason the
+Consumer-driven Contract Tests are also contained in the Customer and
+Catalog project. There they run against the implemented
+Microservices. This ensures that the Stubs as well as the real
+Microservices are in line with this specification. In case the
+interface is supposed to be changed, these tests can be used to
+confirm that the change does not break the calling Microservice. It is
+up to the used Microservices – Customer and Catalog in the example –,
+to comply with these tests. In this manner the requirements of the
+Order Microservice in regards to the Customer and
+Catalog Microservice can be formally defined and tested. The
+Consumer-driven Contract Tests serve in the end as formal definition
+of the agreed interface.</p>
+
+<p class="calibre3">In the example application the Consumer-driven Contract Tests are part
+of the Customer and Catalog projects in order to verify that the
+interface is correctly implemented. Besides they are part of the Order
+project
+for verifying the correct functioning of the stubs. In a real project
+copying the tests should be prevented. The Consumer-driven Contract
+Tests can be located in one project together with the
+tested Microservices. Then all teams need to have access to the
+Microservice projects to be able to alter the tests. Alternatively,
+they are located within the projects of the different teams, which are
+using the Microservice. In that case the tested Microservice has to
+collect the tests from the other projects and execute them.</p>
+
+<p class="calibre3">In a real project it is not really necessary to protect stubs by
+Consumer-driven Contract Tests, especially as it is the purpose of the
+stubs to offer an easier implementation than the real
+Microservices. Thus the functionalities will be different and conflict
+with Consumer-driven Contract Tests.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-36" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">Insert a field into Catalog or Customer data. Is the system still working? Why?</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">Delete a field in the implementation of the server for Catalog or Customer. Where is the problem noticed? Why?</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">Replace the home grown stubs with stubs, which use a tool from <a href="part0015.html#section11-6">Section 11.6</a>.</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">Replace the Consumer-driven Contract Tests with tests, which use a tool from <a href="part0015.html#section11-7">Section 11.7</a>.</p>
+
+</aside>
+
+<h3 id="leanpub-auto-experiences-with-jvm-based-microservices-in-the-amazon-cloud-sascha-mllering" class="calibre2">Experiences with JVM-based Microservices in the Amazon Cloud (Sascha Möllering)</h3>
+
+<p class="calibre3">by Sascha Möllering, zanox AG</p>
+
+<p class="calibre3">During the last months zanox has implemented a light-weight
+Microservices architecture in Amazon Web Services (AWS), which runs
+in several AWS regions. Regions divide the Amazon Cloud
+into sections like US-East or EU-West, which each have their own
+data centers. They work completely independently of each other
+and do not exchange any data directly. Different AWS regions are used
+because latency is very important for this type of application and is
+minimized by latency-based routing. In addition it was a fundamental aim
+to design the architecture in an event-driven manner. Furthermore, the
+individual services were intended not to communicate directly, but
+rather to be separated by message queues resp. bus systems. An Apache
+Kafka cluster as message bus in the zanox data center serves as
+central point of synchronization for the different regions. Each service
+is implemented as a stateless application. The state is stored in
+external systems like the bus systems, Amazon ElastiCache (based on the
+NoSQL database Redis), the data stream processing technology Amazon
+Kinesis and the NoSQL database Amazon DynamoDB. The JVM serves as basis
+for the implementation of the individual services. We chose Vert.x and
+the embedded web server Jetty as frameworks. We developed all
+applications as self-contained services so that a Fat JAR, which
+can easily be started via <strong class="calibre19">java –jar</strong>, is generated at the end of the
+build process.</p>
+
+<p class="calibre3">There is no need to install any additional components or an
+application server. Vert.x serves as basis framework for the HTTP part
+of the architecture. Within the application work is performed almost
+completely asynchronously to achieve high performance. For the remaining
+components we use Jetty as framework: These act either as
+Kafka/Kinesis consumer or update the Redis cache for the HTTP
+layer. All called applications are delivered in
+Docker Containers. This allows the use of a uniform deployment
+mechanism independent of the utilized technology. To be able to
+deliver the services independently in the different regions, an
+individual Docker Registry storing the Docker images in a S3 bucket
+was implemented in each region. S3 is a service that allows the
+storage of large file on Amazon server.</p>
+
+<p class="calibre3">If you intend to use Cloud Services, you have to address the question whether you want to use the managed services of
+a Cloud provider or develop and run the infrastructure yourself. zanox
+decided to use the managed services of a Cloud provider because building
+and administrating proprietary infrastructure modules does not provide
+any business value. The EC2 computers of the Amazon portfolio are pure
+infrastructure. IAM on the other hand offers comprehensive security
+mechanisms. In the deployed services the AWS Java SDK is used, which
+allows in combination with
+<a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html">IAM roles for EC2</a>
+to generate
+applications, which are able to access the managed services of AWS
+without using explicit credentials. During initial bootstrapping an
+IAM role containing the necessary permissions is assigned to an EC2
+instance. Via the
+<a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">Metadata Service</a>
+the AWS SDK is given the
+necessary credentials. This enables the application to access the
+managed services defined in the role. Thus, an application can be
+implemented, which sends metrics to the monitoring system Amazon Cloud
+Watch and events to the data streaming processing solution Amazon
+Kinesis without having to role out explicit credentials together with
+the application.</p>
+
+<p class="calibre3">All applications are equipped with REST interfaces for heartbeats and
+healthchecks so that the application itself as well as the
+infrastructure necessary for the availability of the application can be monitored
+at all times:  Each application uses healthchecks to monitor the
+infrastructure components it uses. Application scaling is implemented
+via Elastic Load Balancing (ELB) and
+<a href="https://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/as-add-elb-healthcheck.html">AutoScaling</a>
+to be
+able to achieve a fine-grained application depending on the concrete
+load. AutoScaling starts additional EC2 instances if needed. ELB
+distributes the load between the instances. The AWS ELB service is not
+only suitable for web applications working with HTTP protocols, but
+for all types of applications. A healthcheck can also be implemented based
+on a TCP protocol without HTTP. This is even simpler than an HTTP
+healthcheck.</p>
+
+<p class="calibre3">Still the developer team decided to implement the ELB healthchecks via
+HTTP for all services to achieve that they all behave exactly the
+same, independent of the implemented logic, the used frameworks and
+the language. It is well possible that in the future also
+applications, which do not run on JVM and for instance use Go or
+Python as programming languages, are deployed in AWS.</p>
+
+<p class="calibre3">For the ELB
+healthcheck zanox uses the application heartbeat URL. As a result,
+traffic is only directed to the application resp. potentially
+necessary infrastructure scaling operations are only performed once
+the EC2 instance with the application has properly been started and
+the heartbeat was successfully monitored.</p>
+
+<p class="calibre3">For application monitoring Amazon CloudWatch is a good choice as
+CloudWatch alarms can be used to define scaling events for the AutoScaling Policies, i.e. the infrastructure scales automatically based
+on metrics. For this purpose EC2 basis metrics like CPU can for
+instance be used. Alternatively, it is possible to send your own
+metrics to CloudWatch. For this purpose this project uses a fork of
+the project
+<a href="https://github.com/SaschaMoellering/jmxtrans-agent">jmxtrans-agent</a>,
+which uses the CloudWatch API to
+send JMX metrics to the monitoring system. JMX (Java Management
+Extension) is the standard for monitoring and metrics in the Java
+world. Besides metrics are sent from within the application (i.e. from
+within the business logic) using the library
+<a href="https://dropwizard.github.io/metrics/">Coda Hale Metrics</a> and
+a module for the CloudWatch integration by
+<a href="https://github.com/blacklocus/metrics-cloudwatch">Blacklocus</a>.</p>
+
+<p class="calibre3">A slightly
+different approach is chosen for the logging: In a Cloud environment
+it is never possible to rule out that a server instance is abruptly
+terminated. This causes often the sudden loss of data, which are
+stored on the server. Log files are an
+example for that. For this reason a
+<a href="https://github.com/elastic/logstash-forwarder">logstash-forwarder</a>
+runs in
+parallel to the core application on the server for sending the log
+entries to our ELK-Service running in our own data center. This
+stack consists of Elasticsearch for storage, Logstash for parsing the
+log data and Kibana for UI-based analysis. ELK is an acronym for
+Elasticsearch, Logstash und Kibana. In addition a UUID is calculated
+for each request resp. each event in our HTTP layer so that log
+entries can still be assigned to events after EC2 instances have
+ceased to exist.</p>
+
+<h5 id="leanpub-auto-conclusion-4" class="calibre15">Conclusion</h5>
+
+<p class="calibre3">The pattern of Microservices architectures fits well to the dynamic
+approach of Amazon Cloud if the architecture is well designed and
+implemented. The clear advantage over implementing in your own
+data center is the infrastructure flexibility. This allows to
+implement a nearly endlessly scalable architecture, which is in
+addition very cost-efficient.</p>
+
+<h3 id="section14-14" class="calibre2">14.14 Conclusion</h3>
+
+<p class="calibre3">The technologies used in the example provide a very good foundation
+for implementing a Microservices architecture with
+Java. Essentially, the example is based on the Netflix Stack, which
+has demonstrated its efficacy for years already in one of the largest
+websites.</p>
+
+<p class="calibre3">The example demonstrates the interplay of different technologies for
+Service Discovery, Load Balancing and Resilience – as well as an
+approach for testing Microservices und for their execution in
+Docker Containers. The example is not meant to be directly useable in
+a production context, but is first of all designed to be very easy to
+set up and get running. This entails a number of compromises. However,
+the example serves very well as foundation for further experiments and
+the testing of ideas.</p>
+
+<p class="calibre3">In addition the example demonstrates a Docker-based application
+deployment, which is a good foundation for Microservices.</p>
+
+<h5 id="leanpub-auto-essential-points-11" class="calibre15">Essential Points</h5>
+
+<ul class="calibre16">
+  <li class="calibre14">Spring, Spring Boot, Spring Cloud and the Netflix Stack offer a well
+integrated stack for Java-based Microservices. These
+technologies solve all typical challenges posed during the
+development of Microservices.</li>
+  <li class="calibre14">Docker based deployment is easy to implement and in conjunction
+with Docker Machine and Docker Compose can be used for deployment in
+the Cloud, too.</li>
+  <li class="calibre14">The example application shows how to test Microservices using Consumer-Driven Contract Tests and
+Stubs without special tools. However, for real life
+projects tools might be more useful. </li>
+</ul>
+
+<h5 id="leanpub-auto-try-and-experiment-37" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-add-log-analysis" class="calibre34">Add Log Analysis</h5>
+
+  <p class="calibre3">The log analysis of all log files is important for running a
+Microservice system. At
+<a href="https://github.com/ewolff/user-registration">https://github.com/ewolff/user-registration</a> an example project is
+provided. In the sub directory <strong class="calibre19">log-analysis</strong> it contains a setup for an
+ELK (Elasticsearch, Logstash und Kibana) stack-based log analysis. Use
+this approach to also add a log analysis to the Microservice example.</p>
+
+</aside>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-add-monitoring" class="calibre34">Add Monitoring</h5>
+  <p class="calibre3">In addition the example project from the Continuous Delivery book
+contains in the sub directory graphite an installation of Graphite for
+monitoring. Adapt this installataion for the Microservice example.</p>
+
+</aside>
+
+<aside class="exercise">
+    <h5 id="leanpub-auto-rewrite-a-service" class="calibre34">Rewrite a Service</h5>
+
+  <p class="calibre3">Rewrite one of the services in a different programming language. Use
+the Consumer-driven Contract Tests (compare <a href="part0019.html#section14-13">Section 14.13</a> and <a href="part0015.html#section11-7">11.7</a> to
+protect the implementation. Make use of a sidecar for the integration
+into the technology stack (compare <a href="part0019.html#section14-12">Section 14.12</a>).</p>
+
+</aside>
+
+
+</div>
+</body></html>

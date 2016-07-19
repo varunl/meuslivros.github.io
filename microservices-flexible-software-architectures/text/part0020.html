@@ -1,0 +1,1266 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title dir="ltr">15 Technologies for Nanoservices</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body dir="ltr" class="calibre">
+<div class="calibre6">
+<h2 id="chapter-15" class="calibre1">15 Technologies for Nanoservices</h2>
+
+<p class="calibre3"><a href="part0020.html#section15-1">Section 15.1</a> discusses the advantages of Nanoservices
+and why Nanoservices can be useful. <a href="part0020.html#section15-2">Section 15.2</a>
+defines Nanoservices and distinguishes them from
+Microservices. <a href="part0020.html#section15-3">Section 15.3</a> focuses on Amazon Lambda:
+a Cloud technology which can be used with Python, JavaScript or
+Java. Here each function call is billed instead of renting virtual
+machines or application servers. OSGi (<a href="part0020.html#section15-4">section 15.4</a>)
+modularizes Java applications and also provides services. Another
+Java technology for Nanoservices is Java EE
+(<a href="part0020.html#section15-5">section 15.5</a>), if used correctly. Vert.x, another option,
+(<a href="part0020.html#section15-6">section 15.6</a>) also runs on the JVM, but supports in
+addition to Java a broad variety of programming
+languages. <a href="part0020.html#section15-7">Section 15.7</a> focuses on the programming
+language Erlang which is quite old. The architecture of Erlang allows
+the implementation of Nanoservices. Seneca
+(<a href="part0020.html#section15-8">section 15.8</a>) has a similar approach as Erlang, but
+is based on JavaScript and has been specially designed for the
+development of Nanoservices.</p>
+
+<p class="calibre3">The term Microservice is not uniformly defined. Some people believe
+Microservices should be extremely small services – i.e. ten to a hundred
+lines of code (LoC). This book calls such services Nanoservices. The
+distinction between Microservices and Nanoservices is the focus of
+this chapter. A suitable technology is an essential prerequisite for
+the implementation of small services. If the technology for instance
+combines several services into one operating system process, the
+resource utilization per service can be decreased and the service
+rollout in production facilitated. This decreases the expenditure per
+service which allows to support a large number of small Nanoservices.</p>
+
+<h3 id="section15-1" class="calibre2">15.1 Why Nanoservices?</h3>
+
+<p class="calibre3">Nanoservices are well in line with the already discussed size limits
+of Microservices: Their size is below the maximum size, which was
+defined in <a href="part0007.html#section4-1">section 4.1</a>and depends for 
+instance on the number of team members. In addition, a Microservice should be small 
+enough to still be understood by a developer. With suitable technologies 
+the technical limits for the minimal size of a Microservice, which were discussed in
+<a href="part0007.html#section4-1">section 4.1</a>, can be further reduced.</p>
+
+<p class="calibre3">Very small modules are easier to understand and therefore easier to
+maintain and change. Besides smaller Microservices can more easily be
+replaced by new implementations or a rewrite. Accordingly, systems
+consisting of minimally sized Nanoservices can more easily be
+developed further.</p>
+
+<p class="calibre3">There are systems which successfully employ Nanoservices. In fact, in
+practice it is rather the too large modules that are the source of
+problems and prevent the successful further development of a
+system. Each functionality could be implemented in its own
+Microservice – each class or function could become a separate
+Microservice. <a href="part0014.html#section10-2">Section 10.2</a> demonstrated that it can be
+sensible for CQRS to implement a Microservice which only reads data of
+a certain type. Writing the same type of data can already be
+implemented in another Microservice. So Microservices can really have
+a pretty small scope.</p>
+
+<h5 id="leanpub-auto-minimum-size-of-microservices-is-limited" class="calibre15">Minimum Size of Microservices is Limited</h5>
+
+<p class="calibre3">What are reasons against very tiny Microservices? <a href="part0007.html#section4-1">Section 4.1</a>
+identified factors which render Microservices below a
+certain size not practicable:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The expenditure for infrastructure increases. When each Microservice
+is a separate process and requires infrastructure such as an
+application server and monitoring, the expenditure necessary for
+running hundreds or even thousands of Microservices becomes too
+large. Therefore, Nanoservices require technologies which allow to
+keep the expenditure for infrastructure per individual service as
+small as possible. In addition, a low resource utilization is
+desirable. The individual services should consume as little memory and
+CPU as possible.</li>
+  <li class="calibre14">In case of very small services a lot of communication via the
+network is required. That has a negative influence on system
+performance. Consequently, when working with Nanoservices
+communication between the services should not occur via the
+network. This might result in less technological freedom. When all
+Nanoservices run in a single process, they are usually required to
+employ the same technology. Such an approach also affects system
+robustness. When several services run in the same process, it is much
+more difficult to isolate them from each other. A Nanoservice can use
+up so many resources that other Nanoservices do not operate error-free
+anymore. When two Nanoservices run in the same process, the operating
+system cannot intervene in such situations. In addition, a crash of a
+Nanoservice can result in the failure of additional Nanoservices. If
+the processes crashes, it will affect all Nanoservices running in the
+same process.</li>
+</ul>
+
+<p class="calibre3">The technical compromises can have a negative effect on the properties
+of Nanoservices. In any case the essential feature of Microservices
+has to be maintained – namely, the independent deployment of the
+individual services.</p>
+
+<h5 id="leanpub-auto-compromises" class="calibre15">Compromises</h5>
+
+<p class="calibre3">In the end the main task is to identify technologies which minimize
+the overhead per Nanoservice and at the same time preserve as many
+advantages of Microservices as possible.</p>
+
+<p class="calibre3">In detail the following points need to be achieved:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The expenditure for infrastructure such as monitoring and
+deployment has to be kept low. It has to be possible to bring a new
+Nanoservice into production without much effort and to have it
+immediately displayed in monitoring.</li>
+  <li class="calibre14">Resource utilization for instance in regards to memory should be as
+low as possible to allow a large number of Nanoservices also with
+little hardware. This does not only make the production environment
+cheaper, but also facilitates the generation of test environments.</li>
+  <li class="calibre14">Communication should be possible without network. This does not only
+improve latency and performance, but increases the reliability of the
+communication between Nanoservices because it is not influenced by
+network failures.</li>
+  <li class="calibre14">Concerning isolation a compromise has to be
+found. The Nanoservices should be isolated from each other so that one
+Nanoservice cannot cause another Nanoservice to fail. Otherwise a
+single Nanoservice might cause the entire system to break
+down. However, achieving a perfect isolation might be less important
+than having a lower expenditure for infrastructure, a low resource
+utilization and the other advantages of Nanoservices.</li>
+  <li class="calibre14">Using Nanoservices can limit the choice of programming languages,
+platforms 
+and frameworks. Microservices on the other hand allow in principle a
+free choice of technology.</li>
+</ul>
+
+<h5 id="leanpub-auto-desktop-applications" class="calibre15">Desktop Applications</h5>
+
+<p class="calibre3">Nanoservices enable the use of Microservice approaches in areas in
+which Microservices themselves are hardly useable. One example is the
+possibility to divide a desktop application in Nanoservices. OSGi
+(<a href="part0020.html#section15-4">section 15.4</a>) is for instance used for desktop and
+even for embedded applications. A desktop application consisting of
+Microservices is on the other hand probably too difficult to deploy to
+really use it for desktop applications. Each Microservice has to be deployed
+by itself and that is hardly possible for a large number of desktop
+clients - some of which might even be located in other companies. Moreover
+the integration of several Microservices into a coherent desktop
+application is hard - in particular if they are implemented as
+completely separated processes.</p>
+
+<h3 id="section15-2" class="calibre2">15.2 Nanoservices: Definition</h3>
+
+<p class="calibre3">A Nanoservice differs from a Microservice: It compromises in certain
+areas. One of these areas is isolation: Multiple Nanoservices run on a
+single virtual machine or in a single process. Another area is
+technology freedom: Nanoservices use a shared platform or programming
+language. Only with these limitations does the use of Nanoservices become
+feasible. The infrastructure can be so efficient that a much larger
+number of services is possible. This allows the individual services to
+be smaller. A Nanoservice might comprise only a few lines of code.</p>
+
+<p class="calibre3">However, by no means may the technology require a joint deployment of
+Nanoservices since independent deployment is the central
+characteristic of Microservices and also Nanoservices. Independent
+deployment constitutes the basis for the essential advantages of
+Microservices: Teams which can work independently, a strong
+modularization and as consequence a sustainable development.</p>
+
+<p class="calibre3">Therefore, Nanoservices can be defined as follows:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Nanoservices <em class="calibre20">compromise</em> in regards to some Microservice
+properties such as isolation and technology freedom. However,
+Nanoservices still have to be independently deployable.</li>
+  <li class="calibre14">The compromises allow for a <em class="calibre20">larger number</em> of services and
+therefore for <em class="calibre20">smaller services</em>. Nanoservices can contain just a few
+lines of code.</li>
+  <li class="calibre14">To achieve this, Nanoservices use <em class="calibre20">highly efficient runtime
+environments</em>. These exploit the restrictions of Nanoservices in order
+to allow for more and smaller services.</li>
+</ul>
+
+<p class="calibre3">Thus Nanoservices depend a lot on the employed technologies. The
+technology enables certain compromises in Nanoservices and therefore
+Nanoservices of a certain size. Therefore, this chapter is geared to
+different technologies to explain the possible varieties of
+Nanoservices.</p>
+
+<p class="calibre3">The objective of Nanoservices is to amplify a number of advantages of
+Microservices. Having even smaller deployment units decreases the
+deployment risk further, facilitates deployment even more and achieves
+better understandable and replaceable services. In addition, the
+domain architecture will change: A <em class="calibre20">Bounded Context</em> which might
+consist of one or a few Microservices will now comprise a multitude of
+Nanoservices which each implement a very narrowly defined
+functionality.</p>
+
+<p class="calibre3">The difference between Microservices and Nanoservices is not strictly defined:
+If two Microservices are deployed in the same virtual machine,
+efficiency increases and isolation is compromised. The two
+Microservices now share an operating system instance and a virtual
+machine. When one of the Microservices uses up the resources of the
+virtual machine, the other Microservice running on the same virtual
+machine will also fail. This is the compromise in terms of
+isolation. So in a sense these Microservices are already Nanoservices.</p>
+
+<p class="calibre3">By the way, the term “Nanoservice” is not used very much. This book
+uses the term “Nanoservice” to make it plain that there are
+modularizations which are similar to Microservices, but differ when it
+comes to detail thereby allowing for even smaller services. To
+distinguish these technologies with their compromises clearly from
+“real” Microservices the term “Nanoservice” is useful.</p>
+
+<h3 id="section15-3" class="calibre2">15.3 Amazon Lambda</h3>
+
+<p class="calibre3"><a href="http://aws.amazon.com/lambda">Amazon Lambda</a> is a service in the
+Amazon Cloud. It is available worldwide in all Amazon computing
+centers.</p>
+
+<p class="calibre3">Amazon Lambda can execute individual functions which are written in
+Python, JavaScript with Node.js or Java 8 with OpenJDK. The code of
+these functions does not have dependencies on Amazon Lambda. Access to
+the operating system is possible. The computers the code is executed
+on contain the Amazon Web Services SDK as well as ImageMagick for image
+manipulations. These functionalities can be used by Amazon Lambda
+applications. Besides additional libraries can be installed.</p>
+
+<p class="calibre3">Amazon Lambda functions have to start quickly because it can happen
+that they are started for each request. Therefore, the functions may
+also not hold a state.</p>
+
+<p class="calibre3">Thus there are no costs when there are no requests that cause an
+execution of the functions. Each request is billed
+individually. Currently the first million requests is for free and a
+further million costs 0,20 $.</p>
+
+<h5 id="leanpub-auto-calling-lambda-functions" class="calibre15">Calling Lambda Functions</h5>
+
+<p class="calibre3">Lambda functions can be called directly via a command line tool. The
+processing occurs asynchronously. The functions can return results via
+different Amazon functionalities. For this purpose, the Amazon Cloud
+contains messaging solutions such as SNS (Simple Notification Service)
+or SQS (Simple Queuing Service).</p>
+
+<p class="calibre3">The following events can trigger a call of a Lambda function:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">In S3 (Simple Storage Service) large files can be stored and
+downloaded. Such actions trigger events to which an Amazon Lambda
+function can react.</li>
+  <li class="calibre14">Amazon Kinesis can be used to administrate and distribute data
+streams. This technology is meant for the real time processing of
+large data amounts. Lambda can be called as reaction to new data in
+these streams.</li>
+  <li class="calibre14">With Amazon Cognito it is possible to use Amazon Lambda to provide
+simple backends for mobile applications.</li>
+  <li class="calibre14">The API Gateway provides a way to implement REST APIs using Amazon
+Lambda.</li>
+  <li class="calibre14">Furthermore it is possible to have Amazon Lambda functions be called at
+regular intervals.</li>
+  <li class="calibre14">As a reaction to a notification in SNS (Simple Notification Service)
+an Amazon Lambda function can be executed. As there are many
+services which can provide such notifications, this makes Amazon Lambda
+useable in many scenarios.</li>
+  <li class="calibre14">DynamoDB is a database within the Amazon Cloud. In case of changes
+to the database it can call Lambda functions. So Lambda functions
+essentially become database triggers.</li>
+</ul>
+
+<h5 id="leanpub-auto-evaluation-for-nanoservices" class="calibre15">Evaluation for Nanoservices</h5>
+
+<p class="calibre3">Amazon Lambda allows the independent deployment of different functions
+without problems. They can also bring their own libraries along.</p>
+
+<p class="calibre3">The technological expenditure for infrastructure is minimal when using
+this technology: A new version of an Amazon Lambda function can easily
+be deployed with a command line tool. Monitoring is also simple: The
+functions are immediately integrated into Cloud Watch. Cloud Watch is
+offered by Amazon to create metrics of Cloud applications and to
+consolidate and monitor log files. In addition, alarms can be defined
+based on these data which can be forwarded by SMS or email. Since all
+Amazon services can be contacted via an API, monitoring or deployment
+can be automated and integrated into their own infrastructures.</p>
+
+<p class="calibre3">Amazon Lambda provides integration with the different Amazon services
+e.g. S3, Kinesis and DynamoDB. It is also easily possible to contact
+an Amazon Lambda function via REST using the API Gateway. However,
+Amazon Lambda exacts that Node.js, Python or Java are used. This
+profoundly limits the technology freedom.</p>
+
+<p class="calibre3">Amazon Lambda offers an excellent isolation of functions. This is also
+necessary since the platform is used by many different users. It would
+not be acceptable for a Lambda function of one user to negatively
+influence the Lambda functions of other users.</p>
+
+<h5 id="leanpub-auto-conclusion-5" class="calibre15">Conclusion</h5>
+
+<p class="calibre3">Amazon Lambda allows to implement extremely small services. The
+overhead for the individual services is very small. Independent
+deployment is easily possible. A Python, JavaScript or Java function
+are the smallest deployment units supported by Amazon Lambda – it is
+hardly possible to make them any smaller. Even if there is a multitude
+of Python, Java or JavaScript functions, the expenditure for the
+deployments remains relatively low.</p>
+
+<p class="calibre3">Amazon Lambda is a part of the Amazon ecosystem. Therefore, it can be
+supplemented by technologies like Amazon Elastic Beanstalk. There
+Microservices can run which can be larger and written in other
+languages. In addition, a combination with EC2 (Elastic Computing
+Cloud) is possible. EC2 offers virtual machines on which any software
+can be installed. Moreover, there is a broad choice in regards to
+databases and other services which can be used with little additional
+effort. Amazon Lambda defines itself as a supplement of this tool
+kit. In the end one of the crucial advantages of the Amazon Cloud is
+that nearly every possible infrastructure is available and can easily
+be used. Thus developers can concentrate on the development of
+specific functionalities while most standard components can just be
+rented.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-38" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">There is a
+<a href="http://aws.amazon.com/lambda/getting-started/">comprehensive tutorial</a>
+which illustrates how to use Amazon Lambda. It does not only
+demonstrate simple scenarios, but also shows how to use complex
+mechanisms such as different Node.js libraries, implementing REST
+services or how to react to different events in the Amazon
+system. Amazon offers cost free quotas of most services to new
+customers. In case of Lambda each customer gets such a large free
+quota that it is fully sufficient for tests and a first getting to
+know the technology. Also note that the first million calls during a
+month are free. However, you should check the current
+<a href="https://aws.amazon.com/lambda/pricing/">pricing</a>.</p>
+
+</aside>
+
+<h3 id="section15-4" class="calibre2">15.4 OSGi</h3>
+
+<p class="calibre3"><a href="http://www.osgi.org/">OSGi</a> is a standard with many
+<a href="http://en.wikipedia.org/wiki/OSGi#Current_framework_implementations">different implementations</a>. Embedded
+systems often use OSGi. Also the development environment Eclipse is
+based on OSGi, and many Java desktop applications use the Eclipse
+framework. OSGi defines a modularization within the JVM
+(Java Virtual Machine). Even though Java allows for a division of code
+into classes or packages, there is no modular concept for larger units.</p>
+
+<h5 id="leanpub-auto-the-osgi-module-system" class="calibre15">The OSGi Module System</h5>
+
+<p class="calibre3">OSGi supplements Java by such a module system. To do so OSGi
+introduces bundles into the Java world. Bundles are based on Java’s
+JAR files which comprise code of multiple classes. Bundles have a
+number of additional entries in the file <strong class="calibre19">META-INF/MANIFEST.MF</strong>,
+which each JAR file should contain. These entries define which classes
+and interfaces the bundle exports. Other bundles can import these
+classes and interfaces. Thereby OSGi extends Java with a quite
+sophisticated module concept without inventing entirely new concepts.</p>
+
+<figure class="code" id="Listing12">
+  <figcaption class="calibre39">Listing 12: OSGi MANIFEST.MF</figcaption>
+
+<div class="highlight"><pre class="calibre40"><code class="lineno">1 </code>Bundle-Name: A service
+<code class="lineno">2 </code>Bundle-SymbolicName: com.ewolff.service
+<code class="lineno">3 </code>Bundle-Description: A small service
+<code class="lineno">4 </code>Bundle-ManifestVersion: 2
+<code class="lineno">5 </code>Bundle-Version: 1.0.0
+<code class="lineno">6 </code>Bundle-Acltivator: com.ewolff.service.Activator
+<code class="lineno">7 </code>Export-Package: com.ewolff.service.interfaces;version="1.0.0"
+<code class="lineno">8 </code>Import-Package: com.ewolff.otherservice.interfaces;version="1.3.0"
+</pre></div>
+
+</figure>
+
+<p class="calibre3"><a href="part0020.html#Listing12">Listing 12</a> shows an example of a <strong class="calibre19">MANIFEST.MF</strong>
+file. It contains the description and name of the bundle and the
+bundle activator. This Java class is executed upon the start of the
+bundle and can initialize the bundle. <strong class="calibre19">Export-Package</strong> indicates
+which Java packages are provided by this bundle. All classes and
+interfaces of these packages are available to other
+bundles. <strong class="calibre19">Import-Package</strong> serves to import packages from another
+bundle. The packages can also be versioned.</p>
+
+<p class="calibre3">In addition to interfaces and classes bundles can also export
+services. However, an entry in <strong class="calibre19">MANIFEST.MF</strong> is not sufficient for
+this. Code has to be written. Services are in the end only Java
+objects. Other bundles can import and use the services. Also calling
+the services happens in the code.</p>
+
+<p class="calibre3">Bundles can be installed, started, stopped and uninstalled at
+runtime. So bundles are easy to update: Stop and uninstall the old
+version, then install a new version and start. However, if a bundle
+exports classes or interfaces and another bundle uses these, an update
+is not so simple anymore. All bundles which use classes or interfaces
+of the old bundle and now want to use the newly installed bundle have
+to be restarted.</p>
+
+<h5 id="leanpub-auto-handling-bundles-in-practice" class="calibre15">Handling Bundles in Practice</h5>
+
+<p class="calibre3">Sharing code is by far not as important for Microservices 
+as the use of services. Nevertheless at least the interface of the
+services has to be offered to other bundles.</p>
+
+<p class="calibre3">In practice a procedure has been established where a bundle only
+exports the interface code of the service as classes and
+Java interfaces. Another bundle contains the implementation of the
+service. The classes of the implementation are not exported. The
+service implementation is exported as OSGi service. To use the service
+a bundle has to import the interface code from the one bundle and the
+service from the other bundle (compare <a href="part0020.html#Fig79">Fig. 79</a>).</p>
+
+<p class="calibre3">OSGi allows to restart services. With the described approach the
+implementation of the service can be exchanged without having to
+restart other bundles. These bundles only import the Java interfaces
+and classes of the interface code. That code does not change for a new
+service implementation so that restarting is not necessary
+anymore. That way the access to services can be implemented in such a
+manner that the new version of the service is in fact used.</p>
+
+<p class="calibre3">With the aid of <a href="http://wiki.osgi.org/wiki/Blueprint">OSGi blueprints</a>
+or
+<a href="http://wiki.osgi.org/wiki/Declarative_Services">OSGi declarative services</a>
+these details can be abstracted away when dealing with the OSGi
+service model. This facilitates the handling of OSGi. These
+technologies for instance render it much easier to handle the
+restart of a service or its temporary failure during the restart of a bundle.</p>
+
+
+<figure id="Fig79" class="image">
+  <img src="../images/00081.jpeg" alt="Fig. 79: OSGi service, implementation and interface code" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 79: OSGi service, implementation and interface code</figcaption>
+</figure>
+
+
+<p class="calibre3">An independent deployment of services is possible, but also laborious
+since interface code and service implementation have to be contained
+in different bundles. This model allows only changes to the
+implementation. Modifications of the interface code are more
+complex. In such a case the bundles using a service have to be
+restarted because they have to reload the interface.</p>
+
+<p class="calibre3">In reality OSGi systems are often completely reinstalled for these
+reasons instead of modifying individual bundles. An Eclipse update for
+instance often entails a restart. A complete reinstallation
+facilitates also the reproduction of the environment. When an OSGi
+system is dynamically changed, at some point it will be in a state
+which nobody is able to reproduce. However, modifying individual
+bundles is an essential prerequisite for implementing the Nanoservice
+approach with OSGi. Independent deployment is an essential property of
+a Nanoservice. So OSGi compromises this essential property.</p>
+
+<h5 id="leanpub-auto-evaluation-for-nanoservices-1" class="calibre15">Evaluation for Nanoservices</h5>
+
+<p class="calibre3">OSGi has a positive effect on Java projects in regards to
+architecture. The bundles are usually relatively small so that the
+individual bundles are easy to understand. In addition, the split into
+bundles forces the developers and architects to think about the
+relationships between the bundles and to define them in the
+configurations of the bundles. Other dependencies between bundles are
+not possible within the system. Normally this leads to a very clean
+architecture with clear and intended dependencies.</p>
+
+<p class="calibre3">However, OSGi does not offer technological freedom: It is based on the
+JVM and therefore can only be used with Java or JVM-based
+languages. For example, it is nearly impossible that an OSGi bundle
+brings along its own database because databases are normally not
+written in Java. For such cases additional solutions alongside the
+OSGi infrastructure have to be found.</p>
+
+<p class="calibre3">For some Java technologies an integration with OSGi is difficult since
+loading Java classes works differently without OSGi. Moreover, many
+popular Java application servers do not support OSGi for deployed
+applications so that changing code at runtime is not supported in such
+environments. The infrastructure has to be specially adapted for OSGi.</p>
+
+<p class="calibre3">Furthermore, the bundles are not fully isolated: When a bundle
+uses a lot of CPU or causes the JVM to crash, the other bundles
+in the same JVM will be affected. Failures can occur for instance due
+to memory leak which causes more and more memory to be allocated due
+to an error until the system breaks down. Such errors easily arise due
+to blunders.</p>
+
+<p class="calibre3">On the other hand, the bundles can locally communicate due to
+OSGi. Distributed communication is also possible with different
+protocols. Moreover, the bundles share a JVM which reduces for
+instance the memory utilization.</p>
+
+<p class="calibre3">Solutions for monitoring are likewise present in the different OSGi
+implementations.</p>
+
+<h5 id="leanpub-auto-conclusion-6" class="calibre15">Conclusion</h5>
+
+<p class="calibre3">OSGi leads first of all to restrictions in regards to technological
+freedom. It restricts the project to Java technologies. In practice
+the independent deployment of the bundles is hard to
+implement. Especially interface changes are poorly supported. Besides
+bundles are not well isolated from each other. On the other hand,
+bundles can easily interact via local calls.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-39" class="calibre15">Try and experiment</h5>
+
+<aside class="exercise">
+    <ul class="calibre16">
+    <li class="calibre14">Get familiar with OSGi for instance with the aid of a
+ <a href="http://www.vogella.com/tutorials/OSGi/article.html">tutorial</a>.</li>
+  </ul>
+
+</aside>
+
+<aside class="exercise">
+    <ul class="calibre16">
+    <li class="calibre14">Create a concept for the distribution into bundles and services for a
+part of a system you know.</li>
+    <li class="calibre14">If you had to implement the system with OSGi: Which additional
+ technologies (databases etc.) would you have to use? How
+ would you handle this?</li>
+  </ul>
+
+</aside>
+
+<h3 id="section15-5" class="calibre2">15.5 Java EE</h3>
+
+<p class="calibre3"><a href="http://www.oracle.com/technetwork/java/javaee/overview/index.html">Java EE</a>
+is a standard from the Java field. It comprises different APIs such as
+for instance JSF (Java ServerFaces), Servlet and JSP (Java Server
+Pages) for web applications, JPA (Java Persistence API) for
+persistence or JTA for transactions. Besides Java EE defines a
+deployment model. Web applications can be packaged into WAR files (Web
+ARchive), JAR files (Java ARchive) can contain logic components like
+Enterprise Java Beans (EJBs), and EARs (Enterprise ARchives) can
+comprise a collection of JARs and WARs. All these components are
+deployed in one application server. The application server implements
+the Java EE APIs and offers for instance support for HTTP, threads and
+network connections and also support for accessing databases.</p>
+
+<p class="calibre3">This section deals with WARs and the deployment model of Java EE
+application servers. <a href="part0019.html#chapter-14">Chapter 14</a> already described in
+detail a Java system that does not require an application
+server. Instead it directly starts a Java application on the Java
+Virtual Machine (JVM). The application is packaged in a JAR file and
+contains the entire infrastructure. This deployment is called Fat JAR
+deployment, because the application including the entire
+infrastructure is contained in one single JAR. The example from
+<a href="part0019.html#chapter-14">chapter 14</a> uses Spring Boot which also supports a
+number of Java EE APIs such as JAX-RS for
+REST. <a href="https://dropwizard.github.io/dropwizard/">Dropwizard</a> also
+offers such a JAR model. It is actually focused on JAX RS-based REST
+web services, however, it can also support other
+applications. <a href="http://github.com/wildfly-swarm/">Wildfly Swarm</a> is a
+variant of the Java EE server Wildfly which also supports such a
+deployment model.</p>
+
+<h5 id="leanpub-auto-nanoservices-with-java-ee" class="calibre15">Nanoservices with Java EE</h5>
+
+<p class="calibre3">A Fat JAR deployment utilizes too many resources for
+Nanoservices. In a Java EE application server multiple WARs
+can be deployed thereby saving resources. Each WAR can be accessed via
+its own URL. Furthermore, each WAR can be individually deployed. This
+allows to bring each Nanoservice individually into production.</p>
+
+<p class="calibre3">However, the separation between WARs is not optimal:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Memory and CPU are collectively used by all Nanoservices. When a
+Nanoservice uses a lot of CPU or memory, this can interfere with
+other Nanoservices. A crash of one Nanoservice propagates to all
+other Nanoservices.</li>
+  <li class="calibre14">In practice, redeployment of a WAR causes memory leaks if
+it is not possible to remove the entire application from
+memory. Therefore, in practice the independent deployment of
+individual Nanoservices is hard to achieve.</li>
+  <li class="calibre14">In contrast to OSGi the ClassLoaders of the WARs are completely
+separate. There is no possibility for accessing the code of other
+Nanoservices.</li>
+  <li class="calibre14">Because of the separation of the code WARs can only communicate via
+HTTP or REST. Local method calls are not possible.</li>
+</ul>
+
+<p class="calibre3">Since multiple Nanoservices share an application server and a JVM,
+this solution is more efficient than the Fat JAR Deployment of
+individual Microservices in their own JVM as described in
+<a href="part0019.html#chapter-14">chapter 14</a>. The Nanoservices use a shared heap and
+thereby use less memory. However, scaling works only by starting more
+application servers. Each of the application servers contains all
+Nanoservices. All Nanoservices have to be scaled collectively. It is
+not possible to scale individual Nanoservices.</p>
+
+<p class="calibre3">The technology choice is restricted to JVM technologies. Besides all
+technologies are excluded which do not work with the servlet model
+such as Vert.x (<a href="part0020.html#section15-6">section 15.6</a>) or Play.</p>
+
+<h5 id="leanpub-auto-microservices-with-java-ee" class="calibre15">Microservices with Java EE?</h5>
+
+<p class="calibre3">For Microservices Java EE can also be an option: Theoretically it
+would be possible to run each Microservice in its own application
+server. In this case an application server has to be installed and
+configured in addition to the application. The version of the
+application server and its configuration have to fit to the version of
+the application. For Fat JAR deployment there is no need for a
+specific configuration of the application server because it is part of
+the Fat JAR and therefore configured just like the application. This
+additional complexity of the application server is not counterbalanced
+by any advantage. Since deployment and monitoring of the application
+server only work for Java applications, these features can only be
+used in a Microservices-based architecture when the technology choice
+is restricted to Java technologies. In general,
+<a href="http://jaxenter.com/java-application-servers-dead-1-111928.html">application servers have hardly any advantages</a>
+– especially for Microservices.</p>
+
+<h5 id="leanpub-auto-an-example-1" class="calibre15">An example</h5>
+
+<p class="calibre3">The application from <a href="part0019.html#chapter-14">chapter 14</a> is also available with
+the
+<a href="https://github.com/ewolff/javaee-example/">Java EE deployment model</a>. <a href="part0020.html#Fig80">Fig. 80</a>
+provides an overview of the example: There are three WARs, which
+comprise order, customer and catalog. They communicate with each other
+via REST. When customer fails, order would also fail in the host
+since order communicates only with this single customer instance. To
+achieve better availability, the access would have to be rerouted to
+other customer instances.</p>
+
+<p class="calibre3">A customer can use the UI of the Nanoservices from the outside via
+HTML/HTTP. The code contains only small modifications compared to the
+solution from <a href="part0019.html#chapter-14">chapter 14</a>. The Netflix libraries have
+been removed. On the other hand, the application has been extended
+with support for servlet containers.</p>
+
+
+<figure id="Fig80" class="image">
+  <img src="../images/00082.jpeg" alt="Fig. 80: Example application with Java EE Nanoservices" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 80: Example application with Java EE Nanoservices</figcaption>
+</figure>
+
+
+<h5 id="leanpub-auto-try-and-experiment-40" class="calibre15">Try and Experiment</h5>
+
+<p class="calibre3">The application as Java EE Nanoservices can be found
+<a href="https://github.com/ewolff/javaee-example/">on GitHub</a>.</p>
+
+<p class="calibre3">The application does not use the Netflix technologies.</p>
+
+<aside class="exercise">
+    <p class="calibre3">Hystrix offers Resilience (compare <a href="part0019.html#section14-10">section 14.10</a>).</p>
+
+  <ul class="calibre16">
+    <li class="calibre14">Does it make sense to integrate Hystrix into the application?</li>
+    <li class="calibre14">How are the Nanoservices isolated from each other?</li>
+    <li class="calibre14">Is Hystrix always helpful?</li>
+    <li class="calibre14">Compare also <a href="part0014.html#section10-5">section 10.5</a> concerning stability and
+ resilience. How can these patterns be implemented in this
+ application?</li>
+  </ul>
+
+</aside>
+
+<aside class="exercise">
+    <ul class="calibre16">
+    <li class="calibre14">Eureka is helpful for service discovery. How would it fit into the
+Java EE Nanoservices?</li>
+    <li class="calibre14">How can other service discovery technologies be integrated (compare
+<a href="part0012.html#section8-9">section 8.9</a>)?</li>
+  </ul>
+
+</aside>
+
+<aside class="exercise">
+    <ul class="calibre16">
+    <li class="calibre14">Ribbon for load balancing between REST services could likewise be
+ integrated. Which advantages would that have? Would it also be
+ possible to use Ribbon without Eureka?</li>
+  </ul>
+
+</aside>
+
+<h3 id="section15-6" class="calibre2">15.6 Vert.x</h3>
+
+<p class="calibre3"><a href="http://vertx.io/">Vert.x</a> is a framework containing numerous
+interesting approaches. Although it runs on the (Java Virtual
+Machine), it supports many different programming languages – such as
+Java, Scala, Clojure, Groovy, Ceylon as well as JavaScript, Ruby or
+Python. A Vert.x system is built from Verticles. They receive events
+and can return messages.</p>
+
+<p class="calibre3"><a href="part0020.html#Listing13">Listing 13</a> shows a simple Vert.x Verticle, which only
+returns the incoming messages. The code creates a server. When a
+client connects to the server, a callback is called, and the server
+creates a pump. The pump serves to transfer data from a source to a
+target. In the example source and target are identical.</p>
+
+<p class="calibre3">The application becomes only active when a client connects and the
+callback is called. Likewise, the pump becomes only active when new
+data are available from the client. Such events are processed by the
+event loop which calls the Verticles. The Verticles then have to
+process the events. An event loop is a thread. Usually one event loop
+is started per CPU core so that the event loops are processed in
+parallel. An event loop and thus a thread resp. a CPU core can support
+an arbitrary number of network connections. Events of all connections
+can be processed in a single event loop. Therefore, Vert.x is also
+suitable for applications which have to handle a large number of
+network connections.</p>
+
+<figure class="code" id="Listing13">
+  <figcaption class="calibre39">Listing 13: Simple Java Vert.x Echo Verticle</figcaption>
+
+<div class="highlight"><pre class="calibre40"><code class="lineno"> 1 </code><code class="kd">public</code> <code class="kd">class</code> <code class="nc">EchoServer</code> <code class="kd">extends</code> <code class="n">Verticle</code> <code class="o">{</code>
+<code class="lineno"> 2 </code>
+<code class="lineno"> 3 </code>  <code class="kd">public</code> <code class="kt">void</code> <code class="nf">start</code><code class="o">()</code> <code class="o">{</code>
+<code class="lineno"> 4 </code>    <code class="n">vertx</code><code class="o">.</code><code class="na">createNetServer</code><code class="o">().</code><code class="na">connectHandler</code><code class="o">(</code><code class="kd">new</code> <code class="n">Handler</code><code class="o">&lt;</code><code class="n">NetSocket</code><code class="o">&gt;()</code> <code class="o">{</code>
+<code class="lineno"> 5 </code>      <code class="kd">public</code> <code class="kt">void</code> <code class="nf">handle</code><code class="o">(</code><code class="kd">final</code> <code class="n">NetSocket</code> <code class="n">socket</code><code class="o">)</code> <code class="o">{</code>
+<code class="lineno"> 6 </code>        <code class="n">Pump</code><code class="o">.</code><code class="na">createPump</code><code class="o">(</code><code class="n">socket</code><code class="o">,</code> <code class="n">socket</code><code class="o">).</code><code class="na">start</code><code class="o">();</code>
+<code class="lineno"> 7 </code>      <code class="o">}</code>
+<code class="lineno"> 8 </code>    <code class="o">}).</code><code class="na">listen</code><code class="o">(</code><code class="o">1234</code><code class="o">);</code>
+<code class="lineno"> 9 </code>  <code class="o">}</code>
+<code class="lineno">10 </code><code class="o">}</code>
+</pre></div>
+
+</figure>
+
+<p class="calibre3">As described Vert.x supports different programming
+languages. <a href="part0020.html#Listing14">Listing 14</a> shows the same Echo Verticle in
+JavaScript. The code adheres to JavaScript conventions and uses for
+instance a JavaScript function for callback. Vert.x has a layer for
+each programming language that adapts the basic functionality in such
+a way that it seems like a native library for the respective
+programming language.</p>
+
+<figure class="code" id="Listing14">
+  <figcaption class="calibre39">Listing 14: Simple JavaScript Vert.x Echo Verticle</figcaption>
+
+<div class="highlight"><pre class="calibre40"><code class="lineno">1 </code><code class="kd">var</code> <code class="n">vertx</code> <code class="o">=</code> <code class="n">require</code><code class="n">(</code><code class="s">'vertx'</code><code class="n">)</code>
+<code class="lineno">2 </code>
+<code class="lineno">3 </code><code class="n">vertx</code><code class="n">.</code><code class="n">createNetServer</code><code class="n">().</code><code class="n">connectHandler</code><code class="n">(</code><code class="kd">function</code><code class="n">(</code><code class="n">sock</code><code class="n">)</code> <code class="n">{</code>
+<code class="lineno">4 </code>  <code class="kd">new</code> <code class="n">vertx</code><code class="n">.</code><code class="n">Pump</code><code class="n">(</code><code class="n">sock</code><code class="n">,</code> <code class="n">sock</code><code class="n">).</code><code class="n">start</code><code class="n">();</code>
+<code class="lineno">5 </code><code class="n">}).</code><code class="n">listen</code><code class="n">(</code><code class="o">1234</code><code class="n">);</code>
+</pre></div>
+
+</figure>
+
+<p class="calibre3">Vert.x modules can contain multiple Verticles in different
+languages. Verticles and modules can communicate with each other via
+an event bus. The messages on the event bus use JSON as data
+format. The event bus can be distributed onto multiple servers. In
+this manner Vert.x supports distribution and can implement high
+availability by starting modules on other servers. Besides the
+Verticles and modules are loosely coupled since they only exchange
+messages. Vert.x also offers support for other messaging systems and
+can also communicate with HTTP and REST. So it is relatively easy to
+integrate Vert.x systems into Microservice-based systems.</p>
+
+<p class="calibre3">Modules can be individually deployed and also removed again. Since the
+modules communicate with each other via events, modules can be easily
+replaced by new modules at runtime. They only have to process the same
+messages. A module can implement a Nanoservice. Modules can be started
+in new nodes so that the failure of a JVM can be compensated.</p>
+
+<p class="calibre3">Vert.x supports also Fat JARs where the application brings all
+necessary libraries along. This is useful for Microservices since this
+means that the application brings all dependencies along and is
+easier to deploy. For Nanoservices this approach is not so useful
+because the approach consumes too many resource - deploying multiple
+Vert.x modules in one JVM is a better option for Nanoservices.</p>
+
+<h5 id="leanpub-auto-conclusion-7" class="calibre15">Conclusion</h5>
+
+<p class="calibre3">Via the independent module deployment and the loose coupling by the
+event bus Vert.x supports multiple Nanoservices within a
+JVM. However, a crash of the JVM, a memory leak or blocking the
+event loop would affect all modules and Verticles in the JVM. On the
+other hand, Vert.x supports many different programming languages – in
+spite of the restriction to JVM. This is not only a theoretical
+option. In fact Vert.x aims at being easily useable in all supported
+languages. Vert.x presumes that the entire application is written in a
+non blocking manner. However, there is the possibility to execute
+blocking tasks in Worker Verticles. They use separate thread pools so
+that they do not influence the non blocking Verticles. So even code
+that does not support the Vert.x non blocking approach can still be used
+in a Vert.x system. This allows for even greater technological freedom.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-41" class="calibre15">Try and Experiment</h5>
+
+<p class="calibre3">The <a href="http://vertx.io/">Vert.x homepage</a> offers an easy start to
+developing with Vert.x. It demonstrates how a web server can be
+implemented and executed with different programming languages. The
+modules in the example use Java and
+<a href="http://vertx.io/maven_dev.html">Maven</a>. There are also
+<a href="https://github.com/vert-x/vertx-examples">complex examples in other programming languages</a>.</p>
+
+<h3 id="section15-7" class="calibre2">15.7 Erlang</h3>
+
+<p class="calibre3"><a href="http://www.erlang.org/">Erlang</a> is a functional programming language
+which is first of all used in combination with the OTP (Open Telecom
+Platform) framework. Originally, Erlang has been developed for
+telecommunication. In this field applications have to be very
+reliable. Meanwhile Erlang is employed in all areas which profit from
+its strengths. Erlang uses a virtual machine
+similar to Java as runtime environment which is called BEAM (Bogdan/ Björn’s Erlang Abstract
+Machine).</p>
+
+<p class="calibre3">Erlang’s strengths are first of all its resilience against failures
+and the possibility to let systems run for years. This is only
+possible via dynamic software updates. At the same time Erlang has a
+light-weight concept for parallelism. Erlang uses the concept of
+processes for parallel computing. These processes are not related to
+operating system processes and are even more light-weight than
+operating system threads. In an Erlang system millions of processes
+can run which are all isolated from each other.</p>
+
+<p class="calibre3">Another factor contributing to the isolation is the asynchronous
+communication. Processes in an Erlang system communicate with each
+other via messages. Messages are sent to the mailbox of a process (see
+<a href="part0020.html#Fig81">Fig. 81</a>). In one process only one message is processed at a
+time. This facilitates the handling of parallelism: There is parallel
+execution because many messages can be handled at the same time. But
+each process takes care of only one message at a time. Parallelism is
+achieved because there are multiple processes. The functional
+approach of the language, which attempts to get by without a state,
+fits well to this model. This approach corresponds to the Verticles in
+Vert.x and their communication via the event bus.</p>
+
+
+<figure id="Fig81" class="image">
+  <img src="../images/00083.jpeg" alt="Fig. 81: Communication between Erlang processes" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 81: Communication between Erlang processes</figcaption>
+</figure>
+
+
+<p class="calibre3"><a href="part0020.html#Listing15">Listing 15</a> shows a simple Erlang server which returns
+the received message. It is defined in its own module. The module
+exports the function <strong class="calibre19">loop</strong>, which does not have any parameters. The
+function receives a message <strong class="calibre19">Msg</strong> from a node <strong class="calibre19">From</strong> and then returns the
+same message to this node. The operator “!” serves for sending the
+message. Afterwards the function is called again and waits for the
+next message. Exactly the same code can also be used for being called
+by another computer via the network. Local messages and messages via
+the network are processed by the same mechanisms.</p>
+
+<figure class="code" id="Listing15">
+  <figcaption class="calibre39">Listing 15: An Erlang echo server</figcaption>
+
+<div class="highlight"><pre class="calibre40"><code class="lineno">1 </code><code class="n">-</code><code class="ni">module</code><code class="n">(</code><code class="n">server</code><code class="n">).</code>
+<code class="lineno">2 </code><code class="n">-</code><code class="ni">export</code><code class="n">([</code><code class="n">loop</code><code class="o">/</code><code class="o">0</code><code class="n">]).</code>
+<code class="lineno">3 </code><code class="nf">loop</code><code class="n">()</code> <code class="o">-&gt;</code>
+<code class="lineno">4 </code>    <code class="kd">receive</code>
+<code class="lineno">5 </code>      <code class="n">{</code><code class="ss">From</code><code class="n">,</code> <code class="ss">Msg</code><code class="n">}</code> <code class="o">-&gt;</code>
+<code class="lineno">6 </code>        <code class="ss">From</code> <code class="o">!</code> <code class="ss">Msg</code><code class="n">,</code>
+<code class="lineno">7 </code>        <code class="n">loop</code><code class="n">()</code>
+<code class="lineno">8 </code><code class="kd">end</code><code class="n">.</code>
+</pre></div>
+
+</figure>
+
+<p class="calibre3">Due to the sending of messages Erlang systems are especially
+robust. Erlang makes use of “Let It Crash”. An individual process is
+just restarted when problems occur. This is the responsibility of
+the supervisor: A process which is specifically dedicated to
+monitoring other processes and restarting them if necessary. The
+supervisor itself is also monitored and restarted in case of
+problems. Thereby a tree is created in Erlang which in the end
+prepares the system for the case that processes should fail (see
+<a href="part0020.html#Fig82">Fig. 82</a>).</p>
+
+
+<figure id="Fig82" class="image">
+  <img src="../images/00084.jpeg" alt="Fig. 82: Monitoring in Erlang systems" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 82: Monitoring in Erlang systems</figcaption>
+</figure>
+
+
+<p class="calibre3">Since the Erlang process model is so light-weight, restarting a
+process is rapidly done. When the state is stored in other components,
+there will also be no information loss. The remainder of the system
+is not affected by the failure of the process: As the communication is
+asynchronous, the other processes can handle the higher latency
+caused by the restart. In practice this approach has proven very
+reliable. Erlang systems are very robust and still easy to develop.</p>
+
+<p class="calibre3">This approach is based on the
+<a href="http://en.wikipedia.org/wiki/Actor_model">actor model</a>: Actors
+communicate with each other via asynchronous messages. As a response
+they can themselves send messages, start new actors or change their
+behavior for the next messages. Erlang’s processes correspond to
+actors.</p>
+
+<p class="calibre3">In addition, there are easy possibilities to monitor Erlang
+systems. Erlang itself has built-in functions which can monitor memory
+utilization or the state of the mailboxes. OTP offers for this purpose
+the Operations and Maintenance Support (OAM), which can for instance
+also be integrated into SNMP systems.</p>
+
+<p class="calibre3">Since Erlang solves typical problems arising upon the implementation
+of Microservices like resilience, it supports the implementation of
+<a href="https://www.innoq.com/en/talks/2015/01/talk-microservices-erlang-otp/">Microservices</a>
+quite well. In that case a Microservice is a system written in Erlang
+which internally consists of multiple processes.</p>
+
+<p class="calibre3">However, the services can also get smaller: Each process in an Erlang
+system could be considered as Nanoservice. It can be deployed
+independently of the others, even during runtime. Furthermore, Erlang
+supports operating system processes. In that case
+they are also integrated into the supervisor hierarchy and restarted
+in case of a break down. This means that any operating system process
+written in any language might become a part of an Erlang system and
+its architecture.</p>
+
+<h5 id="leanpub-auto-evaluation-for-nanoservices-2" class="calibre15">Evaluation for Nanoservices</h5>
+
+<p class="calibre3">As discussed an individual process in Erlang can be viewed as
+Nanoservice. The expenditure for the infrastructure is relatively
+small in that case: Monitoring is possible with built-in Erlang
+functions. The same is true for deployment. Since the processes share
+a BEAM instance, the overhead for a single process is not very
+high. In addition, it is possible for the processes to exchange
+messages without having to communicate via the network and therefore
+with little overhead. The isolation of processes is also
+implemented.</p>
+
+<p class="calibre3">Finally, even processes in other languages can be added to an Erlang
+system. For this purpose an operating system process which can be
+implemented in an arbitrary language is put under the control of
+Erlang. The operating system process can for instance be safeguarded
+by “Let It Crash”. This allows to integrate practically all
+technologies into Erlang – even if they run in a separate process.</p>
+
+<p class="calibre3">On the other hand, Erlang is not very common. The consequent
+functional approach also needs getting used to. Finally, the Erlang
+syntax is not very intuitive for many developers.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-42" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3"><a href="https://github.com/ewolff/erlang-example/">A very simple example</a> is
+based on the code from this section and demonstrates how communication
+between nodes is possible. You can use it to get a basic understanding
+of Erlang.</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">There is a very <a href="http://learnyousomeerlang.com/">nice tutorial</a> for
+Erlang, which also treats deployment and operation. With the aid of
+the information from the tutorial
+<a href="https://github.com/ewolff/erlang-example/">the example</a> can be
+supplemented by a supervisor.</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">An alternative language out of the Erlang ecosystem is
+<a href="https://github.com/ewolff/erlang-example/">Elixir</a>. Elixir has a
+different syntax, but also profits from the concepts of OTP. Elixir is
+much simpler to learn than Erlang and thus lends itself to a first
+start.</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">There are many other implementations of the
+<a href="http://en.wikipedia.org/wiki/Actor_model">actor model</a>. It is
+worthwhile to look more closely before deciding whether such
+technologies are also useful for the implementation of Microservices
+or Nanoservices and which advantages might be associated. Akka from
+the Scala / Java area might be of interest here.</p>
+
+</aside>
+
+<h3 id="section15-8" class="calibre2">15.8 Seneca</h3>
+
+<p class="calibre3"><a href="http://senecajs.org/">Seneca</a> is based on Node.js and accordingly
+uses JavaScript on the server. Node.js has a programming model where
+one operating system process can take care of many tasks in
+parallel. To achieve this there is an event loop which handles the
+events. When a message enters the system via a network connection, the
+system will first wait until the event loop is free. Then the event
+loop processes the message. The processing has to be fast since the
+loop is blocked otherwise resulting in long waiting times for all
+other messages. For this reason, the response of other servers may in
+no case be waited for in the event loop. That would block the system
+for too long. The interaction with other systems has to be implemented
+in such a way that the interaction is only initiated. Then the event
+loop is freed to handle other events. Only when the response of the
+other system arrives, it is processed by the event loop. Then the event
+loop calls a callback which has been registered upon the initiation of
+the interaction. This model is similar to the approaches used by
+Vert.x and Erlang.</p>
+
+<p class="calibre3">Seneca introduces a mechanism in Node.js which allows to process
+commands. Patterns of commands are defined which cause certain code
+to be executed.</p>
+
+<p class="calibre3">Communicating via such commands is also easy to do via the
+network. <a href="part0020.html#Listing16">Listing 16</a> shows a server which calls
+<strong class="calibre19">seneca.add()</strong>. Thereby a new pattern and code for handling events
+with this pattern are defined. To the command with the component
+<strong class="calibre19">cmd: “echo”</strong> a function reacts. It reads out the <strong class="calibre19">value</strong> from the
+command and puts it into the <strong class="calibre19">value</strong> parameter of the function
+<strong class="calibre19">callback</strong>. Then the function <strong class="calibre19">callback</strong> is called. With
+<strong class="calibre19">seneca.listen()</strong> the server is started and listens to commands from
+the network.</p>
+
+<figure class="code" id="Listing16">
+  <figcaption class="calibre39">Listing 16: Seneca Server</figcaption>
+
+<div class="highlight"><pre class="calibre40"><code class="lineno">1 </code><code class="kd">var</code> <code class="n">seneca</code> <code class="o">=</code> <code class="n">require</code><code class="n">(</code><code class="s">"seneca"</code><code class="n">)()</code>
+<code class="lineno">2 </code>
+<code class="lineno">3 </code><code class="n">seneca</code><code class="n">.</code><code class="n">add</code><code class="n">(</code> <code class="n">{</code><code class="n">cmd</code><code class="o">:</code> <code class="s">"echo"</code><code class="n">},</code> <code class="kd">function</code><code class="n">(</code><code class="n">args</code><code class="n">,</code><code class="n">callback</code><code class="n">){</code>
+<code class="lineno">4 </code>    <code class="n">callback</code><code class="n">(</code><code class="kd">null</code><code class="n">,{</code><code class="n">value</code><code class="o">:</code><code class="n">args</code><code class="n">.</code><code class="n">value</code><code class="n">})</code>
+<code class="lineno">5 </code><code class="n">})</code>
+<code class="lineno">6 </code>
+<code class="lineno">7 </code><code class="n">seneca</code><code class="n">.</code><code class="n">listen</code><code class="n">()</code>
+</pre></div>
+
+</figure>
+
+<p class="calibre3">The client in <a href="part0020.html#Listing17">Listing 17</a> sends all commands which cannot
+be processed locally via the network to the server.
+<strong class="calibre19">seneca.client(). seneca.act()</strong> creates the commands that are sent
+to the server. It contains <strong class="calibre19">cmd: “echo”</strong> – therefore the function of
+the server in <a href="part0020.html#Listing16">Listing 16</a> is called. <strong class="calibre19">“echo
+this”</strong> is used as value. The server returns this string to the function which
+was passed in as a callback – and in this way it is finally printed on
+the console. The example code can be found on
+<a href="https://github.com/ewolff/seneca-example/">GitHub</a>.</p>
+
+<figure class="code" id="Listing17">
+  <figcaption class="calibre39">Listing 16: Seneca Client</figcaption>
+
+<div class="highlight"><pre class="calibre40"><code class="lineno">1 </code><code class="kd">var</code> <code class="n">seneca</code><code class="o">=</code><code class="n">require</code><code class="n">(</code><code class="s">"seneca"</code><code class="n">)()</code>
+<code class="lineno">2 </code>
+<code class="lineno">3 </code><code class="n">seneca</code><code class="n">.</code><code class="n">client</code><code class="n">()</code>
+<code class="lineno">4 </code>
+<code class="lineno">5 </code><code class="n">seneca</code><code class="n">.</code><code class="n">act</code><code class="n">(</code><code class="err">'</code><code class="n">cmd</code><code class="o">:</code> <code class="s">"echo"</code><code class="n">,</code><code class="n">value</code><code class="o">:</code><code class="s">"echo this"</code><code class="n">,</code> <code class="kd">function</code><code class="n">(</code><code class="n">err</code><code class="n">,</code><code class="n">result</code><code class="n">){</code>
+<code class="lineno">6 </code>    <code class="n">console</code><code class="n">.</code><code class="n">log</code><code class="n">(</code> <code class="n">result</code><code class="n">.</code><code class="n">value</code> <code class="n">)</code>
+<code class="lineno">7 </code><code class="n">})</code>
+</pre></div>
+
+</figure>
+
+<p class="calibre3">Therefore, it is very easy to implement a distributed system with
+Seneca. However, the services do not use a standard protocol like REST
+for communicating. Nevertheless, also REST systems can be implemented
+with Seneca. Besides the Seneca protocol is based on JSON and
+therefore can also be used by other languages.</p>
+
+<p class="calibre3">A Nanoservice can be a function which reacts with Seneca to calls from
+the network – and therefore it can be very small. As already
+described, a Node.js system as implemented with Seneca is fragile when
+a function blocks the event loop. Therefore, the isolation is not very
+good.</p>
+
+<p class="calibre3">For the monitoring of a Seneca application there is an admin console
+which at least offers a simple monitoring. However, it is in each case
+only available for one Node.js process. Monitoring across all servers has
+to be achieved by different means.</p>
+
+<p class="calibre3">An independent deployment of a single Seneca function is only possible
+if there is a single Node.js process for the Seneca function. This
+represents a profound limitation for independent deployment since the
+expenditure of a Node.js process is hardly acceptable for a single
+JavaScript function. In addition, it is not easy to integrate other technologies
+into a Seneca system. In the end the entire Seneca system has to be
+implemented in JavaScript.</p>
+
+<h5 id="leanpub-auto-evaluation-for-nanoservices-3" class="calibre15">Evaluation for Nanoservices</h5>
+
+<p class="calibre3">Seneca has been especially developed for the implementation of
+Microservices with JavaScript. In fact, it enables a very simple
+implementation for services which can also be contacted via the
+network. The basic architecture is similar to Erlang: In both
+approaches services send messages resp. commands to each other to
+which functions react. In regards to the independent deployment of
+individual services, the isolation of services from each other and the
+integration of other technologies Erlang is clearly superior. Besides
+Erlang has a much longer history and has long been employed in
+different very demanding applications.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-43" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">The <a href="https://github.com/ewolff/seneca-example/">code example</a> can be a
+first step to get familiar with Seneca. You can also use the
+<a href="http://senecajs.org/getting-started.html">basic tutorial</a>. In
+addition, it is worthwhile to look at
+<a href="https://github.com/rjrodger/seneca-examples/">other examples</a>. The
+Nanoservice example can be enlarged to a comprehensive application or
+can be distributed to a larger number of Node.js processes.</p>
+
+</aside>
+
+<h3 id="section15-9" class="calibre2">15.9 Conclusion</h3>
+
+<p class="calibre3">The technologies presented in this chapter show how Microservices can
+also be implemented very differently. Since the difference is so
+large, the use of the separate term “Nanoservice” appears
+justified. Nanoservices are not necessarily independent processes
+anymore which can only be contacted via the network, but might run
+together in one process and use local communication mechanisms to
+contact each other. Thereby not only the use of extremely small
+services is possible, but also the adoption of Microservice approaches
+in areas such as embedded or desktop applications.</p>
+
+<p class="calibre3">An overview of the advantages and disadvantages of different
+technologies in regards to Nanoservices is provided in
+<a href="part0020.html#tab-3">Tab. 3</a>. Erlang is the most interesting
+technology since it also allows the integration of other technologies
+and is able to isolate the individual Nanoservices quite well from
+each other so that a problem in one Nanoservice will not trigger the
+failure of the other services. In addition, Erlang has been the
+basis of many important systems for a long time already so that the
+technology as such has proven its reliability beyond doubt.</p>
+
+<p class="calibre3">Seneca follows a similar approach, but cannot compete with other
+technologies in terms of isolation and the integration of other
+technologies than JavaScript. Vert.x has a similar approach on the
+JVM and supports numerous languages. However, it does not isolate
+Nanoservices as well as Erlang. Java EE does not allow for
+communication without network, and individual deployment is difficult
+in Java EE. In practice memory leaks occur frequently during the
+deployment of WARs. So during a deployment the application server is
+usually restarted to avoid memory leaks. Then all Nanoservices are
+unavailable for some time. Therefore a Nanoservice cannot be deployed
+without influencing the other Nanoservices. OSGi allows in contrast to
+Java EE the shared use of code between Nanoservices. In addition, OSGi
+uses methods calls for communication between services and not commands
+resp. messages like Erlang and Seneca. Commands or messages have the
+advantage of being more flexible. Parts of a message which a certain
+service does not understand are not a problem- they can just be
+ignored.</p>
+
+<table id="tab-3" class="calibre21">
+<caption class="calibre22">Tab.3: Technology evaluation for Nanoservices</caption>
+
+  <thead class="calibre23">
+    <tr class="calibre24">
+      <th class="calibre25"> </th>
+      <th class="calibre26">Lambda</th>
+      <th class="calibre26">OSGi</th>
+      <th class="calibre26">Java EE</th>
+      <th class="calibre26">Vert.x</th>
+      <th class="calibre26">Erlang</th>
+      <th class="calibre26">Seneca</th>
+    </tr>
+  </thead>
+  <tbody class="calibre27">
+    <tr class="calibre24">
+      <td class="calibre28">Effort for infrastructure</td>
+      <td class="calibre29">++</td>
+      <td class="calibre29">+</td>
+      <td class="calibre29">+</td>
+      <td class="calibre29">+</td>
+      <td class="calibre29">++</td>
+      <td class="calibre29">++</td>
+    </tr>
+    <tr class="calibre24">
+      <td class="calibre28">per service</td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+    </tr>
+  </tbody>
+  <tbody class="calibre27">
+    <tr class="calibre24">
+      <td class="calibre28">Resource consumption</td>
+      <td class="calibre29">++</td>
+      <td class="calibre29">++</td>
+      <td class="calibre29">++</td>
+      <td class="calibre29">++</td>
+      <td class="calibre29">++</td>
+      <td class="calibre29">++</td>
+    </tr>
+  </tbody>
+  <tbody class="calibre27">
+    <tr class="calibre24">
+      <td class="calibre28">Communication</td>
+      <td class="calibre29">-</td>
+      <td class="calibre29">++</td>
+      <td class="calibre29">- -</td>
+      <td class="calibre29">+</td>
+      <td class="calibre29">++</td>
+      <td class="calibre29">-</td>
+    </tr>
+    <tr class="calibre24">
+      <td class="calibre28">with network</td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+    </tr>
+  </tbody>
+  <tbody class="calibre27">
+    <tr class="calibre24">
+      <td class="calibre28">Isolation</td>
+      <td class="calibre29">++</td>
+      <td class="calibre29">- -</td>
+      <td class="calibre29">- -</td>
+      <td class="calibre29">-</td>
+      <td class="calibre29">++</td>
+      <td class="calibre29">-</td>
+    </tr>
+    <tr class="calibre24">
+      <td class="calibre28">of services</td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+    </tr>
+  </tbody>
+  <tbody class="calibre27">
+    <tr class="calibre24">
+      <td class="calibre28">Use of different</td>
+      <td class="calibre29">-</td>
+      <td class="calibre29">- -</td>
+      <td class="calibre29">- -</td>
+      <td class="calibre29">+</td>
+      <td class="calibre29">+</td>
+      <td class="calibre29">- -</td>
+    </tr>
+    <tr class="calibre24">
+      <td class="calibre28">technologies</td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+      <td class="calibre29"> </td>
+    </tr>
+  </tbody>
+
+</table>
+
+<p class="calibre3">Amazon Lambda is especially interesting since it is integrated into
+the Amazon ecosystem. This makes handling the infrastructure very
+easy. The infrastructure can be a challenging problem in case of small
+Nanoservices because so many more environments are needed due to the
+high number of services. With Amazon a database server is only an API
+call or a click away – alternatively, an API can be used to store data
+instead of a server. Servers become invisible for storing data – and
+this is also the case with Amazon Lambda for executing code. There is
+no infrastructure for an individual service, but only code which is
+executed and can be used by other services. Because of the prepared
+infrastructure monitoring is also no challenge anymore.</p>
+
+<h5 id="leanpub-auto-essential-points-12" class="calibre15">Essential Points</h5>
+
+<ul class="calibre16">
+  <li class="calibre14">Nanoservices divide systems into even smaller services. To achieve
+this, they compromise in certain areas such as technology freedom or
+isolation.</li>
+  <li class="calibre14">Nanoservices require efficient infrastructures which can handle a
+large number of small Nanoservices.</li>
+</ul>
+
+
+</div>
+</body></html>

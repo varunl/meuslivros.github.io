@@ -1,0 +1,1418 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title dir="ltr">13 Organizational Effects of a Microservices-based Architecture</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body dir="ltr" class="calibre">
+<div class="calibre6">
+<h2 id="chapter-13" class="calibre1">13 Organizational Effects of a Microservices-based Architecture</h2>
+
+<p class="calibre3">It is an essential feature of the Microservice-based approach that one
+team is responsible for each Microservice. Therefore, when working
+with Microservices, it is necessary to look not only at the
+architecture, but also at the organization of teams and the
+responsibilities for the individual Microservices. This chapter
+discusses the organizational effects of Microservices.</p>
+
+<p class="calibre3">In <a href="part0017.html#section13-1">section 13.1</a> organizational advantages of
+Microservices are described. <a href="part0017.html#section13-2">Section 13.2</a> shows that
+collective code ownership presents an alternative to devising teams
+according to Conway’s Law. The independence of the teams is an
+important consequence of Microservices. <a href="part0017.html#section13-3">Section 13.3</a>
+defines micro and macro architecture and shows how these approaches
+offer a high degree of autonomy to the teams and let them make
+independent decisions. Closely connected is the question about the
+role of the technical leadership
+(<a href="part0017.html#section13-4">section 13.4</a>). DevOps is an organizational approach
+which combines development (Dev) and operations (Ops)
+(<a href="part0017.html#section13-5">section 13.5</a>). DevOps has synergies with
+Microservices. Since Microservices focus on independent development
+from a domain perspective, they influence also product owners and
+business stakeholders e.g. the departments of the business that uses
+the software. <a href="part0017.html#section13-6">Section 13.6</a> discusses how these groups
+can handle Microservices. Reusable code can only be achieved in
+Microservice systems via organizational measures as illustrated in
+<a href="part0017.html#section13-7">section 13.7</a>. Finally, <a href="part0017.html#section13-8">section 13.8</a>
+follows up on the question whether an introduction of Microservices is
+possible without changing the organization.</p>
+
+<h3 id="section13-1" class="calibre2">13.1 Organizational Benefits of Microservices</h3>
+
+<p class="calibre3">Microservices are an approach for tackling also large projects with
+small teams. As the teams are independent of each other, less
+coordination is necessary between them. Especially the
+communication overhead renders the work of large teams so
+inefficient. Microservices are an approach on the architectural level
+for solving this problem. The architecture helps to reduce the need
+for communication and to let many small teams work in the project
+instead of one large one. Each domain-based team can have the ideal
+size: The
+<a href="http://www.scrumguides.org/scrum-guide.html#team">Scrum guide</a>
+recommends three to nine members.</p>
+
+<p class="calibre3">Besides, modern enterprises stress self organization and teams which
+are themselves active directly at the market. Microservices support
+this approach because each service is in the responsibility of an
+individual team consistent with Conway’s Law
+(<a href="part0007.html#section4-2">Section 4.2</a>). Therefore Microservices fit well to
+self organization. Each team can implement new features independently
+of other teams and can evaluate the success on the market by
+themselves.</p>
+
+<p class="calibre3">On the other hand there is a conflict between independence and
+standardization: When the teams are supposed to work on their own,
+they have to be independent. Standardization restricts
+independence. This concerns for instance the decision which technologies
+should be used. If the project is standardized in regards to a certain technology stack,
+the teams cannot decide independently anymore which technology they want to use. 
+In addition, independence conflicts with the wish to avoid redundancy: 
+If the system is supposed to be free of
+redundancy, there has to be coordination between the teams in order to
+identify the redundancies and to eliminate them. This in turn
+limits the independence of the teams.</p>
+
+<h5 id="leanpub-auto-technical-independence" class="calibre15">Technical Independence</h5>
+
+<p class="calibre3">An important aspect is the technological decoupling. Microservices can
+use different technologies and can have entirely different structures
+internally. This means that developers have less need to
+coordinate. Only fundamental decisions have to be made together. All
+other technical decisions can be made by the teams.</p>
+
+<h5 id="leanpub-auto-separate-deployment" class="calibre15">Separate Deployment</h5>
+
+<p class="calibre3">Each Microservice can be brought into production independently of the
+other Microservices. There is also no need to coordinate
+release dates or test phases across teams. Each team can choose its
+own speed and its own dates. A delayed release date of one team does not
+influence the other teams.</p>
+
+<h5 id="leanpub-auto-separate-requirement-streams" class="calibre15">Separate Requirement Streams</h5>
+
+<p class="calibre3">The teams should each implement independent stories and
+requirements. This allows each team to pursue its own business objectives.</p>
+
+<h5 id="leanpub-auto-three-levels-of-independence" class="calibre15">Three Levels of Independence</h5>
+
+<p class="calibre3">Microservices enable independence on three levels:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Decoupling via independent releases: Each team takes care of one
+or multiple Microservices. The team can bring them into production
+independently of the other teams and the other Microservices.</li>
+  <li class="calibre14">Technological decoupling: The technical decisions made by a certain team
+concern first of all their Microservices and none of the other Microservices.</li>
+  <li class="calibre14">Domain-based decoupling: The distribution of the domain in
+separate components allows each team to implement their own
+requirements.</li>
+</ul>
+
+<p class="calibre3">For Deployment Monoliths, in contrast, the technical coordination and
+deployment concerns the entire monolith (<a href="part0017.html#Fig62">Fig. 62</a>). This
+necessitates such a close coordination between the developers that in the end all
+developers working on the monolith have to act like one team.</p>
+
+
+<figure id="Fig62" class="image">
+  <img src="../images/00064.jpeg" alt="Fig. 62: Deployment Monolith" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 62: Deployment Monolith</figcaption>
+</figure>
+
+
+<p class="calibre3">A prerequisite for the independence of the Microservice teams is that
+the architecture really offers the necessary independence of the
+Microservices. This requires first of all a good domain
+architecture. This architecture enables also independent requirement
+streams for each team.</p>
+
+
+<figure id="Fig63" class="image">
+  <img src="../images/00065.jpeg" alt="Fig. 63: Separation into Microservices" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 63: Separation into Microservices</figcaption>
+</figure>
+
+
+<p class="calibre3">There are the following teams in the example from <a href="part0017.html#Fig63">Fig. 63</a>:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The team “user registration” takes care of how users can register in
+the E-commerce shop. A possible business objective is to achieve a high
+number of registrations. New features aim at optimizing this
+number. The components of the team are the processes which are
+necessary for the registration and the UI elements. The team can
+change and optimize them at will.</li>
+  <li class="calibre14">The team “order process” addresses how the shopping cart turns
+into an order. Here, a possible objective is that as many shopping carts as
+possible turn into orders. The entire process is implemented by this
+team.</li>
+  <li class="calibre14">The team “product search” improves the search for products. The
+success of this team depends on how many search processes lead to
+items being put into a shopping cart.</li>
+</ul>
+
+<p class="calibre3">Of course, there can be additional teams with other goals. Overall this approach
+distributes the task of developing an E-commerce shop onto
+multiple teams which all have their own objectives. The teams can
+largely independently pursue their objectives because the architecture
+of the system is distributed into Microservices which each team can
+develop independently – without much need for
+coordination.</p>
+
+<p class="calibre3">In addition small projects have many more advantages:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Estimations are more accurate since estimates concerning smaller
+efforts are easier to make.</li>
+  <li class="calibre14">Small projects are better to plan.</li>
+  <li class="calibre14">The risk decreases – because of the more accurate estimates and because
+of the better forecast reliability.</li>
+  <li class="calibre14">If there still is a problem, its effects are smaller because the
+project is smaller.</li>
+</ul>
+
+<p class="calibre3">In addition, Microservices offer much more flexibility. This makes
+decisions faster and easier because the risk is smaller and changes
+can be implemented more rapidly. This ideally supports agile software
+development which relies on such flexibility.</p>
+
+<h3 id="section13-2" class="calibre2">13.2 An Alternative Approach to Conway’s Law</h3>
+
+<p class="calibre3"><a href="part0007.html#section4-2">Section 4.2</a> introduced Conway’s Law. According to this
+law, an organization can only generate architectures which mirror its
+communication structures. In Microservice-based architectures the
+teams are built according to the Microservices. Each team develops one
+or multiple Microservices. Thus each Microservice is only developed by
+exactly one team. This ensures that the domain architecture is
+not only implemented by the distribution into Microservices, but also
+supported by the organizational distribution. This renders violations
+of the architecture practically impossible. Moreover the teams can
+independently develop features when the features are limited to one
+Microservice. For this to work the distribution of domains between the
+Microservices has to be of very high quality.</p>
+
+<h5 id="leanpub-auto-the-challenges-associated-with-conways-law" class="calibre15">The Challenges Associated with Conway’s Law</h5>
+
+<p class="calibre3">However, this approach also has disadvantages:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The teams have to remain stable in the long run. Especially when the
+Microservices use different technologies, the ramp up time for an individual
+Microservice is very long. Developers cannot easily switch between
+teams. Especially in teams containing external consultants long term
+stability is often hard to ensure. Already the usual fluctuation of
+personnel can turn into a challenge when working with
+Microservices. In the worst case, if there is nobody left to maintain a specific
+Microservice, it is still possible to rewrite the respective
+Microservice. Microservices are easy to replace due to their limited
+size. Of course, this still entails some expenditure.</li>
+  <li class="calibre14">Only the team understands the component. When team members quit, the
+knowledge about one or multiple Microservices can get lost. In that
+case the Microservice cannot be modified anymore. Such islands of
+knowledge need to be avoided. In such a case it will not be an option
+to replace the Microservice since an exact knowledge of the domain is
+necessary for this.</li>
+  <li class="calibre14">Changes are difficult whenever they require the coordinated work of
+multiple teams. When a team can implement all changes for a feature in
+its own Microservices, architecture and scaling of development will
+work very well. However, when the feature concerns also another
+Microservice and therefore another team, the other team needs to
+implement the changes to the respective Microservice. This requires
+not only communication, but the necessary changes also have to be
+prioritized versus the other requirements of the team. If the teams
+work in sprints, a team can deliver the required changes without
+prematurely terminating the current sprint earliest in the following
+sprint – this causes a marked delay. In case of a sprint length of two
+weeks the delay can amount to two weeks – if the team prioritizes the change
+high enough so that it is taken care of in the next sprint. Otherwise
+the ensuing delay can be even longer.</li>
+</ul>
+
+<h5 id="leanpub-auto-collective-code-ownership" class="calibre15">Collective Code Ownership</h5>
+
+<p class="calibre3">When it is always only the responsible team which can introduce
+changes to a Microservice, a number of challenges result as
+described. Therefore it is worthwhile to consider alternatives. Agile
+processes have led to the concept of “Collective Code
+Ownership”. Here, each developer has not only the right, but even the
+duty to alter any code – for example when he/she considers the
+code quality as insufficient in a certain place. Thereby all
+developers take care of code quality. Besides technical decisions
+are better communicated because more developers understand them due to their
+reading and changing code. This leads to the critical questioning of
+decisions so that the overall quality of the system increases.</p>
+
+<p class="calibre3">Collective Code Ownership can relate to a team and its
+Microservices. Since the teams are relatively free in their
+organization, such an approach is possible without much coordination.</p>
+
+<h5 id="leanpub-auto-advantages-of-collective-code-ownership" class="calibre15">Advantages of Collective Code Ownership</h5>
+
+<p class="calibre3">However, in principle teams can also modify Microservices which belong
+to other teams. This approach is used by some Microservice projects to
+deal with the discussed challenges because it entails a number of
+advantages:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Changes to a Microservice of another team can be faster and more
+easily implemented. When a modification is necessary, the change
+has not to be introduced by another team. Instead the team requiring
+the change can implement it by itself. It is not necessary anymore to
+prioritize the change in regards to other changes to the component.</li>
+  <li class="calibre14">Teams can be put together more flexibly. The developers are familiar
+with a larger part of the code – at least superficially due to changes
+which they have introduced in the code. This makes it easier to
+replace team members or even an entire team – or to enlarge a
+team. The developers do not have to ramp up from the very basics. A
+stable team is still the best option – however, often this cannot be
+achieved.</li>
+  <li class="calibre14">The distribution in Microservices is easy to change. Because of the
+broader knowledge of the developers it is easier to move
+responsibility for a Microservice to a different team. This can
+be sensible when Microservices have a lot of dependencies on each
+other, but are in the responsibility of different
+teams which then have to closely and laboriously coordinate. If the
+responsibility for the Microservices is changed so that the same
+team is responsible for both of the closely coupled Microservices,
+coordination is easier than in the case where two teams were
+working on these Microservices. Within one team the team members often
+sit in the same office. Therefore they can easily and directly communicate
+with each other.</li>
+</ul>
+
+<h5 id="leanpub-auto-disadvantages-of-collective-code-ownership" class="calibre15">Disadvantages of Collective Code Ownership</h5>
+
+<p class="calibre3">However, there also disadvantages associated with this approach:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Collective Code Ownerships is in contrast to technology freedom:
+When each team uses other technologies, it is difficult for developers
+outside of a team to change the respective Microservices. They might
+not even know the technology used in the Microservice.</li>
+  <li class="calibre14">The teams can lose their focus. The developers acquire a larger
+overview of the full system. However, it might be better when the
+developers concentrate on their own Microservices instead.</li>
+  <li class="calibre14">The architecture is not as solid anymore. By knowing the code of
+other components developers can exploit the internals and thereby
+rapidly create dependencies which had not been intended in the
+architecture. Finally, the distribution of the teams according to
+Conway’s Law is supposed to support the architecture by turning
+interfaces between domain components into interfaces between
+teams. However, the interfaces between the teams lose importance when
+everybody can change the code of every other team.</li>
+</ul>
+
+<h5 id="leanpub-auto-pull-requests-for-coordination" class="calibre15">Pull Requests for Coordination</h5>
+
+<p class="calibre3">Communication between teams is still necessary: In the end the team
+responsible for the respective Microservice has the most knowledge
+about the Microservice. So changes should be coordinated with the
+respective team. This can be safeguarded technically: The changes of
+the external teams can initially be introduced separately from other
+changes and subsequently be sent to the responsible team via a pull
+request. Pull requests bundle changes to the source code. Especially
+in the open source community they are a popular approach to allow for
+external contributions without giving up control of the project. The
+responsible team can accept the pull request or demand fixes. This
+means that there is a review for each change by the responsible
+team. This allows the responsible team to ensure that the architecture
+and design of the Microservice remain sound.</p>
+
+<p class="calibre3">Since there is still the need for communication between teams,
+Conway’s Law is not violated by this approach. It is just a different
+way of playing the game. In case of a bad split among teams in a
+Microservice-based architecture all options are associated with
+tremendous disadvantages. To correct the distribution is difficult as
+larger changes across Microservices are laborious as discussed in
+<a href="part0012.html#section8-4">section 8.4</a>. Due to the unsuitable distribution the
+teams are forced to communicate a lot with each other. Thereby
+productivity is lost. Therefore it is also no option to leave the
+distribution as it is. Collective Code Ownership can be used to limit
+the need for communication. The teams directly implement requirements
+in the code of other teams. This causes less need for communication
+and better productivity. To do so the technology freedom should be
+restricted. The changes to the Microservices still have to be
+coordinated – at least reviews are definitely necessary. However, if
+the architecture had been set up appropriately from the start, this
+measure would not be necessary at all as workaround.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-24" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">Did you already encounter Collective Code Ownership? Which experiences did you
+make with it?</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">Which restrictions are there in your current project when a developer
+wants to change some code which has been written by another developer
+in the same team or by a developer from another team? Are changes
+to the code of other teams not meant to occur? In that case, how is it
+still possible to implement the necessary changes? Which problems are
+associated with this course of action?</p>
+
+</aside>
+
+<h3 id="section13-3" class="calibre2">13.3 Micro and Macro Architecture</h3>
+
+<p class="calibre3">Microservices allow to largely avoid overarching architecture
+decisions. Each team can choose the optimal type of architecture for
+its Microservices.</p>
+
+<p class="calibre3">Basis for this is the Microservices architecture. It allows a large
+degree of technical freedom. While normally due to technical reasons
+uniform technologies are mandatory, Microservices do not have these
+restrictions. However, there can be other reasons for
+uniformity. The question is which decision is made by whom. There are
+two layers of decision making:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Macro architecture comprises the decisions which concern the overall
+system. These are at least the decisions presented in
+<a href="part0012.html#chapter-8">chapter 8</a> regarding the domain architecture and basic
+technologies, which have to be used by all Microservices, as well as
+communication protocols (<a href="part0013.html#chapter-9">chapter 9</a>). The properties and
+technologies of individual Microservices can also be preset
+(<a href="part0014.html#chapter-10">chapter 10</a>). However, this does not have to be the
+case. Decisions about the internals of the individual Microservices do
+not have to be made in the macro architecture.</li>
+  <li class="calibre14">The micro architecture deals with decisions each team can make by
+itself. These should address topics which concern only the
+Microservices developed by the respective team. Among these topics can
+be all aspects presented in <a href="part0014.html#chapter-10">chapter 10</a> as long as they
+have not already been defined as part of the macro architecture.</li>
+</ul>
+
+<p class="calibre3">The macro architecture cannot be defined once for all, but has to
+undergo continuous development. New features can require a different
+domain architecture or new technologies. Optimizing the macro
+architecture is a permanent process.</p>
+
+<h5 id="leanpub-auto-decision--responsibility" class="calibre15">Decision = Responsibility</h5>
+
+<p class="calibre3">The question is who defines macro and micro architecture and takes
+care of their optimization. It is important to keep in mind that each
+decision is linked to responsibility. Whoever makes a decision is
+responsible for its consequences - good or bad. In turn the
+responsibility for a Microservice entails the necessity to make the
+required decisions for its architecture. When the macro architecture
+defines a certain technology stack, the responsibility for this stack
+rests with the persons responsible for the macro architecture – not
+with the teams which use them in the Microservices and might later
+have problems with this technology stack. Therefore a strong
+restriction of the technology freedom of the individual Microservices
+by the macro architecture is often not helpful. It only shifts
+decisions and responsibility to a level which does not have much to do
+with the individual Microservices. This can lead to an ivory tower
+architecture that is not based on the real requirements. In the best
+case it is ignored. In the worst case it causes serious problems in
+the application. Microservices allow to largely do without macro
+architecture decisions in order to avoid such an ivory tower
+architecture.</p>
+
+<h5 id="leanpub-auto-who-creates-macro-architecture" class="calibre15">Who Creates Macro Architecture?</h5>
+
+<p class="calibre3">For defining macro architecture decisions have to be made which affect
+all Microservices. Such decisions cannot be made by a single team
+since the teams only carry responsibility for their respective
+Microservices. Macro architecture decisions go beyond
+individual Microservices.</p>
+
+<p class="calibre3">The macro architecture can be defined by a team which is composed from
+members of each individual team. This approach seems to be obvious at
+first glance: It allows all teams to voice their perspectives. Nobody
+dictates certain approaches. The teams are not left out of the
+decision process. There are many Microservice projects which very
+successfully employ this approach.</p>
+
+<p class="calibre3">However, this approach has also disadvantages:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">For decisions at the macro architecture level an overview of the
+overall system is necessary and an interest to develop the
+system in its entirety. Members of the individual teams often have a
+strong focus on their own Microservices. That is of course very
+sensible since the development of these Microservices is their primary
+task. However, this can make it hard for them to make overarching
+decisions since those require a different perspective.</li>
+  <li class="calibre14">The group can be too large. Effective teams normally have five to
+ten members at maximum. If there are many teams and each is supposed to
+participate with at least one member, the macro architecture team will
+get too large and thus cannot work effectively anymore. Large teams
+are hardly able to define and maintain the macro architecture.</li>
+</ul>
+
+<p class="calibre3">The alternative is to have a single architect or an architecture team which is
+exclusively responsible for shaping the macro architecture. For larger
+projects this task is so demanding that for sure an entire
+architecture team is needed to work on it. This architecture team
+takes the perspective of the overall project. However, there is a
+danger that the architecture team distances itself too much from the
+real work of the other teams and consequently makes ivory-tower
+decisions or solves problems the teams do not actually
+have. Therefore, the architecture team should mainly moderate the process of
+decision making and make sure that the view points of the different
+teams are all considered. It should not set a certain direction all by
+itself. In the end the different Microservices teams will have to live
+with the consequences of the architecture team’s decisions.</p>
+
+<h5 id="leanpub-auto-extent-of-the-macro-architecture" class="calibre15">Extent of the Macro Architecture</h5>
+
+<p class="calibre3">There is no one and only way to divide the architecture into micro and
+macro architecture. The company culture, the degree of self
+organization and other organizational criteria play a prominent
+role. A highly hierarchical organization will give the teams less
+freedom. When as many decisions as possible are made on the level of
+the micro architecture, the teams will gain more responsibility. This
+often has positive effects because the teams really feel responsible
+and will act accordingly.</p>
+
+<p class="calibre3">The <a href="http://en.wikipedia.org/wiki/NUMMI#Background">NUMMI car factory</a>
+in the USA for instance was a very unproductive factory which was
+known for drug abuse and sabotage. By focusing more on teamwork and
+trust the same workers could be turned into a very productive
+workforce. When teams are able to make more decisions on their own and
+have more freedom of choice, the work climate as well as productivity
+will profoundly benefit.</p>
+
+<p class="calibre3">Besides, by delegating decisions to teams less time is spent on
+coordination so that the teams can work more productively. To avoid
+the need for communication by delegating more decisions to the teams
+and therefore to micro architecture is an essential point for
+architecture scaling.</p>
+
+<p class="calibre3">However, when the teams are very restricted in their choices, one of
+the main advantages of Microservices is not realized. Microservices
+increase the technical complexity of the system. This only makes
+sense if the advantages of Microservices are really
+exploited. Consequently, when the decision for Microservices has been
+made, there should also be a decision for having as much micro
+architecture and as little macro architecture as possible.</p>
+
+<p class="calibre3">The decision for more or less macro architecture can be made for each
+area differently.</p>
+
+<h5 id="leanpub-auto-technology-macromicro-architecture" class="calibre15">Technology: Macro/Micro Architecture</h5>
+
+<p class="calibre3">For the technologies the following decisions can be made concerning
+macro vs. micro architecture:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Uniform security (<a href="part0012.html#section8-12">section 8.12</a>), service discovery
+(<a href="part0012.html#section8-9">section 8.9</a>) and communication protocols
+(<a href="part0013.html#chapter-9">chapter 9</a>) are necessary to enable Microservices to
+communicate with each other. Therefore decisions in these areas
+clearly belong to macro architecture. Among these are also the
+decisions for the use and details of downwards compatible interfaces
+which are required for the independent deployment of microservices.</li>
+  <li class="calibre14">Configuration and coordination (<a href="part0012.html#section8-8">Section 8.8</a>) do not
+necessarily have to be determined globally for the complete
+project. When each Microservice is operated by its respective team,
+the team can also handle the configuration and use its own tool of
+choice for it. However, a uniform tool for all Microservices has clear
+advantages. Besides there is hardly any sensible reason why each team
+should use a different mechanism.</li>
+  <li class="calibre14">The use of resilience (<a href="part0014.html#section10-5">section 10.5</a>) or load
+balancing (<a href="part0012.html#section8-10">section 8.10</a>) can be defined in the macro
+architecture. The macro architecture can either define a certain
+standard technology or just enforce that these points have to be
+addressed during the implementation of the Microservices. This can for
+instance be ensured by tests (<a href="part0015.html#section11-8">section 11.8</a>). The tests
+can check whether a Microservice is still available after a dependent
+Microservice failed. In addition, they can check whether the load is
+distributed to multiple Microservices. The decision for the use of
+resilience or load balancing can be theoretically left to the
+teams. When they are responsible for the availability and the
+performance of their service, they have to have the freedom to use their
+choice of technologies for it. When their Microservices are
+sufficiently available without resilience and load balancing, their
+strategy is acceptable. However, in the real world such scenarios are
+hard to imagine.</li>
+  <li class="calibre14">In regards to platform and programming language the decision can be
+made at the level of macro or micro architecture. The decision might
+not only influence the teams but also operations since operations
+needs to understand the technologies and need to be able to deal with
+failures. It is not necessarily required to prescribe a programming
+language. Alternatively, the technology can be restricted e.g. to the
+JVM (Java Virtual Machine) which supports a number of programming
+languages. In regards to the platform a potential compromise is that a
+certain database is provided by operations, but that the teams can
+also use and operate different ones. Whether the macro architecture
+defines platform and programming language depends also on whether
+developers need to be able to change between teams. A shared platform
+facilitates transferring the responsibility for a Microservice from
+one team to another team.</li>
+</ul>
+
+<p class="calibre3"><a href="part0017.html#Fig64">Fig. 64</a> shows which decisions are part of the macro
+architecture - they are on the right side. The micro architecture
+parts are on the left side. The areas in the middle can be either part
+of the macro or micro architecture. Each project can handle them
+differently.</p>
+
+
+<figure id="Fig64" class="image">
+  <img src="../images/00066.jpeg" alt="Fig. 64: Technology: macro and micro architecture" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 64: Technology: macro and micro architecture</figcaption>
+</figure>
+
+
+<h5 id="leanpub-auto-operations" class="calibre15">Operations</h5>
+
+<p class="calibre3">In the area of operations there is control
+(<a href="part0016.html#section12-5">section 12.5</a>), monitoring
+(<a href="part0016.html#section12-3">section 12.3</a>), logging (<a href="part0016.html#section12-2">section 12.2</a>)
+and deployment (<a href="part0016.html#section12-4">section 12.4</a>). To reduce the
+complexity of the environment and to enable a uniform operations
+solution these areas have to be defined by macro architecture. The
+same holds true for platform and programming language. However,
+standardizing is not obligatory: When the entire operations of the
+Microservices rests with the teams, theoretically each team can use a
+different technology for each of the mentioned areas. But while this
+scenario does not generate many advantages, it creates a huge
+technological complexity. However, it is for example possible that the
+teams use their own special solution for certain tasks. When for
+instance the revenue is supposed to be transferred in a different way
+into the monitoring for the business stakeholders, this is certainly doable.</p>
+
+
+<figure id="Fig65" class="image">
+  <img src="../images/00067.jpeg" alt="Fig. 65: Operations: macro and micro architecture" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 65: Operations: macro and micro architecture</figcaption>
+</figure>
+
+
+<h5 id="leanpub-auto-domain-architecture" class="calibre15">Domain Architecture</h5>
+
+<p class="calibre3">In the context of domain architecture the distribution of domains to
+teams is part of the macro architecture
+(<a href="part0012.html#section8-1">section 8.1</a>). It does not only influence the
+architecture, but decides also which teams are responsible for which
+domains. Therefore this task cannot be moved into the micro
+architecture. However, the domain architecture of the individual
+Microservices has to be left to the teams
+(<a href="part0014.html#section10-1">section 10.1</a>, <a href="part0014.html#section10-2">10.2</a>,
+<a href="part0014.html#section10-3">10.3</a>, <a href="part0014.html#section10-4">10.4</a>). To dictate the
+domain architecture of the individual Microservices to the teams would be
+equivalent to treating Microservices at the
+organizational level like monoliths because the entire architecture is centrally
+coordinated. In that case one could as well develop a Deployment
+Monolith which is technically easier. Such a decision would not make
+sense.</p>
+
+
+<figure id="Fig66" class="image">
+  <img src="../images/00068.jpeg" alt="Fig. 66: Architecture: macro and micro architecture" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 66: Architecture: macro and micro architecture</figcaption>
+</figure>
+
+
+<h5 id="leanpub-auto-tests" class="calibre15">Tests</h5>
+
+<p class="calibre3">In the area of testing integration tests
+(<a href="part0015.html#section11-4">section 11.4</a>) belong to the macro architecture. In
+practice it has to be decided whether there should be an integration
+test for a certain domain and who should implement it. Integration
+tests only make sense when they concern functionalities across
+teams. The respective teams can test all other functionalities on
+their own. Therefore integration tests have to be globally
+coordinated across teams. Technical tests
+(<a href="part0015.html#section11-8">section 11.8</a>) can be dictated to the teams by the
+macro architecture. They are a good option to enforce and control
+global standards and technical areas of macro
+architecture. Consumer-driven contract tests (CDC)
+(<a href="part0015.html#section11-7">section 11.7</a>) and Stubs
+(<a href="part0015.html#section11-6">section 11.6</a>) can be coordinated between the teams
+themselves. A shared technological foundation as part of macro
+architecture can profoundly facilitate development. Uniform
+technologies are especially sensible in this area since teams have to
+use the CDCs and Stubs of other teams. When only one technology is
+used, work is markedly easier. However, it is not obligatory that
+technologies are rigidly prescribed by the macro architecture.</p>
+
+<p class="calibre3">How to test the respective Microservices should be up to the
+individual teams as they have the responsibility for the quality of
+the Microservices.</p>
+
+
+<figure id="Fig67" class="image">
+  <img src="../images/00069.jpeg" alt="Fig. 67: Test: macro and micro architecture" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 67: Test: macro and micro architecture</figcaption>
+</figure>
+
+
+<p class="calibre3">In many areas decisions can be made either at the level of macro or at
+the level of micro architecture. It is a central objective of
+Microservice-based architectures to give the individual teams as much
+independence as possible. Therefore, as many decisions as possible
+should be made on the level of micro architecture and therefore by the
+individual teams. However, in regards to operations the question arises
+whether the teams really profit from the freedom to use their own
+distinct tools. It seems more likely that the technology zoo just
+gets bigger without real advantages. In this area there is a
+connection to DevOps (<a href="part0017.html#section13-5">section 13.5</a>). Depending on the
+degree of cooperation between developers and operations there can be
+different degrees of freedom. In case of a clear division between
+development and operations operations will define many standards in
+macro architecture. In the end operations will have to take care of the
+Microservices in production. When all Microservices employ a uniform
+technology, this task is easier.</p>
+
+<p class="calibre3">When defining programming language and platform one should likewise
+weigh the advantages of specialized technology stacks versus the
+disadvantages of having heterogeneous technologies in the overall
+system. Depending on the circumstances the decision to prescribe a
+technology stack might be as sensible as the decision to leave the
+technology choice to the individual teams. A uniform technology stack
+can facilitate operations and make it easier for developers to change
+between Microservices and teams. Specialized technology stacks make it
+easier to handle special challenges and motivate employees who thus
+have the possibility to use cutting edge technologies.</p>
+
+<p class="calibre3">Whether a Microservice really conforms to the macro architecture can
+be evaluated by a test (compare <a href="part0015.html#section11-8">section 11.8</a>). This
+test can be an artifact which is likewise part of the macro
+architecture. The group responsible for the macro architecture can use
+this artifact to unambiguously define the macro architecture. This
+allows to check whether all Microservices are in line with macro
+architecture.</p>
+
+<h3 id="section13-4" class="calibre2">13.4 Technical Leadership</h3>
+
+<p class="calibre3">The division in micro and macro architecture completely changes the
+technical leadership teams and is an essential advantage of
+Microservices. The macro architecture defines technical duties and
+freedom. The freedom of choice entails also the responsibility for the
+respective decisions.</p>
+
+<p class="calibre3">For example a database can be prescribed. In that case the team can
+delegate the responsibility for the database to the technical
+leadership team. If the database decision were part of the micro
+architecture, the database would be run by the team since it made the
+decision for the technology. No other team would need to deal with
+potential consequences of this decision (compare
+<a href="part0012.html#section8-7">section 8.7</a>). Whoever makes the decision, also has the
+responsibility. The technical leadership team for sure can make such
+decisions, but by doing so it takes away responsibility from the
+Microservices teams and thereby independence.</p>
+
+<p class="calibre3">A larger degree of freedom entails more responsibility. The teams have
+to be able to deal with this and also have to want this
+freedom. Unfortunately, this is not always the case. This can either
+argue for more macro architecture or for organizational improvements
+which in the end lead to more self organization and thus less macro
+architecture. It is one of the objectives of the technical leadership team
+to enable less macro architecture and to lead the way to more self
+organization.</p>
+
+<h5 id="leanpub-auto-developer-anarchy" class="calibre15">Developer Anarchy</h5>
+
+<p class="calibre3">The approach
+<a href="http://www.infoq.com/news/2012/02/programmer-anarchy">Developer</a>
+<a href="https://www.youtube.com/watch?v=uk-CF7klLdA">Anarchy</a> is even more
+radical in regards to the freedom of the teams. It confers the entire
+responsibility to the developers. They cannot only freely choose
+technologies, but even rewrite code if they deem it
+necessary. Besides, they communicate directly with the stake
+holders. This approach is employed in very fast growing enterprises
+and works very well there. Behind this idea is Fred George who has
+collected more than 40 years of experience while working in many
+different companies. In a model like this macro architecture and
+Deployment Monoliths are abolished so that the developers can do what
+they think is best. This approach is very radical and shows how far the
+idea can be extended.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-25" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">In <a href="part0017.html#Fig64">Fig. 64</a>, <a href="part0017.html#Fig65">Fig. 65</a>, <a href="part0017.html#Fig66">Fig. 66</a> and
+<a href="part0017.html#Fig67">Fig. 67</a> areas are marked which can belong to either micro or macro
+architecture. These are the elements which are depicted in the center
+of the respective figure. Look through these elements and decide
+whether you would place them in micro or macro architecture. Most
+important is your reasoning for the one or the other alternative. Take
+into consideration that making decisions at the level of the micro
+architecture rather corresponds to the Microservice idea of independent teams.</p>
+
+</aside>
+
+<h3 id="section13-5" class="calibre2">13.5 DevOps</h3>
+
+<p class="calibre3">DevOps denotes the concept that developments (Dev) and operations
+(Ops) merge into one team (DevOps). This is an organizational change:
+Each team has developers and operations experts. They work together in
+order to develop and operate a Microservice. This requires a different
+mindset since operations-associated topics are often unfamiliar to
+developers while people working in operations often do not work in
+projects, but usually run systems independently of
+projects. Ultimately, the technical skills become very similar:
+Operations works more on automation and associated suitable tests –
+and this is in the end software development. At the same time
+monitoring, log analysis or deployment turn more and more also into
+topics for developers.</p>
+
+<h5 id="leanpub-auto-devops-and-microservices" class="calibre15">DevOps and Microservices</h5>
+
+<p class="calibre3">DevOps and Microservices ideally complement each other:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The teams cannot only take care of the development, but also of
+the operations of the Microservices. This requires that the teams have
+knowledge in the areas of operations and development.</li>
+  <li class="calibre14">Orienting the teams in line with features and Microservices
+represents a sensible organizational alternative to the division into
+operations and development.</li>
+  <li class="calibre14">Communication between operations and development gets easier when
+members of both areas work together in one team. Communication within
+a team is easier than between teams. This is in line with the aim of
+Microservices to reduce the need for coordination and communication.</li>
+</ul>
+
+<p class="calibre3">DevOps and Microservices fit very well together. In fact, the aim that
+teams deploy Microservices up to production and keep taking care of
+them in production can only be achieved with DevOps teams. This is the
+only way to ensure that teams have the necessary knowledge about both
+areas.</p>
+
+<h5 id="leanpub-auto-do-microservices-necessitate-devops" class="calibre15">Do Microservices Necessitate DevOps?</h5>
+
+<p class="calibre3">DevOps is such a profound change in organization that many enterprises
+are still reluctant to take this step. Therefore the question arises
+whether Microservices can also be implemented without introducing
+DevOps. In fact, this is possible:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Via the macro vs. micro architecture division operations can define
+standards. Then technical elements like logging, monitoring or
+deployment belong to the macro architecture. When these standards are
+conformed to, operations can take over the software and make it part
+of the standard operations processes.</li>
+  <li class="calibre14">In addition, platform and programming language can be defined as
+much as needed for operations. When operations only feels comfortable
+with running Java applications on a Tomcat, this can be prescribed as
+platform in the macro architecture. The same holds true for
+infrastructure elements like databases or messaging systems.</li>
+  <li class="calibre14">Moreover, there can be organizational requirements: For example,
+operations can ask that members of the Microservices teams are
+available at certain times so that problems arising in production can
+be referred to the teams. To put it concretely: Who wants to deploy on
+his/her own, has to provide a phone number and will also be called at
+night in case of problems. If the call is not answered, the management
+can be called next. This increases the likelihood that developers
+actually answer such calls.</li>
+</ul>
+
+<p class="calibre3">In such a context the teams cannot be responsible anymore for bringing
+all Microservices up to production. Access and responsibility rest
+with operations. There has to be a point in the Continuous Delivery
+Pipeline where the Microservices are passed on to operations and then
+are rolled out in production. At this point the Microservice passes
+into the responsibility of operations which has to coordinate with the
+respective team about their Microservices. A typical point for the
+transfer to operations is immediately after the test phases, prior to
+possible explorative tests. Operations is at least responsible for the
+last phase, i.e. the rollout in production. Operations can turn into a
+bottleneck if a high number of modified Microservices have to be
+brought into production.</p>
+
+<p class="calibre3">Overall DevOps and Microservices have synergies – however, it is not
+necessarily required to also introduce DevOps when deciding for
+Microservices.</p>
+
+<h3 id="leanpub-auto-when-microservices-meet-classical-it-organizations-alexander-heusingfeld" class="calibre2">When Microservices Meet Classical IT Organizations (Alexander Heusingfeld)</h3>
+
+<p class="calibre3">by Alexander Heusingfeld, innoQ</p>
+
+<p class="calibre3">The “Microservices” topic has meanwhile reached numerous IT
+departments and is discussed there. Interestingly, initiatives for
+introducing Microservices are often started by middle
+management. However, frequently too little thought is spent on the
+effect a Microservice architecture has on the (IT) organization of
+enterprises. Because of this I would like to tell of a number of
+“surprises” which I experienced during the introduction of such an
+architecture approach.</p>
+
+<h5 id="leanpub-auto-pets-vs-cattle" class="calibre15">Pets vs. Cattle</h5>
+
+<p class="calibre3"><a href="http://www.slideshare.net/randybias/architectures-for-open-and-scalable-clouds">“Pets vs. Cattle”</a>
+is a slogan which  reached a certain fame at the  outset of the DevOps
+movement.  Its   basic  message  is   that  in  times  of   cloud  and
+virtualization servers  should not  be treated  like pets,  but rather
+like a herd of cattle. If a pet gets sick, the owner will likely nurse
+it back to health. Sick cattle on the other hand is killed immediately
+in order not to endanger the health of the entire herd.</p>
+
+<p class="calibre3">Thus the point is to avoid the personification of servers – e.g. by
+giving them names (like Leviathan, Pollux, Berlin or Lorsch). If you
+assign such “pet” names to servers, there will be a tendency to care
+for them like pets and thus provide individual updates, scripts,
+adjustments or other specific modifications. However, it is well known
+that this has negative consequences for the reproducibility of
+installations and server state. Especially considering auto-scaling
+and failover features as they are required for Microservice-based
+architectures, this is a K.O. criterion.</p>
+
+<p class="calibre3">One of my projects addressed this problem in a very interesting
+manner: The server and virtual machines still had names. However, the
+administration of these systems was completely automated via Puppet.
+Puppet downloaded the respective scripts from an SVN repository. In
+this repository individual scripts for each server were stored. This
+scenario could be called “Puppets for automated pet care”.  The
+advantage is that crashed servers can quickly be replaced by exact
+copies.</p>
+
+<p class="calibre3">However, requirements for scalability are not taken into consideration
+at all, since there can always only be one instance of a “pet server”
+named Leviathan. An alternative is to switch to parameterized scripts
+and to use templates like “production VM for app XYZ”. At the same
+time this also allows more flexible deployment scenarios like
+Blue/Green Deployments. In that case it is not relevant anymore
+whether the VM app-xyz-prod08.zone1.company.com or
+app-xyz-prod045.zone1.company.com gets the job done. The only relevant
+point is that eight instances of this service are constantly available
+and at times of high load additional instances can be started. How
+these instances are named does not matter.</p>
+
+<h5 id="leanpub-auto-us-vs-them" class="calibre15">Us vs. Them</h5>
+
+<p class="calibre3">“Alarming is our concern!”</p>
+
+<p class="calibre3">“You shouldn’t care about that!”</p>
+
+<p class="calibre3">“That is none of your business, it’s our area!”</p>
+
+<p class="calibre3">Unfortunately I frequently hear sentences like these in so-called
+cross-functional teams. These are teams composed of architects,
+developers, testers and administrators. Especially if the members
+previously worked in other, purely functional teams within the same
+company, old trench wars and prejudices are carried along into the new
+team – often subconsciously. Therefore, it is important to be aware of
+the social aspects right from the start and to counter these
+proactively. For example, in my experience it has very positive
+effects to let newly setup teams work in the same office for the first
+two to four weeks. This allows the new team mates to get to know each
+other’s human side and to directly experience the colleague’s body
+language, character and humor. This will markedly facilitate
+communication during the later course of the project,
+misunderstandings are avoided.</p>
+
+<p class="calibre3">In addition, team building measures during the first weeks which
+require that the team members rely on each other can help to break the
+ice, to get an idea of the strengths and weaknesses of the individual
+members and to build up and strengthen trust within the team. If these
+points are neglected, there will be noticeable adverse consequences
+throughout the run time of the project. People who do not like each
+other or do not trust each other, will not rely on each other, even if
+only subconsciously. And this means that they will not be able to work
+100% as a team.</p>
+
+<h5 id="leanpub-auto-development-vs-test-vs-operation-change-of-perspective" class="calibre15">Development vs. Test vs. Operation: Change of Perspective</h5>
+
+<p class="calibre3">In many companies there are initiatives for a change of perspective.
+For example, employees from sales may work in the purchasing
+department for a day to get to know the people and the processes
+there. The expectation is that the employees will develop a better
+understanding for their colleagues and to let that become part of
+their daily work so that cross-department processes harmonize
+better. The motto is: “On ‘the other side’ you get to know a new
+perspective!”</p>
+
+<p class="calibre3">Such a change of perspective can also be advantageous in IT. A
+developer could for instance get a new perspective with regards to the
+use cases or test cases. This might motivate them to enforce a
+modularization in the development which is easier to test. Or they
+might consider early in development which criteria will be needed
+later on to better monitor the software in production or to more
+easily find errors. A deeper insight into the internal processes of
+the application can help an administrator to develop a better
+understanding for implementing a more specific and more efficient
+monitoring. Each perspective, which deviates from one’s own
+perspective, can raise questions which previously were not considered
+in this section of the application life cycle. And these questions
+will help the team to evolve as a whole and deliver better software.</p>
+
+<h5 id="leanpub-auto-for-ops-there-is-never-an-entirely-green-field" class="calibre15">For Ops there is Never an “Entirely Green Field”</h5>
+
+<p class="calibre3">For sure Microservices are a topical subject and bring along new
+technologies, concepts and organizational changes. However, one should
+always consider that enterprises introducing Microservices hardly ever
+start from scratch! There are always some kind of legacy systems or
+entire IT environments which already exist and might better not be
+replaced in a Big Bang approach. Usually these legacy systems have to
+be integrated into the brave new world of Microservices, at least they
+will have to coexist.</p>
+
+<p class="calibre3">For this reason, it is important to take these systems into
+consideration when planning a Microservices-based architecture,
+especially in regards to IT costs. Can the existing hardware
+infrastructure really be restructured for the Microservices or is
+there a legacy system which relies exactly on this infrastructure?
+These are often questions which get caught on the infrastructure or
+operations team – if there is such an organizational unit in the
+company. Otherwise it might happen that these questions first arise
+when a deployment to the system test or production environment is
+supposed to be done. Especially for being able to recognize these
+questions early on, I recommend to deal with the deployment pipeline
+as early as possible in the reorganization project. The deployment
+pipeline should already be in place before the first business
+functionality is implemented by the teams. A simple “Hello World” will
+often be sufficient which then is brought towards production by the
+combined forces of the entire team. While doing so, the team will
+almost always encounter open questions which in the worst case will
+have effects on the design of the systems. However, as not much is
+implemented at this stage, early on during the project such changes
+are still comparably cost-efficient to implement.</p>
+
+<h5 id="leanpub-auto-conclusion-3" class="calibre15">Conclusion</h5>
+
+<p class="calibre3">The organizational changes (resp. “Conway’s Law”), which accompany the
+introduction of Microservices, are up to now often underestimated. Old
+habits, prejudices and maybe even trench wars are often deep-rooted.
+Especially if the new team mates were previously assigned to different
+departments. However, “one team” has to be more than just a
+buzzword. If the team manages to bury their prejudices and to put
+their different experiences to good use, it can advance
+together. Everyone has to understand that all of them now share the
+task and responsibility to bring a stable software into production for
+the customer. Everybody can profit from the experiences of the others
+when everybody acts on the premise: “Everybody voices their concerns,
+and we will solve it jointly”.</p>
+
+<h3 id="section13-6" class="calibre2">13.6 Interface to the Customer</h3>
+
+<p class="calibre3">To ensure that the development can really be scaled to multiple teams
+and Microservices, each team needs to have its own Product Owner. In
+line with Scrum approaches he/she is responsible for the further
+development of the Microservice. For this purpose he/she defines
+stories which are implemented in the Microservice. The Product Owner
+is the source of all requirements and prioritizes them. This is
+especially easy when a Microservice only comprises features which are
+within the responsibility of a single department at the business level
+(<a href="part0017.html#Fig68">Fig. 68</a>). Usually this objective is achieved by adjusting
+Microservices and teams to the organization of departments. Each
+department gets “its” Product Owner and therefore “its” team and “its”
+Microservices.</p>
+
+<p class="calibre3">When the Microservices have a good domain architecture, they can be
+independently developed. Ultimately, each domain should be implemented
+in one or many Microservices, and the domain should only be of interest
+to one department. The architecture has to take the organization of
+the departments into consideration when distributing the domains into
+Microservices. This ensures that each department has its own
+Microservices that are not shared with other domains or departments.</p>
+
+
+<figure id="Fig68" class="image">
+  <img src="../images/00070.jpeg" alt="Fig. 68: Department, product owner and Microservices" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 68: Department, product owner and Microservices</figcaption>
+</figure>
+
+
+<p class="calibre3">Unfortunately, the architecture often is not perfect. Besides,
+Microservices have interfaces – an indication that functionalities
+might span multiple Microservices. When multiple functionalities
+concern one Microservice and therefore multiple departments want to
+influence the development of a Microservice, the Product Owner has to
+ensure a prioritization which is coordinated with the different
+departments. This can be a challenge because departments can have
+different priorities. In that case the Product Owner has to coordinate
+between the concerned departments.</p>
+
+<p class="calibre3">Let us assume that there is a department which takes care of sales
+campaigns in an E-commerce shop. It starts a campaign where orders
+containing a certain item get a rebate on the delivery cost. The
+required modification concerns the order team: It has to find out
+whether an order contains such an item. This information has to be
+transmitted to the delivery Microservice which has to calculate the
+costs for the delivery. Accordingly, the Product Owners of these two
+teams have to prioritize these changes in regards to the changes
+desired by the departments in charge of delivery and
+orders. Unfortunately, many of these sales campaigns combine different
+functionalities so that such a prioritization is often required. The
+departments for orders and deliveries have their own Microservices,
+while the department in charge of sales campaigns does not have its
+own Microservices. Instead it has to introduce its features into the
+other Microservices.</p>
+
+<h5 id="leanpub-auto-architecture-leads-to-departments" class="calibre15">Architecture Leads to Departments</h5>
+
+<p class="calibre3">The Microservice architecture can thus be a direct result of the
+departmental organization of the company. However, there are also
+cases where a new department is created around an IT system, which
+then takes care of this system from the business side. In such a case
+one can argue that the Microservices architecture directly influences
+the organization. For instance there might be a new Internet market
+place which is implemented by an IT system. If it is successful, a
+department can be created which takes over the further development of
+this marketplace. This department will continue to develop the IT
+system from a domain and from a business perspective. In this case the
+marketplace was developed first and subsequently the department has
+been created. Therefore the system architecture has defined the
+departmental structure of the organization.</p>
+
+<h3 id="section13-7" class="calibre2">13.7 Reusable Code</h3>
+
+<p class="calibre3">At first sight the reuse of code is a technical
+problem. [Section 8.3]{#section8-3} already described the challenges
+which arise when two Microservices use the same library: When the
+Microservices use the library in such a way that a new release of the
+library necessitates a new deployment of the Microservices, the result
+is a deployment dependency. This has to be avoided to allow for an
+independent deployment of the Microservices. There is additional
+expenditure because the teams responsible for the Microservices have
+to coordinate their changes to the library. New features for the
+different Microservices have to be prioritized and developed.
+These represent also dependencies between the teams which should rather be
+avoided.</p>
+
+<h5 id="leanpub-auto-client-libraries" class="calibre15">Client Libraries</h5>
+
+<p class="calibre3">Client libraries which encapsulate calls from a Microservice can be
+acceptable. When the interfaces of the Microservices are downwards
+compatible, the client library does not have to be replaced in case of
+a new version of the Microservice. In such a scenario client libraries
+do not cause problems because a new deployment of the called
+Microservices does not lead to an update of the client library or a
+new deployment of the calling Microservice.</p>
+
+<p class="calibre3">However, when the client library also contains domain objects,
+problems can occur. When a Microservice wants to change the domain
+model, the team has to coordinate this change with the other users of
+the client library and therefore cannot develop independently
+anymore. The boundaries between a simplified use of the interface
+which can be sensible and a shared implementation of logic or other
+deployment dependencies which can be problematic is not clear cut. One
+option is to entirely forbid shared code.</p>
+
+<h5 id="leanpub-auto-reuse-anyhow" class="calibre15">Reuse Anyhow?</h5>
+
+<p class="calibre3">However, obviously, projects can reuse code. Hardly any project
+nowadays manages without some open source library. Using this code is
+obviously easy and thus facilitates work. Problems like the ones
+arising upon reusing code between Microservices are unlikely for a
+number of reasons:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Open source projects in general are of high quality. Developers
+working in different companies use the code and thereby spot
+errors. Often they even remove the errors so that the quality
+permanently increases. To publish source code and thereby provide
+insight into internals is often already motivation enough to increase
+the quality.</li>
+  <li class="calibre14">The documentation allows to immediately start to use the code
+without a need to directly communicate with the developers. Without a
+good documentation open source projects hardly find enough users or
+additional developers since getting started would be too hard.</li>
+  <li class="calibre14">There is a coordinated development with a bug tracker and a
+process for accepting code changes introduced by external
+developers. Therefore errors and their fixes can be tracked. In
+addition, it is clear how changes from the outside can be incorporated
+into the code basis.</li>
+  <li class="calibre14">Moreover, in case of a new version of the open source library it is
+not necessary for all users to use the new version. The dependencies
+in regards to the library are not so pronounced that a deployment
+dependency ensues.</li>
+  <li class="calibre14">Finally, there are clear rules how one’s own supplements can be
+incorporated into the open source library.</li>
+</ul>
+
+<p class="calibre3">In the end the difference between a shared library and an open source
+project is mainly a higher quality in regards to different
+aspects. Besides there is also an organizational aspect: There is a team
+which takes care of the open source project. It directs the project
+and keeps developing it. This team does not necessarily make all
+changes, but it coordinates them. Ideally, the team has members from
+different organizations and projects so that the open source project
+is developed under different view points and in the context of
+different use cases.</p>
+
+<h5 id="leanpub-auto-reuse-as-open-source" class="calibre15">Reuse as Open Source</h5>
+
+<p class="calibre3">With open source projects as role models in mind there are different
+options for reusable code in a Microservices project:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The organization around reusable libraries is structured like in
+an open source project. There are employees responsible for the
+continued code development, the consolidation of requirements and for
+incorporating the changes of other employees. The team members ideally
+come from different Microservice teams.</li>
+  <li class="calibre14">The reusable code turns into a real open source project. Developers
+outside of the organization can use and extend the project.</li>
+</ul>
+
+<p class="calibre3">Both decisions can result into a significant investment since markedly
+more effort has to go into quality and documentation etc. Besides, the
+employees working on the project have to get enough freedom to do so
+in their teams. The teams can control the prioritization in the open
+source project by only making their members available for certain
+tasks. Due to the large investment and potential problems with
+prioritization the decision to establish an open source project should
+be well considered. The idea itself is not new –
+<a href="http://dirkriehle.com/2015/05/20/inner-source-in-platform-based-%0Aproduct-engineering/">experiences</a> in this area have already been collected for
+quite some time.</p>
+
+<p class="calibre3">If the investment is very high, it means that the code is hardly
+reusable for the moment and using the code in its current state
+causes quite some effort. Probably the code is not only hard to reuse,
+but hard to use at all. The question is why team members would accept
+such a bad code quality. Investing into code quality in order to make the
+code reusable can pay off already by reusing it just once.</p>
+
+<p class="calibre3">At first glance it does not appear very sensible to make code
+available to external developers. This requires that code quality and
+documentation are of high enough quality for external developers to
+be able to use the code without direct contact to the developers of
+the open source project. Only the external developers seem to profit
+from this approach as they get good code for free.</p>
+
+<p class="calibre3">However, a real open source project has a number of advantages:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">External developers find weak spots by using the code. Besides,
+they will use the code in different projects so that it gets more
+generalized. This will improve quality as well as documentation.</li>
+  <li class="calibre14">Maybe external developers contribute to the further development of
+the code. However, this is rather the exception than the norm. But
+having external feedback via bug reports and requests for new features
+can already represent a significant advantage.</li>
+  <li class="calibre14">Running open source projects is great marketing for technical
+competence. This can be useful for attracting employees as well as
+customers. Important is the extent of the project. If it is only a
+simple supplement of an existing open source project, the investment
+can be manageable. An entirely new open source framework is a very
+different topic.</li>
+</ul>
+
+<p class="calibre3">Blueprints, i.e. documentations for certain approaches, represent
+elements which are fairly easy to reuse. This can be elements of macro
+architecture like for instance a document detailing the correct
+approach for logging. Likewise there can be templates which contain
+all necessary components of a Microservice including a code skeleton,
+a build script and a Continuous Delivery Pipeline. Such artifacts can
+rapidly be written and are immediately useful.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-26" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">Maybe you have already previously used your own technical libraries in
+projects or even developed some yourself. Try to estimate how large
+the expenditure would be to turn these libraries into real open source
+libraries. Apart from a good code quality this necessitates also 
+documentation about the use and the extension of the code. Besides,
+there have to be a bug tracker and forums. How easy would it be to
+reuse it in the project itself? How high would be the quality of the
+library?</p>
+
+</aside>
+
+<h3 id="section13-8" class="calibre2">13.8 Microservices Without Changing the Organization?</h3>
+
+<p class="calibre3">Microservices are more than just an approach for software
+architecture. They have pronounced effects on organization. Changes to
+the organization are often very difficult. Therefore the question
+arises whether Microservices can be implemented without changing the
+organization.</p>
+
+<h5 id="leanpub-auto-microservices-without-changing-the-organization" class="calibre15">Microservices Without Changing the Organization?</h5>
+
+<p class="calibre3">Microservices allow for independent teams. The domain-focused teams
+are responsible for one or multiple Microservices – this includes
+ideally their development as well as operations. Theoretically it is
+possible to implement Microservices without dividing developers into
+domain-focused teams. In that case the developers could modify each
+Microservice – an extension of the ideas presented in
+<a href="part0017.html#section13-2">section 13.2</a>. It would even be possible that
+technically focused teams work on Microservices which are split according to
+domain-based criteria. In this scenario there would be a UI, a middle
+tier and a database team which work on domain Microservices such
+as order process or registration. However, a number of advantages
+usually associated with Microservices cannot be exploited anymore in
+that case. Firstly, it is not possible anymore to scale the agile
+processes via Microservices. Secondly, it will be necessary to
+restrict the technology freedom since the teams will not be able to
+handle the different Microservices if they all employ different
+technologies. Besides, each team can modify each Microservice. This
+entails the danger that though a distributed system is created there
+are dependencies which prevent the independent development of
+individual Microservices. The necessity for independent Microservices
+is obliterated because a team can change multiple Microservices
+together and therefore can handle also Microservices having numerous
+dependencies. However, even under these conditions sustainable
+development, an easier start with Continuous Delivery, independent
+scaling of individual Microservices or a simple handling of legacy
+systems can still be implemented because the deployment units are
+smaller.</p>
+
+<h5 id="leanpub-auto-evaluation" class="calibre15">Evaluation</h5>
+
+<p class="calibre3">To put it clearly: Introducing Microservices without creating
+domain-focused teams does not lead to the main benefits meant to be derived from
+Microservices. It is always problematic to implement only some
+parts of a certain approach as only the synergies between the
+different parts will generate the overall value. Although implementing
+Microservices without domain-focused teams is a possible option – it is
+for sure not recommended.</p>
+
+<h5 id="leanpub-auto-departments" class="calibre15">Departments</h5>
+
+<p class="calibre3">As already discussed in <a href="part0017.html#section13-6">section 13.6</a>, the Microservice
+structure should ideally extend to the departments. However, in
+reality this is sometimes hard to achieve since the Microservice
+architecture often deviates too much from the organizational structure of
+the departments. It is unlikely that the organization of the
+departments will adapt to the distribution into Microservices. When
+the distribution of the Microservice cannot be adjusted, the respective Product
+Owners have to take care of prioritization and coordinate the wishes of
+the departments, which concern multiple Microservices, in such a way
+that all requirements are unambiguously prioritized for the teams. If
+this is not possible, a Collective Code Ownership approach
+(<a href="part0017.html#section13-2">section 13.2</a>) can limit the problem. In this case the
+Product Owner and his/her team can also modify Microservices which do
+not really belong to their sphere of influence. This can be the better
+alternative in contrast to a coordination across teams – however both
+solutions are not optimal.</p>
+
+<h5 id="leanpub-auto-operations-1" class="calibre15">Operations</h5>
+
+<p class="calibre3">In many organizations there is a separate team for operations. The
+teams responsible for the Microservices should also take care of the
+operations of their Microservices following the principle of
+DevOps. However, as discussed in <a href="part0017.html#section13-5">section 13.5</a>, it is
+not a strict requirement for Microservices to introduce DevOps. If the
+separation between operations and development is supposed to be
+maintained, operations has to define the necessary standards for the
+Microservices in the macro architecture to ensure a smooth operations
+of the system.</p>
+
+<h5 id="leanpub-auto-architecture" class="calibre15">Architecture</h5>
+
+<p class="calibre3">Often architecture and development are likewise kept separated. In a
+Microservices environment there is the area of macro architecture
+where architects make global decisions for all teams. Alternatively,
+the architects can be distributed to the different teams and work
+together with the teams. In addition, they can found an overarching
+committee which defines topics for macro architecture. In that case it
+has to be ensured that the architects really have time for this task
+and are not completely busy with work in their team.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-27" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">What does the organization of a project you know look like?</p>
+
+  <ul class="calibre16">
+    <li class="calibre14">Is there a special organizational unit which takes care of
+architecture? How would they fit into a Microservices-based
+architecture?</li>
+    <li class="calibre14">How is operations organized? How can the organization of operations best
+support Microservices?</li>
+    <li class="calibre14">How well does the domain-based division fit to the departments? How
+could it be optimized?</li>
+    <li class="calibre14">Can a Product Owner with fitting task area be assigned to each team?</li>
+  </ul>
+
+</aside>
+
+<h3 id="section13-9" class="calibre2">13.9 Conclusion</h3>
+
+<p class="calibre3">Microservices enable the independence of teams in regards to technical
+decisions and deployments (<a href="part0017.html#section13-1">section 13.1</a>). This allows
+the teams to independently implement requirements. In the end this
+makes it possible for numerous small teams to work together on a large
+project. This reduces the communication overhead between the
+teams. Since the teams can deploy independently, the overall risk of
+the project is reduced.</p>
+
+<p class="calibre3">Ideally the teams should be put together in a way that allows them to
+work separately on different domain aspects. If this is not possible
+or requires too much coordination between the teams, Collective Code
+Ownership can be an alternative (<a href="part0017.html#section13-2">section 13.2</a>). In
+that case each developer can change all of the code. Still one team has the
+responsibility for each Microservice. Changes to this Microservice
+have to be coordinated with the responsible team.</p>
+
+<p class="calibre3"><a href="part0017.html#section13-3">Section 13.3</a> described that Microservices have a macro
+architecture which comprises decisions which concern all
+Microservices. In addition, there is the micro architecture which can
+be different for each Microservice. In the areas of technology,
+operations, domain architecture and testing there are decisions which
+can either be attributed to micro or macro architecture. Each project
+has the choice to delegate them to teams (micro architecture) or to
+centrally define them (macro architecture). Delegating into teams is
+in line with the objective to achieve a large degree of independence –
+and is therefore often the better option. A separate architecture team
+can define the macro architecture – alternatively, the responsible
+team is assembled from members of the different Microservice teams.</p>
+
+<p class="calibre3">Responsibility for the macro architecture is closely linked to a
+concept for technical leadership (<a href="part0017.html#section13-4">section 13.4</a>):
+Less macro architecture means more responsibility for the Microservice
+teams and less responsibility for the central architecture team.</p>
+
+<p class="calibre3">Though Microservices profit from merging operations and development to
+DevOps (<a href="part0017.html#section13-5">section 13.5</a>), it is not strictly required to
+introduce DevOps to do Microservices. If DevOps is not possible or
+desired, operations can define guidelines in the context of macro
+architecture to unify certain aspects in order to ensure a smooth
+operations of the Microservice-based system.</p>
+
+<p class="calibre3">Microservices should always implement their own separate
+requirements. Therefore it is best when each Microservice can be
+assigned to a certain department on the business side
+(<a href="part0017.html#section13-6">section 13.6</a>). If this is not possible, the Product
+Owners have to coordinate the requirements coming from different
+departments in such a way that each Microservice has clearly
+prioritized requirements. When Collective Code Ownership is used, a
+Product Owner and his/her team can also change Microservices of other
+teams – which can limit the communication overhead. Instead of
+coordinating priorities, a team will introduce the changes which are
+necessary for a new feature by itself – even if they concern different
+Microservices. The team responsible for the modified Microservice can
+review the introduced changes and adjust them if necessary.</p>
+
+<p class="calibre3">Code can be reused in a Microservices project if the code is treated
+like an open source project (<a href="part0017.html#section13-7">section 13.7</a>). An
+internal project can be handled like an internal open source project – or can
+in fact be turned into a public open source project. It has to be
+considered that the effort for a real open source project is
+high. Therefore, it can be more efficient not to reuse code. Besides,
+the developers of the open source project have to prioritize domain
+requirements versus changes to the open source project which can be a
+difficult decision at times.</p>
+
+<p class="calibre3"><a href="part0017.html#section13-8">Section 13.8</a> discussed that an introduction of
+Microservices without changes to the organizational structure at the
+development level does not work in real life. When there are no
+domain-focused teams which can develop certain domain aspects
+independently of other teams, it is practically impossible to develop
+multiple features in parallel and thus to bring more features to the
+market within the same time. However, this is just what Microservices
+were meant to achieve. Sustainable development, an easy introduction
+of Continuous Delivery, independent scaling of individual
+Microservices or a simple handling of legacy systems are still
+possible. Operations and an architecture team can define the macro
+architecture so that in this area changes to the organizational
+structure are not strictly required. Ideally, the requirements of the
+departments are always reflected by one Microservice. If that is not
+possible, the Product Owners have to coordinate and prioritize the
+required changes.</p>
+
+<h5 id="leanpub-auto-essential-points-10" class="calibre15">Essential Points</h5>
+
+<ul class="calibre16">
+  <li class="calibre14">Microservices have significant effects on the
+organization. Independent small teams which together work on a large
+project are an important advantage of Microservices.</li>
+  <li class="calibre14">Viewing the organization as part of the architecture is an
+essential innovation of Microservices.</li>
+  <li class="calibre14">A combination of DevOps and Microservices is advantageous, but not
+obligatory.</li>
+</ul>
+
+
+</div>
+</body></html>

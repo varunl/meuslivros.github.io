@@ -1,0 +1,203 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title dir="ltr">16 How to Start with Microservices</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body dir="ltr" class="calibre">
+<div class="calibre6">
+<h2 id="chapter-16" class="calibre1">16 How to Start with Microservices</h2>
+
+<p class="calibre3">As conclusion of the book this chapter shows what the start with
+Microservices can look like. <a href="part0021.html#section16-1">Section 16.1</a> enumerates the different
+advantages of Microservices once more to illustrate that there is not
+only a single reason to introduce Microservices, but
+several. <a href="part0021.html#section16-2">Section 16.2</a> describes several ways for introducing
+Microservices – depending on the use context and the expected
+advantages. <a href="part0021.html#section16-3">Section 16.3</a> finally follows up on the question whether
+Microservices are more than just a hype.</p>
+
+<h3 id="section16-1" class="calibre2">16.1 Why Microservices?</h3>
+
+<p class="calibre3">Microservices entail a number of advantages such as (compare also
+<a href="part0008.html#chapter-5">chapter 5</a>):</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Microservices make it easier to implement agility for large
+projects since teams can work independently.</li>
+  <li class="calibre14">Microservices can help to supplement and replace legacy
+applications stepwise.</li>
+  <li class="calibre14">Microservice-based architectures allow for sustainable development
+since they are less susceptible to architecture decay and because
+individual Microservices can be easily replaced. This increases the
+long-term maintainability of the system.</li>
+  <li class="calibre14">In addition, there are technical reasons for Microservices such as
+robustness and scalability.</li>
+</ul>
+
+<p class="calibre3">To prioritize these advantages and the additional ones mentioned in
+<a href="part0008.html#chapter-5">chapter 5</a> should be the first step when considering the
+adaptation of a Microservice-based architecture. Likewise the
+challenges discussed in <a href="part0009.html#chapter-6">chapter 6</a> have to be evaluated
+and, where necessary, strategies for dealing with these challenges
+have to be devised.</p>
+
+<p class="calibre3">Continuous Delivery and infrastructure play a prominent role in this
+context. If the deployment processes are still manual, the expenditure
+for operating a large number of Microservices is so high that their
+introduction is hardly feasible. Unfortunately, many organizations
+still have profound weaknesses especially in the area of Continuous
+Delivery and infrastructure. In such a case Continuous Delivery should
+be introduced alongside Microservices. Since Microservices are much
+smaller than Deployment Monoliths, Continuous Delivery is also easier
+with Microservices. Therefore, both approaches have synergies.</p>
+
+<p class="calibre3">In addition the organizational level (<a href="part0017.html#chapter-13">chapter 13</a>) has
+to be taken into account. When the scalability of agile processes
+constitutes an important reason for introducing Microservices, the
+agile processes should already be well established. For example, there
+has to be a Product Owner per team, who also decides about all
+features, as well as agile planning. The teams should also be
+already largely self-reliant – otherwise in the end they might not make use of
+the independence Microservices offer.</p>
+
+<p class="calibre3">Introducing Microservices can solve more than just one problem. The
+specific motivation for Microservices will differ between
+projects. The large number of advantages can on its own be a good
+reason for introducing Microservices. In the end the strategy for
+introducing Microservices has to be adapted to the advantages that are
+most important in the context of a specific project.</p>
+
+<h3 id="section16-2" class="calibre2">16.2 Roads towards Microservices</h3>
+
+<p class="calibre3">There are different approaches which pave the way towards
+Microservices:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The most typical scenario is to start out with a monolith which is
+converted stepwise into a multitude of Microservices. Usually,
+different functionalities are transferred one by one into
+Microservices. A driving force behind this conversion is often the
+wish for an easier deployment. However, independent scaling and
+achieving a more sustainable architecture can also be important
+reasons.</li>
+  <li class="calibre14">However, migrating from a monolith to Microservices can also occur
+in a different manner. When for instance resilience is the main reason
+for switching to Microservices, the migration can be started by first
+adding technologies like Hystrix to the monolith. Afterwards the
+system can be split into Microservices.</li>
+  <li class="calibre14">Starting a Microservice-based system from scratch is by far the
+rarer scenario. Even in such a case a project can start by building a
+monolith. However, it is more sensible to devise a first
+coarse-grained domain architecture which leads to the first
+Microservices. Thereby an infrastructure is created which supports
+more than just one Microservice. This approach also allows teams to
+already work independently on features. However, a fine-granular
+division into Microservices right from the start often does not make
+sense because it will probably have to be revised again later on.
+Introducing the necessary profound changes into an already existing
+Microservices architecture can be highly complex.</li>
+</ul>
+
+<p class="calibre3">Microservices are easy to combine with existing systems which
+facilitates their introduction. A small Microservice as supplement to
+an existing Deployment Monolith is rapidly written. If problems arise,
+such a Microservice can also be rapidly removed again from the
+system. Other technical elements can then be introduced in a stepwise
+manner.</p>
+
+<p class="calibre3">The easy combination of Microservices with legacy systems is an
+essential reason for the fact that the introduction of Microservices
+is quite simple and can immediately result in advantages.</p>
+
+<h3 id="section16-3" class="calibre2">16.3 Microservice: Hype or Reality?</h3>
+
+<p class="calibre3">Without doubt Microservices are an approach which is in the focus of
+attention right now. This does not have to be bad – yet, such
+approaches often are at second glance only a fashion and do not
+solve any real problems.</p>
+
+<p class="calibre3">However, the interest in Microservices is more than just a fashion or
+hype:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">As described in the introduction, Amazon has been employing
+Microservices for many years. Likewise, many internet companies have
+been following this approach for a long time. Therefore, Microservices
+are not just a new fashion, but have already been used for a long time
+behind the scenes in many companies before they became fashionable.</li>
+  <li class="calibre14">For the Microservice pioneers the advantages associated with
+Microservices were so profound that they were willing to invest a lot
+of money into creating the not yet existing necessary
+infrastructures. These infrastructures are nowadays available free of
+cost as Open Source – Netflix is a prominent example. Therefore, it is
+much easier nowadays to introduce Microservices.</li>
+  <li class="calibre14">The trend towards agility and Cloud infrastructures is suitably
+complemented by Microservices-based architectures: They enable the
+scaling of agility and fulfill the demands of the Cloud in regards to
+robustness and scalability.</li>
+  <li class="calibre14">Likewise Microservices as small deployment units support
+Continuous Delivery which is employed by many enterprises to increase
+software quality and to bring software more rapidly into production.</li>
+  <li class="calibre14">There is more than one reason for Microservices. Therefore,
+Microservices represent an improvement for many areas. Since there is
+not a single reason for the introduction of Microservices, but a
+number of them, it is more likely that even very diverse projects will
+in the end really benefit from switching to Microservices.</li>
+</ul>
+
+<p class="calibre3">Presumably, everybody has already seen large, complex systems. Maybe
+it is now the time to develop smaller systems and to profit from the
+associated advantages. In any case there seem to be only very few
+reasons arguing for monoliths – except for their lower technical
+complexity.</p>
+
+<h3 id="section16-4" class="calibre2">16.4 Conclusion</h3>
+
+<p class="calibre3">Introducing Microservices makes sense for a number of reasons:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">There is a plethora of advantages (discussed in
+<a href="part0021.html#section16-1">section 16.1</a> and <a href="part0008.html#chapter-5">chapter 5</a>).</li>
+  <li class="calibre14">The way to Microservices is evolutionary. It is not necessary to
+start adopting Microservices for the whole system from the
+beginning. Quite in contrast: A stepwise migration is the usual way
+(<a href="part0021.html#section16-2">section 16.2</a>). Many different approaches can be
+chosen in order to profit as
+quickly as possible from the advantages Microservices offer.</li>
+  <li class="calibre14">The start is reversible: If Microservices prove not to be suitable
+for a certain project, they can easily be replaced again.</li>
+  <li class="calibre14">Microservices are clearly more than a hype
+(<a href="part0021.html#section16-3">section 16.3</a>). For being just a hype they have been
+in use for too long and have been too broadly adapted. Therefore, one
+should at least experiment with Microservices – and this books invites
+the reader in many places to do just that.</li>
+</ul>
+
+<h5 id="leanpub-auto-try-and-experiment-44" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">Answer the following questions for an architecture/system you are familiar with:</p>
+
+  <ul class="calibre16">
+    <li class="calibre14">Which are the most important advantages of Microservices in this context?</li>
+    <li class="calibre14">How could a migration to Microservices be achieved? Possible approaches:
+      <ul class="calibre31">
+        <li class="calibre14">Implement new functionalities in Microservices</li>
+        <li class="calibre14">Enable certain properties (e.g. robustness or rapid deployment) via suitable technologies</li>
+      </ul>
+    </li>
+    <li class="calibre14">What could a project look like which tests the introduction of Microservices with as little expenditure as possible?
+      <ul class="calibre31">
+        <li class="calibre14">In which case would this project be a success and the introduction of Microservices therefore sensible?</li>
+      </ul>
+    </li>
+  </ul>
+
+</aside>
+
+
+</div>
+</body></html>

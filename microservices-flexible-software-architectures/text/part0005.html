@@ -1,0 +1,552 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title dir="ltr">3 Microservice Scenarios</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body dir="ltr" class="calibre">
+<div class="calibre6">
+<h2 id="chapter-3" class="calibre1">3 Microservice Scenarios</h2>
+
+<p class="calibre3">This chapter will present a number of scenarios in which 
+Microservices can be useful. <a href="part0005.html#section3-1">Section 3.1</a> focuses on the
+modernization of a legacy web application. This scenario is the most
+common context for Microservices. A very different
+scenario is discussed in <a href="part0005.html#section3-2">section 3.2</a>. In this case a
+signaling system is supposed to be developed as distributed system
+based on Microservices. <a href="part0005.html#section3-3">Section 3.3</a> formulates a
+conclusion and invites the readers to judge for themselves on the
+usefulness of Microservices in the presented scenarios.</p>
+
+<h3 id="section3-1" class="calibre2">3.1 Modernizing an E-Commerce Legacy Application</h3>
+
+<h5 id="leanpub-auto-scenario" class="calibre15">Scenario</h5>
+
+<p class="calibre3">The Big Money Online Commerce inc. runs an E-commerce shop, which is the
+main source of the company revenue. It is a web application
+offering many different functionalities such as user registration and
+administration, product search, an overview of orders and the
+ordering process – the central feature of an E-commerce application.</p>
+
+<p class="calibre3">This application is a Deployment Monolith: It can only be deployed in
+its entirety.  Whenever a feature is changed, the entire application
+needs to be deployed anew. The E-Commerce shop works together with
+other systems – for instance with accounting and logistics.</p>
+
+<h5 id="leanpub-auto-reasons-to-use-microservices" class="calibre15">Reasons to Use Microservices</h5>
+
+<p class="calibre3">The Deployment Monolith once started out as a well-structured
+application. However, over the years more and more dependencies
+between the individual modules creeped in. For this reason the
+application is nowadays hardly maintainable and changeable. In
+addition the original architecture is not suited any more for the
+current requirements. Product search for instance has been greatly modified
+as the Big Money Online Commerce inc. attempts to outperform its
+competitors especially in this area. Likewise more and more
+possibilities have been generated for clients to solve problems by
+themselves without the assistance of a client service. This helped the
+company to reduce costs. Accordingly, these two modules became
+very large with a very complex internal structure and many
+dependencies on other modules that had not been planned for
+originally.</p>
+
+<h5 id="leanpub-auto-slow-continuous-delivery-pipeline" class="calibre15">Slow Continuous Delivery Pipeline</h5>
+
+<p class="calibre3">Big Money has decided to use Continuous Delivery and has established a
+Continuous Delivery pipeline. This pipeline is complicated and slow
+as the complete Deployment Monolith needs to be
+tested and brought into production. Some of the tests run for hours.
+A faster pipeline would be highly desirable.</p>
+
+<h5 id="leanpub-auto-parallel-work-complicated" class="calibre15">Parallel Work Complicated</h5>
+
+<p class="calibre3">There are teams working on different new features. However, the
+parallel work is complicated: The software structure just doesn’t
+really support it.
+The individual modules are not well enough separated and have
+too many interdependencies. As everything can only be deployed
+together, the entire Deployment Monolith has to be tested. Deployment
+and testing phase constitute a bottle neck. Whenever a team is having
+a release in the deployment pipeline, which is creating a problem, all
+other teams have to wait until the problem has been fixed and the change has been successfully
+deployed. Moreover, the access to the Continuous Delivery pipeline has
+to be coordinated. Only one team at a time can be doing testing and
+deployment. Thus it has to be regulated which team can bring which
+change into production at which time.</p>
+
+<h5 id="leanpub-auto-bottleneck-during-testing" class="calibre15">Bottleneck During Testing</h5>
+
+<p class="calibre3">In addition to deployment also the tests have to be coordinated. When
+the Deployment Monolith runs in an integration test, only the changes
+made by one team are allowed to be contained in the test. There were
+attempts to test several changes at once. However, in that case it was
+very hard to discern the origin of errors so that error analyses were
+long and complex.</p>
+
+<p class="calibre3">One integration test requires approximately one hour. Thus about six
+integration tests are feasible per working day as errors have to be
+fixed and the environment has to be set up again for the next test.
+In the case of ten
+teams one team can bring one change into production every two days on
+average. However, often a team also has to do error analysis, which
+lengthens integration. For that reason some teams use feature branches in
+order to separate themselves from integration: They perform their
+changes on a separate branch in the version control system. Integrating these
+changes into the main branch later on often causes problems: Changes
+are erroneously removed again upon merging or the software suddenly
+contains errors, which are caused by the separated development
+process and only show up after integration. These errors can only be eliminated in lengthy processes
+after integration.</p>
+
+<p class="calibre3">Consequently, the teams slow each other down due to the testing.
+Although each team develops its own modules, they all work on the same
+code basis so that they impede each other. As a consequence of the
+shared Continuous Delivery pipeline and the ensuing need for
+coordination the teams are neither able to work independently of each
+other nor in parallel.</p>
+
+
+<figure id="Fig2" class="image">
+  <img src="../images/00004.jpeg" alt="Fig. 2: Teams slow each other down due to the Deployment Monoliths." class="calibre17"/>
+  <figcaption class="calibre18">Fig. 2: Teams slow each other down due to the Deployment Monoliths.</figcaption>
+</figure>
+
+
+<h5 id="leanpub-auto-approach" class="calibre15">Approach</h5>
+
+<p class="calibre3">Because of the many problems Big Money Online Commerce inc.
+decided to split off small Microservices from the Deployment Monolith.
+The Microservices each implement one feature such as the product
+search and are developed by individual teams. Each team has the
+complete responsibility for an individual Microservice starting from
+requirements engineering up to running the application in production. The Microservices
+communicate with the Monolith and other Microservices via REST. The
+client GUI is also divided between the individual Microservices
+based on use cases. Each Microservice delivers the HTML pages for its
+use cases. Links are allowed between the HTML pages of the
+Microservices. However, it is not allowed to access the database
+tables of the other Microservices or the Deployment Monolith. Integration
+of services is exclusively done via REST or via links
+between the HTML pages.</p>
+
+<p class="calibre3">The Microservices can be deployed independently of each other. This
+allows to deliver changes in a Microservice without the need to
+coordinate with other Microservices or teams. This greatly facilitates
+parallel work on features while reducing coordination efforts.</p>
+
+<p class="calibre3">The Deployment Monolith is subject to far fewer changes due to the
+addition of Microservices. For many features changes to the
+Monolith are not necessary anymore. Thus, the Deployment Monolith is
+more seldom deployed and changed. Originally, it was planned to
+completely replace the Deployment Monolith at some point. However,
+meanwhile it seems more likely that the Deployment Monolith will just
+be deployed less and less frequently as most changes take place within
+the Microservices. Thus the Deployment Monolith does not disturb work
+any more. To replace it entirely is in the end not necessary and also
+does not appear sensible in economic terms anymore.</p>
+
+<h5 id="leanpub-auto-challenges-1" class="calibre15">Challenges</h5>
+
+<p class="calibre3">Implementing Microservices creates additional complexity in the
+beginning: All the Microservices need their own infrastructure. In
+parallel the Monolith has still to be supported.</p>
+
+<p class="calibre3">The Microservices comprise a lot more servers and thus pose very
+different challenges. Monitoring and log file processing have to deal
+with the fact that the data originate from different servers. Thus
+information has to be centrally consolidated. Besides a substantially
+larger number of servers has to be handled – not only in production,
+but also in the different test stages and team environments. This
+is only possible with good infrastructure
+automatization. It is not only necessary to support different types of
+infrastructure for the Monolith and the Microservices, but also to
+provide substantially more servers in the end.</p>
+
+<h5 id="leanpub-auto-entire-migration-lengthy" class="calibre15">Entire Migration Lengthy</h5>
+
+<p class="calibre3">The added complexity due to the two different software types will
+persist for a long time as it is a very lengthy process to completely
+migrate away from the Monolith. If the Monolith is never entirely
+replaced, the additional infrastructure costs will remain as well.</p>
+
+<h5 id="leanpub-auto-testing-remains-a-challenge" class="calibre15">Testing Remains a Challenge.</h5>
+
+<p class="calibre3">Testing is an additional challenge: Previously the entire Deployment
+Monolith was tested in the deployment pipeline. These tests are
+complex and take a long time as all functionalities of the Deployment
+Monolith have to be tested. If each change to each Microservice is
+sent through these tests, it will take a long time for each change to
+reach production. Moreover, the changes have to be coordinated as each
+change should be tested in isolation so that it is easily discernible
+in case of errors which change caused them. In that scenario a
+Microservices-based architecture does not seem to have major
+advantages over a Deployment Monolith: While Microservices can in principle be
+deployed independently of each other, the test stages preceding
+deployment still have to be coordinated and each change
+still has to pass through them singly.</p>
+
+<h5 id="leanpub-auto-current-status-of-migration" class="calibre15">Current Status of Migration</h5>
+
+<p class="calibre3"><a href="part0005.html#Fig3">Fig. 3</a> presents the current status: Product search works on
+an independent Microservice and is completely independent of the
+Deployment Monolith. Coordination with other teams is hardly
+necessary. Only in the last stage of the deployment the Deployment
+Monolith and the Microservices have to be tested together. Each change
+to the Monolith or any Microservice has to run through this step. This
+causes a bottleneck. The team “Customer” works together with the team
+“Order Process” on the Deployment Monolith. In spite of Microservices
+these teams still have to closely coordinate their work. For that
+reason the team “Order Process” has implemented its own Microservice,
+which comprises part of the order process. In this part of the system
+changes can be introduced faster than in the Deployment Monolith - not
+only due to the younger code basis, but also because it is no longer
+necessary to coordinate with the other teams.</p>
+
+
+<figure id="Fig3" class="image">
+  <img src="../images/00005.jpeg" alt="Fig. 3: Independent work through Microservices" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 3: Independent work through Microservices</figcaption>
+</figure>
+
+
+<h5 id="leanpub-auto-creating-teams" class="calibre15">Creating Teams</h5>
+
+<p class="calibre3">For the teams to be able to work independently on features it is
+important to create teams according to functionalities such as product search,
+customer or order process. If teams are instead created along technical
+layers such as UI, Middle Tier or database, each feature requires the
+involvement of all the teams as a feature normally comprises changes to
+UI, Middle Tier and database. Thus to minimize coordination efforts
+between the teams, the best approach is to create teams around
+features like product search. Microservices support the independence
+of the teams by their own technical independence from each other.
+Consequently, teams need to coordinate less in respect to basic
+technologies and technical designs.</p>
+
+<p class="calibre3">The tests have also to be modularized. Each test should ideally deal
+with a single Microservice. In that case it is sufficient
+to perform the test upon changes in the respective Microservice. In
+addition it might be possible to implement the test
+rather as unit test than as integration test. This progressively
+shortens the test phase in which all Microservices and the Monolith
+have to be tested together. This reduces the coordination problems for
+the final test phase.</p>
+
+<p class="calibre3">Migrating to a Microservices-based architecture created a number of
+performance problems and also some problems upon network failures.
+However, these problems could be solved after some time.</p>
+
+<h5 id="leanpub-auto-advantages" class="calibre15">Advantages</h5>
+
+<p class="calibre3">Thanks to the new architecture changes can be deployed much faster. A
+team can bring a change into production within 30 minutes. The
+Deployment Monolith on the other hand is deployed only weekly due to
+the not yet fully automated tests.</p>
+
+<p class="calibre3">Deploying the Microservices is not only much faster, but also in other
+respects much more comfortable: Less coordination is required. Errors
+are more easily found and fixed because developers still know very
+well what they have been working on as it was only 30 minutes ago.</p>
+
+<p class="calibre3">In summary the goal was attained: The developers can introduce more
+changes to the  E-Commerce shop. This is possible because the teams
+need to coordinate their work less and because the deployment of a
+Microservice can take place independently of the other services.</p>
+
+<p class="calibre3">The possibility to use different technologies was sparingly used by
+the teams: The previously used technology stack proved sufficient, and
+the teams wanted to avoid the additional complexity caused by the use
+of different technologies. However, the long needed search engine for
+the product search was introduced. The team responsible for product
+search was able to implement this change on its own. Previously the
+introduction of this new technology had been prohibited because the associated risk had been considered too great. In
+addition some teams meanwhile have new versions of the libraries of
+the technology stack in production as they needed the bug fixes of the
+more recent version. This
+did not require any coordination with the other teams.</p>
+
+<h5 id="leanpub-auto-conclusion" class="calibre15">Conclusion</h5>
+
+<p class="calibre3">Replacing a Monolith via the implementation of Microservices is
+nearly a classical scenario for the introduction of Microservices. It
+requires a lot of effort to keep developing a Monolith and to add new
+features to it. The complexity of the Monolith and consequently the
+problems caused by it progressively increase over time. Its complete
+replacement by a newly written system is very difficult. The software has
+to be replaced in one go which is very risky.</p>
+
+<h5 id="leanpub-auto-rapid-and-independent-development-of-new-features" class="calibre15">Rapid and Independent Development of new Features</h5>
+
+<p class="calibre3">Especially in the case of companies like Big Money Online Commerce
+inc. the rapid development of new features and the parallel work on
+several features are vital for economic success. Only by providing state of
+the art features customers can be won and kept from changing to other
+companies. The promise to develop more features faster renders
+Microservices highly attractive for many use cases.</p>
+
+<h5 id="leanpub-auto-influence-on-the-organization" class="calibre15">Influence on the Organization</h5>
+
+<p class="calibre3">The presented example illustrates also the influence of Microservices
+on the organization. The teams work on their own Microservices. As the
+Microservices can be developed and deployed independently of each
+other, the work of the different teams is no longer linked. In order
+to keep it that way a Microservice may not be changed by several
+teams in parallel. The Microservices architecture requires a team
+organization corresponding to the different Microservices: Each team
+is responsible for one or several Microservices, which implement an
+isolated functionality. This relationship between organization and
+architecture is especially important in the case of
+Microservices-based architectures. Each team takes care of all issues
+revolving around “its” Microservices from requirements engineering up to
+operation monitoring. Of course, especially for operation the teams
+can use common infrastructure services for logging and monitoring.</p>
+
+<p class="calibre3">And finally: If the goal is to achieve a simple and fast deployment in
+production, just including Microservices into the architecture will
+not be sufficient. The entire Continuous Delivery pipeline has to be
+checked for potential obstacles and these have to be removed. This is
+illustrated by the tests in the presented example: Testing all
+Microservices together should be reduced to the essential minimum. Each
+change has to run through an integration test together with the other
+Microservices, but this test must not require a lot of time to avoid
+a bottleneck in integration tests.</p>
+
+<h5 id="leanpub-auto-amazon-has-been-doing-it-for-a-long-time" class="calibre15">Amazon Has Been Doing It for a Long Time</h5>
+
+<p class="calibre3">The scenario presented here is very similar to what Amazon
+has been doing already for a very long time – and for the discussed
+reasons: Amazon wants to be able to rapidly and easily implement new
+features on its website. In 2006 Amazon did not only present its Cloud
+platform, but also discussed how it develops software. Essential
+features are:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The application is divided into different services.</li>
+  <li class="calibre14">Each services provides a part of the website. For instance there
+is a service for searching and another one for recommendations. In
+the end the individual services are presented together in the UI.</li>
+  <li class="calibre14">There is always one team responsible for one service. The team takes
+care of developing new features as well as of operating the service. The
+idea is: “You build it – you run it!”</li>
+  <li class="calibre14">The Cloud platform i.e. virtual machines constitute the common foundation
+of all services. Apart from that there are no further standards. Thus
+the teams are very free in their choice of technologies.</li>
+</ul>
+
+<p class="calibre3">By introducing this type of architecture Amazon implemented
+fundamental characteristics of Microservices already in 2006. Moreover
+Amazon introduced DevOps by having teams consisting of operation
+experts and developers. This approach necessitates that the
+deployments occur largely in an automated fashion as the manual
+construction of servers is not feasible in Cloud environments – thus
+Amazon also implemented at least one aspect of Continuous Delivery.</p>
+
+<p class="calibre3">Conclusion: Microservices have been used by some companies for quite
+some time already – especially by companies having an internet-based
+business model. Thus the approach has already proven its practical
+advantages in real life. In addition Microservices display synergy
+effects with other modern approaches such as Continuous Delivery,
+Cloud or DevOps.</p>
+
+<h3 id="section3-2" class="calibre2">3.2 Developing a New Signaling System</h3>
+
+<h5 id="leanpub-auto-scenario-1" class="calibre15">Scenario</h5>
+
+<p class="calibre3">Searching airplanes and ships which have gone missing is a complex
+task. Rapid action can save lives. Therefore different systems are
+required. Some provide signals such as radio or radar signals. These
+signals have to be recorded and processed. Radio signals for example
+can be used to obtain a bearing, which subsequently has to be checked
+against radar-based pictures. Finally humans have to further evaluate
+the information. The data analyses as well as the raw data have to be
+provided to the different rescue teams. Signal inc. builds systems
+for exactly these use cases. The systems are individually assembled,
+configured and adapted to the specific needs of the respective client.</p>
+
+
+<figure id="Fig4" class="image">
+  <img src="../images/00006.jpeg" alt="Fig. 4: Overview of the Signaling System" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 4: Overview of the Signaling System</figcaption>
+</figure>
+
+
+<h5 id="leanpub-auto-reasons-to-use-microservices-1" class="calibre15">Reasons to Use Microservices</h5>
+
+<p class="calibre3">The system is composed of different components, which run on different
+computers. The sensors are distributed all over the area to be
+monitored and are provided with their own servers. However, these
+computers are not supposed to handle the more detailed data processing or to
+store the data. Their hardware is not sufficiently powerful for that.
+Besides data privacy considerations render such an approach very
+undesirable as well.</p>
+
+<h5 id="leanpub-auto-distributed-system" class="calibre15">Distributed System</h5>
+
+<p class="calibre3">For these reasons the system has to be a distributed system. The different
+functionalities are distributed within the network. The system is
+unreliable as individual components and the communication between
+components can fail.</p>
+
+<p class="calibre3">It would be possible to implement a large part of the system within a
+Deployment Monolith. However, upon closer consideration the different
+parts of the system have to fulfill very different demands. Data
+processing requires rather a lot of CPU and an approach that allows
+numerous algorithms to process the data. For such purposes there are
+solutions, which read events out of a data or event stream and process
+them. Data storage requires a very different focus: Basically, the
+data have to be maintained within a data structure, which is suitable
+for different data analyses. Modern NoSQL databases are well suited
+for this. Recent data are more important than old data. They have to
+be accessible faster while old data can even be deleted at some point.
+To be finally analyzed by experts the data have to be read from the
+database and processed.</p>
+
+<h5 id="leanpub-auto-technology-stack-per-team" class="calibre15">Technology Stack per Team</h5>
+
+<p class="calibre3">Each of the discussed tasks poses different challenges. Consequently,
+each requires not only a well adapted technology stack but also a
+dedicated team consisting of technical experts for the respective
+task. In addition people are needed who decide which features
+Signal inc. will bring to the market and in line with that define new
+requirements for the systems. Systems for processing and sensors are
+individual products, which can be positioned on the market
+independently of each other.</p>
+
+<h5 id="leanpub-auto-integration-of-other-systems" class="calibre15">Integration of Other Systems</h5>
+
+<p class="calibre3">An additional reason for the use of Microservices is the possibility
+to easily integrate other systems. Sensors and computing units are also provided
+by other companies. The ability to integrate such solutions is a
+frequent requirement in client projects. Microservices allow the easy
+integration of other systems as the integration of different
+distributed components is anyhow a core feature of a
+Microservices-based architecture.</p>
+
+<p class="calibre3">For these reasons the architects of Signal inc. decided to indeed
+implement their system as a distributed system. Each team must
+implement its respective domain in several small Microservices. In
+this way the exchangeability of the Microservices will be further
+improved, and the integration of other systems will be even more
+facilitated.</p>
+
+<p class="calibre3">Only the communication infrastructure to be used by all services for
+their communication with each other is predetermined. The
+communication technology supports many programming languages and
+platforms so that there are no limitations as to which concrete
+technology is used. To allow for a flawless communication the
+interfaces between the Microservices have to be clearly defined.</p>
+
+<h5 id="leanpub-auto-challenges-2" class="calibre15">Challenges</h5>
+
+<p class="calibre3">A failure of communication between the different
+Microservices presents an important challenge. The system has to stay
+useable even if network failures occur. This necessitates the use of
+technologies, which can handle such failures. However, technologies
+alone will not solve this problem. It has to be decided as part of the
+user requirements what should happen if a system fails. If for
+instance old data are sufficient, caches can be helpful. In addition
+it can be possible to use a simpler algorithm, which does not require
+calls to other systems.</p>
+
+<h5 id="leanpub-auto-high-technological-complexity" class="calibre15">High Technological Complexity</h5>
+
+<p class="calibre3">The technological complexity of the entire system is very high.
+Different technologies are employed to fulfill the demands of the
+different components. The teams working on the individual systems can
+make largely independent technology decisions. This allows them to
+always implement the most suitable solution.</p>
+
+<p class="calibre3">Unfortunately, this means as well that developers can no longer change
+easily between teams. For example when there was a lot of work for the
+data storage team, developers from other teams could hardly help out as
+they were not even proficient in the programming languages the data
+storage team was using and did not know the specific technologies such
+as the used database.</p>
+
+<p class="calibre3">It certainly is a challenge to run a system comprising such a plethora
+of technologies. For this reason there is one standardization in this
+area: All Microservices must be able to be run in a largely identical
+manner. They are virtual machines so that their installation is fairly
+simple. Furthermore, the monitoring is standardized, which
+determines data formats and technologies. This allows for the central
+monitoring of the applications. In addition to the typical operational
+monitoring there is also monitoring of application-specific values and finally an
+analysis of log files.</p>
+
+<h5 id="leanpub-auto-advantages-1" class="calibre15">Advantages</h5>
+
+<p class="calibre3">In this context the main advantage offered by Microservices is the
+good support for the distributed nature of the system. The sensors are
+at different locations so that a centralized system is anyhow not
+sensible. The architecture has adapted to this fact by further
+dividing the system into small Microservices, which are distributed
+within the network. This enhanced the exchangeability of the
+Microservices. Besides the Microservices approach supports the
+technology diversity, which characterizes this system.</p>
+
+<p class="calibre3">In this scenario time-to-market is by far not as important as in the
+other scenario. It would also be hard to implement as the systems are
+installed at different clients and cannot be easily reinstalled.
+However, some ideas from the Continuous Delivery field are used: For
+instance the largely uniform installation and
+the central monitoring.</p>
+
+<h5 id="leanpub-auto-verdict" class="calibre15">Verdict</h5>
+
+<p class="calibre3">Microservices are a very suitable architecture design for the
+presented scenario. The system can profit from the fact that typical
+problems can be solved during implementation by established approaches
+from the Microservices field – for example technology complexity and
+platform operation.</p>
+
+<p class="calibre3">Still this scenario would hardly be immediately associated with the
+term “Microservice”. This leads to the following conclusions:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Microservices have a wider application than is apparent at first
+glance. Also outside of web-based business models Microservices can
+solve many problems – even if those issues are very different from the
+ones found in web companies.</li>
+  <li class="calibre14">Indeed many projects from different fields have been using
+Microservice-based approaches for quite some time,  even if they do
+not call them by this name or implement them only partially.</li>
+  <li class="calibre14">With the help of Microservices these projects can use technologies,
+which are currently created in the Microservice field. In addition
+they can profit from the experiences made in this field, for instance
+in regards to architecture.</li>
+</ul>
+
+<h3 id="section3-3" class="calibre2">3.3 Conclusion</h3>
+
+<p class="calibre3">This chapter presented two very different scenarios from two
+completely distinct business areas: a web system with a strong focus
+on rapid time-to-market and a system for signal processing, which is
+inherently distributed. The architecture principles are very similar
+for the two systems although originating from different reasons.</p>
+
+<p class="calibre3">In addition there are a number of common approaches, among those the
+creation of teams according to Microservices, the demands in regards
+to infrastructure automatization as well as other organizational
+topics. However, in other areas there are also differences. For the
+signaxsling system it is essential to have the possibility to use different
+technologies as this system anyhow has to employ a number of different
+technologies. For the web system this aspect is not as important.
+Here, the independent development, the fast and easy deployment and
+finally the better time-to-market are the decisive factors.</p>
+
+<h5 id="leanpub-auto-essential-points" class="calibre15">Essential Points</h5>
+
+<ul class="calibre16">
+  <li class="calibre14">Microservices offer a plethora of advantages.</li>
+  <li class="calibre14">In the case of web-based applications Continuous Delivery and short
+time-to-market can constitute an important motivation for the use of
+Microservices.</li>
+  <li class="calibre14">However, there are also very different use cases for which
+Microservices as distributed systems are extremely well suited.</li>
+</ul>
+
+
+</div>
+</body></html>

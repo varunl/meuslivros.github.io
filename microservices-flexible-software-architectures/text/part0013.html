@@ -1,0 +1,1342 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title dir="ltr">9 Integration and Communication</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body dir="ltr" class="calibre">
+<div class="calibre6">
+<h2 id="chapter-9" class="calibre1">9 Integration and Communication</h2>
+
+<p class="calibre3">Microservices have to be integrated and need to communicate. This can
+be achieved at different levels (<a href="part0013.html#Fig37">Fig. 37</a>). Each approach has certain
+advantages and disadvantages. Besides, at each level different
+technical implementations of integration are possible.</p>
+
+
+<figure id="Fig37" class="image">
+  <img src="../images/00039.jpeg" alt="Fig. 37: Different levels of integration" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 37: Different levels of integration</figcaption>
+</figure>
+
+
+<ul class="calibre16">
+  <li class="calibre14">Microservices contain a graphical user interface. Therefore,
+Microservices can be integrated at the level of the UI. This type of
+integration is introduced in <a href="part0013.html#section9-1">section 9.1</a>.</li>
+  <li class="calibre14">Also the logic can be integrated. Microservices can
+use REST (<a href="part0013.html#section9-2">section 9.2</a>), SOAP or RCP
+(<a href="part0013.html#section9-3">section 9.3</a>) or messaging
+(<a href="part0013.html#section9-4">section 9.4</a>) to achieve the integration of logic.</li>
+  <li class="calibre14">Finally, the integration can be performed at the level of the database
+via data replication (<a href="part0013.html#section9-5">section 9.5</a>).</li>
+</ul>
+
+<p class="calibre3">General rules for the design of interfaces are provided in
+<a href="part0013.html#section9-6">section 9.6</a>.</p>
+
+<h3 id="section9-1" class="calibre2">9.1 Web and UI</h3>
+
+<p class="calibre3">Microservices should bring their own UI along. This allows to
+implement functionalities even in those cases in only one Microservice, when the
+changes also affect the UI. At the level of the entire system it is
+necessary to jointly integrate the UIs of the Microservices. This can
+be achieved by different approaches, which are reviewed in the
+<a href="https://www.innoq.com/blog/st/2014/11/web-based-frontend-integration/">innoQ Blog</a>.</p>
+
+<h5 id="leanpub-auto-multiple-single-page-apps" class="calibre15">Multiple Single-Page-Apps</h5>
+
+<p class="calibre3"><a href="http://en.wikipedia.org/wiki/Single-page_application">Single-Page-App (SPA)</a>
+implements the entire UI with just one HTML page. The logic is
+implemented in JavaScript, which dynamically changes parts of the
+page. The logic can manipulate the URL displayed in the browser so
+that bookmarks and other typical browser features can be
+used. However, SPAs are not in line with the original web thinking:
+SPAs marginalize HTML as central web technology. Most logic is
+implemented in JavaScript. Classical web architectures implement logic
+nearly exclusively on the server.</p>
+
+<p class="calibre3">SPAs are especially advantageous when complex interactions or offline
+ability are required. Google’s GMail is an example which also
+decisively shaped the term SPA. Mail clients are often native
+applications. GMail as SPA offers nearly the same comfort.</p>
+
+<p class="calibre3">There are different technologies for the implementation of
+Single-Page-Apps:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<a href="https://angularjs.org/">AngularJS</a> is very popular. AngularJS has
+amongst other features a bidirectional UI data-binding: If the
+JavaScript code assigns a new value to an attribute of a bound model,
+the view components displaying the value are automatically
+changed. The binding works also from UI to the code: AngularJS can
+bind the input of a user to a JavaScript variable. Furthermore,
+AngularJS can render HTML templates in the browser. Thereby JavaScript
+code can also generate complex DOM structures. In that case the entire
+frontend logic is implemented in the JavaScript code running the
+browser. AngularJS was made by Google who put the framework under the
+very liberal MIT license.</li>
+  <li class="calibre14">
+<a href="http://emberjs.com/">Ember.js</a> works in line with the principle Convention over
+Configuration and represents in essence the same features like
+AngularJS. Via the supplementary module Ember Data it offers a
+model-driven approach for accessing REST resources. Ember.js is under
+the MIT license and is looked after by developers from the open
+source community.</li>
+  <li class="calibre14">
+<a href="http://www.sencha.com/products/extjs/">Ext JS</a> offers apart from an
+MVC approach also components which developers can compose to a UI
+similar like for Rich Client applications. Ext JS is available as Open
+Source under GPL v3.0. However, for commercial development a licence
+has to be bought from the manufacturer Sencha.</li>
+</ul>
+
+<h5 id="leanpub-auto-spa-per-microservice" class="calibre15">SPA per Microservice</h5>
+
+<p class="calibre3">In case of Microservices with Single Page Apps each Microservice can bring
+its own SPA along (<a href="part0013.html#Fig38">Fig. 38</a>). The SPA can call the Microservice for
+instance via JSON/REST. This is especially easy to implement with
+JavaScript. Between the SPAs a link can be used.</p>
+
+
+<figure id="Fig38" class="image">
+  <img src="../images/00040.jpeg" alt="Fig. 38: Microservices with Single Page Apps" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 38: Microservices with Single Page Apps</figcaption>
+</figure>
+
+
+<p class="calibre3">Thereby the SPAs are completely separate and independent. New versions
+of a SPA and of the associated Microservice can be rolled out without
+further ado. However, a tighter integration of SPAs is difficult. When
+the user switches from one SPA to another, the browser loads a new web
+page and starts a different JavaScript application. Even modern
+browsers need so much time for this that this approach is only
+sensible when switching between SPAs is an exception.</p>
+
+<h5 id="leanpub-auto-asset-server-for-uniformity" class="calibre15">Asset Server for Uniformity</h5>
+
+<p class="calibre3">Besides SPAs can be heterogeneous. Each brings its own individually
+designed UI along. However, this issue can be solved by using an Asset
+Server. Such a server is used to provide JavaScript files and CSS
+files for the applications. When the SPAs of the Microservices are
+only allowed to use these kinds of resources via the Asset Server, a
+uniform user interface can be achieved. To accomplish this, a Proxy
+Server can distribute requests to the Asset Server and the
+Microservices. Thereby it will look for the web browser as if all
+resources as well as the Microservices possess a shared URL. This
+approach avoids that security rules prohibit the use of the contents
+because they originate from different URLs. Caching can then reduce
+the time for loading the applications. When only JavaScript libraries,
+which are stored on the Asset Server, are allowed to be used, the
+choice of technologies for the Microservices can be
+reduced. Therefore, uniformity and free technology choice are competing aims.</p>
+
+<p class="calibre3">Besides the shared assets will create code dependencies between the
+Asset Server and all Microservices. A new version of an asset entails
+the modification of all Microservices which use this asset. In the
+end, they have to modified in a way that they use the new
+version. Such code dependencies endanger the independent deployment
+and therefore should be avoided. Code dependencies in the backend are
+often a problem (compare <a href="part0012.html#section8-3">section 8.3</a>). In fact, such
+dependencies should also be reduced in the frontend. However, in such
+a case an Asset Server is rather a problem than a solution.</p>
+
+<p class="calibre3">Apart from an Asset Server UI guidelines can be helpful, which
+describe the design of the application in more detail and thereby
+enable a uniform approach also at different levels. This allows for
+the implementation of a uniform UI even without a shared Asset Server
+and code dependencies.</p>
+
+<p class="calibre3">In addition, it has to be ensured that the SPAs possess a uniform
+authentication and authorization so that the users do not have to log
+in multiple times. An OAuth2 or a shared signed cookie can be a
+solution for this (compare also <a href="part0012.html#section8-12">section 8.12</a>).</p>
+
+<p class="calibre3">JavaScript can only access data which are available under the domain
+from where the JavaScript code originates. This Same Origin
+Policy avoids that JavaScript code can read data from other
+domains. When all Microservices are accessible to the outside under
+the same domain due to a Proxy, this is no limitation. Otherwise the
+policy has to be deactivated when the UI of a Microservice
+is supposed to access the data of another Microservice. This problem
+can be solved by CORS (Cross Origin Resource Sharing) with which the
+server delivering the data can also allow JavaScript from other
+domains. Another option is to offer all SPA and REST services to the
+outside only via one domain so that an access across domains is not
+necessary. In this way also the access to shared JavaScript code on an
+Asset Server can be implemented.</p>
+
+<h5 id="leanpub-auto-a-single-page-app-for-all-microservices" class="calibre15">A Single Page App for all Microservices</h5>
+
+<p class="calibre3">The division into multiple SPAs results in a strict separation of the
+frontends of the Microservices. If for instance a SPA is responsible
+for registering orders and another one for a fundamentally different
+use case like reports, the load times needed when changing
+between SPAs are still acceptable. Maybe the user groups are even
+different so that changes between the applications do not occur.</p>
+
+<p class="calibre3">There are cases when a tighter integration of the user interfaces of
+the Microservices is necessary. For example, in an order also details
+about the items can be displayed. Displaying the order is the
+responsibility of one Microservice, displaying the items is performed
+by another. In this case the SPA can be distributed into modules. Each
+module belongs to another Microservice and therefore to another
+team. The modules should be deployed separately. They can for instance
+be stored on the server in individual JavaScript files and possess
+separate Continuous Delivery pipelines. Besides there have to be
+suitable conventions for the interfaces. For example, only the sending
+of events might be allowed. Events uncouple the modules because the
+modules communicate only changes in the states, but not how other
+modules have to react to them.</p>
+
+
+<figure id="Fig39" class="image">
+  <img src="../images/00041.jpeg" alt="Fig. 39: Close integration of Microservices sharing one Single-Page-App" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 39: Close integration of Microservices sharing one Single-Page-App</figcaption>
+</figure>
+
+
+<p class="calibre3">AngularJS for instance has a module concept which allows to implement
+individual parts of the SPA in separate units. A Microservice could
+provide an AngularJS module for displaying the user interface of the
+Microservice. The model can integrate, if necessary, AngularJS modules
+of other Microservices.</p>
+
+<p class="calibre3">However, such an approach has disadvantages:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Deploying the SPA is often only possible as complete
+application. When a module is modified, the entire SPA has to be
+rebuilt and deployed. This has to be coordinated between the
+Microservices, which provide the modules of the application. In
+addition, the deployment of the Microservices on the server has to be
+coordinated with the deployment of the modules since the modules call
+the Microservices. This necessity for coordination for the deployment
+of modules of an application should be avoided by Microservices.</li>
+  <li class="calibre14">The modules can call each other. Depending on the way calls
+are implemented, changes to a module can entail that also other
+modules have to changed, for instance because an interface has been
+modified. When the modules belong to separate Microservices, this
+enforces again a coordination across Microservices, which should be
+avoided.</li>
+</ul>
+
+<p class="calibre3">For SPA modules a much closer coordination is necessary than for links
+between applications. On the other hand the SPA modules offer the
+advantage that UI elements from different Microservices can be
+simultaneously displayed to the user. However, this approach closely couples
+the Microservices at the level of the UI. The SPA modules
+correspond to the module concepts which also exist in other
+programming languages and cause a simultaneous deployment. Thus, the
+Microservices, which really should be independent of each other, are
+combined at the UI level in one shared deployment artifact. Therefore,
+this approach undoes one of the most important advantages of a
+Microservice-based architecture – the independent deployment.</p>
+
+<h5 id="leanpub-auto-html-applications" class="calibre15">HTML Applications</h5>
+
+<p class="calibre3">Another option for implementing the user interface are HTML-based user
+interfaces. Every Microservice has one or more web pages which are
+generated on the server. The web page can also use JavaScript. Here,
+contrary to SPAs, only a new HTML web page and not necessarily an
+application is loaded by the server when changing between web pages.</p>
+
+<h5 id="leanpub-auto-roca" class="calibre15">ROCA</h5>
+
+<p class="calibre3"><a href="http://roca-style.org/">ROCA</a> (Resource Oriented Client Architecture)
+offers the possibility to arrange the handling of JavaScript and
+dynamical elements in HTML user interfaces. ROCA views itself as
+alternative to SPAs. In ROCA the role of JavaScript is limited to
+optimizing the usability of the web pages. JavaScript can facilitate
+their use or can add effects to the HTML web pages. However, the
+application has to remain useable without JavaScript. It is not the
+purpose of ROCA that users really use web pages without JavaScript. The
+applications are only supposed to use the architecture of the web,
+which is based on HTML and HTTP. Especially when a web application is
+supposed to be divided into Microservices, ROCA reduces the
+dependencies and simplifies the division. Between Microservices the
+coupling of the UI can be achieved by links. For HTML applications
+links are the usual tool for navigating between the web pages and
+represent a natural integration. They are no foreign body like in the
+case of SPAs.</p>
+
+
+<figure id="Fig40" class="image">
+  <img src="../images/00042.jpeg" alt="Fig. 40: HTML user interface with an asset server" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 40: HTML user interface with an asset server</figcaption>
+</figure>
+
+
+<p class="calibre3">To support the uniformity of the HTML user interfaces, the
+Microservices can use a shared Asset Server like in the case of SPAs
+(<a href="part0013.html#Fig40">Fig. 40</a> ). It contains all CSS and JavaScript
+libraries. When the teams in addition define design guidelines for the
+HTML web pages and look after the assets on the Asset Server, the user
+interfaces of the different Microservices will be largely
+identical. However, as described before, this will lead to code
+dependencies between the UIs of the Microservices.</p>
+
+<h5 id="leanpub-auto-easy-routing" class="calibre15">Easy Routing</h5>
+
+<p class="calibre3">To the outside the Microservices should appear like a single web
+application – ideally with one URL. This also facilitates the shared
+use of assets since the Same Origin Policy is not violated. However,
+from the outside user requests have to be directed to the right
+Microservice. This is the function of the router. It can receive HTTP
+requests and forward them to one of the Microservices. This can be
+done based on the URL. How individual URLs are mapped to Microservices
+can be decided by rules, which can also be complex. The example
+application uses Zuul for this task (compare
+<a href="part0019.html#section14-9">section 14.9</a>). Reverse Proxies are an
+alternative. These can for instance be web servers like Apache httpd or
+nginx, which can direct requests to other servers. In the process the
+requests can be modified, URLs can for instance be rewritten. However,
+these mechanisms are not as flexible as Zuul, which is very easy to
+extend with home-grown code.</p>
+
+<p class="calibre3">When the logic in the router is very complex, this can cause
+problems. If this logic has to be changed because a new version of a
+Microservice is brought into production, an isolated deployment is not
+easy anymore. This endangers the independent development and the
+independent deployment of the Microservices.</p>
+
+<h5 id="leanpub-auto-arrange-html-with-javascript" class="calibre15">Arrange HTML with JavaScript</h5>
+
+<p class="calibre3">In some cases, a closer integration is necessary. It can happen that
+information originating from different Microservices is displayed on one 
+HTML web page. For example a web page might display order
+data from one Microservice and data concerning the ordered items from
+another Microservice. In that case one router is not sufficient
+anymore. A router can only allow that a Microservice generates a
+complete HTML web page.</p>
+
+<p class="calibre3">A simple solution which employs the architecture presented in
+<a href="part0013.html#Fig40">Fig. 40</a> is based on links. AJAX allows to load the content
+of a link from another Microservice. Afterwards the link is replaced
+by the thereby received HTML. In the example a link to an item could
+be transformed into an HTML description of this item. This allows to
+implement the logic for the presentation of a product in one Microservice,
+while the design of the entire web page is implemented in another
+Microservice. The entire web page would be the responsibility of the
+order Microservice, while the presentation of the products would be the
+responsibility of the product Microservice. This enables the continued
+independent development of both Microservices and displaying
+presentations from both components. If the presentation of the items
+has to be changed or new products necessitate a revised presentation,
+these modifications can be implemented in the product
+Microservice. The entire logic of the order Microservice remains
+unchanged.</p>
+
+<p class="calibre3">Another example for this approach is
+<a href="https://www.facebook.com/notes/facebook-engineering/bigpipe-pipelining-web-pages-for-high-performance/389414033919">Facebook’s BigPipe</a>. It
+optimizes not only the load time, but allows also the composition
+of web pages from pagelets. A custom implementation can use JavaScript
+to replace certain elements of the web page by other HTML. This can be
+links or <strong class="calibre19">div</strong>-elements like the ones also otherwise used for
+structuring web pages. Such a <strong class="calibre19">div</strong>-element can be replaced by HTML
+code.</p>
+
+<p class="calibre3">However, this approach causes relatively long load times. It is
+mainly advantageous when the web UI anyhow uses a lot of JavaScript
+and when there are not many transitions between web pages.</p>
+
+<h5 id="leanpub-auto-frontend-server" class="calibre15">Frontend Server</h5>
+
+<p class="calibre3"><a href="part0013.html#Fig41">Fig. 41</a> shows an alternative for a tight integration. A
+frontend server composes the HTML web page from HTML snippets, which
+are each generated by a Microservice. Assets like CSS or JavaScript
+libraries can also be stored in the frontend server. Edge Side
+Includes (ESI) represents a possibility to implement this concept. ESI
+offers a relatively simple language for combining HTML from different
+sources. With ESI caches can supplement static content – for instance
+the skeleton of a web page– with dynamic content. In this way caches
+can help with the delivery of web pages, even if they contain dynamic
+content. Proxies and caches like
+<a href="https://www.varnish-cache.org/">Varnish</a> or
+<a href="http://www.squid-cache.org/">Squid</a> implement ESI.  Another
+alternative are Server Side Includes (SSI). They are very similar to
+ESIs, however, they are not implemented in caches, but in web servers. With SSIs
+web servers can integrate HTML snippets from other servers into HTML
+web pages. The Microservices can deliver components for the web page,
+which then will be assembled on the server. Apache httpd supports SSIs
+for instance with
+<a href="http://httpd.apache.org/docs/2.2/mod/mod_include.html">mod_include</a>. nginx
+uses the
+<a href="http://nginx.org/en/docs/http/ngx_http_ssi_module.html">ngx_http_ssi_module</a>
+for the support of SSIs.</p>
+
+
+<figure id="Fig41" class="image">
+  <img src="../images/00043.jpeg" alt="Fig. 41: Integration using a Frontend server" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 41: Integration using a Frontend server</figcaption>
+</figure>
+
+
+<p class="calibre3">Portals also consolidate information from different sources on one web
+page. Most products use Java Portlets in line with the Java standard
+JSR 168 (Portlet 1.0) or JSR 286 (Portlet 2.0). Portlets can be
+brought into production independently of each other and therefore
+solve one of the central challenges surrounding Microservice-based
+architectures. In practice these technologies result frequently in
+complex solutions. Portlets behave technically very differently in
+comparison to normal Java web applications so that the use of many
+technologies from the Java environment is either difficult or
+impossible. Portlets allow the user to compose a web page from
+previously defined portlets. In this way the user can assemble for
+instance his/her most important information sources on one
+web page. However, this is not really necessary for creating a UI for
+Microservices. The additional features result in additional
+complexity. Therefore, portal servers which are based on portlets are
+not a really good solution for the web user interfaces of
+Microservices. In addition, they restrict the available web
+technologies to the Java field.</p>
+
+<h5 id="leanpub-auto-mobile-clients-and-rich-clients" class="calibre15">Mobile Clients and Rich Clients</h5>
+
+<p class="calibre3">Web user interfaces do not need any installation of software on the
+client. The web browser is the universal client for all web
+applications. On the server site the deployment of the web user
+interface can easily be coordinated with the deployment of the
+Microservice. The Microservice implements a part of the UI and can
+deliver the code of the web user interface via HTTP. This allows for a
+relatively easy coordinated deployment of client and server.</p>
+
+<p class="calibre3">For mobile apps, Rich Clients, or desktop applications the situation
+is different: A software has to be installed on the client. This
+client application is a Deployment Monolith, which has to offer an
+interface for all Microservices. If the client application is supposed
+to comprise functionalities of different Microservices, it would
+technically have to be modularized, and the individual modules like the
+associated Microservices would have to be brought into production
+independently of each other. However, this is not possible since the
+client application is a Deployment Monolith. A SPA can also easily
+turn into a Deployment Monolith. Sometimes a SPA is used to separate the
+development of client and server. In a Microservices context such a
+use of SPAs is not desirable.</p>
+
+<p class="calibre3">When a new feature is implemented in a Microservice, which also
+requires modifications of the client application, this change cannot
+solely be rolled out via a new version of the Microservice. In
+addition, a new version of the client application has to be
+delivered. However, it is unrealistic to deliver the client
+application over and over again for each small change of a feature. If
+the client applications is supposed to be available in the app store
+of a mobile operation system, an extensive review of each version is
+necessary. If multiple changes are supposed to be delivered together,
+the change has to be coordinated. And the new version of the client
+application has to be coordinated with the Microservices so that the
+new versions of the Microservices are ready in time. This results in
+deployment dependencies between the Microservices, which should really
+be avoided.</p>
+
+<h5 id="leanpub-auto-organizational-level" class="calibre15">Organizational Level</h5>
+
+<p class="calibre3">At the organizational level there is often a designated team for
+developing the client application. In this manner the division into an
+individual module is also implemented at the organizational
+level. Especially when different platforms are supported, it is
+unrealistic that there is one developer in each Microservice team for
+each platform. The developers are going to form one team for each
+platform. This team has to communicate with all Microservice teams,
+which offer Microservices for mobile applications. This can
+necessitate a lot of communication. However, Microservices have set out
+to avoid such excessive communication requirements. Therefore, the
+Deployment Monolith poses a challenge for client applications at the
+organizational level.</p>
+
+
+<figure id="Fig42" class="image">
+  <img src="../images/00044.jpeg" alt="Fig. 42: Mobile Apps and Rich Client are Deployment Monoliths that integrate multiple Microservices." class="calibre17"/>
+  <figcaption class="calibre18">Fig. 42: Mobile Apps and Rich Client are Deployment Monoliths that integrate multiple Microservices.</figcaption>
+</figure>
+
+
+<p class="calibre3">One possible solution is to develop new features initially for the
+web. Each Microservice can directly bring functionalities into the
+web. Upon a release of the client application these features will also
+be available there. However, in that case each Microservice needs to
+support a certain set of features for the web application and, where
+required, another set for the client application. In exchange this
+approach can keep the web application and the mobile application
+uniform. It supports an approach where the domain-based teams
+provide features of the Microservices to mobile users as well as to
+web users. Mobile applications and web applications are only two
+channels to offer the same functionalities.</p>
+
+<h5 id="leanpub-auto-backend-for-each-frontend" class="calibre15">Backend for each Frontend</h5>
+
+<p class="calibre3">However, the requirements can also be entirely different. For
+instance, the mobile application can be a largely independent
+application which is supposed to be developed further as independently
+of the Microservices and the web user interface as possible. Often the
+use cases of the mobile application are so different from the use
+cases of the web application that a separate development is required
+due to the differences in the features.</p>
+
+<p class="calibre3">In such cases the approach depicted in <a href="part0013.html#Fig43">Fig. 43</a> can be
+sensible: The team for the mobile app resp. the Rich Client has a
+number of developers who implement a special backend. This allows to
+also develop functionalities of the mobile app independently in the
+backend, because at least a part of the requirements for the
+Microservices can be implemented by developers from the same team. In
+that case it should not happen that logic for the mobile app is
+implemented in the Microservice, which really belongs into a backend
+Microservice. However, the backend for a mobile application differs
+from other APIs. Mobile clients have little bandwidth and a high
+latency. Therefore, APIs for mobile devices are optimized for getting by
+with as few calls as possible and for only transfering really essential
+data. This is also true for Rich Clients, however not exactly to the
+same extent. The adaption of an API to the specific requirements of a mobile
+applications can be implemented in a Microservice, which is
+implemented by the frontend team.</p>
+
+
+<figure id="Fig43" class="image">
+  <img src="../images/00045.jpeg" alt="Fig. 43: Mobile Apps or Rich Clients with their own backend" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 43: Mobile Apps or Rich Clients with their own backend</figcaption>
+</figure>
+
+
+<p class="calibre3">In a mobile app a user interaction should rapidly lead to a reaction of the
+app. When it is necessary to call a Microservice
+as reaction to a user interaction, this can already conflict with this
+aim. If there are multiple calls, the latency will increase
+further. Therefore, the API for a mobile App should be optimized for
+delivering the required data with as few calls as possible. Also these
+optimizations can be implemented by a backend for the mobile app.</p>
+
+<p class="calibre3">The optimizations can be implemented by the team which is responsible
+for the mobile app. Thereby the Microservices can offer universally
+valid interfaces while the teams for the mobile apps can assemble
+their special APIs by themselves. Due to that the mobile app teams are
+not so dependent anymore on the teams which are responsible for the
+implementation of the Microservices.</p>
+
+<p class="calibre3">To modularize web applications is simpler than the modularization of
+mobile apps, especially when the web applications are based on HTML
+and not on SPAs. For mobile apps or Rich Client Apps it is much more
+difficult since they form an individual deployment unit and cannot be
+easily divided.</p>
+
+<p class="calibre3">The architecture shown in <a href="part0013.html#Fig43">Fig. 43</a> makes it possible to reuse
+Microservices for different clients. At the same time, it is an entry
+into a layered architecture. The UI layer is separated from the
+Microservices and is implemented by another team. In that case
+requirements have to be implemented by multiple teams. Microservices
+were meant to avoid exactly this. Besides this architecture entails
+the danger that logic is implemented in the services for the client
+application, which really belongs in the Microservices. Therefore,
+this solution does not only have advantages.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-11" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">This section presented as alternative for web applications a SPA per
+Microservice, a SPA with modules per Microservice, an HTML application
+per Microservice and a frontend server with HTML snippets. Which of
+these approaches would you choose? Why?</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">How would you deal with mobile apps? One option would be a team
+with backend developers – or would you rather choose a team without
+backend developers?</p>
+
+</aside>
+
+<h3 id="section9-2" class="calibre2">9.2 REST</h3>
+
+<p class="calibre3">Microservices have to be able to call each other in order
+to implement logic together. This can be supported by different
+technologies.</p>
+
+<p class="calibre3">REST (Representational State Transfer) is one option to enable
+communication between Microservices. REST is the term for the
+fundamental approaches of the WWW:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">There is a plethora of resources which can be identified via
+URIs. URI stands for Uniform Resource Identifier. It unambiguously and globally
+identifies resources. URLs are practically the same as
+URIs.</li>
+  <li class="calibre14">The resources can be manipulated via a fixed set of methods. In the
+case of HTTP these are for instance GET for requesting a resource,
+PUT for storing a resource and DELETE for deleting a resource. The
+methods semantics are rigidly defined.</li>
+  <li class="calibre14">There can be different representations for resources – for instance
+as PDF or HTML. HTTP supports the so-called Content Negotiation via
+the Accept Header. In this manner the client can determine which
+data representation it can process. The Content Negotiation allows
+for instance to display resources in a way that is human-readable
+and to provide them at the same time under the same URL in a
+machine-readable manner. The client can communicate via an Accept
+Header whether it only accepts human-readable HTML or only JSON.</li>
+  <li class="calibre14">Relationships between resources can be represented by links. Links
+can point to other Microservices thereby enabling the integration of
+logic of different Microservices.</li>
+  <li class="calibre14">The servers in a REST system are supposed to be stateless. Therefore
+HTTP implements a stateless protocol.</li>
+</ul>
+
+<p class="calibre3">The limited vocabulary represents the exact opposite of what
+object-oriented systems employ. Object-orientation focuses on a
+specific vocabulary with specific methods for each class. The REST
+vocabulary can likewise execute complex logic. When data validations
+are necessary, this can be checked at the POST or PUT of new data. If
+complex processes are supposed to be represented, a POST can start the
+process, and subsequently the state can be updated. The current state
+of the process can be fetched by the client under the known URL via
+GET. Likewise, POST or PUT can be used to initiate the next state.</p>
+
+<h5 id="leanpub-auto-cache-and-load-balancer" class="calibre15">Cache and Load Balancer</h5>
+
+<p class="calibre3">A RESTful HTTP interface can very easily be supplemented with a cache:
+Since RESTful HTTP uses the same HTTP protocol like the web, a simple
+web cache is sufficient. Likewise, the usual HTTP Load Balancer can
+also be used for RESTful HTTP. The power of these concepts is
+impressively illustrated by the size of the WWW. This size is only
+possible due to the properties of HTTP. HTTP for instance also
+possesses simple and useful mechanisms for security – not only
+encryption via HTTPS, but also authentication with HTTP Headers.</p>
+
+<h5 id="leanpub-auto-hateoas" class="calibre15">HATEOAS</h5>
+
+<p class="calibre3">HATEOAS (Hypermedia as the Engine of Application State) is another
+important component of REST. The relationships between the resources
+are modeled by links. Therefore, a client only has to know an entry
+point. From there it can go on navigating at will and thereby locate
+all data in a stepwise manner. In the WWW it is for instance possible
+to start from Google and from there to reach practically the entire
+web via links.</p>
+
+<p class="calibre3">REST describes the architecture of the WWW and thereby the largest
+integrated computer system. However, REST could also be implemented
+with other protocols. It is an architecture which can be implemented
+with different technologies. The implementation of  REST with HTTP is
+called RESTful HTTP. When RESTful HTTP services exchange data as JSON
+or XML instead as HTML, this approach allows to exchange data and not
+only to access web pages.</p>
+
+<p class="calibre3">Microservices can also profit from HATEOAS. HATEOAS does not have a
+central coordination, just links. This fits very well to the concept
+that Microservices should have as little central coordination as
+possible. In case of REST clients know only entry points based on
+which they can discover the entire system. Therefore, in a REST-based
+architecture services can be moved in a manner that is transparent for the
+client. The client simply gets new links. A central coordination is
+likewise not necessary for this. The REST service just has to return
+different links. In the ideal case the client only has to understand
+the fundamentals of HATEOAS and then can navigate via links to any
+data in the Microservice system. The Microservice-based systems on the
+other hand can modify their links and thereby change the distribution
+of functionalities between Microservices. Even extensive architecture
+changes can be kept transparent.</p>
+
+<h5 id="leanpub-auto-hal" class="calibre15">HAL</h5>
+
+<p class="calibre3">HATEOAS is a
+concept. <a href="http://stateless.co/hal_specification.html">HAL</a> is a
+possibility to implement it. It is a standard describing how the links
+to other documents should be contained in a JSON document. Thereby
+HATEOAS is very easy to implement especially in JSON/RESTful HTTP
+services. The links are separate from the actual document. This allows
+to implement links to details or to independent data sets.</p>
+
+<h5 id="leanpub-auto-xml" class="calibre15">XML</h5>
+
+<p class="calibre3">XML has a long history as data format. It is easy to use together with
+RESTful HTTP. There are different type systems for XML which can
+determine whether an XML document is valid. This is very useful for the
+definition of an interface. Among the languages for the definition of
+valid data is for instance
+<a href="http://www.w3.org/XML/Schema">XML Schema (XSD)</a> or
+<a href="http://relaxng.org/">RelaxNG</a>. Some frameworks allow for the
+generation of code in order to administrate XML data, which correspond
+to such a schema. Via <a href="http://www.w3.org/TR/xlink11/">XLink</a> XML
+documents can contain links to other documents. This enables the
+implementation of HATEOAS.</p>
+
+<h5 id="leanpub-auto-html" class="calibre15">HTML</h5>
+
+<p class="calibre3">XML was designed to transfer data and documents. To display the
+information is the task of different software. Meanwhile HTML has a
+similar approach as XML: HTML defines only the structures. The display
+occurs via CSS. For the communication between processes HTML documents
+can be sufficient because in modern web applications documents contain
+only data - just like XML. In a Microservices world this approach
+has the advantage that the communication to the user and between the
+Microservices employs the same format. This reduces the effort. Thereby
+it gets even easier to implement Microservices which contain a UI and
+a communication option for other Microservices.</p>
+
+<h5 id="leanpub-auto-json" class="calibre15">JSON</h5>
+
+<p class="calibre3">JSON (JavaScript Object Notation) is a representation of data which is
+especially optimized for JavaScript. Like JavaScript the data are
+dynamically typed. However, meanwhile there are in fact suitable JSON
+libraries for all programming languages. In addition there are type
+systems like<a href="http://json-schema.org/">JSON Schema</a>, which supplement
+JSON with an appropriate validation. With that JSON is not inferior at
+all anymore to data formats like XML.</p>
+
+<h5 id="leanpub-auto-protocol-buffer" class="calibre15">Protocol Buffer</h5>
+
+<p class="calibre3">Binary protocols like
+<a href="https://developers.google.com/protocol-buffers/">Protocol Buffer</a> can
+also be used instead of text-based data representations. This
+technology has been designed by Google to represent data more
+efficiently and to achieve a higher performance. There are
+implementations for many different programming languages so that
+Protocol Buffer can be universally used similar to JSON or XML.</p>
+
+<h5 id="leanpub-auto-restful-http-is-synchronous" class="calibre15">RESTful HTTP is synchronous.</h5>
+
+<p class="calibre3">RESTful HTTP is synchronous: Typically a service sends out a request
+and waits for a response which is subsequently analyzed in order to
+continue with the program sequence. This can cause problems in case of
+long latency times within the network. It can lengthen the processing
+of a request since responses of other services have to be waited
+for. Besides, after a certain waiting time the request has to be
+aborted because it is likely that the request is not going to be
+answered at all. Possible reasons are that the server is not
+available at the moment or that the network has a problem. Correctly
+handled timeouts increase the stability of the system
+(<a href="part0014.html#section10-5">section 10.5</a>).</p>
+
+<p class="calibre3">The failure may not result in the failure of additional
+services. Therefore, via the timeout it has to be ensured that the
+particular system still responds and the failure does not propagate.</p>
+
+<h3 id="section9-3" class="calibre2">9.3 SOAP and RPC</h3>
+
+<p class="calibre3">It is possible to build a Microservices-based architecture on
+SOAP. SOAP uses also HTTP like REST, but employs only POST
+messages to transfer data to a server. In the end a SOAP calls a
+method on a certain object on the server. Therefore SOAP is an RPC
+mechanism (Remote Procedure Call), which calls methods in a different
+process.</p>
+
+<p class="calibre3">SOAP lacks mechanisms like HATEOAS, which allow to flexibly handle
+relationships between Microservices. The interfaces have to be
+completely defined by the server and known on the client.</p>
+
+<h5 id="leanpub-auto-flexible-transport" class="calibre15">Flexible Transport</h5>
+
+<p class="calibre3">SOAP can convey messages with different transport mechanisms. It is
+for instance possible to receive a message via HTTP and to subsequently sent
+it on as message via JMS or as email via SMTP/POP. SOAP-based
+technologies also support the forwarding of requests. For example, the
+security standard WS-Security can encrypt or sign parts of a
+message. Afterwards the parts can be sent on to different services
+without having to be decrypted. The sender can send a message in which
+some parts are encrypted. This message can be processed via different
+stations. Each station can process a part of the message or send it to
+other recipients. Finally, the encrypted parts will arrive at their
+final recipients – and only there they have to be decrypted and
+processed.</p>
+
+<p class="calibre3">SOAP has many extensions for special use contexts. The different
+extensions from the WS-*-environment comprise for instance
+transactions and the coordination of web services. In this way a
+complex protocol stack can arise. The interoperability between the
+different services and solutions can suffer due to the
+complexity. Some technologies are also not very sensible for
+Microservices. For example, a coordination of different Microservices
+is problematic as this will result in a coordination layer, and
+modifications of a business process will probably concern the
+coordination of the Microservices and also the Microservices
+themselves. When the coordination layer comprises all Microservices, a
+Monolith is created which also has to be changed upon each
+modification. This contradicts the Microservices idea of independent
+deployment. WS-* is rather in line with such concepts as SOA.</p>
+
+<h5 id="leanpub-auto-thrift" class="calibre15">Thrift</h5>
+
+<p class="calibre3">Another communication possibility is
+<a href="https://thrift.apache.org/">Apache Thrift</a>. It uses a very efficient
+binary encoding like Protocol Buffer. Furthermore, Thrift can forward
+requests from a process with a programming language via the network to
+other processes. The interface is described in an interface definition
+specific for Thrift. Based on this definition different client and
+server technologies can communicate with each other.</p>
+
+<h3 id="section9-4" class="calibre2">9.4 Messaging</h3>
+
+<p class="calibre3">Another option for the communication between Microservices are
+messages and messaging systems. As the name suggests, these systems
+are based upon the sending of messages. The messages can result in a
+response which again is sent as message. Messages can go to one or
+multiple recipients.</p>
+
+<p class="calibre3">Especially in case of distributed systems messaging solutions can
+demonstrate their advantages:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Messages can still be transferred in case of network failures. The
+messaging system buffers them and delivers them when the network is
+available again.</li>
+  <li class="calibre14">The guarantees can be further strengthened: The messaging system cannot
+only guarantee the correct transfer of the messages, but even their
+processing. If there was a problem during the processing of the
+message, the message can be transferred anew. A successful processing
+is possible when the error disappears after some time. Otherwise it
+will be attempted a couple more times to process the message until
+finally the message is discarded because it cannot be processed
+successfully.</li>
+  <li class="calibre14">In a messaging architecture responses are transferred and
+processed asynchronously. Such architectures are well tuned to high
+latency times like they occur in the network. Waiting for a response is
+the usual case in such an architecture. Therefore the programming
+model always acts on the assumption of a high latency.</li>
+  <li class="calibre14">The call of another service does not block the further
+processing. Even if the response has not been received yet, the
+service can continue working and for instance call additional
+services.</li>
+  <li class="calibre14">The sender does not know the recipient of the message. The sender
+sends the message to a queue or a topic. There the recipient 
+registers. Thereby sender and recipient are decoupled. There can even
+be multiple recipients without that the sender is aware of this. Besides the
+messages can be modified on their way. Data can be for instance
+supplemented or removed. In addition, messages can also be forwarded
+to entirely different recipients.</li>
+</ul>
+
+<p class="calibre3">Messaging is also a good basis for certain architectures of
+Microservice-based systems like Event Sourcing (compare <a href="part0014.html#section10-3">section 10.3</a>)
+or Event-driven Architecture (<a href="part0012.html#section8-6">section 8.6</a>).</p>
+
+<h5 id="leanpub-auto-messages-and-transactions" class="calibre15">Messages and Transactions</h5>
+
+<p class="calibre3">Messaging offers a solution for transactional systems with
+Microservices. In a Microservice-based system the guarantees for
+transactions are hard to ensure when the Microservices call each
+other. In that case all Microservices would have to participate in a
+transaction. They are only allowed to write changes when all
+Microservices in the transaction have processed the logic without
+errors. This means that the changes would have to be held back for a
+very long time. That is bad for the performance since no new
+transaction can change the data meanwhile. Besides in a network it is
+always possible that a participant fails. In that case the transaction
+will remain open for a long time or might even not be closed at
+all. This will block changes to the data for a long time. Such
+problems arise for instance when the calling system crashes.</p>
+
+
+<figure id="Fig44" class="image">
+  <img src="../images/00046.jpeg" alt="Fig. 44: Transactions and Messaging" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 44: Transactions and Messaging</figcaption>
+</figure>
+
+
+<p class="calibre3">In a messaging system transactions can be treated differently: The
+sending and receiving of messages is part of a transaction – just as
+for instance the writing and reading from the database
+(<a href="part0013.html#Fig44">Fig. 44</a>). When an error occurs during the processing of the
+message, all outgoing messages are canceled and the database changes
+are rolled back. In the case of success all these actions take
+place. The recipients of the messages can likewise be safeguarded
+transactionally. In that case the processing of the outgoing messages
+is subject to the same transactional guarantees.</p>
+
+<p class="calibre3">The important point is that the sending and receiving of messages and
+the transactions on the database can be combined in one
+transaction. The coordination is taken care of by the
+infrastructure. No extra code needs to be written. For the
+coordination of messaging and databases the protocol Two Phase Commit (2PC) can be
+employed. This protocol is the usual solution for coordinating
+transactional systems like databases and messaging systems with each
+other. An alternative are products like Oracle AQ or ActiveMQ. They
+store the messages in a database. Then the coordination between
+database and messaging can simply be achieved by writing the messages
+as well as the data modifications in the same database
+transaction. Messaging and database are in the end the same systems in
+that case.</p>
+
+<p class="calibre3">Messaging allows to implement transactions without the need for a
+global coordination. Each Microservice is transactional. The
+transactional sending of messages is ensured by the messaging
+technology. However, when a message cannot be processed, for instance
+due to invalid values, there is no possibility to roll the already
+processed messages back. Therefore, the correct processing of transactions is not
+given under all circumstances.</p>
+
+<h5 id="leanpub-auto-messaging-technology" class="calibre15">Messaging Technology</h5>
+
+<p class="calibre3">For the implementation of messaging a technology has to be used:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<a href="https://www.amqp.org/">AMQP (Advanced Message Queuing Protocol)</a> is
+a standard. It defines a protocol with which messaging solutions can
+communicate on the wire with each other and with clients. An
+implementation of this standard is <a href="https://www.rabbitmq.com/">RabbitMQ</a>, which is written in
+Erlang and is under Mozilla licence. Another implementation is for
+instance Apache Qpid.</li>
+  <li class="calibre14">
+<a href="http://kafka.apache.org/">Apache Kafka</a> focuses on high throughput,
+replication and fail safeness. Therefore, it is well suited for
+distributed systems like Microservices, especially the fail
+safeness is very helpful in this use context.</li>
+  <li class="calibre14">
+<a href="http://zeromq.org/">0MQ</a> (also called ZeroMQ or ZMQ) gets along
+without a server and is therefore very light-weight. It has some
+primitivs which can be assembled into complexer systems. 0MQ is under
+the LGPL licence and written in C++.</li>
+  <li class="calibre14">
+<a href="https://jcp.org/en/jsr/detail?id=343">JMS (Java Messaging Service)</a>
+defines an API, with which a Java application can receive messages and
+send them. In contrast to AMQP the specification does not define how
+the technology transfers messages on the wire. Since it is a standard,
+Java-EE server implement this API. Well known implementations are
+<a href="http://activemq.apache.org/">ActiveMQ</a> and
+<a href="http://hornetq.jboss.org/">HornetQ</a>.</li>
+  <li class="calibre14">It is also possible to use
+<a href="http://tools.ietf.org/html/rfc4287">ATOM</a>
+<a href="http://tools.ietf.org/html/rfc5023">Feeds</a> for messaging. This
+technology is normally used to transfer blog contents. Clients can
+relatively easily request new entries of a blog. In the same manner a
+client can use ATOM to request new messages. ATOM is based on HTTP and
+therefore fits well in a REST environment. However, ATOM has only
+functionalities for delivering new information. It does not support more
+complex techniques like transactions.</li>
+</ul>
+
+<p class="calibre3">For many messaging solutions a messaging server and therefore an
+additional infrastructure are required. This infrastructure has to be
+operated in a manner that prevents failures because failures would
+cause the communication in the entire Microservice-based system to
+break down. However, messaging solutions are mostly designed to achieve
+high availability for instance via clustering.</p>
+
+<p class="calibre3">For many developers messaging is rather unfamiliar since it requires
+asynchronous communication. This makes it appear as rather complex. In
+most cases the calling of a method in a different process is easier to
+understand. With approaches like Reactive (compare
+<a href="part0014.html#section10-6">section 10.6</a>) asynchronous development is introduced
+into the Microservices themselves. Also the AJAX model from JavaScript
+development resembles the asynchronous treatment of messages. More and
+more developers are therefore familiar with the asynchronous model.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-12" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">REST, SOAP/RPC and messaging each have advantages and
+disadvantages. Collect the advantages and disadvantages and make up
+your mind which of the alternatives to use.</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">In a Microservice-based system there can be different types of
+communication – however, there should be one predominant communication
+type. Which would you choose? Which others would be allowed in
+addition? In which situations?</p>
+
+</aside>
+
+<h3 id="section9-5" class="calibre2">9.5 Data Replication</h3>
+
+<p class="calibre3">At the database level Microservices could share a database and thereby
+concertedly access data. This type of integration has already
+been in practice for a long time: It is not unusual that a database is
+used by several applications. Often databases last longer than
+applications so that not the application with its demands is focused
+on, but rather the database. Although the integration via a shared
+database is widespread, it has critical disadvantages:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The data representation cannot easily be modified since several
+applications access the data. A change can cause one of the
+applications to break. Therefore, changes have to be coordinated
+across all applications.</li>
+  <li class="calibre14">This makes it impossible to rapidly modify applications in cases
+where this entails changes to the database. However, rapid
+changeability is exactly the area where Microservices should bring
+advantages.</li>
+  <li class="calibre14">Finally, it is also hardly possible to clear up the schema –
+i.e. to remove columns which are not needed anymore because it is
+unclear whether any system is still using these columns. In the long run
+the database will get more and more complex and harder to maintain.</li>
+</ul>
+
+<p class="calibre3">In the end the shared use of a database is a violation of an important
+architecture rule. Components should be able to change their internal data
+representation without other components being affected. The database
+schema is an example for an internal data representation. When multiple
+components share the database, it is not possible anymore to change
+the data representation. Therefore, Microservices should have a
+strictly separate data storage and not share a database schema.</p>
+
+<p class="calibre3">However, a database instance can be used for multiple Microservices
+when the data sets of the individual Microservices are completely
+separate. For instance, each Microservice can use its own schema
+within a shared database. However, in that case there may not be any
+relationships between the schemas.</p>
+
+<h5 id="leanpub-auto-replication" class="calibre15">Replication</h5>
+
+<p class="calibre3">Replicating data is one possible alternative for the integration of
+Microservices. However, the data replication must not introduce a
+dependency of the database schemas by the back door. When the data are
+just replicated and the same schema is used, the same problem occurs
+like in the case of a shared use of the database. A schema change will
+also affect other Microservices so that the Microservices are in the
+end coupled again. This has to be avoided.</p>
+
+<p class="calibre3">The data should be transferred into another schema to ensure the
+independency of the schemas and therefore the Microservices. In
+addition, such a transformation is also in most cases desirable for
+domain-based reasons.</p>
+
+<p class="calibre3">A typical example for the use of replication in classical IT are Data
+Warehouses. They replicate data, but store them differently. That is
+due to the fact that data accessing in the Data Warehouse has very
+different requirements: The aim is to analyze lots of data. The data
+are optimized for reading access and often also combined as not every
+single data set is relevant for statistics.</p>
+
+<p class="calibre3">Because of <em class="calibre20">Bounded Context</em> in most cases different representations
+or subsets of data are relevant for different Microservices. When
+replicating data between Microservices it will for this reason
+frequently anyhow be necessary to transform the data or to replicate
+just subsets of the data.</p>
+
+<h5 id="leanpub-auto-problems-redundancy-and-consistency" class="calibre15">Problems: Redundancy and Consistency</h5>
+
+<p class="calibre3">The replication causes a redundant storage of the data. This means
+that the data are not immediately consistent: It takes some time until
+changes will have been replicated to all locations.</p>
+
+<p class="calibre3">However, immediate consistency can be dispensable. In case of analysis
+tasks like in a Data Warehouse an analysis which does not comprise the
+orders of the last few minutes, can be sufficient. There are also other
+cases in which consistency is not that important. When an order takes
+a little bit of time until it is visible in the delivery Microservice,
+this can be acceptable because maybe anyhow nobody will request the
+data in the meanwhile.</p>
+
+<p class="calibre3">Consistency is a requirement for the system. High consistency
+requirements make replication difficult. When system requirements are
+determined, it is often not clear how consistent the data really have
+to be. This limits the possibilities for data replication.</p>
+
+<p class="calibre3">Also for replication there has to be a leading system which contains
+the current data. All other replicates should obtain the data from
+this system. Then it is always clear which data are really
+up-to-date. Data modifications should not be triggered by different
+systems. This easily causes conflicts and a very complex
+implementation. Such conflicts are excluded when there is just one
+source for changes.</p>
+
+<h5 id="leanpub-auto-implementation" class="calibre15">Implementation</h5>
+
+<p class="calibre3">Some databases offer replication as feature. However, this is not
+helpful for the replication of data between Microservices because the
+schemas of the Microservices should be different. The replication has
+to be self implemented. For this purpose, a custom interface can be
+implemented. This interface should allow for high performance access
+even to large data sets. To achieve the necessary performance, one can
+also directly write into the target schema. The interface does not
+necessarily have to use a protocol like REST, but can employ faster
+alternative protocols. To this end it can be necessary to use another
+communication mechanism than the one normally used by the
+Microservices.</p>
+
+<h5 id="leanpub-auto-batch" class="calibre15">Batch</h5>
+
+<p class="calibre3">The replication can be activated in a batch. In that case the entire
+data or at least changes from a longer time interval can be
+transferred. For the first replication run the amount of data can be
+large so that the replication takes a long time. It can still be
+sensible to transfer all the data each time. This allows to correct
+mistakes which happened during the last replication.</p>
+
+<p class="calibre3">An easy implementation can assign a version to each data set. Based on
+the version data sets which have changed can be specifically selected and replicated. 
+This approach can be easily restarted again in case of an
+interruption of the replication because the process itself does not
+hold a state. Instead the state is stored with the data itself.</p>
+
+<h5 id="leanpub-auto-event" class="calibre15">Event</h5>
+
+<p class="calibre3">One alternative is to start the replication in case of certain
+events. For instance, when a data set is newly generated, the data can
+also immediately be copied into the replicates. Such approaches are
+especially easy to implement with messaging (<a href="part0013.html#section9-4">section 9.4</a>).</p>
+
+<p class="calibre3">Data replication is an especially good choice for high performance
+access to large amounts of data. Many Microservice-based systems get
+along without replicating data. Even those systems which use data
+replication will also employ other integration mechanisms.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-13" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">Would you use data replication in a Microservice-based system? In
+which areas? How would you implement it?</p>
+
+</aside>
+
+<h3 id="section9-6" class="calibre2">9.6 Interfaces: Internal and External</h3>
+
+<p class="calibre3">Microservice-based systems have different types of interfaces:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Each Microservice can have one or more interfaces for other
+Microservices. A change to the interface can require coordination with
+other Microservice teams.</li>
+  <li class="calibre14">The interfaces between Microservices which are developed by the
+same team are a special case. Team members can closely work together
+so that these interfaces are easier to change.</li>
+  <li class="calibre14">Besides the Microservice-based system can offer interfaces to the
+outside with which the system can also be used outside of the
+organization of the developers. In extreme cases this can be
+potentially every internet user when the system offers a public
+interface in the internet.</li>
+</ul>
+
+<p class="calibre3">These interfaces are differently easy to change: It is very easy to
+ask a colleague in the same team for a change. This colleague is
+presumably even in the same room.</p>
+
+<p class="calibre3">Changes to an interface of a Microservice of another team are more
+difficult. The change has to prevail against other changes and new
+features. When the change has to be coordinated with other teams,
+additional expenditures arise.</p>
+
+<p class="calibre3">Interface changes between Microservices can be safeguarded by
+appropriate tests (Consumer-driven Contract Tests,
+<a href="part0015.html#section11-7">section 11.7</a>). These tests examine whether the
+interface still fulfills the expectations of the interface users.</p>
+
+<h5 id="leanpub-auto-external-interfaces-1" class="calibre15">External Interfaces</h5>
+
+<p class="calibre3">In case of interfaces to the outside the coordination with users is
+more complicated. There might be very many users. For public
+interfaces the users might even be unknown. Therefore, techniques like
+Consumer-driven Contract Tests are hard to implement in such
+scenarios. However, for interfaces to the outside rules can be defined
+which determine for instance for how long a certain version of the
+interface is supported. A stronger focus on backwards compatibility
+can also be sensible for public interfaces.</p>
+
+<p class="calibre3">For interfaces to the outside it can be necessary to support several
+versions of the interface in order to not force all users to perform
+changes. Between Microservices it should be an aim to accept multiple
+versions only for uncoupling deployments. When a Microservice changes an
+interface, it should still support the old interface. In that case the
+Microservices which depend on the old interface do not have to be
+instantly deployed anew. However, the next deployment should use the
+new interface. Afterwards the old interface can be removed. This
+reduces the number of interfaces which have to be supported and
+therefore the complexity of the system.</p>
+
+<h5 id="leanpub-auto-separating-interfaces" class="calibre15">Separating Interfaces</h5>
+
+<p class="calibre3">Since the interfaces are differently easy to change, they should be
+implemented separately. When an interface of a Microservice is supposed to be
+used externally, it can subsequently only be changed when this change
+is coordinated with the external users. However, a new interface for
+internal use can be split off. In that case the interface which is
+exposed to the outside is the starting point for a separate internal
+interface which can be more easily changed again.</p>
+
+<p class="calibre3">Besides, several versions of the same interface can be internally
+implemented together. In this way new parameters of a new version can in cases of
+calls to the old interface simply be set to default
+values so that both interfaces internally use the same implementation.</p>
+
+<h5 id="leanpub-auto-implementing-external-interfaces" class="calibre15">Implementing External Interfaces</h5>
+
+<p class="calibre3">Microservice-based systems can also offer interfaces to the outside in
+different ways. Apart from a web interface for users there can also be
+an API, which can be accessed from outside. For the web interface
+<a href="part0013.html#section9-1">section 9.1</a> showed already how the Microservices can be
+integrated in a way which allows that all Microservices can implement
+a part of the UI.</p>
+
+<p class="calibre3">When the system offers a REST interface to the outside, the calls from
+outside can be forwarded to a Microservice with the help of a
+router. In the example application the router Zuul is used for this
+(<a href="part0019.html#section14-9">section 14.9</a>). Zuul is very flexible and can forward
+request to different Microservices based on very detailed
+rules. However, HATEOAS offers also the freedom to move resources. In
+that case routing is dispensable. The Microservices are accessible
+from the outside via URLs, but they can be moved at any time. In the
+end the URLs are dynamically determined by HATEOAS.</p>
+
+<p class="calibre3">It would also be possible to offer an adaptor for the external
+interface which modifies the external calls before they reach the
+Microservices. However, in that case a change to the logic cannot
+always be limited to a Microservice, but could also affect the
+adaptor.</p>
+
+<h5 id="leanpub-auto-semantic-versioning" class="calibre15">Semantic Versioning</h5>
+
+<p class="calibre3">To denote changes to an interface a version number can be
+used. <a href="http://semver.org/">Semantic Versioning</a> defines a possible
+version number semantics. The version number is split into
+MAJOR.MINOR.PATCH. The components have the following meaning:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">A change in MAJOR indicates that the new version breaks backwards
+compatibility. The clients have to adjust to the new version.</li>
+  <li class="calibre14">The MINOR version is changed when the interface offers new
+features. However, the changes should be backwards compatible. A
+change of the clients is only necessary if they want to use the new
+features.</li>
+  <li class="calibre14">PATCH is increased in the case of bug fixes. Such changes should
+be completely backwards compatible and should not require any
+modifications of the clients.</li>
+</ul>
+
+<p class="calibre3">In case of REST one should keep in mind that it is not sensible to encode the
+version in the URL. The URL should represent a resource – independent
+of the fact with which API version it is called. Therefore, the
+version can for instance also be defined in an Accept Header of the
+request.</p>
+
+<h5 id="leanpub-auto-postels-law-or-the-robustness-principle" class="calibre15">Postel’s Law or the Robustness Principle</h5>
+
+<p class="calibre3">Another important basis for the definition of interfaces is
+<a href="http://tools.ietf.org/html/rfc793#section-2.10">Postel’s Law</a>, which
+is also known as the Robustness Principle. It states that components
+should be strict in regards to what they are passing on and liberal in
+regards to what they are accepting from others. Differently put: Each
+component should adhere as closely as possible to the defined
+interface when using other components, but should whenever possible
+compensate errors which arise during the use of its own interface.</p>
+
+<p class="calibre3">When each component behaves according to the Robustness Principle the
+interoperability will improve: In fact, if each component adheres
+exactly to the defined interfaces, interoperability should already be
+ensured. If a deviation happens nevertheless, the used component
+will try to compensate for it and thereby attempt to “save” the
+interoperability. This concept is also known as
+<a href="http://martinfowler.com/bliki/TolerantReader.html">Tolerant Reader</a>.</p>
+
+<p class="calibre3">In practice a called service should accept the calls as long as this is
+possible at all. One way to achieve this is to only readout those
+parameters from a call which are really necessary. On no account
+should a call be rejected just because it does not formally conform
+with the interface specification. However, the incoming calls should be
+validated. Such an approach makes it easier to ensure a smooth
+communication in distributed systems like Microservices.</p>
+
+<h3 id="section9-7" class="calibre2">9.7 Conclusion</h3>
+
+<p class="calibre3">The integration of Microservices can occur at different levels.</p>
+
+<h5 id="leanpub-auto-client" class="calibre15">Client</h5>
+
+<p class="calibre3">One possible level for the integration is the web interface
+(<a href="part0013.html#section9-1">section 9.1</a>):</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Each Microservice can bring along its own Single-Page-App
+(SPA). The SPAs can be developed independently. The transition between
+the Microservices, however, starts a completely new SPA.</li>
+  <li class="calibre14">There can be one SPA for the entire system. Each Microservice
+supplies one module for the SPA. Therefore, the transitions between
+the Microservices are very simple in the SPA. However, the
+Microservices get very tightly integrated so that a coordination of
+deployments can become necessary.</li>
+  <li class="calibre14">Each Microservice can bring along an HTML application. The
+integration can occur via links. This approach is easy to implement
+and allows for a modularization of the web application.</li>
+  <li class="calibre14">JavaScript can load HTML. The HTML can be supplied by different
+Microservices so that each Microservice can contribute a
+representation of its data. In this way an order can load the presentation
+of a product from another Microservice.</li>
+  <li class="calibre14">A skeleton can assemble individual HTML snippets. Thereby an
+E-commerce landing page can display the last order from one
+Microservice and recommendations from another Microservice. ESI (Edge
+Side Includes) or SSI (Server Side Includes) can be useful for this.</li>
+</ul>
+
+<p class="calibre3">In case of a Rich Client or a mobile app the integration is difficult
+because the client application is a Deployment Monolith. Therefore,
+changes of different Microservices can in fact only be deployed
+together. The teams can modify the Microservices and then deliver a
+certain amount of fitting UI changes together as new release of the
+client application. There can also be a team for each client
+application which adopts new functionalities of the Microservices into
+the client application. From an organizational perspective there can
+even be developers in the team of the client application which develop
+a custom service. This service can for instance implement the interface
+in a way that allows the client application to use it in a high
+performance manner.</p>
+
+<h5 id="leanpub-auto-logic-layer" class="calibre15">Logic Layer</h5>
+
+<p class="calibre3">REST is an option for the communication of the logic layer
+(<a href="part0013.html#section9-2">section 9.2</a>). REST uses the mechanisms of the WWW to enable
+communication between services. HATEOAS (Hypermedia as the Engine of
+Application State) means that the relationships between systems are
+represented as links. The client knows only an entry URL. All the
+other URLs can be changed because they are not directly contacted by
+the clients, but are found by them via links starting at the entry
+URL. HAL defines how links can be expressed and supports the
+implementation of REST. Other possible data formats for REST are XML,
+JSON, HTML or Protocol Buffer.</p>
+
+<p class="calibre3">Classical protocols like SOAP or RPC (<a href="part0013.html#section9-3">section 9.3</a>) can
+also be used for the communication of Microservices. SOAP offers
+possibilities for forwarding a message to other Microservices. Thrift
+has an efficient binary protocol and can likewise forward calls
+between processes.</p>
+
+<p class="calibre3">Messaging (<a href="part0013.html#section9-4">section 9.4</a>) has the advantage that it can
+handle network problems and high latency times very well. In addition,
+transactions are also very well supported by messaging.</p>
+
+<h5 id="leanpub-auto-data-replication" class="calibre15">Data Replication</h5>
+
+<p class="calibre3">At the database level a shared schema is not recommended
+(<a href="part0013.html#section9-5">section 9.5</a>). This would couple Microservices too
+tightly since they would have a shared internal data
+representation. The data have to be replicated into another
+schema. The schema can be in line with the requirements for the
+respective Microservice. As Microservices are <em class="calibre20">Bounded Contexts</em>, it is
+very unlikely that the Microservices should use the same data model.</p>
+
+<h5 id="leanpub-auto-interfaces-and-versions" class="calibre15">Interfaces and Versions</h5>
+
+<p class="calibre3">Finally, interfaces are an important foundation for communication and
+integration (<a href="part0013.html#section9-6">section 9.6</a>). Not all interfaces are
+equally easy to change: Public interfaces are practically not
+changeable at all because too many systems depend on them. Internal
+interfaces can more easily be changed. Public interfaces in the
+simplest case just route certain functionalities to suitable
+Microservices. Semantic Versioning is useful for giving a meaning to
+version numbers. To ensure a high level of compatibility the
+Robustness Principle is helpful.</p>
+
+<p class="calibre3">This section should have shown that Microservices are not just
+services which use RESTful HTTP. This is only one option for the
+communication between Microservices.</p>
+
+<h5 id="leanpub-auto-essential-points-6" class="calibre15">Essential Points</h5>
+
+<ul class="calibre16">
+  <li class="calibre14">At the UI level the integration with HTML user interfaces is
+especially simple. SPAs, desktop applications or mobile apps are
+Deployment Monoliths so that changes to the user interface for a
+Microservice have to be closely coordinated with other changes.</li>
+  <li class="calibre14">Though REST or RPC approaches offer at the logic level a simple
+programming model, messaging allows for a looser coupling and can 
+better cope with the challenges of distributed communication via the
+network.</li>
+  <li class="calibre14">Data replication allows high performance access even to large
+amounts of data. The Microservices may on no account use the same
+schema for their data since in that case the internal data representation
+cannot be changed anymore.</li>
+</ul>
+
+
+</div>
+</body></html>

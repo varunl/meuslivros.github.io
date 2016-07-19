@@ -1,0 +1,614 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title dir="ltr">7 Microservices and SOA</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body dir="ltr" class="calibre">
+<div class="calibre6">
+<h2 id="chapter-7" class="calibre1">7 Microservices and SOA</h2>
+
+<p class="calibre3">At first glance Microservices and SOA seem to have a lot in common:
+Both approaches focus on the modularization of large systems into
+services. Are SOA and Microservices indeed the same or are there
+differences? Dissecting this question contributes to an in depth
+understanding of Microservices. Besides, some ideas from the SOA field
+are interesting for Microservice-based architectures. A SOA approach
+can be advantageous when migrating to Microservices. It separates the
+functionalities of the old applications into services, which can be
+replaced or supplemented by Microservices.</p>
+
+<p class="calibre3"><a href="part0010.html#section7-1">Section 7.1</a> defines the term “SOA” as well as the term
+“service” within the SOA context. <a href="part0010.html#section7-2">Section 7.2</a> extends
+this topic by highlighting the differences between SOA and
+Microservices.</p>
+
+<h3 id="section7-1" class="calibre2">7.1 What is SOA?</h3>
+
+<p class="calibre3">SOA (Service-Oriented Architecture) and Microservices share one
+similarity: They lack an unambiguous definition. Therefore, this
+section provides only one of the possible definitions. According to
+other definitions Microservices and SOA are indeed identical
+approaches. Eventually, both approaches are based on services and the
+distribution of applications into services.</p>
+
+<p class="calibre3">The term “service” is central for SOA.</p>
+
+<p class="calibre3">A SOA service should have the following characteristics:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">A service should comprise a domain functionality.</li>
+  <li class="calibre14">A service can be used independently.</li>
+  <li class="calibre14">It is available in the network.</li>
+  <li class="calibre14">Each service has an interface. Knowledge about the interface is
+sufficient to use the service.</li>
+  <li class="calibre14">The service can be used via different programming languages and
+platforms.</li>
+  <li class="calibre14">To make it easy to use the service is registered in a directory.
+Via this directory clients search the service at run time and use it.</li>
+  <li class="calibre14">The service should be coarse-grained in order to reduce
+dependencies. Small services can only implement sensible
+functionalities together with other services. Therefore, SOA focuses
+rather on larger services.</li>
+</ul>
+
+<p class="calibre3">SOA services do not need to be newly implemented, but are already
+present in the company applications. Introducing SOA means to make
+these services available outside of those applications. Because of the
+distribution of applications into services their use in different
+contexts is facilitated. This is supposed to improve the flexibility
+of the overall IT – that is the goal of SOA. Due to the distribution
+into individual services it is possible to recycle services during the
+implementation of business processes. This requires only to
+orchestrate the individual services.</p>
+
+
+<figure id="Fig15" class="image">
+  <img src="../images/00017.jpeg" alt="Fig. 15: Overview of a SOA landscape" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 15: Overview of a SOA landscape</figcaption>
+</figure>
+
+
+<p class="calibre3"><a href="part0010.html#Fig15">Fig. 15</a> depicts a possible SOA landscape. Like the previous
+examples this example is derived from the E-commerce field. There are
+different systems in the SOA landscape:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The <em class="calibre20">CRM</em> (Customer Relationship Management) is an application,
+which stores essential information about the customers. This
+information comprises not only contact details, but also the history
+of all transactions with the customer – telephone calls as well as
+emails or orders. The CRM exposes services, which for instance support
+the creation of a new customer, provide information about a customer or
+generate reports for all customers.</li>
+  <li class="calibre14">The <em class="calibre20">Order System</em> is in charge of order processing. It can receive
+new orders, provide information about the order status or cancel an
+order. Also this system provides access to the different
+functionalities via individual services. These services might
+have been added as additional interface to the system after the first version
+was put into production.</li>
+  <li class="calibre14">In the scheme CRM and the order system are the only systems. In
+reality there would be certainly additional systems, for instance to
+provide the product catalog. However, to illustrate a SOA landscape
+these two systems suffice.</li>
+  <li class="calibre14">For the systems to be able to call each other there is an
+<em class="calibre20">integration platform</em>. This platform allows for the communication
+between the services. It can newly compose the services by
+orchestration. Orchestration can be mediated by a technology, which
+models business processes and calls the individual services to execute
+the different processes.</li>
+  <li class="calibre14">Therefore, <em class="calibre20">orchestration</em> is responsible for coordinating the
+different services. The infrastructure is intelligent and can react
+appropriately to the different messages. It contains the model of the
+business processes and thus an important part of the business logic.</li>
+  <li class="calibre14">SOA can be used via a <em class="calibre20">portal</em>. The portal is responsible for
+providing the users with an interface for using the services. There can
+be different portals: for instance one for the customers, one for
+the support and one for internal employees. Likewise, the system can
+be called via rich client applications or mobile Apps. From an
+architectural perspective this does not make a difference: All such
+systems use the different services to make them useable for a user.
+Eventually, all these systems are a universal UI to be able to use all
+services in the SOA.</li>
+</ul>
+
+<p class="calibre3">Each of these systems can be operated und further developed by an
+individual team. In the example there could be one team each for the
+CRM and the order system, and one additional team each for each portal
+and finally one team taking care of integration and orchestration.</p>
+
+<p class="calibre3"><a href="part0010.html#Fig16">Fig 16</a> shows how communication is structured in SOA
+architecture. Users typically work with SOA via the portal. Thereby
+business processes can be initiated, which then are implemented in the
+orchestration layer. These processes use the services. Especially when
+migrating from a Monolith to SOA users might still use a Monolith
+via its own user interface. However, SOA usually aims for having a
+portal as central user interface and an orchestration for implementing
+processes.</p>
+
+
+<figure id="Fig16" class="image">
+  <img src="../images/00018.jpeg" alt="Fig. 16: Communication in a SOA architecture" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 16: Communication in a SOA architecture</figcaption>
+</figure>
+
+
+<h5 id="leanpub-auto-introducing-soa" class="calibre15">Introducing SOA</h5>
+
+<p class="calibre3">Introducing SOA is a strategic initiative involving different teams.
+ In the end the aim is to distribute the entire company IT into
+ separate services. The distribution supports the composition
+ of services into new functionalities in a better manner. However, this is only possible
+ when all systems in the entire organization have been adjusted. And
+ only when so many services are available that business processes
+ can be implemented by simple orchestration, SOA’s advantages are
+ really evident. Therefore, the integration and orchestration
+ technology has to be used in the entire IT to enable service
+ communication and integration. This entails high investment costs as
+ the entire IT landscape has to be changed. This is one of the main
+ points of <a href="http://apsblog.burtongroup.com/2009/01/soa-is-dead-long-live-ser-%20vices.html">criticism</a> in regards to SOA.</p>
+
+<p class="calibre3">The services can also be offered to other companies and users via
+internet or private networks. Thus SOA is well suited to support
+business concepts, which are based on the outsourcing of services or
+the inclusion of external services. In an E-commerce application an
+external provider could for instance offer simple services like
+address validation or complex services like a credit check.</p>
+
+<h5 id="leanpub-auto-services-in-a-soa" class="calibre15">Services in a SOA</h5>
+
+<p class="calibre3">At least when introducing SOA based on old systems the SOA services
+are only interfaces of large Deployment Monolith. One Monolith offers
+several services. The services are built upon the existing
+applications. Often it is not even necessary to adjust the internals
+of a system in order to offer the services. Such a service typically
+does not have a UI, instead it offers only an interface for other
+applications. A UI exists only for all systems. It is also not part
+of a service, but independent - for instance in the portal.</p>
+
+<p class="calibre3">In addition, it is possible to implement smaller deployment units in a
+SOA. The definition of SOA services does not limit the size of the
+deployment units – quite contrary to Microservices where the size of
+the deployment units is a defining feature.</p>
+
+<h5 id="leanpub-auto-interfaces-and-versioning" class="calibre15">Interfaces and Versioning</h5>
+
+<p class="calibre3">Service versioning in SOA is a special challenge. Service changes have
+to be coordinated with the users of the respective service. Because of
+this coordination requirement, changes to the interface of the services
+are laborious. Service users are unlikely to adjust their own software
+if they do not profit from the new interface. Therefore, old interface
+versions frequently have to be supported as well. This means that
+numerous interface versions have probably to be supported if a service
+is used by many clients. This increases software complexity and
+renders changes more difficult. After all, the correct functioning of
+the old interfaces has to be ensured upon each new software release.
+If data are supplemented, challenges arise because the old interfaces
+do not support these data. This is no problem during reading. However,
+when writing it can be difficult to create new data sets without the
+additional data.</p>
+
+<h5 id="leanpub-auto-external-interfaces" class="calibre15">External Interfaces</h5>
+
+<p class="calibre3">If there are external users outside the company using the service,
+interface changes get even more difficult. In the worst case the
+service provider does not even know exactly who is using the service
+since it is available to anonymous users in the Internet. In that case
+it is nearly impossible to coordinate changes. Consequently,
+switching off an old service version then gets nearly unfeasible. This
+leads to a growing number of interface versions, and service changes
+get more and more difficult. This problem concerns Microservices as
+well (compare <a href="part0013.html#section9-6">section 9.6</a>).</p>
+
+<p class="calibre3">The interface users are also facing challenges: If they need an
+interface modification, they have to coordinate this with the team
+offering the service. Then the changes have to be prioritized in relation
+to all other changes and wishes of other teams. As discussed already,
+an interface change is no easy task. Therefore, it can take quite a long time
+till changes are in fact implemented. This hampers the further
+development of the system.</p>
+
+<h5 id="leanpub-auto-interfaces-enforce-a-coordination-of-deployments" class="calibre15">Interfaces Enforce a Coordination of Deployments</h5>
+
+<p class="calibre3">After a change to the interface the deployment of the services has to
+be coordinated. First the service has to be deployed, which offers the
+new interface versions. Only then the service, which uses the new
+interface, can be deployed. Since applications are mostly Deployment
+Monoliths in the case of SOA, several services can always only be
+deployed together. This renders the coordination of services more
+difficult. In addition, the risk increases as the deployment of a
+Monolith takes a long time and is hard to undo – just because the
+changes are so extensive.</p>
+
+<h5 id="leanpub-auto-coordination-and-orchestration" class="calibre15">Coordination and Orchestration</h5>
+
+<p class="calibre3">Coordinating SOA via an orchestration in the integration layer poses a
+number of challenges. In a way a Monolith is generated: All business
+processes are echoed in this orchestration. This Monolith is often
+even worse than the usual Monoliths as it is using all systems within
+the enterprise IT. In extreme cases it can happen that the services
+only undertake the data administration while all logic is found in the
+orchestration. In such cases the entire SOA is in the end nothing else
+than a Monolith, which is having its entire logic in the
+orchestration.</p>
+
+<p class="calibre3">However, even in other settings changes to SOA are not really easy:
+Domains are divided into services in the different systems and into
+business processes in orchestration. When a change to a functionality
+also concerns services or the user interface, things get difficult:
+Changing the business processes is relatively simple, but changing the
+service is only possible by writing code and by deploying a new
+version of the application providing the service. The necessary code
+changes and the deployment can be very laborious. Thus, the
+flexibility of SOA is lost, which was meant to arise from a simple
+orchestration of services. Modifications of the user interface cause
+changes to the portal or to the other user interface systems and
+require likewise a new deployment.</p>
+
+<h5 id="leanpub-auto-technologies" class="calibre15">Technologies</h5>
+
+<p class="calibre3">SOA is an architecture approach and independent of a concrete
+technology. However, a SOA has to define a common technology for the
+communication between the services, like Microservices do. In
+addition, a concrete technology needs to be set for the orchestration
+of the services. Often introducing a SOA leads to the introduction of
+complex technologies to allow for the integration and orchestration of
+the services. There are special products, which support all
+aspects of SOA. However, they are correspondingly complex, and their
+features are hardly ever used to full capacity.</p>
+
+<p class="calibre3">This technology can rapidly turn into a bottleneck. Many problems with
+these technologies are attributed to SOA although SOA could be
+implemented with other technologies as well. One of the problems is
+the complexity of the web services protocols. SOA on its own is still
+quite simple, however, in conjunction with the extensions from the
+WS-* environment a complex protocol stack arises. WS-* is necessary
+for transactions, security or other extensions. Complex protocols
+exacerbate the interoperability – however, interoperability is a
+prerequisite for a SOA.</p>
+
+<p class="calibre3">An action on the user interface has to be processed by the
+orchestration and the different services. These are distributed calls
+within the network with associated overhead and latency. Moreover,
+this communication runs via the central integration and orchestration
+technology, which accordingly has to cope with numerous calls.</p>
+
+<h3 id="section7-2" class="calibre2">7.2 Differences Between SOA and Microservices</h3>
+
+<p class="calibre3">SOA and Microservices are related: Both aim at splitting
+applications into services. It is also not easy to distinguish between
+SOA and Microservices just because of what is happening in the
+network. After all, in both architecture approaches many services
+exchange information via the network.</p>
+
+<h5 id="leanpub-auto-communication" class="calibre15">Communication</h5>
+
+<p class="calibre3">Like Microservices SOA can be based on asynchronous communication or
+synchronous communication. SOAs can be uncoupled by sending merely
+events like “new order”. In such cases every SOA service can react to
+the event with different logic. One service can write a bill and
+another can initiate the delivery. The services are strongly uncoupled
+since they only react to events without knowing the trigger for the
+events. New services can easily be integrated into the system by
+likewise reacting to such events.</p>
+
+<h5 id="leanpub-auto-orchestration" class="calibre15">Orchestration</h5>
+
+<p class="calibre3">However, already at the level of integration differences between SOA
+and Microservices appear: In SOA the integration solution is also
+responsible for orchestrating the services. A business process is
+built up from services. In a Microservice-based architecture the
+integration solution does not possess any intelligence. The
+Microservices are responsible for communicating with the other
+services. SOA attempts to use orchestration to gain additional
+flexibility for the implementation of business processes. This will
+only work out when services and user interface are stable and do not
+frequently have to be modified.</p>
+
+<h5 id="leanpub-auto-flexibility" class="calibre15">Flexibility</h5>
+
+<p class="calibre3">For achieving the necessary flexibility Microservices on the other
+hand exploit the fact that each Microservice can be easily changed and
+brought into production. When the flexible business processes of SOA
+are not sufficient, SOA forces the change of services into Deployment
+Monolith or user interfaces in an additional Deployment Monolith.</p>
+
+<p class="calibre3">Microservices place emphasis on isolation: Ideally a user interaction
+is completely processed within one Microservice without the need to
+call another Microservice. Therefore, changes required for new features
+are limited to individual Microservices. SOA distributes the logic to
+the portal, the orchestration and the individual services.</p>
+
+<h5 id="leanpub-auto-microservices-project-level" class="calibre15">Microservices: Project Level</h5>
+
+<p class="calibre3">However, the most important difference between SOA and Microservices
+is the level at which the architecture aims. SOA considers the entire
+enterprise. It defines how a multitude of systems within the
+enterprise IT interacts. Microservices on the other hand represent an
+architecture for an individual system. They are an alternative to
+other modularization technologies. It would be conceivable to
+implement a Microservice-based system with another modularization
+technology and then to bring the system into production as a
+Deployment Monolith without distributed services. An entire SOA spans
+the entire enterprise IT. It has to look at different systems. An
+alternative to a distributed approach is not conceivable. Accordingly,
+the decision for a Microservice-based architecture can concern and be
+limited to an individual project while the introduction and
+implementation of SOA pertains to the entire enterprise.</p>
+
+<p class="calibre3">The SOA scenario depicted in <a href="part0010.html#Fig15">Fig. 15</a> results in a
+fundamentally different architecture (compare <a href="part0010.html#Fig17">Fig. 17</a>) if
+<a href="http://slideshare.net/ewolff/micro-services-neither-micro-nor-service">implemented</a> using <a href="https://blogs.oracle.com/archbeat/entry/podcast_show_notes_micro-services_roundtable">Microservices</a>:</p>
+
+
+<figure id="Fig17" class="image">
+  <img src="../images/00019.jpeg" alt="Fig. 17: CRM as Collection of Microservices" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 17: CRM as Collection of Microservices</figcaption>
+</figure>
+
+
+<ul class="calibre16">
+  <li class="calibre14">Since Microservices refer to a single system, the architecture does
+not need to comprise the entire IT with its different systems, but can
+be limited to an individual system. In <a href="part0010.html#Fig17">Fig. 17</a> this system is the
+CRM. Thus, implementing Microservices is relatively easy and not very
+costly as it is sufficient to implement one individual project rather
+than to change the entire IT landscape of the enterprise.</li>
+  <li class="calibre14">Accordingly, a Microservice-based architecture does not require an
+integration technology to be introduced and used throughout the
+company. The use of a specific integration and communication
+technology is limited to the Microservice system - it is even possible
+to use several approaches. For instance, a high-performance access
+also to large data sets can be implemented by replicating the data in
+the database. For access to other systems again other technologies can
+be used. In case of SOA all services in the entire company need to be
+accessible via a uniform technology. This requires a uniform
+technology stack. Microservices focus on simpler technologies, which
+do not have to fulfill as complex requirements as SOA suites.</li>
+  <li class="calibre14">In addition, communication between Microservices is different:
+Microservices employ simple communication systems without any
+intelligence. Microservices call each other or send messages. The
+integration technology does not implement an orchestration. A
+Microservice can call several other Microservices and implement an
+orchestration on its own. In that case, the logic for the
+orchestration resides in the Microservice and not in an integration
+layer. In the case of Microservices the integration solution contains 
+no logic, because it would originate from different domains. This
+conflicts with the distribution according to domains, which
+Microservice-based architectures aim at.</li>
+  <li class="calibre14">The use of the integration is also entirely different. Microservices
+avoid communication with other Microservices by having the UI
+integrated into the Microservice and due to their domain-based
+distribution. SOA focuses on communication. SOA
+obtains its flexibility by orchestration - this is accompanied by communication between
+services. And in the case of Microservices the communication does not
+necessarily have to be implemented via messaging or REST: An
+integration at the UI level or via data replication is possible as
+well.</li>
+  <li class="calibre14">CRM as complete system is not really present anymore in a
+Microservice-based architecture. Instead there is a collection of
+Microservices, which each cover specific functionalities like reports
+or forecasting transaction volume.</li>
+  <li class="calibre14">While in SOA all functionalities of the CRM system are collected in
+a single deployment unit, each service is an independent deployment
+unit and can be brought into production independently of the other
+services in the case of Microservice-based approaches. Depending on
+the concrete technical infrastructure the services can be even smaller
+than the ones depicted in <a href="part0010.html#Fig17">Fig. 17</a>.</li>
+  <li class="calibre14">Finally, the handling of UI is different: For Microservices the UI is
+part of the Microservice, while SOA typically offers only services,
+which then can be used by a portal.</li>
+  <li class="calibre14">The division into UI and service in SOA has far reaching consequences:
+To implement a new functionality including the UI in SOA, at least the
+service has to be changed and the UI adjusted. This means that at
+least two teams have to be coordinated. When other services in other
+applications are used, even more teams are involved requiring
+consequently an even greater coordination effort. In addition there
+are also orchestration changes, which are implemented likewise by a
+separate team. Microservices on the other hand attempt that an
+individual team can bring a new functionality into production with as
+little need for coordination with other teams as possible. Due to the
+Microservice-based architecture, interfaces between layers, which
+normally are between teams, are now within a team. This facilitates
+the implementation of changes. The changes can be processed in one
+team. If another team were involved, the changes had to be prioritized
+in relation to other requirements.</li>
+  <li class="calibre14">Each Microservice can be developed and operated by one individual
+team. This team is responsible for a specific domain and can implement
+new requirements or changes to the domain completely independently of
+other teams.</li>
+  <li class="calibre14">Moreover, the approach is different between SOA and Microservices:
+SOA introduces only one new layer above the existing services in order
+to combine applications in new ways. It aims at a flexible integration
+of the existing applications. Microservices serve to change the
+structure of the applications themselves – in pursuit of the goal to
+make changes to applications easier.</li>
+</ul>
+
+<p class="calibre3">The communication relationships in case of Microservices are depicted
+in <a href="part0010.html#Fig18">Fig. 18</a>: The user interacts with the UI, which is
+implemented by the different Microservices. In addition, the
+Microservices communicate with each other. There is no central UI or
+orchestration.</p>
+
+
+<figure id="Fig18" class="image">
+  <img src="../images/00020.jpeg" alt="Fig. 18: Communication in the case of Microservices" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 18: Communication in the case of Microservices</figcaption>
+</figure>
+
+
+<h5 id="leanpub-auto-synergies" class="calibre15">Synergies</h5>
+
+<p class="calibre3">There are definitely areas where Microservices and SOA have synergies.
+In the end both approaches pursue the goal to resolve applications
+into services. Such a step can be helpful when migrating an
+application to Microservices: When the application is split into
+SOA services, individual services can be replaced or supplemented by
+Microservices. Certain calls can be processed by a Microservice while
+other calls are still processed by the application. This allows to
+migrate applications in a stepwise manner and to implement the
+Microservices step by step.</p>
+
+<p class="calibre3"><a href="part0010.html#Fig19">Fig. 19</a> shows an example: The upper most service of CRM is
+supplemented by a Microservice. This Microservice now takes all calls
+and can, if necessary, call the CRM. The second CRM service is
+completely replaced by a Microservice. Thereby the CRM can be
+complemented by new functionalities. At the same time, it is not
+necessary to newly implement the entire CRM, instead Microservices can
+complement it at selected places. <a href="part0012.html#section8-5">Section 8.5</a> presents
+additional approaches how legacy applications can be replaced by
+Microservices.</p>
+
+
+<figure id="Fig19" class="image">
+  <img src="../images/00021.jpeg" alt="Fig. 19: SOA for migrating to Microservices" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 19: SOA for migrating to Microservices</figcaption>
+</figure>
+
+
+<h3 id="section7-3" class="calibre2">7.3 Conclusion</h3>
+
+<table id="tab-2" class="calibre21">
+<caption class="calibre22">Tab. 2: Differences between SOA and Microservices</caption>
+
+  <thead class="calibre23">
+    <tr class="calibre24">
+      <th class="calibre25"> </th>
+      <th class="calibre25">SOA</th>
+      <th class="calibre25">Microservices</th>
+    </tr>
+  </thead>
+  <tbody class="calibre27">
+    <tr class="calibre24">
+      <td class="calibre28">Scope</td>
+      <td class="calibre36">Enterprise-wide architecture</td>
+      <td class="calibre36">Architecture for one project</td>
+    </tr>
+  </tbody>
+  <tbody class="calibre27">
+    <tr class="calibre24">
+      <td class="calibre28">Flexibility</td>
+      <td class="calibre36">Flexibility by orchestration</td>
+      <td class="calibre36">Flexibility by fast deployment</td>
+    </tr>
+    <tr class="calibre24">
+      <td class="calibre28"> </td>
+      <td class="calibre36"> </td>
+      <td class="calibre36">and rapid, independent development</td>
+    </tr>
+    <tr class="calibre24">
+      <td class="calibre28"> </td>
+      <td class="calibre36"> </td>
+      <td class="calibre36">of Microservices</td>
+    </tr>
+  </tbody>
+  <tbody class="calibre27">
+    <tr class="calibre24">
+      <td class="calibre28">Organization</td>
+      <td class="calibre36">Services are  implemented</td>
+      <td class="calibre36">Services are  implemented</td>
+    </tr>
+    <tr class="calibre24">
+      <td class="calibre28"> </td>
+      <td class="calibre36">by different organizational</td>
+      <td class="calibre36">by teams in the same</td>
+    </tr>
+    <tr class="calibre24">
+      <td class="calibre28"> </td>
+      <td class="calibre36">units</td>
+      <td class="calibre36">project</td>
+    </tr>
+  </tbody>
+  <tbody class="calibre27">
+    <tr class="calibre24">
+      <td class="calibre28">Deployment</td>
+      <td class="calibre36">Monolithic deployment of</td>
+      <td class="calibre36">Each Microservice can</td>
+    </tr>
+    <tr class="calibre24">
+      <td class="calibre28"> </td>
+      <td class="calibre36">several services</td>
+      <td class="calibre36">be deployed individually</td>
+    </tr>
+  </tbody>
+  <tbody class="calibre27">
+    <tr class="calibre24">
+      <td class="calibre28">UI</td>
+      <td class="calibre36">Portal as universal UI for</td>
+      <td class="calibre36">Service contains UI</td>
+    </tr>
+    <tr class="calibre24">
+      <td class="calibre28"> </td>
+      <td class="calibre36">all services</td>
+      <td class="calibre36"> </td>
+    </tr>
+  </tbody>
+
+</table>
+
+<p class="calibre3">At the organizational level the approaches are very different: SOAs
+place emphasis on the structure of the entire enterprise IT,
+Microservices can be utilized in an individual project. SOAs focus on
+an organization where some teams develop backend services, while
+a different team implements the UI. In a Microservice-based approach one
+team should implement everything to facilitate communication and
+thereby speed up the implementation of features. That is not a goal of
+SOA. In SOA a new feature can entail changes to numerous services and
+thus require communication between a large number of
+teams. Microservices try to avoid this.</p>
+
+<p class="calibre3">At the technical level there are commonalities: Both concepts are
+based on services. The service granularity can even be
+similar. Because of these technical similarities it does not seem to
+be so easy to distinguish SOA from Microservices. However, from
+conceptual, architectural and organizational view points both
+approaches have very different effects.</p>
+
+<h5 id="leanpub-auto-essential-points-4" class="calibre15">Essential Points</h5>
+
+<ul class="calibre16">
+  <li class="calibre14">SOA and Microservices split applications into services, which
+are available in the network. Similar technologies can be employed
+to this end.</li>
+  <li class="calibre14">SOA aims at flexibility at the level of the enterprise IT by
+orchestrating the services. This is a complex undertaking and only
+works when the services do not need to be modified.</li>
+  <li class="calibre14">Microservices focus on individual projects and aim at facilitating
+deployment and enabling parallel work on different services.</li>
+</ul>
+
+<h5 id="leanpub-auto-try-and-experiment-6" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">A new functionality is supposed to be incorporated into the SOA
+landscape depicted in <a href="part0010.html#Fig15">Fig. 15</a>. The CRM does not have support for
+email campaigns. Therefore, a system for email campaigns has to be
+implemented. It is supposed to contain a service for the creation
+and execution of campaigns and a service for evaluating the results of
+a campaign.</p>
+
+  <p class="calibre3">An architect has to answer the following questions:</p>
+
+  <ul class="calibre16">
+    <li class="calibre14">Is the SOA infrastructure needed for integrating the two services?
+The service for campaign evaluation needs a large amount of data.
+      <ul class="calibre31">
+        <li class="calibre14">Would it be better to use data replication, UI-level integration
+or service calls for accessing the large amount of data?</li>
+        <li class="calibre14">Which of these integration options is typically offered by SOA?</li>
+      </ul>
+    </li>
+    <li class="calibre14">Should the service integrate into the existing portal or rather have
+its own user interface? Which arguments favor the one or the other
+option?</li>
+    <li class="calibre14">Should the new functionality be implemented by the CRM team?</li>
+  </ul>
+
+</aside>
+
+
+</div>
+</body></html>

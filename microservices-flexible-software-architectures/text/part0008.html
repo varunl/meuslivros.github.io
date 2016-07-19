@@ -1,0 +1,656 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title dir="ltr">5 Reasons for Microservices</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body dir="ltr" class="calibre">
+<div class="calibre6">
+<h2 id="chapter-5" class="calibre1">5 Reasons for Microservices</h2>
+
+<p class="calibre3">Microservices offer many advantages. These are presented in this
+chapter. A detailed understanding of the advantages allows a better
+evaluation whether Microservices represent a sensible approach in a
+given use case. The chapter continues the discussion of
+<a href="part0002.html#section1-2">section 1.2</a> and explains the
+advantages in more detail.</p>
+
+<p class="calibre3"><a href="part0008.html#section5-1">Section 5.1</a> depicts the technical advantages of
+Microservices. However, Microservices also influence the organization,
+as described in <a href="part0008.html#section5-2">section 5.2</a>. Finally,
+<a href="part0008.html#section5-3">section 5.3</a> addresses the advantages from a business
+perspective.</p>
+
+<h3 id="section5-1" class="calibre2">5.1 Technical Benefits</h3>
+
+<p class="calibre3">Microservices are an effective modularization concept. Only with
+distributed communication it is possible to call another Microservice.
+This does not happen by accident, but a developer has to create the
+respective possibilities for it within the communication
+infrastructure. Consequently, dependencies between Microservices do
+not just creep in unintendedly, but a developer has to generate them
+explicitly. Without Microservices it easily happens that a developer
+just uses some class and thereby creates a dependency, which had not
+been architecturally intended.</p>
+
+<p class="calibre3">Let us assume for instance that in an E-commerce application the
+product search should be able to call the order process, but not the
+other way round. This ensures that the product search can be changed
+without influencing the order process, as the product search does not
+use the order process. Now a dependency of the product search to the
+order process is introduced, for instance, because a developer found
+functionalities there, which were useful for him. Consequently,
+product search and order process now depend on each other and can only
+be changed together.</p>
+
+<p class="calibre3">Once undesired dependencies have started to creep into the system,
+additional dependencies rapidly accrue. The application architecture
+erodes. This development can normally only be prevented by
+architecture management tools. Such tools have a model of the desired
+architecture and discover when a developer has introduced an undesired
+dependency. The developer then can immediately remove the dependency
+again before harm is done and the architecture suffers. Appropriate
+tools are presented in <a href="part0012.html#section8-2">section 8.2</a>.</p>
+
+<p class="calibre3">In a Microservices-based architecture product search and order process
+would be separate Microservices. To create a dependency the developer
+would have to implement it within the communication mechanisms. This
+is laborious and thus normally does not happen unnoticed, even without
+architecture management tools. Thus the probability is lower that the
+architecture erodes on the level of dependencies between
+Microservices. The Microservice boundaries act like firewalls, which
+prevent an architecture erosion. Microservices offer a strong
+modularization as it is difficult to overstep the boundaries between
+modules.</p>
+
+<h5 id="leanpub-auto-replacing-microservices" class="calibre15">Replacing Microservices</h5>
+
+<p class="calibre3">Working with old software systems poses a big challenge: A further
+development of the software is difficult due to bad code quality. To
+replace the software is risky. Often it is unclear how exactly the
+software is working, and the system is very large. The larger the
+software system the more laborious is its replacement. When the
+software is in addition supporting important business processes, it is
+nearly impossible to change it. The failure of such business processes
+can have tremendous consequences, and each software change entails the
+danger of such a failure.</p>
+
+<p class="calibre3">Although this is a central problem, a software architecture is never
+really aimed at replacing a software. However, Microservices support
+this goal: They can be replaced individually since they are separate
+and small deployment units. Therefore, the technical prerequisites for
+a replacement are better. Eventually it is not necessary to replace a
+large software system, but only a small Microservice. Whenever
+necessary, additional Microservices can be replaced.</p>
+
+<p class="calibre3">In case of the new Microservices the developers are not tied to
+the old technology stack, but free to use other technologies at will.
+When the Microservice additionally is independent in a domain sense,
+the logic is easier to understand. The developer does not need to
+understand the entire system, but just the functionalities of an
+individual Microservice. Knowledge regarding the domain is a
+prerequisite for the successful replacement of a Microservice.</p>
+
+<p class="calibre3">Moreover, Microservices keep functioning when another Microservice
+fails. Even if the replacement of a Microservice leads to the
+temporary failure of one Microservice, the system as such can keep
+operating. This additionally decreases the risk associated with a replacement.</p>
+
+<h5 id="leanpub-auto-sustainable-software-development" class="calibre15">Sustainable Software Development</h5>
+
+<p class="calibre3">The start in a new software project is simple: There is not much code
+yet, the code structure is clean, and the developers make fast
+progress. Due to architecture erosion and an increasing complexity
+development can get more difficult over time. At some point, the software turns
+into a legacy system. As already discussed, Microservices prevent
+architecture erosion. When a Microservice has turned into a legacy
+system, it can be replaced. For these two reasons Microservices make a
+sustainable software development possible. This means that a high
+productivity can be reached also on the long-term. However, also in a
+Microservice-based system it can happen that a lot of code has to be newly
+written. This will of course decrease productivity.</p>
+
+<h5 id="leanpub-auto-handling-legacy" class="calibre15">Handling Legacy</h5>
+
+<p class="calibre3">Replacing Microservices is only possible if the system is already
+implemented in a Microservice-based manner. However, also the
+replacement and amending of existing legacy applications is easier
+with Microservices. The legacy applications only have to provide an
+interface, which enables the Microservice to communicate with the
+legacy application. Comprehensive code changes or the integration of
+new code components into the legacy system are not necessary. The code
+level integration is a big challenge in the case of legacy systems,
+which can be avoided in this manner. Amending the system is especially
+easy when a Microservice can intercept the processing of all calls and
+process them itself. Such calls can be HTTP requests for the built-up
+of web sites or REST calls.</p>
+
+<p class="calibre3">In these instances, the Microservice can complement the legacy system.
+There are different possibilities for this:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The Microservice can process certain requests by itself while
+leaving the others to the legacy system.</li>
+  <li class="calibre14">Alternatively, the Microservice can change the requests and
+afterwards transfer them to the actual application.</li>
+</ul>
+
+<p class="calibre3">This approach is similar to the SOA approach (compare <a href="part0010.html#chapter-7">Chapter 7</a>),
+which deals with the comprehensive integration of different
+applications. When the applications are distributed into services,
+these services cannot only be orchestrated anew, likewise it is
+possible to replace individual services for instance by Microservices.</p>
+
+<aside class="calibre33">
+  <h3 id="leanpub-auto-an-example-for-microservices-and-legacy" class="calibre35">An Example for Microservices and Legacy</h3>
+
+  <p class="calibre3">In a project the goal was to undertake a modernization in an existing
+Java-E-commerce application. For this purpose, new technologies, for
+example new frameworks, were to be introduced to enhance future
+software development productivity. After some time, it turned out that
+the effort for the integration of the new and old technologies would
+be tremendous. The new code had to be able to call the old one – and
+vice versa. This requires technology integration in both directions.
+Transactions and database connections have to be used jointly.
+Likewise, the security mechanisms have to be integrated. This
+integration would also render the development of the new software more
+complicated and thus endanger the goal of the undertaking.</p>
+
+  <p class="calibre3"><a href="part0008.html#Fig10">Fig. 10</a> shows the solution: The new system was developed
+completely independent of the old system. The only integration was
+provided by links, which call certain behaviors in the old software –
+for instance the addition of items to the shopping cart. The new
+system also had access to the same database like the old system. In
+hindsight, a shared database is not a good idea as the database is an
+internal representation of the data of the old system. When this
+representation is placed at the disposal of another application, the
+principle of
+<a href="https://en.wikipedia.org/wiki/Encapsulation_(computer_programming)">encapsulation</a>
+is violated (compare <a href="part0014.html#section10-1">section 10.1</a>). The data
+structures can hardly be changed anymore as now in addition to the old
+system also the new system depends on them.</p>
+
+  <p class="calibre3">The approach to develop the system separately solved the
+integration-related problems to a large extent. First of all,
+developers thereby could use new technological approaches without
+having to consider the old code and the old approaches. This enabled
+much more elegant solutions.</p>
+
+</aside>
+
+
+<figure id="Fig10" class="image">
+  <img src="../images/00012.jpeg" alt="Fig. 10: Example for legacy integration" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 10: Example for legacy integration</figcaption>
+</figure>
+
+
+<h5 id="leanpub-auto-continuous-delivery-1" class="calibre15">Continuous Delivery</h5>
+
+<p class="calibre3">Continuous Delivery brings software regularly into production
+thanks to a simple, reproducible process. This is achieved by a
+Continuous Delivery pipeline (compare <a href="part0008.html#Fig11">Fig. 11</a>):</p>
+
+<ul class="calibre16">
+  <li class="calibre14">In the commit phase the software is compiled, the unit tests are
+run, and static code analysis might be performed.</li>
+  <li class="calibre14">The automated acceptance tests of the next phase ensure that the
+software is correct concerning the business requirements so that it
+would be accepted by the customer.</li>
+  <li class="calibre14">Capacity tests check whether the software is sufficiently performant
+to support the expected number of users. These tests are automated as
+well.</li>
+  <li class="calibre14">Explorative tests on the other hand are performed manually and serve
+to test certain areas of the system such as new features or certain
+aspects like software security.</li>
+  <li class="calibre14">Finally, the software is brought into production. This process is
+ideally also automated.</li>
+</ul>
+
+<p class="calibre3">Software is promoted through the individual phases: It traverses the
+individual phases consecutively. For example, a release can
+successfully pass the acceptance tests. However, the capacitance tests
+reveal that the software does not meet the requirement regarding the
+expected load. In this case the software is never going to be promoted
+to the remaining phases such as explorative tests or even production.</p>
+
+
+<figure id="Fig11" class="image">
+  <img src="../images/00013.jpeg" alt="Fig. 11: Continuous Delivery pipeline" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 11: Continuous Delivery pipeline</figcaption>
+</figure>
+
+
+<p class="calibre3">A Continuous Delivery pipeline with a full automation is the optimum.
+However, somehow all software gets into production. Accordingly, the
+current process can be optimized in a stepwise manner.</p>
+
+<p class="calibre3">Continuous Delivery is especially easy to realize
+<a href="http://slideshare.net/ewolff/software-architecture-for-devops-andcontinuousdelivery">with Microservices</a>.
+Microservices are independent deployment units. Consequently, they can
+be brought into production independently of other services. This has
+tremendous effects onto the Continuous Delivery pipeline:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The pipeline is faster as only a small Microservice has to be tested
+and brought into production at one time. This accelerates feedback.
+Rapid feedback is an essential goal of Continuous Delivery. When it
+takes weeks for a developer to get to know that his/her code has
+caused a problem in production, it will be difficult to become
+acquainted with the code again and to analyze the problem.</li>
+  <li class="calibre14">The risk of deployment decreases. The deployed units are smaller,
+besides Microservice-based systems can even still be used if a number
+of Microservices fail. And the deployment can more easily be rolled
+back.</li>
+  <li class="calibre14">Measures to further decrease the risk are also easier to implement
+with smaller deployment units. In case of Blue/Green Deployment for
+instance a new environment is built up with the new release. This is
+similar for Canary Releasing: In the case of this approach at first
+only one server is provided with the new software version. Only when
+this server runs successfully in production, the new version is rolled
+out to the other servers. For a Deployment Monolith this approach can
+be hard or nearly impossible to implement as it requires a lot of
+resources for the large number of environments. In case of
+Microservices the required environments are much smaller and the
+procedure thus easier.</li>
+  <li class="calibre14">Test environments pose additional challenges. When for instance a
+third party system is used, the environment has to contain also
+a test version of this third system. In case of smaller deployment
+units, the demands to the environments are lower. The environments for
+Microservices only have to integrate the third systems, which are
+necessary for the individual Microservice. It is likewise possible to
+test the systems using mocks of the third systems. This facilitates
+the tests and represents also an interesting method in order to test
+Microservices independently of each other.</li>
+</ul>
+
+<p class="calibre3">Continuous Delivery is one of the most important arguments for
+Microservices. Many projects invest in migrating to Microservices in
+order to facilitate the creation of a Continuous Delivery pipeline.</p>
+
+<p class="calibre3">However, Continuous Delivery is also a prerequisite for Microservices.
+Without Continuous Delivery pipelines the many Microservices can
+hardly be brought into production since it is not feasible to bring so
+many Microservices into production manually. Thus Microservices profit
+from Continuous Delivery and
+<a href="http://slideshare.net/ewolff/continuous-delivery-and-micro-services-a-symbiosis">vice versa</a>.</p>
+
+<h5 id="leanpub-auto-scaling" class="calibre15">Scaling</h5>
+
+<p class="calibre3">Microservices offer via the network reachable interfaces, which can be
+accessed for instance via HTTP or via a message solution. Each
+Microservice can run on one server – or on several. When the service
+runs on several servers, the load can be distributed onto the
+different servers. Likewise, it is possible to install and run
+Microservices on computers having different performance. Each
+Microservice can implement its own scaling.</p>
+
+<p class="calibre3">In addition, caches can be placed in front of Microservices. For
+REST-based Microservices it can be sufficient to use a generic HTTP
+cache. This reduces the effort for such a cache significantly. The
+HTTP protocol contains a comprehensive support for caching, which is
+very helpful in this context.</p>
+
+<p class="calibre3">Furthermore, it might be possible to install the Microservices at
+different locations within the network in order to bring them closer
+to the caller. In case of world-wide distributed Cloud environments,
+it does not matter anymore in which computing center the Microservices
+are running. When the Microservice infrastructure uses several
+computing centers and processes calls always in the nearest computing
+center, the architecture can significantly reduce the response times.
+Besides, static content can be delivered by a CDN (Content Delivery
+Network), whose servers are located even closer to the users.</p>
+
+<p class="calibre3">However, the better scaling and the support for caching cannot work
+miracles: Microservices result in a distributed architecture. Calls
+via the network are a lot slower than local calls. From a pure
+performance perspective it might be better to combine several
+Microservices or to use technologies which focus on local calls
+(compare <a href="part0020.html#chapter-15">chapter 15</a>).</p>
+
+<h5 id="leanpub-auto-robustness" class="calibre15">Robustness</h5>
+
+<p class="calibre3">Actually, Microservices should be less reliable than other
+architecture approaches. After all, Microservices are a distributed
+system. Thus possible network failures add to the usual sources of
+errors. Moreover, Microservices run on several servers so that there
+is also a larger probability for hardware failure.</p>
+
+<p class="calibre3">To ensure a high availability, the Microservices-based architecture has to be
+appropriately designed. The communication between the Microservices
+has to form a kind of firewall: The failure of a Microservice may not
+propagate. This prevents that a problem arising in an individual
+Microservice causes a failure of the complete system.</p>
+
+<p class="calibre3">Accordingly, the Microservice, which is calling, has to somehow keep working upon
+a failure. One possibility is to assume default values. Alternatively,
+the failure might lead to a graceful degradation i.e. a somehow
+reduced service.</p>
+
+<p class="calibre3">It can already be decisive how a failure is dealt with technically:
+The operation system level timeout for TCP/IP connections is often set
+to five minutes, for example. If due to the failure of a Microservice
+requests run into this timeout, the thread is blocked for five
+minutes. At some point all threads will be blocked. If that happens,
+the calling system might fail as it cannot do anything else anymore
+than wait for timeouts. This can be avoided by supplying the calls
+with shorter timeouts. Such ideas are around much longer than the
+concept of Microservices. The book “Release It” <sup id="fnref-ReleaseIt" class="calibre32"><a rel="footnote" href="part0008.html#fn-ReleaseIt">1</a></sup> in detail
+presents such challenges and approaches for solving them. When these
+approaches are implemented, Microservice-based systems can tolerate
+the failure of entire Microservices and thus become more robust than a
+Deployment Monolith.</p>
+
+<p class="calibre3">In comparison to Deployment Monoliths Microservices have the
+additional advantage that they distribute the system into multiple
+processes. These processes are better isolated from each other. In a
+Deployment Monolith, which only starts one process, memory leaks or
+a functionality using up a lot of computing resources can make the whole
+system fail. Such errors are very often simple programming mistakes or
+slips. The distribution into Microservices prevents such situations as
+only a single Microservice would be failing in such a scenario.</p>
+
+<h5 id="leanpub-auto-free-technology-choice" class="calibre15">Free Technology Choice</h5>
+
+<p class="calibre3">Microservices offer technological freedom. Since Microservices
+communicate only via the network, they can be implemented in any
+language and platform as long as communication with other
+Microservices is possible. This free technology choice can be used to
+test new technologies without running big risks. As a test one can use the new
+technology in a single Microservice. If the technology does not
+perform according to expectations, only this one Microservice has to
+be rewritten. In addition, troubles arising in case of failure will be
+limited. The free technology choice offers for instance the advantage
+that developers can really use new technologies in production. This
+increases motivation and has positive effects on personnel recruitment
+as developers normally enjoy to use new technologies.</p>
+
+<p class="calibre3">Moreover, in this way the most appropriate technology can be used for
+each problem. A different programming language or a certain framework
+can be used to implement specific system parts. It is even possible
+for an individual Microservice to use a specific database or
+persistence technology. However, backup and disaster recovery
+mechanisms have to be implemented for that.</p>
+
+<p class="calibre3">Free technology is an option – it does not have to be made use of.
+Technologies can also be defined for all Microservices in a project so
+each Microservice is bound to a specific technology stack. However,
+Deployment Monolith inherently narrow the choices developers have: For
+example, in Java applications each library can only be used in one
+version. Accordingly, not only the libraries to be used, but even the
+versions have to be set in a Deployment Monolith. Microservices do not
+impose such technical limitations.</p>
+
+<h5 id="leanpub-auto-independence" class="calibre15">Independence</h5>
+
+<p class="calibre3">Decisions regarding technology and putting new versions into
+production concern only individual Microservices. This makes
+Microservices very independent of each other. Of course, there has to
+be a common technical basis. The installation of Microservices should
+be automated, there should be a Continuous Delivery pipeline for each
+Microservices, and Microservices should adhere to the monitoring
+specifications. However, within these parameters Microservices can
+implement a practically unlimited choice of technical approaches. Due
+to the greater technological freedom there is less coordination
+necessary between Microservices.</p>
+
+<h3 id="section5-2" class="calibre2">5.2	Organizational Benefits</h3>
+
+<p class="calibre3">Microservices are an architectural approach and thus should have only
+advantages for software development and structure. However, due to
+Conway’s Law (compare <a href="part0007.html#section4-2">section 4.2</a>) architecture affects
+also team communication and thus organization.</p>
+
+<p class="calibre3">First of all Microservices reach a high level of technical
+independence as the last section (<a href="part0008.html#section5-1">5.1</a>) discussed. When
+within the organization a team is in full charge of a Microservice,
+the team can make full use of the technical independence. However, the
+team has also the full responsibility if a Microservice malfunctions
+or fails in production.</p>
+
+<p class="calibre3">In this manner Microservices support team independence. The technical
+basis allows teams to work on the different Microservices with little
+coordination. This provides the fundament for the independent work of
+the teams.</p>
+
+<p class="calibre3">In other projects, technology or architecture have to be decided centrally
+since the individual teams and modules are bound to these decisions
+due to the technical frame conditions. It might just be impossible to
+use two different libraries or even two different versions of one
+library within one Deployment Monolith. Thus, central coordination
+is mandatory. For Microservices, the situation is different. This
+allows for self organization. However, a global coordination might
+still be sensible, for instance to be able to perform an update
+including all components in case of a security problem with a library.</p>
+
+<p class="calibre3">Teams have more responsibilities: They decide the architecture of
+their Microservices. They cannot hand over this responsibility to a
+central architecture. Thus, they also have to carry the consequences
+since they have the responsibility for the Microservice.</p>
+
+<aside class="calibre33">
+  <h3 id="leanpub-auto-the-scala-decision" class="calibre35">The Scala Decision</h3>
+
+  <p class="calibre3">In a project employing a Microservice-based approach the central
+architecture group was supposed to decide whether Scala could be used
+as programming language by one team. This decision would have
+transferred the responsibility for the decision to the central
+architecture group. The group would have had to decide whether the
+team might solve its problems more efficiently by using Scala or
+whether the use of Scala might create additional problems in the end.
+Eventually, the decision was delegated to the team since the team
+has to take responsibility for its Microservice. They have to deal with
+the consequences, if Scala in the end does not fulfill the demands of
+production or does not support an efficient software development. They
+have the investment of getting familiar with Scala first and have to
+estimate whether this effort will pay off in the end. Likewise, they
+have a problem if suddenly all Scala developers leave the project or
+change to another team. To delegate the responsibility to the central
+architecture group is strictly speaking not even possible since the
+central architecture group is not directly affected by the
+consequences. Therefore, the team just has to decide by itself. The
+team has to include all team members into the decision – also the
+Product Owner, who would for instance suffer in the end in case of a
+low productivity.</p>
+
+</aside>
+
+<p class="calibre3">This line of action represents a radical renunciation of old forms of
+organization, where the central architecture group prescribes the
+technology stack to be used for everybody. In this type of
+organization the individual teams are not responsible for decisions
+and non functional requirements like availability, performance or
+scalability. In a classical architecture, the non functional properties
+can only be provided for centrally since they can only be warranted by
+the common basis of the entire system. When Microservices do not force
+a common basis anymore, these decisions can be distributed to the
+teams thus enabling a greater self-reliance and independence.</p>
+
+<h5 id="leanpub-auto-smaller-projects" class="calibre15">Smaller projects</h5>
+
+<p class="calibre3">Finally, Microservices allow for the distribution of large projects
+into numerous small projects as the individual Microservices are so
+independent that a central coordination loses importance. Therefore, a
+comprehensive project organization is not necessary anymore. Large
+organizations are problematic as they have a relatively large communication
+overhead. When Microservices enable the fragmentation of a large
+organization into several smaller ones, the need for communication
+decreases. This allows teams to focus more on the implementation of
+requirements.</p>
+
+<p class="calibre3">Large projects will also fail more frequently. Also from this
+perspective it is better when a large project can be divided into
+multiple smaller projects. The smaller extent of the individual
+projects enables more precise estimations. Better estimations improve
+planning and decrease risk. And even if the estimation is wrong, the
+impact of the incorrect decisions is lower. In conjunction with the
+greater flexibility this can speed up and facilitate the process of
+decision making – especially as the associated risk is so much
+smaller.</p>
+
+<h3 id="section5-3" class="calibre2">5.3 Benefits from a Business Perspective</h3>
+
+<p class="calibre3">The already discussed advantages from an organizational perspective
+lead also to business advantages: The projects have a lower risk, and
+coordination between teams needs to be less intense so that the teams
+can work more efficiently.</p>
+
+<h5 id="leanpub-auto-parallel-work-on-stories" class="calibre15">Parallel Work on Stories</h5>
+
+<p class="calibre3">The distribution into Microservices enables the parallel work on
+different stories (compare <a href="part0008.html#Fig12">Fig. 12</a>). Each team works on a
+story, which only concerns their own Microservice. Consequently, the
+teams can work independently, and the system as such can be
+simultaneously expanded at different spots. This eventually scales the
+agile process. However, scaling does not take place at the level of
+development processes, but is facilitated by the architecture and the
+independence of the teams. Changes and deployments of individual
+Microservices are possible without complex coordination. Therefore,
+teams can work independently. When a team is slower or encounters
+obstacles, this does hardly influence the other teams. Thus the risk
+associated with the project is further reduced.</p>
+
+<p class="calibre3">An unambiguous domain-based design and the assignment of one developer
+team per Microservice can scale the development or project
+organization with the number of teams.</p>
+
+
+<figure id="Fig12" class="image">
+  <img src="../images/00014.jpeg" alt="Fig. 12: Example for legacy integration" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 12: Example for legacy integration</figcaption>
+</figure>
+
+
+<p class="calibre3">It is possible that changes concern several Microservices and thus
+several teams. An example: Only certain customers are allowed to order
+some products – for instance because of youth protection. In case of
+the architecture depicted in <a href="part0008.html#Fig12">Fig. 12</a> changes to all Microservices
+would be necessary to implement this feature. The Customer Microservice
+would have to store the data whether a customer is of legal age. Product search
+should hide or label the products prohibited for underage customers.
+Finally, the order process has to prevent the ordering of prohibited
+products by underage customers. These changes have to be coordinated.
+Coordination is especially required when one Microservice calls
+another. In that case the called upon Microservice has to be changed
+first so that the caller can afterwards use the new features.</p>
+
+<p class="calibre3">This problem can certainly be solved. One can reason that the outlined
+architecture is not optimal. If the architecture is geared to the
+business processes, the changes can be limited to the order process.
+Eventually, only the ordering is to be prohibited, not searching. The
+information whether a certain client is allowed to order or not
+should also be within the responsibility of the order process. Which
+architecture and consequently which team distribution is the right
+one, depends on the requirements and the concerned Microservices and
+teams.</p>
+
+<p class="calibre3">If the architecture has been selected appropriately, Microservices can
+well support agility. This is for sure a good reason from a business
+perspective to use a Microservice-based architecture.</p>
+
+<h3 id="section5-4" class="calibre2">5.4 Conclusion</h3>
+
+<p class="calibre3">In summary Microservices lead to the following technical advantages
+(<a href="part0008.html#section5-1">section 5.1</a>):</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<strong class="calibre19">Strong modularization</strong>: Dependencies between Microservices cannot easily creep in.</li>
+  <li class="calibre14">Microservices can be <strong class="calibre19">easily replaced</strong>.</li>
+  <li class="calibre14">The strong modularization and the replaceability of Microservices
+leads to a <strong class="calibre19">sustained speed of development</strong>: The Architecture remains
+stable, and Microservices, which cannot be maintained anymore, can be
+replaced. Thus, the quality of the system remains high also on the
+long run so that the systems stays maintainable.</li>
+  <li class="calibre14">
+<strong class="calibre19">Legacy systems</strong> can be supplemented with Microservices without the
+need to carry around all the ballast, which has accumulated in the
+legacy system. Therefore, Microservices are a good approach when
+dealing with legacy systems.</li>
+  <li class="calibre14">Since Microservices are small deployment units, a <strong class="calibre19">Continuous
+Delivery pipeline</strong> is much easier to set up.</li>
+  <li class="calibre14">Microservices can be <strong class="calibre19">scaled</strong> independently.</li>
+  <li class="calibre14">If Microservices are implemented in line with established
+approaches, the system will be more <strong class="calibre19">robust</strong> in the end.</li>
+  <li class="calibre14">Each Microservice can be implemented in a different programming
+language and with a different <strong class="calibre19">technology</strong>.</li>
+  <li class="calibre14">Therefore, Microservices are largely <strong class="calibre19">independent</strong> from each other on
+a technical level.</li>
+</ul>
+
+<p class="calibre3">The technical independence affects the organization
+(<a href="part0008.html#section5-2">section 5.2</a>): The teams can work independently and on
+their own authority. There is less need for central coordination.
+Large projects are replaced by a collection of small projects, which
+positively affects risk and coordination.</p>
+
+<p class="calibre3">From a business perspective just the effects on risk are already
+positive (<a href="part0008.html#section5-3">section 5.3</a>). However, is is even more
+attractive that the Microservice-based architecture enables the
+scaling of agile processes without requiring an excessive amount of
+coordination and communication.</p>
+
+<h5 id="leanpub-auto-essential-points-2" class="calibre15">Essential Points</h5>
+
+<ul class="calibre16">
+  <li class="calibre14">There are numerous technical advantages – ranging from scalability
+and robustness to sustainable development.</li>
+  <li class="calibre14">The technical independence results in advantages on the
+organizational level. Teams become independent.</li>
+  <li class="calibre14">The technical and organizational advantages taken together result in
+advantages at the level of business: a lower risk and a faster
+implementation of more features.</li>
+</ul>
+
+<h5 id="leanpub-auto-try-and-experiment-4" class="calibre15">Try and Experiment</h5>
+
+<p class="calibre3">Look at a project you know:</p>
+
+<aside class="exercise">
+    <p class="calibre3">Why are Microservices useful in this scenario? Evaluate each
+advantage by assigning points (1 = no real advantage; 10 = very large
+advantage). The possible advantages are listed in the 
+conclusion of this chapter.</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">What would the project look like with or without the use of Microservices? </p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">Develop a discussion of the advantages of Microservices from the
+perspective of an architect, a developer, a project leader and the
+customer for the project. The technical advantages will be more of
+interest for the developers and architects, while the organizational
+and business advantages matter more for project leaders and customers.
+Which advantages do you put most emphasis on for the different groups?</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">Visualize the current domain design in your project or product.</p>
+
+  <ul class="calibre16">
+    <li class="calibre14">Which teams are responsible for which parts of the project? Where do you see
+overlap?</li>
+    <li class="calibre14">What should the distribution of teams to product parts and
+services look like to achieve a largely independent mode of operation?</li>
+  </ul>
+
+</aside>
+
+<div class="calibre6">
+  <ol class="calibre13">
+    <li id="fn-ReleaseIt" value="1" class="calibre14">Michael T. Nygard: Release It!: Design and Deploy Production-Ready Software, Pragmatic Programmers, 2007, ISBN 978-0-97873-921-8<a rel="rev-footnote" href="part0008.html#fnref-ReleaseIt">↩</a>
+</li>
+  </ol>
+</div>
+
+
+
+</div>
+</body></html>

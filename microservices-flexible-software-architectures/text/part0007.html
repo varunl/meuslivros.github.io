@@ -1,0 +1,1237 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title dir="ltr">4 What are Microservices?</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body dir="ltr" class="calibre">
+<div class="calibre6">
+<h2 id="chapter-4" class="calibre1">4 What are Microservices?</h2>
+
+<p class="calibre3"><a href="part0002.html#section1-1">Section 1.1</a> provided an initial definition of the term
+“Microservice”. However, there are also different possibilities to
+define Microservices. The different definitions illustrate the
+different characteristics of Microservices and thereby explain for
+which reasons the use of Microservices is advantageous. At the end of
+the chapter the reader should have his/her own definition of the term
+“Microservice” – depending on the individual project scenario.</p>
+
+<p class="calibre3">The chapter discusses the term “Microservice” from different perspectives:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<a href="part0007.html#section4-1">Section 4.1</a> focuses on the size of Microservices.</li>
+  <li class="calibre14">
+<a href="part0007.html#section4-2">Section 4.2</a> sets Microservices, architecture and
+organization into relation by using the law of Conway.</li>
+  <li class="calibre14">Finally <a href="part0007.html#section4-3">section 4.3</a> presents a fachliche division of
+Microservices based on Domain-driven Design (DDD) and Bounded
+Context.</li>
+  <li class="calibre14">
+<a href="part0007.html#section4-4">Section 4.4</a> explains why Microservices should contain a UI.</li>
+</ul>
+
+<h3 id="section4-1" class="calibre2">4.1 Size of a Microservice</h3>
+
+<p class="calibre3">The name “Microservices” betrays already that the size of the service
+matters, obviously Microservices are supposed to be small.</p>
+
+<p class="calibre3">One possibility to define the size of a Microservice is to count the
+Lines of Code
+(<a href="http://yobriefca.se/blog/2013/04/28/micro-service-architecture/">LoC</a>). However,
+such an approach entails a number of problems:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">It depends on the programming language used. Some languages require
+more code than others to express the same content – and
+Microservices are explicitly not supposed to predetermine the
+technology stack. Accordingly, defining Microservices based on this
+metric is not very useful.</li>
+  <li class="calibre14">Finally Microservices represent an architecture
+approach. Architectures, however, should follow the conditions in
+the domain rather than adhering to technical metrics such as
+LoC. Also for this reason attempts to determine size based on code
+lines should be viewed critically.</li>
+</ul>
+
+<p class="calibre3">In spite of the voiced criticism LoC can be an indicator for a
+Microservice. Still, the question as to the ideal size of a
+Microservice remains. How many LoC may a Microservice have? Even if
+there are no absolute standard values, there are nevertheless
+influencing factors, which argue for larger or smaller Microservices.</p>
+
+<h5 id="leanpub-auto-modularization" class="calibre15">Modularization</h5>
+
+<p class="calibre3">One factor is the modularization. Teams develop software in modules to
+be better able to deal with its complexity: Instead of having to
+understand the entire software a developer only needs to understand
+the module he is working on as well as the interplay between the
+different modules. This is the only way for a team to work
+productively in spite of the enormous complexity of a typical software
+system. In daily life there are often problems as modules get larger
+than originally planned. This makes them hard to understand and hard
+to maintain as changes require an understanding of the software. Thus
+it is very sensible to keep Microservices as small as possible. On the
+other hand Microservices in contrast to many other approaches to
+modularization have an overhead:</p>
+
+<h5 id="leanpub-auto-distributed-communication" class="calibre15">Distributed Communication</h5>
+
+<p class="calibre3">Microservices run within independent processes. Therefore
+communication between Microservices is distributed communication via
+the network. To this type of system the
+“<a href="http://martinfowler.com/bliki/FirstLaw.html">First Rule of Distributed Object Design</a>”
+applies. This rule states that systems should not be distributed if it
+can be avoided. The reason behind this is that a call on another
+system via the network is orders of magnitude slower than a direct
+call within the same process. In addition to the pure latency time
+serialization and deserialization of parameters and results are time-consuming. These processes do not only take a long time, but also cost
+CPU capacity.</p>
+
+<p class="calibre3">Moreover, distributed calls might fail because the network is
+temporarily unavailable or the called server cannot be reached – for
+instance due to a crash. This increases complexity when implementing
+distributed systems as the caller has to deal with these errors in a
+sensible manner.</p>
+
+<p class="calibre3"><a href="http://martinfowler.com/articles/distributed-objects-microservices.html">Experience</a>
+teaches that Microservice-based architectures work in spite of these
+problems. When Microservices are designed to be especially small, the
+amount of distributed communication increases and the overall system
+gets slower. This argues for larger Microservics. When a Microservice
+contains a UI and fully implements a specific part of the domain , it
+can do without calling on other Microservices in most cases because
+all components of this part of the domain are implemented within one
+Microservice. The wish to prevent distributed communication is another
+reason to build systems according to the domain.</p>
+
+<h5 id="leanpub-auto-sustainable-architecture" class="calibre15">Sustainable Architecture</h5>
+
+<p class="calibre3">Microservices use distribution also to design architecture in a
+sustainable manner through distribution into individual Microservices:
+It is much more difficult to use a Microservice than a class. The
+developer has to deal with the distribution technology and has to use
+the Microservice interface. In addition he might have to make
+preparations for tests to include the called Microservice or replace
+it with a stub. Finally, he has to contact the team responsible for the
+respective Microservice.</p>
+
+<p class="calibre3">To use a class within a Deployment Monolith is much simpler – even if
+the class belongs to a completely different part of the Monolith and
+falls within the responsibility of another team. However, as it is so
+simple to implement a dependency between two classes, unintended
+dependencies tend to accumulate within Deployment Monoliths. In the
+case of Microservices dependencies are harder to implement, which
+prevents the creation of unintended dependencies.</p>
+
+<h5 id="leanpub-auto-refactoring" class="calibre15">Refactoring</h5>
+
+<p class="calibre3">However, the boundaries between Microservices create also challenges,
+for instance during refactoring.  When it becomes apparent that a
+certain functionality is not fitting well within its present
+Microservice, it has to be moved to another Microservice. If the
+target Microservice is written in a different programming language,
+this transfer corresponds ultimately to a new implementation. Such
+problems do not arise when functionalities are moved within a
+Microservice. This factor argues also rather for larger
+Microservices. This topic is the focus of <a href="part0012.html#section8-3">Section 8.3</a>.</p>
+
+<h5 id="leanpub-auto-team-size" class="calibre15">Team Size</h5>
+
+<p class="calibre3">The independent deployment of Microservices and the division into
+teams result in an upper limit for the size of an individual
+Microservice. A team should be able to implement features within a
+Microservice independently of other teams and to bring them also
+independently into production. In this way the architecture enables
+the scaling of development without requiring too much coordination
+effort from the teams.</p>
+
+<p class="calibre3">A team has to be able to implement features independently of the other
+teams. Therefore at first glance it seems like the Microservice should
+be large enough to allow for the implementation of different
+features. When Microservices are smaller, a team can be responsible
+for several Microservices, which together allow the implementation of
+a domain. A lower limit for the Microservice size does not
+result from the independent deployment and the division into teams.</p>
+
+<p class="calibre3">However, an upper limit does result from it: When a Microservice has
+reached a size that prevents its further development by a single team,
+it is too large. For that matter a team should have a size that is
+especially well suited for agile processes, i.e. typically three to
+nine people. Thus a Microservice should in no case grow so large that
+three to nine people cannot develop it further by themselves. In
+addition to sheer size the number of features to be implemented in an
+individual Microservice plays an important role. Whenever a large
+amount of changes is necessary within a short time, a team can be
+rapidly overloaded. <a href="part0017.html#section13-2">Section 13.2</a> highlights
+alternatives to allow several teams to work on the same
+Microservice. However, in general a Microservice should never grow so
+large that several teams are necessary to work on it.</p>
+
+<h5 id="leanpub-auto-infrastructure" class="calibre15">Infrastructure</h5>
+
+<p class="calibre3">Another important factor influencing the size of a Microservice is the
+infrastructure. Each Microservice has to be able to be deployed
+independently. It must have a Continuous Delivery pipeline and an
+infrastructure for running the Microservice, which has to be present
+not only in production, but also during the different test
+stages. Also databases and application servers might belong to
+infrastructure. Moreover, there has to be a build system for the
+Microservice. The Microservice code has to be versioned independently
+of other Microservices. Thus a project within version control has to
+exist for the Microservice.</p>
+
+<p class="calibre3">Depending on the effort that is necessary to provide the required
+infrastructure for a Microservice, the sensible size for a
+Microservice can vary. When a small Microservice size is chosen, the
+system is distributed into many Microservices thus requiring more
+infrastructures. In the case of larger Microservices the system
+contains overall fewer Microservices and consequently requires fewer
+infrastructures.</p>
+
+<p class="calibre3">Build and deployment of Microservices should anyhow be
+automated. Nevertheless it can be laborious to provide all necessary
+infrastructure components for a Microservice. Once setting up the
+infrastructure for new Microservices is automated, the expenditure for
+providing infrastructures for additional Microservices decreases. This
+allows to further reduce the Microservice size. Companies, which have
+been working with Microservices for some time, usually simplify the
+creation of new Microservices by providing the necessary
+infrastructure in an automated manner.</p>
+
+<p class="calibre3">Besides there are technologies, which allow to reduce the
+infrastructure overhead to such an extent that substantially smaller
+Microservices are possible – in that case, however, with a number of
+limitations. Such Nanoservices are discussed in
+<a href="part0020.html#chapter-15">chapter 15</a>.</p>
+
+<h5 id="leanpub-auto-replaceability" class="calibre15">Replaceability</h5>
+
+<p class="calibre3">A Microservice should be as easy to replace as possible. Replacing a
+Microservice can be sensible when its technology is outdated or the
+Microservice code is of such a bad quality that it cannot be developed
+any further. The replaceability of Microservices is an advantage as
+compared to monolithic applications, which hardly can be replaced at
+all. When a Monolith cannot be maintained anymore, its development has
+either to be continued in spite of the associated high costs or a
+likewise cost-intensive migration has to take place nevertheless. The
+smaller a Microservice is, the easier it is to replace it by a new
+implementation. Above a certain size a Microservice can hardly be
+replaced anymore because replacing it then poses the same challenges
+as for a Monolith. Replaceability thus limits the size of a
+Microservice.</p>
+
+<h5 id="leanpub-auto-transactions-and-consistency" class="calibre15">Transactions and Consistency</h5>
+
+<p class="calibre3">Transactions possess the so-called ACID characteristics:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<strong class="calibre19">Atomicity</strong> indicates that a given transaction is either executed
+completely or not at all. In case of an error all changes are
+reversed again.</li>
+  <li class="calibre14">
+<strong class="calibre19">Consistency</strong> means that data are consistent before and after the
+execution of a transaction – validations for instance are not
+violated.</li>
+  <li class="calibre14">
+<strong class="calibre19">Isolation</strong> indicates that the operations of transactions are
+separated from each other.</li>
+  <li class="calibre14">
+<strong class="calibre19">Durability</strong> indicates permanence: Changes to the transaction are
+stored and are still available after a crash.</li>
+</ul>
+
+<p class="calibre3">Within a Microservice changes to a transaction can take
+place. Moreover, the consistency of data in a Microservice can be
+guaranteed very easily. Beyond an individual Microservice this gets
+difficult. In that case an overall coordination is necessary. Upon the
+rollback of a transaction all changes to all Microservices would have
+to be reversed. This is laborious and hard to implement as there has
+to be a guarantee that the decision whether changes have to be
+reversed is delivered. However, communication within networks is
+unreliable. Until it is decided whether a change may take place,
+further changes to the data are barred. For once additional changes
+have taken place, it might not be possible anymore to reverse a
+certain change. However, when Microservices are kept from introducing
+data changes for some time, the system throughput is reduced.</p>
+
+<p class="calibre3">However, when communicating via messaging systems, transactions are
+possible (compare Section 9.4). With such an approach transactions are
+also possible without a close link between the Microservices.</p>
+
+<h5 id="leanpub-auto-consistency" class="calibre15">Consistency</h5>
+
+<p class="calibre3">In addition to transactions data consistency is important. An order
+for instance has finally to be recorded as revenue. Only then will
+revenue and order data be consistent. Data consistency can only be
+achieved through close coordination. Data consistency can hardly be
+guaranteed across Microservices. This does not mean that the revenue
+for an order will not be recorded at all. However, it will likely not
+happen at the exact same time point and maybe not even within one
+minute of order processing as the communication occurs via the
+network - and is consequently slow and unreliable.</p>
+
+<p class="calibre3">Data changes within a transaction and data consistency are only
+possible when all concerned data is part of the same
+Microservice. Therefore they determine the lower size limit for a
+Microservice: When transactions are supposed to encompass several
+Microservices and data consistency is required across several
+Microservices, the Microservices have been designed too small.</p>
+
+<h5 id="leanpub-auto-compensation-transactions-across-microservices" class="calibre15">Compensation Transactions Across Microservices</h5>
+
+<p class="calibre3">At least in the case of transactions there is an alternative: If a
+data change has to be rolled back in the end, compensation
+transactions can be used for that.</p>
+
+<p class="calibre3">A classical example for a distributed transaction is a travel booking,
+which consists of a hotel, a rental car and a flight. Either
+everything has to be booked together or nothing at all. Within real
+systems and also within Microservices this functionality is divided
+into three Microservices because the three tasks are very
+different. Inquiries are sent to the different systems whether
+the desired hotel room, the desired rental car and the desired flight
+are available. If that is the case, everything is reserved. If now, for
+instance, the hotel room suddenly becomes unavailable, the reservation
+for the flight and the rental car has to be cancelled. However, in the
+real world the concerned companies will likely demand a fee for the
+booking cancellation. Due to that the cancellation is not only a
+technical event happening in the background like a transaction
+rollback, but a business process. This is much easier to represent
+with a compensation transaction. With this approach transactions
+across several elements in Microservice environments can also be
+implemented without the presence of a close technical link. A
+compensation transaction is just a normal service call. Technical as
+well as business reasons can argue for the use of mechanisms like
+compensation transactions for Microservices.</p>
+
+<h5 id="leanpub-auto-summary" class="calibre15">Summary</h5>
+
+<p class="calibre3">In conclusion the following factors influence the size of a
+Microservice (compare <a href="part0007.html#Fig5">Fig. 5</a>):</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The team size sets an upper limit: A Microservice should never be
+that large that several teams are required to work on it. Eventually,
+the teams are supposed to work and bring software into production
+independently of each other. This can only be achieved when each
+team works on a separate deployment unit – i.e. a separate
+Microservice. However, one team can work on several Microservices.</li>
+  <li class="calibre14">Modularization further limits the size of a Microservice: The
+Microservice should preferably be of a size that allows a developer
+to understand and further develop it. Even smaller is of course
+better. This limit is below the team size: Whatever one developer
+can still understand, a team should still be able to develop
+further.</li>
+  <li class="calibre14">Replaceability declines with the size of the Microservice. Therefore
+replaceability can influence the upper size limit for a
+Microservice. This limit lies below the one set by modularization:
+When somebody is able to replace a Microservice, this person has
+first of all to be able to understand the Microservice.</li>
+  <li class="calibre14">A lower limit is set by infrastructure: If it is too laborious to
+provide the necessary infrastructure for a Microservice, the number
+of Microservices should be kept rather small – consequently the
+single Microservices are then rather larger.</li>
+  <li class="calibre14">Similarly, distributed communication increases with the number of
+Microservices. Also for this reason the size of Microservices should
+not be set too small.</li>
+  <li class="calibre14">Consistency of data and transactions can only be ensured within a
+Microservice. Therefore Microservices may not be that small that
+consistency and transactions comprise several Microservices.</li>
+</ul>
+
+
+<figure id="Fig5" class="image">
+  <img src="../images/00007.jpeg" alt="Fig. 5: Factors Influencing the Size of a Microservice" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 5: Factors Influencing the Size of a Microservice</figcaption>
+</figure>
+
+
+<p class="calibre3">These factors do not only influence the size of Microservices, but
+they also reflect a certain idea of Microservices. According to
+this idea the main advantages of Microservices are independent
+deployment and the independent work of the different teams, and in
+addition the replaceability of Microservices. The optimal size of a
+Microservice can be deduced from these desired features.</p>
+
+<p class="calibre3">However, there are also other reasons for Microservices. When
+Microservices are, for instance, introduced because of their independent
+scaling, a Microservice size has to be chosen that ensures that each
+Microservice is a unit, which has to scale independently.</p>
+
+<p class="calibre3">How small or large a Microservice can be, cannot be deduced solely
+from this lineup. This also depends on the technology. Especially the
+effort necessary for providing infrastructure for a Microservice and
+for the distributed communication depends on the utilized
+technology. <a href="part0020.html#chapter-15">Chapter 15</a> looks at technologies, which make the
+development of very small services possible – denoted as
+Nanoservices. These Nanoservices have different advantages and
+disadvantages as Microservices, which, for instance, are implemented
+using technologies presented in <a href="part0019.html#chapter-14">Chapter 14</a>.</p>
+
+<p class="calibre3">Thus, there is no ideal size. The actual Microservice size will depend
+on the technology and the use case of an individual Microservice.</p>
+
+<h5 id="leanpub-auto-try-and-experiment" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">How large is the effort for the deployment of a Microservice in your
+language, platform and infrastructure?</p>
+
+  <ul class="calibre16">
+    <li class="calibre14">Is it just a simple process? Or a complex infrastructure containing
+ application servers or other infrastructure elements?</li>
+    <li class="calibre14">How can the effort for the deployment be reduced so that smaller
+Microservices become possible?</li>
+  </ul>
+
+  <p class="calibre3">Based on this information you can define a lower limit for the size of
+a Microservice. Upper limits depend on team size and
+modularization – also in those terms you should think of appropriate
+limits.</p>
+
+</aside>
+
+<h3 id="section4-2" class="calibre2">4.2 Conway’s Law</h3>
+
+<p class="calibre3"><a href="http://www.melconway.com/research/committees.html">Conway’s Law</a>
+was coined by the American computer scientist Melvin Edward Conway and
+indicates:</p>
+
+<blockquote class="calibre30">
+  <p class="calibre3">Any organization, that designs a system (defined broadly), will produce
+a design whose structure is a copy of the organization’s communication
+structure.</p>
+</blockquote>
+
+<p class="calibre3">It is important to know that this law is not only meant to apply to
+software, but to any kind of design. The communication structures,
+which Conway mentions, do not have to be identical with the
+organization chart. Often there are informal communication structures,
+which also have to be considered in this context. In addition the
+geographical distribution of teams can influence communication. After
+all it is much simpler to talk to a colleague who works in the same
+room or at least in the same office than with one working in a
+different city or even in a different time zone.</p>
+
+<h5 id="leanpub-auto-reasons-for-the-law" class="calibre15">Reasons for the Law</h5>
+
+<p class="calibre3">The reasons behind the Law of Conway derive from the fact that each
+organizational unit designs a specific part of the architecture. If
+two architecture parts have an interface, coordination in regards to
+this interface is required – and, consequently, a communication
+relationship between the organizational units, which are responsible
+for the respective architecture parts.</p>
+
+<p class="calibre3">From the Law of Conway it can also be deduced that design
+modularization is sensible. Via such a design it is ensured that not
+every team member has to constantly coordinate with every other team
+member. Instead the developers working on the same module can closely
+coordinate their efforts, while team members working on different
+modules only have to coordinate when they develop an interface – and
+even then only in regards to the specific design of this interface.</p>
+
+<p class="calibre3">However, the communication relationships extend beyond that. It is much
+easier to collaborate with a team within the same building than with a
+team located in another city, another country or even within a
+different time zone. Therefore architecture parts having numerous
+communication relationships are better implemented by teams, which are
+geographically close to each other, as it is easier for them to
+communicate with each other. In the end the Law of Conway does not
+focus on the organization chart, but on the real communication
+relationships.</p>
+
+<p class="calibre3">By the way, Conway postulated that a large organization has numerous
+communication relationships. Thus communication becomes more difficult
+or even impossible in the end. As a consequence the architecture can
+be more and more affected and finally break down. In the end having
+too many communication relationships is a real risk for a project.</p>
+
+<h5 id="leanpub-auto-the-law-as-limitation" class="calibre15">The Law as Limitation</h5>
+
+<p class="calibre3">Normally the Law of Conway is viewed as a limitation, especially from
+the perspective of software development. Let us assume that a project
+is modularized according to technical aspects (<a href="part0007.html#Fig6">Fig. 6</a>). All
+developers with UI focus are grouped into one team, the developers
+with backend focus are put into a second team, and data bank experts make up
+the third team. This distribution has the advantage that all three
+teams consist of experts for the respective technology. This makes it
+easy and transparent to realize this type of organization. Moreover,
+this distribution appears also logical. Team members can easily
+support each other, and the technical exchange is also facilitated.</p>
+
+
+<figure id="Fig6" class="image">
+  <img src="../images/00008.jpeg" alt="Fig. 6: Technical Project Distribution" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 6: Technical Project Distribution</figcaption>
+</figure>
+
+
+<p class="calibre3">According to the Law of Conway it follows from such a distribution that
+the three teams will implement three technical layers: a UI, a backend
+and a database. The chosen distribution corresponds to the
+organization, which is in fact sensibly built. However, it has a
+decisive disadvantage: A typical feature requires changes to UI,
+backend and database. The UI has to render the new features
+useable for the clients, the backend has to implement the logic, and
+the database has to create structures for the storage of the
+respective data. This results in the following disadvantages:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The person wishing to have the feature implemented has to talk to
+all three teams.</li>
+  <li class="calibre14">The teams have to coordinate their work and create new interfaces.</li>
+  <li class="calibre14">The work of the different teams has to be coordinated in a manner
+that ensures that their efforts temporally fit together. The backend,
+for instance, cannot really work without getting input from the
+database – and the UI cannot work without input from the backend.</li>
+  <li class="calibre14">When the teams work in sprints, these dependencies cause time
+delays: The database team generates in its first sprint the
+necessary changes, within the second sprint the backend team
+implements the logic, and in the third sprint the UI is dealt
+with. In this way it takes three sprints to implement a single
+feature.</li>
+</ul>
+
+<p class="calibre3">In the end this approach creates a large amount of dependencies as
+well as a high communication and coordination demand. Thus this type
+of organization does not make much sense if the main goal is to
+implement new features as rapidly as possible.</p>
+
+<p class="calibre3">Many teams following this approach do not realize its impact on
+architecture and do not consider this aspect further. This type of
+organization focuses rather on the aspect that developers with similar
+skills should be similarly positioned within the organization. In this
+way the organization turns into an obstacle for a design driven by the
+domain like Microservices whose development is opposed by the division
+of teams into technical layers.</p>
+
+<h5 id="leanpub-auto-the-law-as-enabler" class="calibre15">The Law as Enabler</h5>
+
+<p class="calibre3">However, the law of Conway can also be used to support approaches like
+Microservices. If the goal is to develop individual components as
+independently of each other as possible, the system can be distributed
+into domain components. Based on these domain components teams can be
+created. <a href="part0007.html#Fig7">Fig. 7</a> illustrates this principle: There are
+individual teams for product search, clients and order process. These
+teams work on the respective components, which can be technically
+divided into UI, backend and database. By the way, the domain
+components are not explicitly named in the figure as they are
+identical with the team names. Components and teams are
+synonymous. This approach corresponds to the idea of so-called cross
+functional teams, as proposed by methods with Scrum. These teams
+should encompass different roles so that they can cover a large task
+spectrum. Only a team designed along such principles can be in charge
+of a component – from engineering requirements via implementation up
+to operation.</p>
+
+<p class="calibre3">The division into technical artifacts and the interface between the
+artifacts can then be settled within the teams. In the easiest case a
+developer has only to talk to the developer sitting next to him to do
+so. Between teams coordination is more complex. However, inter-team
+coordination is not required very often since features are ideally
+implemented by independent teams. Moreover, this approach creates thin
+interfaces between the components. This avoids laborious coordination across
+teams to define the interface.</p>
+
+
+<figure id="Fig7" class="image">
+  <img src="../images/00009.jpeg" alt="Fig. 7: Project by domains" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 7: Project by domains</figcaption>
+</figure>
+
+
+<p class="calibre3">Eventually, the central point to be derived from Conway’s Law is
+that architecture and organization are just two sides of the same
+coin. When this insight is cleverly put to use, the system will have a
+clear and useful architecture for the project. Architecture and
+organization have the common goal to ensure that teams can work
+in an unobstructed manner and with as little coordination effort as possible.</p>
+
+<p class="calibre3">The clean distribution of functionalities into components also
+facilitates maintenance. Since an individual team is responsible for
+an individual functionality and component, this distribution will have
+long term stability, and consequently the system will remain
+maintainable.</p>
+
+<p class="calibre3">The teams need requirements to work upon. This means that the teams
+need contact persons which define the requirements. This affects the
+organization beyond the projects as the requirements come from the
+departments of the enterprise, and also these according to Conway’s Law
+have to correspond to the team structures within the project and the
+domain architecture. Conway’s Law can be expanded beyond software
+development to the communication structures of the entire organization
+including the users. To put it the other way round: The team structure
+within the project and consequently the architecture of a Microservice
+system can follow from the organization of the departments of the
+enterprise.</p>
+
+<h5 id="leanpub-auto-the-law-and-microservices" class="calibre15">The Law and Microservices</h5>
+
+<p class="calibre3">The previous discussion highlighted the relationship between
+architecture and organization of a project only in a general
+manner. It would be perfectly conceivable to align the architecture
+along functionalities and devise teams, which each are in charge for a
+separate functionality without using Microservices. In this case the
+project would develop a Deployment Monolith within which all
+functionalities are implemented. However, Microservices support this
+approach. <a href="part0005.html#section3-1">Section 3.1</a> already discussed that
+Microservices offer technical independence. In conjunction with the
+division by domains the teams become even more independent of each
+other and have even less need to coordinate their work. The technical
+coordination as well as the coordination concerning the domains can be
+reduced to the absolute minimum. This makes it far easier to work in
+parallel on numerous features and to bring the features also in
+production.</p>
+
+<p class="calibre3">Microservices as technical architecture are especially well suited to
+support the approach to devise a Conway’s Law-based distribution of
+functionalities. In fact, exactly this aspect is an essential
+characteristic of a Microservices-based architecture.</p>
+
+<p class="calibre3">However, orienting the architecture according to the communication
+structures entails that a change to the one also requires a change of
+the other. This renders architecture changes between Microservices
+more difficult and makes the overall process less flexible. Whenever
+one functionality is moved from one Microservice to another, this
+might have the consequence that another team has to take care of this
+functionality from that point on. This type of organizational changes
+render software changes more complex.</p>
+
+<p class="calibre3">As a next step this chapter will address how the distribution by
+domain can best be implemented. Domain-driven Design (DDD) is helpful
+for that.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-1" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">Have a look at a project you know:</p>
+
+  <ul class="calibre16">
+    <li class="calibre14">What does the team structure look like?
+      <ul class="calibre31">
+        <li class="calibre14">Is it technically motivated or by domain?</li>
+        <li class="calibre14">Would the structure have to be changed to implement a Microservices-based approach? </li>
+        <li class="calibre14">How would it have to be changed?</li>
+      </ul>
+    </li>
+    <li class="calibre14">Is there a sensible way to distribute the architecture onto
+ different teams? Eventually each team should be in charge of
+ independent domain components and be able to implement features relating to them.
+      <ul class="calibre31">
+        <li class="calibre14">Which architectural changes would be necessary? </li>
+        <li class="calibre14">How laborious would the changes be?</li>
+      </ul>
+    </li>
+  </ul>
+
+</aside>
+
+<h3 id="section4-3" class="calibre2">4.3 Domain-Driven Design and Bounded Context</h3>
+
+<p class="calibre3">In his book of the same title Eric Evans formulated Domain-Driven
+Design (DDD)<sup id="fnref-DDD" class="calibre32"><a rel="footnote" href="part0007.html#fn-DDD">1</a></sup> as pattern language. It is a collection of connected
+design patterns and supposed to support software development
+especially in complex domains. In the following text the names of
+design patterns are written in <em class="calibre20">italics</em>.</p>
+
+<p class="calibre3">Domain-Driven Design is important for understanding Microservices as
+it supports the structuring of larger systems according to
+domains. Exactly such a model is necessary for the division of
+a system into Microservices. Each Microservice is meant to constitute
+a domain, which is designed in such a way that only one
+Microservice has to be changed in order to implement changes or to introduce
+new features. Only then is the benefit to be derived from the
+independent development in different teams maximal as several features
+can be implemented in parallel without the need for extended
+coordination.</p>
+
+<h5 id="leanpub-auto-ubiquitous-language" class="calibre15">Ubiquitous Language</h5>
+
+<p class="calibre3">DDD defines as basis how a model for a domain can be designed. An
+essential foundation of DDD is <em class="calibre20">Ubiquitous Language</em>. This expression
+denotes that the software should use exactly the same terms as the
+domain experts. This applies on all levels: in regards to code and
+variable names as well as for database schemas. This practice ensures
+that the software really encompasses and implements the critical
+domain elements. Let us assume for instance that there are express
+orders in an E-commerce system. One possibility would be to generate a
+boolean value with the name “fast” in the order table. This creates
+the following problem: domain experts have to translate the term
+“express order”, which they use on a daily basis, into “order with a
+specific boolean value”. They might not even know what boolean values
+are. This renders any discussion of the model more difficult as terms
+have to be constantly explained and related to each other. The better
+approach is to call the table within the database scheme “express
+order”.  In that case it is completely transparent how the domain
+terms are implemented in the system.</p>
+
+<h5 id="leanpub-auto-building-blocks" class="calibre15">Building Blocks</h5>
+
+<p class="calibre3">To design a domain model DDD identifies basic patterns:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<em class="calibre20">Entity</em> is an object with an individual identity. In an E-commerce
+application the customer or the items could be examples for
+<em class="calibre20">Entities</em>. <em class="calibre20">Entities</em> are typically stored in databases. However, this
+is only the technical implementation of the concept <em class="calibre20">Entity</em>. An
+<em class="calibre20">Entity</em> belongs in essence to the domain modeling like the
+other DDD concepts.</li>
+  <li class="calibre14">
+<em class="calibre20">Value Objects</em> do not have their own identity. An address can be an
+example for a <em class="calibre20">Value Object</em> as it makes only sense in the context
+of a specific customer and therefore does not have an independent
+identity.</li>
+  <li class="calibre14">
+<em class="calibre20">Aggregates</em> are composite domain objects. They facilitate the
+handling of invariants and other conditions. An order for instance
+can be an <em class="calibre20">Aggregate</em> of order lines. This can be used to ensure that
+an order from a new customer does not exceed a certain value. This is
+a condition, which has to be fulfilled by calculating values from
+the order lines so that the order as <em class="calibre20">Aggregate</em> can control these
+conditions.</li>
+  <li class="calibre14">
+<em class="calibre20">Services</em> contain business logic. DDD focuses on modeling business
+logic as <em class="calibre20">Entities, Value Objects</em> and <em class="calibre20">Aggregates</em>. However, logic
+accessing several such objects cannot be sensibly modeled using
+these objects. For these cases there are <em class="calibre20">Services</em>. The order
+process could be such a <em class="calibre20">Service</em> as it needs access to items and
+customers and requires the <em class="calibre20">Entity</em> order.</li>
+  <li class="calibre14">
+<em class="calibre20">Repositories</em> serve to access all <em class="calibre20">Entities</em> of a type. Typically
+there is a persistency technology like a database behind a
+<em class="calibre20">Repository</em>.</li>
+  <li class="calibre14">Factories are mostly useful to generate complex domain objects. This
+is especially the case when these contain for instance many
+associations.</li>
+</ul>
+
+<p class="calibre3"><em class="calibre20">Aggregates</em> are of special importance in the context of
+ Microservices: Within an <em class="calibre20">Aggregate</em> consistency can be
+ enforced. Because of the necessary consistency parallel changes have
+ to be coordinated in an <em class="calibre20">Aggregate</em>. Otherwise two parallel changes
+ might endanger consistency. For instance, when two order positions
+ are included in parallel into an order, consistency can be
+ endangered. The order has already a value of €900 and is maximally
+ allowed to reach €1000. When two order positions of €60 each are
+ added in parallel, both might calculate a still acceptable total
+ value of €960 based on the initial value of €900. Therefore, changes
+ have to be serialized so that the final result of €1020 can be
+ controlled. Accordingly, changes to <em class="calibre20">Aggregates</em> have to be
+ serialized. For this reason an <em class="calibre20">Aggregate</em> cannot be distributed
+ across two Microservices. In such a scenario consistency cannot be
+ ensured. Consequently, <em class="calibre20">Aggregates</em> cannot be divided between
+ Microservices.</p>
+
+<h5 id="leanpub-auto-bounded-context" class="calibre15">Bounded Context</h5>
+
+<p class="calibre3">Building Blocks such as <em class="calibre20">Aggregate</em> represent for many people the core
+of DDD. DDD describes in addition with Strategic Design how different
+domain models interact and how more complex systems can be built up
+this way. This aspect of DDD is probably even more important than the
+Building Blocks. In any case it is the concept of DDD, which influences
+Microservices.</p>
+
+<p class="calibre3">The central element of Strategic Designs is the <em class="calibre20">Bounded Context</em>. The
+underlying reasoning is that each domain model is only sensible in
+certain limits within a system. In E-commerce for instance number,
+size and weight of the ordered items are of interest in regards to
+delivery, as they influence delivery routes and costs. For accounting
+on the other hand prices and tax rates are relevant. A complex system
+consists of several <em class="calibre20">Bounded Contexts</em>. In this it resembles the way
+complex biological organisms are built out of individual cells, which
+are likewise separate entities with their own inner life.</p>
+
+
+<figure id="Fig8" class="image">
+  <img src="../images/00010.jpeg" alt="Fig. 8: Project by domains" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 8: Project by domains</figcaption>
+</figure>
+
+
+<aside class="calibre33">
+  <h5 id="leanpub-auto-bounded-context-an-example" class="calibre34">Bounded Context: An example</h5>
+
+  <p class="calibre3">The customer from the E-commerce system shall serve as example for a
+<em class="calibre20">Bounded Context</em> (<a href="part0007.html#Fig8">Fig. 8</a>). The different <em class="calibre20">Bounded Contexts</em> are
+Order, Delivery and Billing. The component Order is responsible for the
+order process. The component Delivery implements the delivery
+process. The component Billing generates the bills.</p>
+
+  <p class="calibre3">Each of these Bounded Contexts requires certain customer
+data:</p>
+
+  <ul class="calibre16">
+    <li class="calibre14">Upon ordering the customer is supposed to be rewarded with
+points in a bonus program. In this Bounded Context the
+number of the customer has to be known to the bonus program.</li>
+    <li class="calibre14">For Delivery the delivery address and the preferred delivery service
+of the customer are relevant.</li>
+    <li class="calibre14">Finally, for generating the bill the
+billing address and the tax rate of the customer have to be known.</li>
+  </ul>
+
+  <p class="calibre3">In this manner each <em class="calibre20">Bounded Context</em> has its own model of the
+customer. This renders it possible to independently change
+Microservices. If for instance more information regarding the customer
+is necessary for generating bills, only changes to the <em class="calibre20">Bounded Context</em>
+billing are necessary.</p>
+
+  <p class="calibre3">It might be sensible to store basic information
+concerning the customer in a separate <em class="calibre20">Bounded Context</em>. Such fundamental
+data is probably sensible in many <em class="calibre20">Bounded Contexts</em>. To this purpose
+the <em class="calibre20">Bounded Contexts</em> can cooperate (compare below).</p>
+
+  <p class="calibre3">A universal model of the customer, however, is hardly sensible. It would
+be very complex since it would have to contain all information
+regarding the customer. Moreover, each change to customer information,
+which is necessary in a certain context, would concern the universal
+model. This would render such changes very complicated and would
+probably result in permanent changes to the model.</p>
+
+</aside>
+
+<p class="calibre3">To illustrate the system setup in the different <em class="calibre20">Bounded Contexts</em> a
+<em class="calibre20">Context Map</em> can be used (see <a href="part0012.html#section8-2">section 8.2</a>). Each of
+the <em class="calibre20">Bounded Contexts</em> then can be implemented within one or several
+Microservices.</p>
+
+<h5 id="leanpub-auto-collaboration-between-bounded-contexts" class="calibre15">Collaboration between <em class="calibre20">Bounded Contexts</em>
+</h5>
+
+<p class="calibre3">How are the individual <em class="calibre20">Bounded Contexts</em> connected? There are
+different possibilities:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">In case of a <em class="calibre20">Shared Kernel</em> the domain models share some common
+elements, however, in other areas they differ.</li>
+  <li class="calibre14">
+<em class="calibre20">Customer/Supplier</em> means that a subsystem offers a domain model for
+   the caller. The caller in this case is the client who determines
+   the exact setup of the model.</li>
+  <li class="calibre14">This is very different in case of <em class="calibre20">Conformist</em>: The caller uses the
+same model as the subsystem, and the other model is thereby forced
+upon him. This approach is relatively easy – there is no need for
+translation. One example is a standard software for a certain
+domain. The developers of this software likely know a lot about the
+domain since they have seen many different use cases. The caller can
+use this model to profit from the knowledge from the modeling.</li>
+  <li class="calibre14">The <em class="calibre20">Anti-corruption Layer</em> translates a domain model into another
+   one so that both are completely decoupled. This allows the
+   integration of legacy systems without having to take over the
+   domain models. Often data modeling is not very meaningful in
+   legacy systems.</li>
+  <li class="calibre14">
+<em class="calibre20">Separate Ways</em> means that the two systems are not integrated, but
+stay independent of each other.</li>
+  <li class="calibre14">In the case of <em class="calibre20">Open Host Service</em> the <em class="calibre20">Bounded Context</em> offers
+   special services everybody can use. In this way everybody can
+   assemble their own integration. This is especially useful when an
+   integration with numerous other systems is necessary and when the
+   implementation of these integrations is too laborious.</li>
+  <li class="calibre14">
+<em class="calibre20">Published Language</em> achieves similar things. It offers a certain
+   domain modeling as common language between the <em class="calibre20">Bounded
+   Contexts</em>. Since it is widely used, this language can hardly be
+   changed anymore afterwards.</li>
+</ul>
+
+<h5 id="leanpub-auto-bounded-context-and-microservices" class="calibre15">Bounded Context and Microservices</h5>
+
+<p class="calibre3">Each Microservice is meant to model one domain so that new
+features or changes have only to be implemented within one
+Microservice. Such a model can be designed based on <em class="calibre20">Bounded Context</em>.</p>
+
+<p class="calibre3">One team can work on one or several <em class="calibre20">Bounded Contexts</em>, which each
+serve as foundation for one or several Microservices. Changes and new
+features are supposed to concern typically only one <em class="calibre20">Bounded Context</em>
+– and thus only one team. This ensures that teams can work largely
+independently of each other. A <em class="calibre20">Bounded Context</em> can be divided into
+multiple Microservices if that seems sensible. There can be technical
+reasons for that. For example a certain part of a <em class="calibre20">Bounded Context</em>
+might have to be scaled up to a larger extent than the others. This is
+simpler if this part is separated into its own Microservice. However,
+it should be avoided to design Microservices, which contain multiple
+<em class="calibre20">Bounded Contexts</em>, as this entails that several new features might
+have to be implemented in one Microservice. This interferes with the
+goal to develop features independently.</p>
+
+<p class="calibre3">Nevertheless, it is possible that a special requirement comprises many
+<em class="calibre20">Bounded Contexts</em> – in that case additional coordination and
+communication will be required.</p>
+
+<p class="calibre3">The coordination between teams can be regulated via different
+collaboration possibilities. These influence the independence of the
+teams as well: <em class="calibre20">Separate Ways, Anti-corruption Layer</em> or <em class="calibre20">Open Host
+Service</em> offer a lot of independence. <em class="calibre20">Conformist</em> or
+<em class="calibre20">Customer/Supplier</em> on the other hand tie the domain models very
+closely together. For <em class="calibre20">Customer/Supplier</em> the teams have to closely
+coordinate their efforts: The supplier needs to understand the
+requirements of the customer. For <em class="calibre20">Conformist</em> , however, the teams do
+not need to coordinate: One team defines the model that the other team
+just uses unchanged. (compare <a href="part0007.html#Fig9">Fig. 9</a> ).</p>
+
+
+<figure id="Fig9" class="image">
+  <img src="../images/00011.jpeg" alt="Fig. 9: Communication effort of different collaborations" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 9: Communication effort of different collaborations</figcaption>
+</figure>
+
+
+<p class="calibre3">Like in the case of Conway’s Law from <a href="part0007.html#section4-2">section 4.2</a>
+it becomes very apparent that organization and architecture are very
+closely linked. When the architecture enables a distribution of the domains
+in which the implementation of new features only requires changes to a
+defined architecture part, these parts can be distributed to different
+teams in such a way that these teams can work largely independently of each
+other. DDD and especially <em class="calibre20">Bounded Context</em> demonstrate what such a
+distribution can look like - and how the parts can work together and
+how they have to coordinate.</p>
+
+<h5 id="leanpub-auto-large-scale-structure" class="calibre15">Large-Scale Structure</h5>
+
+<p class="calibre3">With Large-Scale Structure DDD also addresses the question how the
+system in its entirety can be viewed from the different <em class="calibre20">Bounded
+Contexts</em> respectively Microservices.</p>
+
+<ul class="calibre16">
+  <li class="calibre14">A <em class="calibre20">System Metaphor</em> can serve to define the fundamental structure of
+the entire system. For example, an E-commerce system can orient
+itself according to the shopping process: The customer starts out
+looking for products, then he/she will compare items, select one item
+and order it. This can give rise to three Microservices: search,
+comparison and order.</li>
+  <li class="calibre14">
+<em class="calibre20">Responsibility Layer</em> divides the system into layers with different
+responsibilities. Layers can only call other layers if those are
+located below them. This does not refer to a technical division into
+database, UI and logic. In an E-commerce system domain layers
+might be for example the catalog, the order process and 
+billing. The catalog can call on the order process
+and the order process can call on the generation of the
+bill. However, calls into the other direction are not permitted.</li>
+  <li class="calibre14">
+<em class="calibre20">Evolving Order</em> suggests not to determine the overall structure too
+rigidly. It should arise from the individual components in a
+stepwise manner.</li>
+</ul>
+
+<p class="calibre3">These approaches can provide an idea how the architecture of a system,
+which consists of different Microservices, can be organized (compare
+also <a href="part0012.html#chapter-8">Chapter 8</a>).</p>
+
+<h5 id="leanpub-auto-try-and-experiment-2" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">Look at a project you know:</p>
+
+  <ul class="calibre16">
+    <li class="calibre14">Which <em class="calibre20">Bounded Contexts</em> can you identify?</li>
+    <li class="calibre14">Generate an overview of the <em class="calibre20">Bounded Contexts</em> in a <em class="calibre20">Context
+Map</em>. Compare <a href="part0012.html#section8-2">section 8.2</a>.</li>
+    <li class="calibre14">How do the <em class="calibre20">Bounded Contexts</em> cooperate? (<em class="calibre20">Anti-corruption Layer,
+Customer/Supplier</em> etc.). Add this information to the <em class="calibre20">Context Map</em>.</li>
+    <li class="calibre14">Would other mechanisms have been better at certain places? Why?</li>
+    <li class="calibre14">How could the <em class="calibre20">Bounded Contexts</em> be sensibly distributed to teams so
+that features are implemented by independent teams?</li>
+  </ul>
+
+  <p class="calibre3">These questions might be hard to answer as you need to get a new
+perspective on the system and how the domains are modeled in the
+system.</p>
+
+</aside>
+
+<h3 id="leanpub-auto-why-you-should-avoid-a-canonical-data-model-stefan-tilkov" class="calibre2">Why You Should Avoid a Canonical Data Model (Stefan Tilkov)</h3>
+
+<p class="calibre3">by Stefan Tilkov, innoQ</p>
+
+<p class="calibre3">In recent times, I’ve been involved in a few architecture projects on the
+enterprise level again. If you’ve never been in that world, i.e. if
+you’ve been focusing on individual systems so far, let me give you the
+basic gist of what this kind of environment is like: There are lots of
+meetings, more meetings, and even more meetings; there’s an abundance
+of slide decks, packed with text and diagrams – none of that
+Presentation Zen nonsense, please. There are conceptual architecture
+frameworks, showing different perspectives, there are guidelines and
+reference architectures, enterprise-wide layering approaches, a little
+bit of SOA und EAI and ESB and Portals and (lately) API talk thrown in
+for good measure. Vendors and system integrators and (of course)
+consultants all see their chance to exert influence on strategic
+decisions, making their products or themselves an integral part of the
+company’s future strategy. It can be a very frustrating, but (at least
+sometimes) also very rewarding experience: Those wheels are very big
+and really hard to turn, but if you manage to turn them, the effect is
+significant.</p>
+
+<p class="calibre3">It’s also amazing to see how many of the things that cause problems
+when building large systems are repeated on the enterprise level. (We
+don’t often make mistakes … but if we do, we make them big!) My
+favorite one is the idea of establishing <em class="calibre20">canonical data model</em> (CDM)
+for all of your interfaces.</p>
+
+<p class="calibre3">If you haven’t heard of this idea before, a quick summary is: Whatever
+kind of technology you’re using (an ESB, a BPM platform, or just some
+assembly of services of some kind), you standardize the data models of
+the business objects you exchange. In its extreme (and very common)
+form, you end up with having just one kind of Person, Customer, Order,
+Product, etc., with a set of IDs, attributes, and associations
+everyone can agree on. It isn’t hard to understand how that might seem
+a very compelling thing to attempt: After all, even a non-technical
+manager will understand that the conversion from one data model to
+another whenever systems need to talk to each other is a complete
+waste of time. It’s <em class="calibre20">obviously</em> a good idea to standardize. Then, anyone
+who happens to have a model that differs from the canonical one will
+have to implement a conversion to a and from it just once, new systems
+can just use the CDM directly, and everyone will be able to
+communicate without further ado!</p>
+
+<p class="calibre3">In fact, it’s a horrible, horrible idea. Don’t do it.</p>
+
+<p class="calibre3">In his book on Domain-driven Design, Eric Evans gave a name to a
+concept that is obvious to anyone who has actually successfully built
+a larger system: The <em class="calibre20">Bounded Context</em>. This is a structuring mechanism
+that avoids having a single huge model for all of your application,
+simply because that (a) becomes unmanageable and (b) makes no sense to
+begin with. It recognizes that a Person or a Contract are different
+things in different contexts on a <em class="calibre20">conceptual level</em>. This is not an
+implementation problem – it’s reality.</p>
+
+<p class="calibre3">If this is true for a large system – and trust me, it is – it’s
+infinitely more true for an enterprise-wide architecture. Of course
+you can argue that with a CDM, you’re only standardizing the interface
+layer, but that doesn’t change a thing: You’re still trying to make
+everyone agree what a concept means, and my point is that you should
+recognize that not every single system has the same needs.</p>
+
+<p class="calibre3">But isn’t this all just pure theory? Who cares about this, anyway? The
+amazing thing is that organizations are excellent in generating a huge
+amount of work based on bad assumptions. The CDM (in the form I’ve
+described it here) requires coordination between all the parties that
+use a particular object in their interfaces (unless you trust that
+someone will be able to just design the right thing from scratch on
+their own, which you should never do). You’ll have meetings with some
+enterprise architect and a few representatives for specific systems,
+trying to agree what a customer is. You’ll end up with something that
+has tons of optional attributes because everyone insisted theirs need
+to be there, and with lots of things that are kind of weird because
+they reflect some system’s internal restrictions. Despite the fact
+that it’ll take you ages to agree on it, you’ll end up with a zombie
+interface model will be universally hated by everyone who has to work
+with it.</p>
+
+<p class="calibre3">So is a CDM a universally bad idea? Yes, unless you approach it
+differently. In many cases, I doubt a CDM’s value in the first place,
+and think you are better off with a different and less intrusive kind
+of specification. But <em class="calibre20">if</em> you want a CDM, here are a number of things
+you can do to address the problems you’ll run into:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Allow for independent parts to be specified independently. If only one
+system is responsible for a particular part of your data model, leave
+it to the people to specify what it looks like canonically. Don’t make
+them participate in meetings. If you’re unsure whether the data model
+they create has a significant overlap with another group’s, it
+probably hasn’t.</li>
+  <li class="calibre14">Standardize on formats and possibly fragments of data models. Don’t
+try to come up with a consistent model of the world. Instead, create
+small buildings blocks. What I’m thinking of are e.g. small XML or
+JSON fragments, akin to microformats, that standardize small groups of
+attributes (I wouldn’t call them business objects).</li>
+  <li class="calibre14">Most importantly, don’t push your model from a central team downwards
+or outwards to the individual teams. Instead, it should be the teams
+who decide to “pull” them into their own context when they believe
+they provide value. It’s not you who’s doing the really important
+stuff (even though that’s a common delusion that’s attached to the
+mighty Enterprise Architect title). Collect the data models the
+individual teams provide in a central location, if you must, and make
+them easily browsable and searchable. (Think of providing a big
+elastic search index as opposed to a central UML model).</li>
+</ul>
+
+<p class="calibre3">What you actually need to as an enterprise architect is to get out of
+people’s way. In many cases, a crucial ingredient to achieve this is
+to create as little centralization as possible. It shouldn’t be your
+goal to make everyone do the same thing. It should be your goal to
+establish a minimal set of rules that allows people to work as
+independently as possible. A CDM of the kind I’ve described above is
+the exact opposite.</p>
+
+<h3 id="section4-4" class="calibre2">4.4 Microservices with UI?</h3>
+
+<p class="calibre3">This book recommends to equip Microservices with a UI. The UI should
+offer the functionality of the Microservice to the user. In this way
+all changes in regards to one functionality can be implemented in one Microservice –
+regardless of whether they concern the UI, the logic or the
+database. However, Microservice experts so far have different opinions
+in regards to the question whether the integration of UI into
+Microservices is really required. Ultimately, Microservices should not
+be too large. And when logic is anyhow supposed to be used by multiple
+frontends, a Microservice consisting of pure logic without UI might be
+sensible. In addition, it is possible to implement the logic and the
+UI in two different Microservices, but to have them implemented by one
+team. This allows to implement features without coordination across
+teams.</p>
+
+<p class="calibre3">Focusing on Microservices with UI puts the main emphasis on the
+distribution of the domain logic instead of a distribution by
+technical aspects. Many architects
+are not familiar with the domain architecture, which is especially
+important for Microservices-based architectures. Therefore, a design
+where the Microservices contain the UI is helpful as a first approach
+in order to focus the architecture on the domains.</p>
+
+<h5 id="leanpub-auto-technical-alternatives" class="calibre15">Technical Alternatives</h5>
+
+<p class="calibre3">Technically the UI can be implemented as Web UI. When the
+Microservices have a RESTful-HTTP interface, the Web-UI and the
+RESTful-HTTP interface are very similar – both use HTTP as
+protocol. The RESTful-HTTP interface delivers JSON or XML, the Web UI
+HTML. If the UI is a Single-Page-App, the JavaScript code is likewise
+delivered via HTTP and communicates with the logic via RESTful
+HTTP. In case of mobile clients the technical implementation is more
+complicated. <a href="part0013.html#section9-1">Section 9.1</a> explains this in
+detail. Technically a deployable artifact can deliver via an HTTP
+interface JSON/XML and HTML. In this way it implements the UI and
+allows other Microservices to access the logic.</p>
+
+<h5 id="leanpub-auto-self-contained-system" class="calibre15">Self-Contained System</h5>
+
+<p class="calibre3">Instead of calling this approach “Microservice with UI” you can also
+call it “Self-Contained System”
+(<a href="http://scs-architecture.org">SCS</a>). SCS define Microservices as
+having about 100 lines of code, of which there might be more than one
+hundred in a complete project.</p>
+
+<p class="calibre3">An SCS consists of many of those Microservices and contains a UI. It
+should communicate with other SCS asynchronously if at all. Ideally
+each functionality should be implemented in just one SCS and there
+should be no need for SCSs to communicate with each other. An
+alternative approach might be to integrate the SCSs at the UI-level.</p>
+
+<p class="calibre3">In an entire system there are then only five to 25 of these SCS. An
+SCS is something one team can easily deal with. Internally the SCS can
+be divided into multiple Microservices.</p>
+
+<p class="calibre3">The following definitions result from this reasoning:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">SCS (Self-Contained System) is something a team works on and which
+represents a unit in the domain architecture. This can be an order
+process or an registration. It implements a sensible functionality,
+and the team can supplement the SCS with new features. An
+alternative name for a SCS is a vertical. The SCS distributes the
+architecture by domain. This is a vertical design in contrast to a
+horizontal design. A horizontal design would divide the system
+into layers, which are technically motivated – for instance UI,
+logic or persistence.</li>
+  <li class="calibre14">A Microservice is a part of a SCS. It is a technical unit and can be
+independently deployed. This conforms nearly with the Microservice
+definition put forward in this book. Only the size given in the SCS
+world rather correspond to what this book denotes as Nanoservices
+see <a href="part0020.html#chapter-15">chapter 15</a>.</li>
+  <li class="calibre14">This book refers to Nanoservices as units, which are still
+individually deployable, but which make technical trade-offs in some
+areas to further reduce the size of the deployment units. For that
+reason, Nanoservices do not share all technical characteristics of
+Microservices.</li>
+</ul>
+
+<p class="calibre3">SCS inspired the definition of Microservices as put forward in this
+book. Still there is no reason not to separate the UI into a different
+artifact in case the Microservice gets otherwise too large. Of course,
+it is more important that the Microservice is small and thus
+maintainable than to integrate the UI. But UI and logic should at
+least be implemented by the same team.</p>
+
+<h3 id="section4-5" class="calibre2">4.5 Conclusion</h3>
+
+<p class="calibre3">Microservices are a modularization approach. For a deeper
+understanding of Microservices the different perspectives discussed in
+this chapter are very helpful:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<a href="part0007.html#section4-1">Section 4.1</a> focused on the size of Microservices. But
+a closer look revealed that the size of Microservices itself is not that
+important, even though there are influencing factors. However, this
+perspective provided a first impression on what a Microservice
+should be. Team size, modularization and replaceability of
+Microservices each determine an upper size limit. The lower limit is
+determined by transactions, consistency, infrastructure and
+distributed communication.</li>
+  <li class="calibre14">Conway’s Law (<a href="part0007.html#section4-2">section 4.2</a>) shows that architecture
+and organization of a project are closely linked – they are nearly
+synonymous. Microservices can further improve the independence of
+teams and thus ideally support architectural designs, which aim at
+the independent development of functionalities. Each team is
+responsible for a Microservice and therefore for a certain part of a
+domain so that the teams are largely independent concerning the
+implementation of new functionalities. Thus, in regards to domain
+logic there is hardly any need for coordination across teams. The
+requirement for technical coordination can likewise be reduced to a
+minimum due to the possible technical independence.</li>
+  <li class="calibre14">In <a href="part0007.html#section4-3">section 4.3</a> Domain-driven Design provides a very
+good impression as to what the distribution of domains in a
+project can look like and how the individual parts can be 
+coordinated. Each Microservice can represent a <em class="calibre20">Bounded Context</em>. This
+is a self-contained piece of domain logic with an independent domain
+model. Between the <em class="calibre20">Bounded Contexts</em> there are different
+possibilities for collaboration.</li>
+  <li class="calibre14">Finally <a href="part0007.html#section4-4">section 4.4</a> demonstrated that Microservices
+should contain a UI to be able to implement the changes for a
+functionality really within an individual Microservice. This does
+not necessarily have to be a deployment unit, however, UI and
+Microservice should be in the responsibility of one team.</li>
+</ul>
+
+<p class="calibre3">Together these different perspectives provide a balanced picture of
+what constitutes Microservices and how they can function.</p>
+
+<h5 id="leanpub-auto-essential-points-1" class="calibre15">Essential Points</h5>
+
+<p class="calibre3">To put it differently: A successful project requires three components:</p>
+
+<ol class="calibre13">
+  <li value="1" class="calibre14">An organization: This is supported by Conway’s Law.</li>
+  <li value="2" class="calibre14">A technical approach: This can be Microservices.</li>
+  <li value="3" class="calibre14">A domain design as offered by DDD and <em class="calibre20">Bounded Context</em>.</li>
+</ol>
+
+<p class="calibre3">The domain design is especially important for the long-term
+maintainability of the system.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-3" class="calibre15">Try and Experiment</h5>
+
+<p class="calibre3">Look at the three approaches for defining Microservices: size,
+Conway’s Law and Domain-driven Design.</p>
+
+<aside class="exercise">
+    <p class="calibre3"><a href="part0002.html#section1-2">Section 1.2</a> showed the most important advantages of
+Microservices. Which of the goals to be achieved by Microservices are
+best supported by the three definitions? DDD and Conway’s Law
+lead for instance to a better time-to-market.</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">Which of the three aspects is in your opinion the most important?
+Why?</p>
+
+</aside>
+
+<div class="calibre6">
+  <ol class="calibre13">
+    <li id="fn-DDD" value="1" class="calibre14">Eric Evans: Domain-Driven Design: Tackling Complexity in the Heart of Software, Addison-Wesley,2003, ISBN 978-0-32112-521-7<a rel="rev-footnote" href="part0007.html#fnref-DDD">↩</a>
+</li>
+  </ol>
+</div>
+
+
+
+</div>
+</body></html>

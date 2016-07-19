@@ -1,0 +1,457 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title dir="ltr">6 Challenges</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body dir="ltr" class="calibre">
+<div class="calibre6">
+<h2 id="chapter-6" class="calibre1">6 Challenges</h2>
+
+<p class="calibre3">The distribution of a system into Microservices entails a higher
+complexity. This leads to challenges at the technical level (compare
+<a href="part0009.html#section6-1">section 6.1</a>) – for instance high latency times in the
+network or the failure of individual services. However, also at the
+level of software architecture there are a number of things to
+consider – for instance because of the bad architecture changeability
+(<a href="part0009.html#section6-2">section 6.2</a>). And finally, there are many more
+components to be independently delivered so that operation and
+infrastructure become more complex (<a href="part0009.html#section6-3">section 6.3</a>). These
+challenges have to be dealt with when introducing Microservices.
+Measures described in the following chapters show how to appropriately
+handle these challenges.</p>
+
+<h3 id="section6-1" class="calibre2">6.1 Technical Challenges</h3>
+
+<p class="calibre3">Microservices are distributed systems. Calls between Microservices go
+via the network. This affects the latency and thus the response times
+of Microservices negatively. The already mentioned
+<a href="http://martinfowler.com/bliki/FirstLaw.html">first rule for distributed objects</a>
+states that objects, if possible, should not be distributed (compare
+<a href="part0007.html#section4-1">section 4.1</a>).</p>
+
+<p class="calibre3">The reason for that is illustrated in <a href="part0009.html#Fig13">Fig. 13</a> A call has to
+go via the network to reach the server, is processed there and has to
+return to the caller. The latency just for network communication can
+be around 0.5 ms in a computing center (compare
+<a href="https://www.cs.cornell.edu/projects/ladis2009/talks/dean-keynote-ladis2009.pdf">here</a>).
+Within this time a processor running at 3 Ghz can process about 1.5
+million instructions. When a computation is redistributed to another
+node, it should be checked whether local processing of the request
+might not be faster. The latency can even increase further by
+parameter marshaling and unmarshaling for a call and the result of a
+call. On the other hand, network optimizations or connecting nodes to
+the same network switch can improve the situation.</p>
+
+
+<figure id="Fig13" class="image">
+  <img src="../images/00015.jpeg" alt="Fig. 13: Latency for a call via the network" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 13: Latency for a call via the network</figcaption>
+</figure>
+
+
+<p class="calibre3">The first rule for distributed objects and the warning to be aware of
+the latency within the network dates back to the time when CORBA and
+EJB were used. These technologies were often used for distributed Three
+Tier Architectures (compare <a href="part0009.html#Fig14">Fig. 14</a>). For every client
+request the web tier implements only the data rendering as HTML page.
+The logic resides on another server, which is called via the network.
+The data are deposited in the database and thus on an again other
+server. When only data are to be shown, there is little happening in
+the Middle Tier. The data are not processed, just forwarded. For
+performance and latency, it would be much better to keep the logic on
+the same server as the web tier. Though the distribution allows to
+scale the Middle Tier independently, the system does not get faster
+this way when it anyhow does not have much to do.</p>
+
+
+<figure id="Fig14" class="image">
+  <img src="../images/00016.jpeg" alt="Fig. 14: Three Tier Architecture" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 14: Three Tier Architecture</figcaption>
+</figure>
+
+
+<p class="calibre3">For Microservices the situation is different as the UI is contained in
+the Microservice. Calls between Microservices only take place when
+Microservices need functionalities of other Microservices. If that is
+often the case, this might be a hint that there are architectural
+problems as the Microservices should be largely independent of each
+other.</p>
+
+<p class="calibre3">Practically, Microservice-based architectures function
+<a href="http://martinfowler.com/articles/distributed-objects-microservices.html">in spite</a>
+of the challenges related to distribution. Still Microservices should
+not communicate too much with each other in order to improve
+performance and reduce latency.</p>
+
+<h5 id="leanpub-auto-code-dependencies" class="calibre15">Code Dependencies</h5>
+
+<p class="calibre3">The great advantage of Microservice-based architectures is the option
+to independently deploy the individual services. However, this option
+can be undone by code dependencies. If a library is used by several
+Microservices and a new version of this library is supposed to be
+rolled out, a coordinated deployment of several Microservices might be
+required – precisely the scenario that should be prevented. Something
+like that can for instance easily occur due to binary dependencies
+where sometimes different versions are not compatible anymore. The
+deployment has to be temporally coordinated in a way that all
+Microservices are rolled out in a certain time interval and in a
+defined order. Besides the code dependency has to be changed in all
+Microservices, a process that has likewise to be prioritized and
+coordinated across all involved teams. A binary level dependency is a
+very tight technical coupling, which entails a very tight
+organizational coupling.</p>
+
+<p class="calibre3">Therefore Microservices propagate a Shared Nothing Approach where the
+Microservices do not possess shared code. Microservices rather accept
+code redundancy and resist the urge to reuse code in order to avoid
+a close organizational link.</p>
+
+<p class="calibre3">Code dependencies can be tolerable in certain situations. When a
+Microservice offers for instance a client library, which supports
+callers while using this Microservice, this does not necessarily have
+negative consequences. The library depends on the interface of the
+Microservice. If the interface is changed in a backward compatible
+manner, also a caller having an old version of the client library can
+still use the Microservice. The deployment remains uncoupled. However,
+the client library can be the starting point to a code dependency. If
+the client library contains for instance domain objects, this can be a
+problem. In fact, if the client library contains the same code for the
+domain objects, which is also internally used, changes to the internal
+model will affect the clients. They might have to be deployed again
+if need be. If the domain object contains logic, this logic can only
+be modified when all clients are likewise deployed anew. This also
+violates the idea of independently deployable Microservices.</p>
+
+<aside class="calibre33">
+  <h3 id="leanpub-auto-consequences-of-code-dependencies" class="calibre35">Consequences of Code Dependencies</h3>
+
+  <p class="calibre3">Here is an example for the effects of code dependencies: User
+authentication is a central function, which all services use. A
+project has developed a service implementing the authentication.
+Nowadays there are open source projects, which implement such things,
+(<a href="part0012.html#section8-12">section 8.12</a>) so that an implementation of a
+home-grown solution is rarely sensible anymore. In that project each
+Microservice could use a library for facilitating the handling of the
+authentication service. Accordingly, all Microservices have a code
+dependency towards the authentication service. Changes to the
+authentication service might require that the library has to be newly
+rolled out. This in turn means that all Microservices have to be
+modified and newly rolled out as well. In addition, the deployments of
+the Microservices and the authentication service have to be
+coordinated. This can easily cost a two-digit number of man days. Thus
+authentication can hardly be changed anymore due to the code
+dependency. If the authentication service could be deployed just like
+that and if there were no code dependencies, which couple the deployment
+of the Microservices and the authentication service, the problem would be
+solved.</p>
+
+</aside>
+
+<h5 id="leanpub-auto-unreliable-communication" class="calibre15">Unreliable Communication</h5>
+
+<p class="calibre3">Communication between Microservices occurs via the network and is therefore
+unreliable. In addition, Microservices can fail. To prevent that a
+failure of the entire system ensues, the remaining Microservices in
+such a case have to compensate for the failure of the malfunctioning
+Microservice and keep being available. However, to achieve this goal
+the quality of the services has to be degraded i.e. by using default
+values or limiting the useable functionality
+(<a href="part0014.html#section10-5">section 10.5</a>).</p>
+
+<p class="calibre3">This problem cannot be completely solved on a technical level: The
+Microservice availability can for instance be optimized by highly
+available hardware. But this increases costs. Besides, it is no
+complete solution: In some respects, it even increases risk. If the
+Microservice fails despite highly available hardware and the failure
+propagates across the entire system, a complete failure of the entire
+system occurs. Thus, the Microservices should rather compensate the
+failure of another Microservice.</p>
+
+<p class="calibre3">In addition, the threshold between a technical and a domain problem is
+crossed. An ATM might serve as example: When the ATM cannot retrieve
+the account balance of the customer, there are two possibilities. The
+ATM can refuse the withdrawal. Although this is a safe option, it will
+anger the customer and decrease revenue. Alternatively, the ATM can hand
+out the money – maybe up to a certain upper limit. Which alternative
+should be implemented, is a business decision. Eventually, somebody has
+to decide whether it is preferable to be on the safe side, even if it
+means to forego some revenue and anger customers, or to run a certain
+risk to pay out too much money.</p>
+
+<h5 id="leanpub-auto-technology-pluralism" class="calibre15">Technology Pluralism</h5>
+
+<p class="calibre3">The technology freedom of Microservices can result in a project using
+many different technologies. The Microservices do not need to have a
+shared technology basis. Accordingly, the complexity of the whole
+system increases. Each team masters the technologies, which are used
+in its own Microservice. However, the large number of used
+technologies and approaches can cause the system as such to reach a
+level of complexity no individual developer or team can understand
+anymore. But often such a general understanding is not necessary since
+each team only needs to understand its own Microservice. Whenever it
+becomes necessary to have a look at the entire system - be it even
+only from a certain limited perspective as for instance operations –,
+the complexity might pose a problem. In such cases, unification can be a
+sensible counter measure. This does not mean that the technology stack
+has to be completely uniform, but that certain parts should be uniform
+or that the individual Microservices should behave in a uniform
+manner. For instance, a uniform logging framework might be defined or
+a uniform format for logging, which different logging frameworks
+might implement differently. Alternatively, a common technical
+basis like the JVM (Java Virtual Machine) can be decided upon for
+operational reasons without setting the programming languages.</p>
+
+<h3 id="section6-2" class="calibre2">6.2 Architecture</h3>
+
+<p class="calibre3">The architecture of a Microservice-based system distributes the
+domain-based functionalities among the Microservices. To understand the
+architecture at this level dependencies and communication
+relationships between the Microservices have to be known. Analyzing
+communication relationships is difficult. For large Deployment
+Monoliths there are tools, which read source code or even only the
+executable system. Based on this the tools can generate graphs
+visualizing modules and relationships. This makes it possible to
+verify the implemented architecture, adjust it in regards to the
+planned architecture and to follow the architecture evolution over
+time. Such overviews are central for architectural work, however,
+difficult to generate in the case of Microservices as the respective
+tools are lacking – but there are solutions. <a href="part0012.html#section8-2">Section 8.2</a>
+discusses these in detail.</p>
+
+<h5 id="leanpub-auto-architecture--organization" class="calibre15">Architecture = Organization</h5>
+
+<p class="calibre3">Microservices are based on the idea that organization and architecture
+are the same. Microservices exploit this circumstance to implement the
+architecture. The organization is structured in a way, which renders
+the architecture implementation especially easy. However, this means
+that an architecture refactoring can entail changes to the
+organization. This renders architectural changes more difficult. This
+is not only a problem of Microservices: Conway’s Law
+(<a href="part0007.html#section4-2">section 4.2</a>) applies to all projects. However, other
+projects often are not aware of the law and its implications.
+Therefore, they do not use the law productively and cannot estimate the
+organizational problems caused by architectural changes.</p>
+
+<h5 id="leanpub-auto-architecture-and-requirements" class="calibre15">Architecture and Requirements</h5>
+
+<p class="calibre3">The architecture influences also the independent development of
+individual Microservices and the independent streams of stories. When
+the domain-based distribution of Microservices is not optimal,
+requirements might not only influence one team and one Microservice,
+but several. In such cases a larger amount of coordination is
+necessary between the different teams and Microservices. This
+influences the productivity negatively and thus undoes one of the
+essential reasons for the introduction of Microservices.</p>
+
+<p class="calibre3">In case of Microservices the architecture influences not only the
+software quality, but also the organization and the independent work
+of the teams and thereby the productivity. Designing an optimal
+architecture gets even more important since mistakes have far reaching
+consequences.</p>
+
+<p class="calibre3">Many projects do not pay sufficient attention to domain architecture,
+often much less than to technical architecture. Besides, most
+architects are not as experienced with domain architecture as with
+technical architecture. These circumstances can cause tremendous
+problems in the case of Microservice-based approaches. The
+distribution into Microservices and therefore into fields of
+responsibility for the different teams has to be performed according
+to domain criteria.</p>
+
+<h5 id="leanpub-auto-refactoring-1" class="calibre15">Refactoring</h5>
+
+<p class="calibre3">In a single Microservice refactoring is simple since the Microservice is
+small. It can also be easily replaced and newly implemented.</p>
+
+<p class="calibre3">Between Microservices the situation differs: Transferring
+functionalities from one Microservice to another is difficult. The
+functionality has to be moved into a different deployment unit. This
+is for sure more difficult than moving a functionality within the same
+unit. Between Microservices technologies are not necessarily uniform.
+Microservices can use different libraries or even different
+programming languages. In such cases the functionality has to be moved
+into a new Microservice. In some cases the functionality must be newly
+implemented in the technology of the other Microservice and
+subsequently transferred into this Microservice. However, this is far
+more complex than moving code within a Microservice.</p>
+
+<h5 id="leanpub-auto-agile-architecture" class="calibre15">Agile Architecture</h5>
+
+<p class="calibre3">Microservices make it easier to bring as many changes as possible into
+production in the shortest possible time and to reach a sustainable
+development speed. This is especially advantageous when there are
+numerous and hard to predict requirements. This is exactly the
+environment where Microservices are at home. Changes to a Microservice
+are also very simple. However, adjusting the architecture of the
+system as such, for instance by moving around functionalities, is not
+so simple.</p>
+
+<p class="calibre3">In addition, the architecture of a system is frequently not yet
+optimal at the first attempt. During implementation the team learns a
+lot about the domain. In a second attempt, it will be much more
+capable of designing an appropriate architecture. Most projects
+suffering from bad architecture had a good architecture at the outset
+based on the state of knowledge at that time. However, when the
+project progressed, it became clear that requirements were meant
+differently and new requirements arose so that the initial
+architecture stopped fitting. Problems arise when this does not lead
+to consequences. If the project just continues with a more and more
+inappropriate architecture, the architecture will not fit at all
+anymore at some point. This can be avoided by adjusting the
+architecture step by step to the changed requirements based on the
+respective state of knowledge. Architecture changeability and
+architecture adjustment in line with new requirements are central for
+this. However, architecture changeability at the level of the entire
+system is a weakness of Microservices while changes within
+Microservices are very simple.</p>
+
+<h5 id="leanpub-auto-summary-1" class="calibre15">Summary</h5>
+
+<p class="calibre3">When using Microservices, architecture is even more important than in
+other systems as it influences also the organization and the
+independent work on requirements. At the same time, Microservices
+offer many advantages in cases where requirements are unclear and
+architecture therefore has to be changeable. Unfortunately, the
+interplay between Microservices is hard to modify since the
+distribution into Microservices is quite rigid due to the distributed
+communication between them. Besides, as Microservices can be
+implemented by the use of different technologies, it gets difficult to
+move functionalities around. On the other hand, changes to individual
+Microservices or their replacement are very simple.</p>
+
+<h3 id="section6-3" class="calibre2">6.3 Infrastructure and Operations</h3>
+
+<p class="calibre3">Microservices are supposed to be brought into production independently
+of each other and to be able to use individual technology stacks.
+Therefore, each Microservice usually resides on its own server. This
+is the only way to ensure complete technological independence. It is
+not possible to cope with the required multitude of systems using
+hardware servers. Even with virtualization the management of such an
+environment remains difficult. The number of required virtual machines
+can be higher than otherwise used by an entire business IT. When there
+are hundreds of Microservices, there are also hundreds of virtual
+machines needed and for some of them several instances e.g. for load
+balancing. This requires automation and appropriate infrastructures,
+which are able to generate a large number of virtual machines.</p>
+
+<h5 id="leanpub-auto-continuous-delivery-pipelines" class="calibre15">Continuous Delivery Pipelines</h5>
+
+<p class="calibre3">Beyond operation each Microservice requires additional infrastructure:
+It needs its own Continuous Delivery pipeline so that it can be
+brought into production independently of the other Microservices. This
+means that appropriate test environments and automation scripts are
+necessary. The large number of pipelines causes additional challenges:
+The pipelines have to be built up and maintained. Furthermore, to
+reduce expenses they need to be largely standardized.</p>
+
+<h5 id="leanpub-auto-monitoring" class="calibre15">Monitoring</h5>
+
+<p class="calibre3">Each Microservice requires in addition monitoring. This is the only
+way to recognize problems with the service at runtime. In case of a
+Deployment Monolith, it is still quite easy to monitor the system.
+When problems arise, the administrator can log into the system and use
+specific tools to analyze errors. Microservice-based systems contain
+so many systems that this approach is not feasible anymore.
+Consequently, there has to be a monitoring, which comprises all
+systems. Thereby, not only the typical information from the operating
+system and the I/O to the hard disc and to the network should be
+analyzed, also a view into the application should be possible based
+on application metrics. This is the only way for developers to find
+out where the application has to be optimized and where problems exist
+at the moment.</p>
+
+<h5 id="leanpub-auto-version-control" class="calibre15">Version control</h5>
+
+<p class="calibre3">Finally, every Microservice has to be stored under version control
+independent of the other ones. Only software, which is separately
+versioned, can be brought into production individually. When two
+software modules are versioned together, they should always be brought
+into production together. Otherwise a change might have influenced
+both modules so that in fact both services should be newly delivered.
+Moreover, if an old version of one of the services is in
+production, it is not clear whether an update is necessary or whether
+the new version does not contain changes – after all the new version
+might only have contained changes in the other Microservice.</p>
+
+<p class="calibre3">For Deployment Monoliths a lower number of servers, environments and projects in
+version control would be necessary. This decreases complexity. The
+requirements in regards to operation and infrastructure are much
+higher in a Microservices environment. To deal with this complexity is
+the biggest challenge when introducing Microservices.</p>
+
+<h3 id="section6-4" class="calibre2">6.4 Conclusion</h3>
+
+<p class="calibre3">This chapter discussed the different challenges associated with
+Microservices-based approaches. At the technical level
+(<a href="part0009.html#section6-1">section 6.1</a>) the challenges are mostly a consequence of
+the fact that Microservices are distributed systems: Due to that,
+system performance and reliability are more difficult to ensure. In
+addition, technical complexity increases because of the greater
+variety of used technologies. Furthermore, code dependencies can
+render the independent deployment of Microservices impossible.</p>
+
+<p class="calibre3">The architecture of a Microservice-based system
+(<a href="part0009.html#section6-2">section 6.2</a>) is extremely important due to its impact
+on the organization and the parallel implementation of multiple
+stories. At the same time, changes to the interplay of Microservices
+are hard. Functionalities cannot be easily transferred from one
+Microservice to another. Classes within a project can often even be
+moved automatically. Between Microservices manual work is necessary.
+The interface to the code changes from local calls to communication
+between Microservices. This increases the necessary efforts. Finally,
+Microservices can be written in different programming languages – in
+such cases to move code entails that it has to be rewritten.</p>
+
+<p class="calibre3">However, changes to system architecture are often necessary because of
+unclear requirements. Besides, the team permanently improves its
+knowledge about the system and its domain. Especially in circumstances
+where the use of Microservices is particularly advantageous because of
+rapid and independent deployments, architecture should be peculiarly
+easy to change. Within Microservices changes are indeed easy to
+implement, however between Microservices they are very laborious.</p>
+
+<p class="calibre3">Finally infrastructure complexity rises due to the larger number of
+services (<a href="part0009.html#section6-3">section 6.3</a>) since more servers, more
+projects in version control and more Continuous Delivery pipelines are
+necessary. This is a central challenge encountered by
+Microservice-based architectures.</p>
+
+<p class="calibre3"><a href="part0011.html#part-III">Part III</a> of the book is going to show solutions for these challenges.</p>
+
+<h5 id="leanpub-auto-essential-points-3" class="calibre15">Essential Points</h5>
+
+<ul class="calibre16">
+  <li class="calibre14">Microservices are distributed systems. This makes them technically
+more complex.</li>
+  <li class="calibre14">A good architecture is very important due to its impact on the
+organization. While the architecture is easy to modify within
+Microservices, the interplay between Microservices is hard to change.</li>
+  <li class="calibre14">Due to the number of Microservices more infrastructure
+is necessary e.g. in terms of server environments, Continuous Delivery
+pipelines or projects in version control.</li>
+</ul>
+
+<h5 id="leanpub-auto-try-and-experiment-5" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">Choose one of the scenarios from <a href="part0005.html#chapter-3">chapter 3</a> or a project
+you know:</p>
+
+  <ul class="calibre16">
+    <li class="calibre14">Which are the challenges to be anticipated? Evaluate these
+challenges. The conclusion of this chapter highlights the different
+challenges once again in a compressed manner.</li>
+    <li class="calibre14">Which of the challenges poses the biggest risk? Why?</li>
+    <li class="calibre14">Are there possibilities to use Microservices in a way which
+maximizes advantages and avoids disadvantages? For example,
+heterogeneous technology stacks could be avoided.</li>
+  </ul>
+
+</aside>
+
+
+</div>
+</body></html>

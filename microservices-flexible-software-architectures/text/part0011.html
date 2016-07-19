@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title dir="ltr">Part III: Implementing Microservices</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body dir="ltr" class="calibre">
+<div class="calibre6">
+<h2 id="part-III" class="calibre1">Part III: Implementing Microservices</h2>
+
+<p class="calibre3">This part of the book demonstrates how Microservices can be
+implemented. After studying this part the reader cannot only design
+Microservice-based architectures, but also implement them and evaluate
+the organizational effects.</p>
+
+<h5 id="leanpub-auto-chapter-8-architecture-of-microservice-based-systems" class="calibre15">Chapter 8: Architecture of Microservice-based Systems</h5>
+
+<p class="calibre3"><a href="part0012.html#chapter-8">Chapter 8</a> describes the architecture of
+Microservice-based systems. It focuses on the interplay between
+individual Microservices.</p>
+
+<p class="calibre3">The domain architecture deals with Domain-Driven Design as basis of
+Microservice-based architectures and shows metrics which allow to
+measure the quality of the architecture. Architecture management
+is a challenge: It can be difficult to keep the overview of the
+numerous Microservices. However, often it is sufficient to understand
+how a certain use case is implemented and which Microservices interact
+in a specific scenario.</p>
+
+<p class="calibre3">Practically all IT systems are subject to more or less profound
+change. Therefore the architecture of a Microservice system has to
+evolve and the system has to undergo continued development. To achieve
+this several challenges have to be solved, which do not arise in this
+form in the case of Deployment Monoliths – for instance the overall
+distribution into Microservices is difficult to change. However,
+changes to individual Microservices are simple.</p>
+
+<p class="calibre3">In addition, Microservice systems need to integrate legacy systems.
+This is quite simple as Microservices can treat legacy systems as
+blackbox. A replacement of a Deployment Monolith by Microservices can
+progressively transfer more functionalities into Microservices without
+having to adjust the inner structure of the legacy system or having to
+understand the code in detail.</p>
+
+<p class="calibre3">The technical architecture comprises typical challenges for the
+implementation of Microservices. In most cases there is a central
+configuration and coordination for all Microservices. Furthermore, a
+load balancer distributes the load between the individual instances of
+the Microservices. The security architecture has to leave each
+Microservice the freedom to implement its own authorizations in the
+system, but also ensure that a user needs to log in only once.
+Finally, Microservices should return information concerning themselves
+as documentation and as metadata.</p>
+
+<h5 id="leanpub-auto-chapter-9-integration-and-communication" class="calibre15">Chapter 9: Integration and Communication</h5>
+
+<p class="calibre3"><a href="part0013.html#chapter-9">Chapter 9</a> shows the different possibilities for the integration and
+communication between Microservices. There are three possible levels
+for integration:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Microservices can integrate at the web level. In that case each
+Microservice delivers a part of the web UI.</li>
+  <li class="calibre14">At the logic level Microservices can communicate via REST or
+messaging.</li>
+  <li class="calibre14">Data replication is also possible.</li>
+</ul>
+
+<p class="calibre3">Via these technologies the Microservices have internal interfaces for
+other Microservices. The complete system can have one interface to the
+outside. Changes to the different interfaces create different
+challenges. Accordingly, this chapter also deals with versioning of
+interfaces and the effects thereof.</p>
+
+<h5 id="leanpub-auto-chapter-10-architecture-of-individual-microservices" class="calibre15">Chapter 10: Architecture of Individual Microservices</h5>
+
+<p class="calibre3"><a href="part0014.html#chapter-10">Chapter 10</a> describes possibilities for the architecture
+of an individual Microservice. There
+are different approaches for an individual Microservice:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">CQRS divides read and write access into two separate services. This
+allows for smaller services and an independent scaling of both parts.</li>
+  <li class="calibre14">Event Sourcing administrates the state of a Microservice via a
+stream of events from which the current state can be deduced.</li>
+  <li class="calibre14">In a hexagonal architecture the Microservice possesses a core,
+which can be accessed via different adaptors and which communicates
+also via such adaptors with other Microservices or the infrastructure.</li>
+</ul>
+
+<p class="calibre3">Each Microservice can follow an independent architecture.</p>
+
+<p class="calibre3">In the end all Microservices have to handle technical challenges like
+resilience and stability – these issues have to be solved by their
+technical architecture.</p>
+
+<h5 id="leanpub-auto-chapter-11-testing-microservices-and-microservice-based-systems" class="calibre15">Chapter 11: Testing Microservices and Microservice-based Systems</h5>
+
+<p class="calibre3">Testing is the focus of <a href="part0015.html#chapter-11">chapter 11</a>. Also tests have to
+take the special challenges associated with Microservices into
+consideration.</p>
+
+<p class="calibre3">The chapter starts off with explaining why tests are necessary at all
+and how a system can be tested in principle.</p>
+
+<p class="calibre3">Microservices are small deployment units. This decreases the risk
+associated with deployments. Accordingly, besides tests also
+optimization of deployment can help to decrease the risk.</p>
+
+<p class="calibre3">Testing the entire system represents a special problem in case of
+Microservices since only one Microservice at a time can pass through
+this phase. If the tests last one hour, only eight deployments will be
+feasible per working day. In the case of 50 Microservices that is by
+far too few. Therefore, it is necessary to limit these tests as much
+as possible.</p>
+
+<p class="calibre3">Often Microservices replace legacy systems. The Microservices and the
+legacy system both have to be tested – and also their interplay. Tests
+for the individual Microservices differ in some respects greatly from
+tests for other software systems.</p>
+
+<p class="calibre3">Consumer-driven contract tests are an essential component of
+Microservice tests: They test the expectations of a Microservice in
+regards to an interface. Thereby the correct interplay of
+Microservices can be ensured without having to test the Microservices
+together in an integration test. Instead a Microservice defines its
+requirements for the interface in a test, which the used Microservice
+can execute.</p>
+
+<p class="calibre3">Microservices have to adhere to certain standards in regards to
+monitoring or logging. The adherence to these standards can also be
+checked by tests.</p>
+
+<h5 id="leanpub-auto-chapter-12-operation-and-continuous-delivery-of-microservices" class="calibre15">Chapter 12: Operation and Continuous Delivery of Microservices</h5>
+
+<p class="calibre3">Operation and Continuous Delivery are the focus of
+<a href="part0016.html#chapter-12">chapter 12</a>. Especially the infrastructure is an
+essential challenge when introducing Microservices. Logging and
+monitoring have to be uniformly implemented across all Microservices,
+otherwise the associated expenditure gets too large. In addition,
+there should be a uniform deployment. Finally, starting and stopping
+of Microservices should be possible in a uniform manner – i.e. via a
+simple control. For these areas the chapter introduces concrete
+technologies and approaches. Additionally, the chapter presents
+infrastructures which especially facilitate the operation of a
+Microservices environment.</p>
+
+<h5 id="leanpub-auto-chapter-13-organizational-effects-of-a-microservice-based-architecture" class="calibre15">Chapter 13: Organizational Effects of a Microservice-based Architecture</h5>
+
+<p class="calibre3">Finally <a href="part0017.html#chapter-13">chapter 13</a> discusses how Microservices
+influence the organization. Microservices allow for a simpler
+distribution of tasks to independent teams and thus for parallel work
+on different features. To that end the tasks have to be distributed to
+the teams, which subsequently introduce the appropriate changes into
+their Microservices. However, new features can also comprise several
+Microservices. In that case one team has to put requirements to
+another team – this requires a lot of coordination and delays the
+implementation of new features. Therefore, it can be better that teams
+also change Microservices of other teams.</p>
+
+<p class="calibre3">Microservices divide the architecture into micro and
+macro architecture: In regards to micro architecture the teams can
+make their own decisions while the macro architecture has to be
+defined for and coordinated across all Microservices. In areas like
+operation, architecture and testing individual aspects can be assigned to
+micro or macro architecture.</p>
+
+<p class="calibre3">DevOps as organizational form fits well to Microservices since close
+cooperation between operation and development is very useful,
+especially for the infrastructure intensive Microservices.</p>
+
+<p class="calibre3">The independent teams each need their own independent requirements,
+which in the end have to be derived from the domain. Consequently,
+Microservices have also effects in these areas.</p>
+
+<p class="calibre3">Code recycling is likewise an organizational problem: How do the teams
+coordinate the different requirements for shared components? A model
+which is inspired by open source projects can help.</p>
+
+<p class="calibre3">However, there is of course the question whether Microservices are
+possible at all without organizational changes – after all, the
+independent teams constitute one of the essential reasons for
+introducing Microservices.</p>
+
+
+</div>
+</body></html>

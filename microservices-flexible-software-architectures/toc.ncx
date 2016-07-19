@@ -1,0 +1,813 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="eng">
+  <head>
+    <meta content="7505949a-cc6a-4a81-bc23-424455d65e0e" name="dtb:uid"/>
+    <meta content="3" name="dtb:depth"/>
+    <meta content="calibre (2.35.0)" name="dtb:generator"/>
+    <meta content="0" name="dtb:totalPageCount"/>
+    <meta content="0" name="dtb:maxPageNumber"/>
+  </head>
+  <docTitle>
+    <text>Microservices: Flexible Software Architectures</text>
+  </docTitle>
+  <navMap>
+    <navPoint class="chapter" id="num_1" playOrder="1">
+      <navLabel>
+        <text>1 Preface</text>
+      </navLabel>
+      <content src="text/part0002.html"/>
+      <navPoint class="chapter" id="num_2" playOrder="2">
+        <navLabel>
+          <text>1.1 Overview of Microservice</text>
+        </navLabel>
+        <content src="text/part0002.html#section1-1"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_3" playOrder="3">
+        <navLabel>
+          <text>1.2 Why Microservices</text>
+        </navLabel>
+        <content src="text/part0002.html#section1-2"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_4" playOrder="4">
+      <navLabel>
+        <text>Part I: Motivation and Basics</text>
+      </navLabel>
+      <content src="text/part0003.html"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_5" playOrder="5">
+      <navLabel>
+        <text>2 Introduction</text>
+      </navLabel>
+      <content src="text/part0004.html"/>
+      <navPoint class="chapter" id="num_6" playOrder="6">
+        <navLabel>
+          <text>2.1 Overview of the Book</text>
+        </navLabel>
+        <content src="text/part0004.html#section2-1"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_7" playOrder="7">
+        <navLabel>
+          <text>2.2 For Whom is the Book Meant?</text>
+        </navLabel>
+        <content src="text/part0004.html#section2-2"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_8" playOrder="8">
+        <navLabel>
+          <text>2.3 Chapter Overview</text>
+        </navLabel>
+        <content src="text/part0004.html#section2-3"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_9" playOrder="9">
+        <navLabel>
+          <text>2.4 Essays</text>
+        </navLabel>
+        <content src="text/part0004.html#section2-4"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_10" playOrder="10">
+        <navLabel>
+          <text>2.5 Paths Through the Book</text>
+        </navLabel>
+        <content src="text/part0004.html#section2-5"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_11" playOrder="11">
+        <navLabel>
+          <text>2.6 Acknowledgement</text>
+        </navLabel>
+        <content src="text/part0004.html#section2-6"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_12" playOrder="12">
+      <navLabel>
+        <text>3 Microservice Scenarios</text>
+      </navLabel>
+      <content src="text/part0005.html"/>
+      <navPoint class="chapter" id="num_13" playOrder="13">
+        <navLabel>
+          <text>3.1 Modernizing an E-Commerce Legacy Application</text>
+        </navLabel>
+        <content src="text/part0005.html#section3-1"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_14" playOrder="14">
+        <navLabel>
+          <text>3.2 Developing a New Signaling System</text>
+        </navLabel>
+        <content src="text/part0005.html#section3-2"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_15" playOrder="15">
+        <navLabel>
+          <text>3.3 Conclusion</text>
+        </navLabel>
+        <content src="text/part0005.html#section3-3"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_16" playOrder="16">
+      <navLabel>
+        <text>Part II: Microservices: What, Why and Why Not?</text>
+      </navLabel>
+      <content src="text/part0006.html"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_17" playOrder="17">
+      <navLabel>
+        <text>4 What are Microservices?</text>
+      </navLabel>
+      <content src="text/part0007.html"/>
+      <navPoint class="chapter" id="num_18" playOrder="18">
+        <navLabel>
+          <text>4.1 Size of a Microservice</text>
+        </navLabel>
+        <content src="text/part0007.html#section4-1"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_19" playOrder="19">
+        <navLabel>
+          <text>4.2 Conway’s Law</text>
+        </navLabel>
+        <content src="text/part0007.html#section4-2"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_20" playOrder="20">
+        <navLabel>
+          <text>4.3 Domain-Driven Design and Bounded Context</text>
+        </navLabel>
+        <content src="text/part0007.html#section4-3"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_21" playOrder="21">
+        <navLabel>
+          <text>Why You Should Avoid a Canonical Data Model (Stefan Tilkov)</text>
+        </navLabel>
+        <content src="text/part0007.html#leanpub-auto-why-you-should-avoid-a-canonical-data-model-stefan-tilkov"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_22" playOrder="22">
+        <navLabel>
+          <text>4.4 Microservices with UI?</text>
+        </navLabel>
+        <content src="text/part0007.html#section4-4"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_23" playOrder="23">
+        <navLabel>
+          <text>4.5 Conclusion</text>
+        </navLabel>
+        <content src="text/part0007.html#section4-5"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_24" playOrder="24">
+      <navLabel>
+        <text>5 Reasons for Microservices</text>
+      </navLabel>
+      <content src="text/part0008.html"/>
+      <navPoint class="chapter" id="num_25" playOrder="25">
+        <navLabel>
+          <text>5.1 Technical Benefits</text>
+        </navLabel>
+        <content src="text/part0008.html#section5-1"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_26" playOrder="26">
+        <navLabel>
+          <text>5.2 Organizational Benefits</text>
+        </navLabel>
+        <content src="text/part0008.html#section5-2"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_27" playOrder="27">
+        <navLabel>
+          <text>5.3 Benefits from a Business Perspective</text>
+        </navLabel>
+        <content src="text/part0008.html#section5-3"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_28" playOrder="28">
+        <navLabel>
+          <text>5.4 Conclusion</text>
+        </navLabel>
+        <content src="text/part0008.html#section5-4"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_29" playOrder="29">
+      <navLabel>
+        <text>6 Challenges</text>
+      </navLabel>
+      <content src="text/part0009.html"/>
+      <navPoint class="chapter" id="num_30" playOrder="30">
+        <navLabel>
+          <text>6.1 Technical Challenges</text>
+        </navLabel>
+        <content src="text/part0009.html#section6-1"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_31" playOrder="31">
+        <navLabel>
+          <text>6.2 Architecture</text>
+        </navLabel>
+        <content src="text/part0009.html#section6-2"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_32" playOrder="32">
+        <navLabel>
+          <text>6.3 Infrastructure and Operations</text>
+        </navLabel>
+        <content src="text/part0009.html#section6-3"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_33" playOrder="33">
+        <navLabel>
+          <text>6.4 Conclusion</text>
+        </navLabel>
+        <content src="text/part0009.html#section6-4"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_34" playOrder="34">
+      <navLabel>
+        <text>7 Microservices and SOA</text>
+      </navLabel>
+      <content src="text/part0010.html"/>
+      <navPoint class="chapter" id="num_35" playOrder="35">
+        <navLabel>
+          <text>7.1 What is SOA?</text>
+        </navLabel>
+        <content src="text/part0010.html#section7-1"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_36" playOrder="36">
+        <navLabel>
+          <text>7.2 Differences Between SOA and Microservices</text>
+        </navLabel>
+        <content src="text/part0010.html#section7-2"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_37" playOrder="37">
+        <navLabel>
+          <text>7.3 Conclusion</text>
+        </navLabel>
+        <content src="text/part0010.html#section7-3"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_38" playOrder="38">
+      <navLabel>
+        <text>Part III: Implementing Microservices</text>
+      </navLabel>
+      <content src="text/part0011.html"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_39" playOrder="39">
+      <navLabel>
+        <text>8 Architecture of Microservice-based Systems</text>
+      </navLabel>
+      <content src="text/part0012.html"/>
+      <navPoint class="chapter" id="num_40" playOrder="40">
+        <navLabel>
+          <text>8.1 Domain Architecture</text>
+        </navLabel>
+        <content src="text/part0012.html#section8-1"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_41" playOrder="41">
+        <navLabel>
+          <text>8.2 Architecture Management</text>
+        </navLabel>
+        <content src="text/part0012.html#section8-2"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_42" playOrder="42">
+        <navLabel>
+          <text>8.3 Techniques to Adjust the Architecture</text>
+        </navLabel>
+        <content src="text/part0012.html#section8-3"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_43" playOrder="43">
+        <navLabel>
+          <text>8.4 Growing Microservice-based Systems</text>
+        </navLabel>
+        <content src="text/part0012.html#section8-4"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_44" playOrder="44">
+        <navLabel>
+          <text>Don’t Miss the Exit Point or How to Avoid the Erosion of a Microservice (Lars Gentsch)</text>
+        </navLabel>
+        <content src="text/part0012.html#leanpub-auto-dont-miss-the-exit-point-or-how-to-avoid-the-erosion-of-a-microservice-lars-gentsch"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_45" playOrder="45">
+        <navLabel>
+          <text>8.5 Microservices and Legacy Applications</text>
+        </navLabel>
+        <content src="text/part0012.html#section8-5"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_46" playOrder="46">
+        <navLabel>
+          <text>Hidden Dependencies (Oliver Wehrens)</text>
+        </navLabel>
+        <content src="text/part0012.html#leanpub-auto-hidden-dependencies-oliver-wehrens"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_47" playOrder="47">
+        <navLabel>
+          <text>8.6 Event-driven Architecture</text>
+        </navLabel>
+        <content src="text/part0012.html#section8-6"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_48" playOrder="48">
+        <navLabel>
+          <text>8.7 Technical Architecture</text>
+        </navLabel>
+        <content src="text/part0012.html#section8-7"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_49" playOrder="49">
+        <navLabel>
+          <text>8.8 Configuration and Coordination</text>
+        </navLabel>
+        <content src="text/part0012.html#section8-8"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_50" playOrder="50">
+        <navLabel>
+          <text>8.9 Service Discovery</text>
+        </navLabel>
+        <content src="text/part0012.html#section8-9"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_51" playOrder="51">
+        <navLabel>
+          <text>8.10 Load Balancing</text>
+        </navLabel>
+        <content src="text/part0012.html#section8-10"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_52" playOrder="52">
+        <navLabel>
+          <text>8.11 Scalability</text>
+        </navLabel>
+        <content src="text/part0012.html#section8-11"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_53" playOrder="53">
+        <navLabel>
+          <text>8.12 Security</text>
+        </navLabel>
+        <content src="text/part0012.html#section8-12"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_54" playOrder="54">
+        <navLabel>
+          <text>8.13 Documentation and Metadata</text>
+        </navLabel>
+        <content src="text/part0012.html#section8-13"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_55" playOrder="55">
+        <navLabel>
+          <text>8.14 Conclusion</text>
+        </navLabel>
+        <content src="text/part0012.html#section8-14"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_56" playOrder="56">
+      <navLabel>
+        <text>9 Integration and Communication</text>
+      </navLabel>
+      <content src="text/part0013.html"/>
+      <navPoint class="chapter" id="num_57" playOrder="57">
+        <navLabel>
+          <text>9.1 Web and UI</text>
+        </navLabel>
+        <content src="text/part0013.html#section9-1"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_58" playOrder="58">
+        <navLabel>
+          <text>9.2 REST</text>
+        </navLabel>
+        <content src="text/part0013.html#section9-2"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_59" playOrder="59">
+        <navLabel>
+          <text>9.3 SOAP and RPC</text>
+        </navLabel>
+        <content src="text/part0013.html#section9-3"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_60" playOrder="60">
+        <navLabel>
+          <text>9.4 Messaging</text>
+        </navLabel>
+        <content src="text/part0013.html#section9-4"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_61" playOrder="61">
+        <navLabel>
+          <text>9.5 Data Replication</text>
+        </navLabel>
+        <content src="text/part0013.html#section9-5"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_62" playOrder="62">
+        <navLabel>
+          <text>9.6 Interfaces: Internal and External</text>
+        </navLabel>
+        <content src="text/part0013.html#section9-6"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_63" playOrder="63">
+        <navLabel>
+          <text>9.7 Conclusion</text>
+        </navLabel>
+        <content src="text/part0013.html#section9-7"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_64" playOrder="64">
+      <navLabel>
+        <text>10 Architecture of Individual Microservices</text>
+      </navLabel>
+      <content src="text/part0014.html"/>
+      <navPoint class="chapter" id="num_65" playOrder="65">
+        <navLabel>
+          <text>10.1 Domain Architecture</text>
+        </navLabel>
+        <content src="text/part0014.html#section10-1"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_66" playOrder="66">
+        <navLabel>
+          <text>10.2 CQRS</text>
+        </navLabel>
+        <content src="text/part0014.html#section10-2"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_67" playOrder="67">
+        <navLabel>
+          <text>10.3 Event Sourcing</text>
+        </navLabel>
+        <content src="text/part0014.html#section10-3"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_68" playOrder="68">
+        <navLabel>
+          <text>10.4 Hexagonal Architecture</text>
+        </navLabel>
+        <content src="text/part0014.html#section10-4"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_69" playOrder="69">
+        <navLabel>
+          <text>10.5 Resilience and Stability</text>
+        </navLabel>
+        <content src="text/part0014.html#section10-5"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_70" playOrder="70">
+        <navLabel>
+          <text>10.6 Technical Architecture</text>
+        </navLabel>
+        <content src="text/part0014.html#section10-6"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_71" playOrder="71">
+        <navLabel>
+          <text>10.7 Conclusion</text>
+        </navLabel>
+        <content src="text/part0014.html#section10-7"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_72" playOrder="72">
+      <navLabel>
+        <text>11 Testing Microservices and Microservice-based Systems</text>
+      </navLabel>
+      <content src="text/part0015.html"/>
+      <navPoint class="chapter" id="num_73" playOrder="73">
+        <navLabel>
+          <text>11.1 Why Tests?</text>
+        </navLabel>
+        <content src="text/part0015.html#section11-1"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_74" playOrder="74">
+        <navLabel>
+          <text>11.2 How to Test?</text>
+        </navLabel>
+        <content src="text/part0015.html#section11-2"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_75" playOrder="75">
+        <navLabel>
+          <text>11.3 Mitigate Risks at Deployment</text>
+        </navLabel>
+        <content src="text/part0015.html#section11-3"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_76" playOrder="76">
+        <navLabel>
+          <text>11.4 Testing the Overall System</text>
+        </navLabel>
+        <content src="text/part0015.html#section11-4"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_77" playOrder="77">
+        <navLabel>
+          <text>11.5 Testing Legacy Applications and Microservices</text>
+        </navLabel>
+        <content src="text/part0015.html#section11-5"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_78" playOrder="78">
+        <navLabel>
+          <text>11.6 Testing Individual Microservices</text>
+        </navLabel>
+        <content src="text/part0015.html#section11-6"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_79" playOrder="79">
+        <navLabel>
+          <text>11.7 Consumer-driven Contract Tests</text>
+        </navLabel>
+        <content src="text/part0015.html#section11-7"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_80" playOrder="80">
+        <navLabel>
+          <text>11.8 Testing Technical Standards</text>
+        </navLabel>
+        <content src="text/part0015.html#section11-8"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_81" playOrder="81">
+        <navLabel>
+          <text>11.9 Conclusion</text>
+        </navLabel>
+        <content src="text/part0015.html#section11-9"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_82" playOrder="82">
+      <navLabel>
+        <text>12 Operations and Continuous Delivery of Microservices</text>
+      </navLabel>
+      <content src="text/part0016.html"/>
+      <navPoint class="chapter" id="num_83" playOrder="83">
+        <navLabel>
+          <text>12.1 Challenges Associated with the Operation of Microservices</text>
+        </navLabel>
+        <content src="text/part0016.html#section12-1"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_84" playOrder="84">
+        <navLabel>
+          <text>12.2 Logging</text>
+        </navLabel>
+        <content src="text/part0016.html#section12-2"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_85" playOrder="85">
+        <navLabel>
+          <text>12.3 Monitoring</text>
+        </navLabel>
+        <content src="text/part0016.html#section12-3"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_86" playOrder="86">
+        <navLabel>
+          <text>12.4 Deployment</text>
+        </navLabel>
+        <content src="text/part0016.html#section12-4"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_87" playOrder="87">
+        <navLabel>
+          <text>Combined or Separate Deployment? (Jörg Müller)</text>
+        </navLabel>
+        <content src="text/part0016.html#leanpub-auto-combined-or-separate-deployment-jrg-mller"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_88" playOrder="88">
+        <navLabel>
+          <text>12.5 Control</text>
+        </navLabel>
+        <content src="text/part0016.html#section12-5"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_89" playOrder="89">
+        <navLabel>
+          <text>12.6 Infrastructure</text>
+        </navLabel>
+        <content src="text/part0016.html#section12-6"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_90" playOrder="90">
+        <navLabel>
+          <text>12.7 Conclusion</text>
+        </navLabel>
+        <content src="text/part0016.html#section12-7"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_91" playOrder="91">
+      <navLabel>
+        <text>13 Organizational Effects of a Microservices-based Architecture</text>
+      </navLabel>
+      <content src="text/part0017.html"/>
+      <navPoint class="chapter" id="num_92" playOrder="92">
+        <navLabel>
+          <text>13.1 Organizational Benefits of Microservices</text>
+        </navLabel>
+        <content src="text/part0017.html#section13-1"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_93" playOrder="93">
+        <navLabel>
+          <text>13.2 An Alternative Approach to Conway’s Law</text>
+        </navLabel>
+        <content src="text/part0017.html#section13-2"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_94" playOrder="94">
+        <navLabel>
+          <text>13.3 Micro and Macro Architecture</text>
+        </navLabel>
+        <content src="text/part0017.html#section13-3"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_95" playOrder="95">
+        <navLabel>
+          <text>13.4 Technical Leadership</text>
+        </navLabel>
+        <content src="text/part0017.html#section13-4"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_96" playOrder="96">
+        <navLabel>
+          <text>13.5 DevOps</text>
+        </navLabel>
+        <content src="text/part0017.html#section13-5"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_97" playOrder="97">
+        <navLabel>
+          <text>When Microservices Meet Classical IT Organizations (Alexander Heusingfeld)</text>
+        </navLabel>
+        <content src="text/part0017.html#leanpub-auto-when-microservices-meet-classical-it-organizations-alexander-heusingfeld"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_98" playOrder="98">
+        <navLabel>
+          <text>13.6 Interface to the Customer</text>
+        </navLabel>
+        <content src="text/part0017.html#section13-6"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_99" playOrder="99">
+        <navLabel>
+          <text>13.7 Reusable Code</text>
+        </navLabel>
+        <content src="text/part0017.html#section13-7"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_100" playOrder="100">
+        <navLabel>
+          <text>13.8 Microservices Without Changing the Organization?</text>
+        </navLabel>
+        <content src="text/part0017.html#section13-8"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_101" playOrder="101">
+        <navLabel>
+          <text>13.9 Conclusion</text>
+        </navLabel>
+        <content src="text/part0017.html#section13-9"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_102" playOrder="102">
+      <navLabel>
+        <text>Part IV: Technologies</text>
+      </navLabel>
+      <content src="text/part0018.html"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_103" playOrder="103">
+      <navLabel>
+        <text>14 Example for a Microservices-based Architecture</text>
+      </navLabel>
+      <content src="text/part0019.html"/>
+      <navPoint class="chapter" id="num_104" playOrder="104">
+        <navLabel>
+          <text>14.1 Domain Architecture</text>
+        </navLabel>
+        <content src="text/part0019.html#section14-1"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_105" playOrder="105">
+        <navLabel>
+          <text>14.2 Basic Technologies</text>
+        </navLabel>
+        <content src="text/part0019.html#section14-2"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_106" playOrder="106">
+        <navLabel>
+          <text>14.3 Build</text>
+        </navLabel>
+        <content src="text/part0019.html#section14-3"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_107" playOrder="107">
+        <navLabel>
+          <text>14.4 Deployment Using Docker</text>
+        </navLabel>
+        <content src="text/part0019.html#section14-4"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_108" playOrder="108">
+        <navLabel>
+          <text>14.5 Vagrant</text>
+        </navLabel>
+        <content src="text/part0019.html#section14-5"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_109" playOrder="109">
+        <navLabel>
+          <text>14.6 Docker Machine</text>
+        </navLabel>
+        <content src="text/part0019.html#section14-6"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_110" playOrder="110">
+        <navLabel>
+          <text>14.7 Docker Compose</text>
+        </navLabel>
+        <content src="text/part0019.html#section14-7"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_111" playOrder="111">
+        <navLabel>
+          <text>14.8 Service Discovery</text>
+        </navLabel>
+        <content src="text/part0019.html#section14-8"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_112" playOrder="112">
+        <navLabel>
+          <text>14.9 Communication</text>
+        </navLabel>
+        <content src="text/part0019.html#section14-9"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_113" playOrder="113">
+        <navLabel>
+          <text>14.10 Resilience</text>
+        </navLabel>
+        <content src="text/part0019.html#section14-10"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_114" playOrder="114">
+        <navLabel>
+          <text>14.11 Load Balancing</text>
+        </navLabel>
+        <content src="text/part0019.html#section14-11"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_115" playOrder="115">
+        <navLabel>
+          <text>14.12 Integrating Other Technologies</text>
+        </navLabel>
+        <content src="text/part0019.html#section14-12"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_116" playOrder="116">
+        <navLabel>
+          <text>14.13 Tests</text>
+        </navLabel>
+        <content src="text/part0019.html#section14-13"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_117" playOrder="117">
+        <navLabel>
+          <text>Experiences with JVM-based Microservices in the Amazon Cloud (Sascha Möllering)</text>
+        </navLabel>
+        <content src="text/part0019.html#leanpub-auto-experiences-with-jvm-based-microservices-in-the-amazon-cloud-sascha-mllering"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_118" playOrder="118">
+        <navLabel>
+          <text>14.14 Conclusion</text>
+        </navLabel>
+        <content src="text/part0019.html#section14-14"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_119" playOrder="119">
+      <navLabel>
+        <text>15 Technologies for Nanoservices</text>
+      </navLabel>
+      <content src="text/part0020.html"/>
+      <navPoint class="chapter" id="num_120" playOrder="120">
+        <navLabel>
+          <text>15.1 Why Nanoservices?</text>
+        </navLabel>
+        <content src="text/part0020.html#section15-1"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_121" playOrder="121">
+        <navLabel>
+          <text>15.2 Nanoservices: Definition</text>
+        </navLabel>
+        <content src="text/part0020.html#section15-2"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_122" playOrder="122">
+        <navLabel>
+          <text>15.3 Amazon Lambda</text>
+        </navLabel>
+        <content src="text/part0020.html#section15-3"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_123" playOrder="123">
+        <navLabel>
+          <text>15.4 OSGi</text>
+        </navLabel>
+        <content src="text/part0020.html#section15-4"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_124" playOrder="124">
+        <navLabel>
+          <text>15.5 Java EE</text>
+        </navLabel>
+        <content src="text/part0020.html#section15-5"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_125" playOrder="125">
+        <navLabel>
+          <text>15.6 Vert.x</text>
+        </navLabel>
+        <content src="text/part0020.html#section15-6"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_126" playOrder="126">
+        <navLabel>
+          <text>15.7 Erlang</text>
+        </navLabel>
+        <content src="text/part0020.html#section15-7"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_127" playOrder="127">
+        <navLabel>
+          <text>15.8 Seneca</text>
+        </navLabel>
+        <content src="text/part0020.html#section15-8"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_128" playOrder="128">
+        <navLabel>
+          <text>15.9 Conclusion</text>
+        </navLabel>
+        <content src="text/part0020.html#section15-9"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_129" playOrder="129">
+      <navLabel>
+        <text>16 How to Start with Microservices</text>
+      </navLabel>
+      <content src="text/part0021.html"/>
+      <navPoint class="chapter" id="num_130" playOrder="130">
+        <navLabel>
+          <text>16.1 Why Microservices?</text>
+        </navLabel>
+        <content src="text/part0021.html#section16-1"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_131" playOrder="131">
+        <navLabel>
+          <text>16.2 Roads towards Microservices</text>
+        </navLabel>
+        <content src="text/part0021.html#section16-2"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_132" playOrder="132">
+        <navLabel>
+          <text>16.3 Microservice: Hype or Reality?</text>
+        </navLabel>
+        <content src="text/part0021.html#section16-3"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_133" playOrder="133">
+        <navLabel>
+          <text>16.4 Conclusion</text>
+        </navLabel>
+        <content src="text/part0021.html#section16-4"/>
+      </navPoint>
+    </navPoint>
+  </navMap>
+</ncx>

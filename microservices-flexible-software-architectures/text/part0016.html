@@ -1,0 +1,1438 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title dir="ltr">12 Operations and Continuous Delivery of Microservices</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body dir="ltr" class="calibre">
+<div class="calibre6">
+<h2 id="chapter-12" class="calibre1">12 Operations and Continuous Delivery of Microservices</h2>
+
+<p class="calibre3">Deployment and operation are additional components of the Continuous
+Delivery Pipeline (compare <a href="part0015.html#section11-1">section 11.1</a>). When the
+software has been tested in the context of the pipeline the
+Microservices go into production. There monitoring and logging collect
+information which can be used for the further development of the
+Microservices.</p>
+
+<p class="calibre3">The operation of a Microservice-based system is more laborious than
+the operation of a Deployment Monolith. There are many more deployable
+artifacts which all have to be
+surveilled. <a href="part0016.html#section12-1">Section 12.1</a> discusses the typical
+challenges associated with the operation of Microservice-based systems
+in detail. Logging is the topic of
+<a href="part0016.html#section12-2">section 12.2</a>. <a href="part0016.html#section12-3">Section 12.3</a> focuses on
+the monitoring of the Microservices. Deployment is treated in
+<a href="part0016.html#section12-4">section 12.4</a>. <a href="part0016.html#section12-5">Section 12.5</a> shows
+necessary measures for directing a Microservice from the outside, and
+<a href="part0016.html#section12-6">section 12.6</a> finally describes suitable
+infrastructures for the operation of Microservices.</p>
+
+<p class="calibre3">The challenges associated with operation should not be
+underestimated. It is in this area where the most complex
+problems associated with the use of Microservices frequently arise.</p>
+
+<h3 id="section12-1" class="calibre2">12.1 Challenges Associated with the Operation of Microservices</h3>
+
+<h5 id="leanpub-auto-challenge-numerous-artifacts" class="calibre15">Challenge: Numerous Artifacts</h5>
+
+<p class="calibre3">Teams who have so far only run Deployment Monoliths are confronted with
+the problem that there are very many additional deployable artifacts
+in Microservices-based systems. Each Microservice is independently
+brought into production and therefore a separate deployable
+artifact. Fifty, hundred or more Microservices are definitely
+realistic. The concrete number depends on the size of the project and
+the size of the Microservices. Such a number of deployable artifacts
+is hardly met with outside of Microservices-based architectures. All
+these artifacts have to be versioned independently because only then
+it can be tracked which code runs currently in
+production. Besides, this allows to bring each Microservice
+independently in a new version into production.</p>
+
+<p class="calibre3">When there are so many artifacts, there has to be a correspondingly
+high number of Continuous Delivery Pipelines. They do not only
+comprise the deployment in production but also the different testing
+phases. In addition, many more artifacts have to be surveilled in
+production by logging and monitoring. This is only possible when all
+these processes are mostly automated. For a small number of artifacts
+manual interventions might still be acceptable. Such an approach is
+simply not possible anymore for the large number of artifacts contained in a
+Microservice-based architecture.</p>
+
+<p class="calibre3">The challenges in the areas of deployment and infrastructure are for
+sure the most difficult ones encountered when introducing Microservices. Many
+organizations are not sufficiently proficient in automation although
+automation is also very advantageous in other architectural approaches
+and should already be routine.</p>
+
+<p class="calibre3">There are different approaches for achieving the necessary automation:</p>
+
+<h5 id="leanpub-auto-delegate-into-teams" class="calibre15">Delegate into Teams</h5>
+
+<p class="calibre3">The easiest option is to delegate this challenge to the teams which
+are responsible for the development of the Microservices. In that case
+each team has not only to develop its Microservice, but also to take
+care of its operation. They have the choice to either use appropriate
+automation for it or to adopt automation approaches from other teams.</p>
+
+<p class="calibre3">The team does not even have to cover all areas. When there is no need
+to evaluate log data to achieve reliable operation, the team can
+decide not to implement a system for evaluating log data. A reliable
+operation without surveilling the log output is hardly possible
+though. However, this risk is then within the responsibility of the
+respective team.</p>
+
+<p class="calibre3">This approach only works when the teams have a lot of knowledge
+regarding operation. Another problem is that the wheel is invented
+over and over again by the different teams: Each team implements
+automation independently and might use different tools for it. This
+approach entails the danger that the anyhow laborious operation of the
+Microservices gets even more laborious due to the heterogeneous
+approaches taken by the teams. The teams have to do this work. This
+interferes with the rapid implementation of new features. However, the
+decentralized decision which technologies to use increases the
+independence of the teams.</p>
+
+<h5 id="leanpub-auto-unify-tools" class="calibre15">Unify Tools</h5>
+
+<p class="calibre3">Because of the higher efficiency, unification can be a sensible
+approach for deployment. The easiest way to obtain uniform tools is to
+prescribe one tool for each area – deployment, test, monitoring,
+logging, deployment pipeline. In addition, there will be guidelines
+and best practices like for instance immutable server or the
+separation of build environment and deployment environment. This
+allows for the identical implementation of all Microservices and
+will facilitate operation since the teams only need to be familiar
+with one tool for each area.</p>
+
+<h5 id="leanpub-auto-specify-behavior" class="calibre15">Specify Behavior</h5>
+
+<p class="calibre3">Another option is to specify the behavior of the system. One example:
+When log output is supposed to be evaluated in a uniform manner across
+services, it is sufficient to define a uniform log format. The log
+framework does not necessarily have to be prescribed. Of course, it is
+sensible to offer for at least one log framework a configuration which
+generates this output format. This increases the motivation of the
+teams to use this log framework. In this way uniformity is not forced,
+but emerges on its own since the teams will minimize their own
+effort. When a team regards the use of another log framework or
+programming language which necessitates another log framework as more
+advantageous, it can still use these technologies.</p>
+
+<p class="calibre3">Defining uniform formats for log output has an additional advantage:
+The information can be delivered to different tools which process log
+files differently. This allows operations to screen log files for
+errors while the business stakeholders create statistics. Operation and
+business stakeholders can use different tools which use the uniform
+format as shared basis.</p>
+
+<p class="calibre3">Similarly, behavior can be defined for the other areas of operation such as
+deployment, monitoring or the deployment pipeline.</p>
+
+<h5 id="leanpub-auto-micro-and-macro-architecture" class="calibre15">Micro and Macro Architecture</h5>
+
+<p class="calibre3">Which decisions can be made by the team and which have to be made for
+the overall project corresponds to the separation of the
+architecture into micro and macro architecture (compare
+<a href="part0017.html#section13-3">section 13.3</a>). Decisions the team can make belong to micro
+architecture while decisions which are made across all teams for the
+overall project are part of the macro architecture. Technologies or
+the desired behavior for logging can be either part of the macro or
+the micro architecture.</p>
+
+<h5 id="leanpub-auto-templates" class="calibre15">Templates</h5>
+
+<p class="calibre3">Templates offer the option to unify Microservices in these areas and
+to increase the productivity of the teams. Based on a very simple
+Microservice a template demonstrates how the technologies can be
+used and how Microservices are integrated into the operation
+infrastructure. The example can simply respond to a request with a
+constant value since the domain logic is not the point
+here.</p>
+
+<p class="calibre3">The template will make it easy and fast for a team to implement a new
+Microservice. At the same time, each team can easily make use of the
+standard technology stack. So the uniform technical solution is at the
+same time the most attractive for the teams. Templates achieve a large
+degree of technical uniformity between Microservices without
+prescribing the used technology. In addition, a faulty use of the
+technology stack is avoided when the template demonstrates the correct
+use.</p>
+
+<p class="calibre3">A template should contain the complete infrastructure in addition to
+the code for an exemplary Microservice. This refers to the Continuous
+Delivery Pipeline, the build, the Continuous Integration Platform, the
+deployment in production and the necessary resources for running the
+Microservice. Especially build and Continuous Delivery Pipeline are
+important since the deployment of a large number of Microservices is
+only possible when these are automated.</p>
+
+<p class="calibre3">The template can be very complex when it really contains the complete
+infrastructure – even if the respective Microservice is very
+simple. It is not necessarily required to provide at once a complete
+and perfect solution. The template can also be built up in a stepwise
+manner.</p>
+
+<p class="calibre3">The template can be copied into each project. This entails the problem
+that changes to the template are not propagated into the existing
+Microservices. On the other hand, this approach is much easier to
+implement than an approach which allows for the automated adoption of
+changes. Besides such an approach would create dependencies between
+the template and practically all Microservices. Such dependencies
+should be avoided for Microservices.</p>
+
+<p class="calibre3">The templates fundamentally facilitate the generation of new
+Microservices. Accordingly, teams are more likely to create new
+Microservices. Thereby they can more easily distribute Microservices
+in multiple smaller Microservices. Thus templates help to keep
+Microservices small. When the Microservices are rather small, the
+advantages of a Microservice-based architecture can be exploited even
+better.</p>
+
+<h3 id="section12-2" class="calibre2">12.2 Logging</h3>
+
+<p class="calibre3">By logging an application can easily provide information about which
+events occurred. These can be errors, but also events like the
+registration of a new user which are mostly interesting for
+statistics. Finally, log data can help developers to locate errors by
+providing detailed information.</p>
+
+<p class="calibre3">In normal systems logs have the advantage that they can be written
+very easily and that the data can be persisted without huge
+effort. Besides, log files are human-readable and can be easily
+searched.</p>
+
+<h5 id="leanpub-auto-logging-for-microservices" class="calibre15">Logging for Microservices</h5>
+
+<p class="calibre3">For Microservices writing and analyzing log files is hardly
+sufficient:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Many requests can only be handled by the interplay of multiple
+Microservices. In that case the log file of a single Microservice
+is not sufficient to understand the complete sequence of events.</li>
+  <li class="calibre14">The load is often distributed across multiple instances of one
+Microservice. Therefore, the information contained in the log file of
+an individual instance is not very useful.</li>
+  <li class="calibre14">Finally, due to increased load, new releases or crashes, new
+instances of a Microservice start constantly. The data from a log file
+can get lost when a virtual machine is shut down and its hard disc is
+subsequently deleted.</li>
+</ul>
+
+<p class="calibre3">It is not necessary for Microservices to write logs into their file
+system because the information can anyhow not be analyzed there. Only
+writing to the central log server is definitely necessary. This
+has also the advantage that the Microservices utilize less local storage.</p>
+
+<p class="calibre3">Usually, applications just log text strings. The centralized logging
+parses the string. During parsing relevant information like time
+stamps or server names are extracted. Often parsing goes even beyond
+that and scrutinizes the texts more closely. If it is possible to
+determine for instance the identity of the current user from the logs,
+all information about a user can be selected from the log data of the
+Microservices. In a way the Microservice hides the relevant
+information in a string which the log system subsequently takes apart
+again. To facilitate the parsing log data can be transferred into a data
+format like JSON. In that case the data can already be structured
+during logging. They are not first packaged into a string which then
+has to be laboriously parsed. Likewise, it is sensible to have uniform
+standards: When a Microservice logs something as an error, then
+an error should really have occurred. In addition, the semantics of the
+other log levels should be uniform across all Microservices.</p>
+
+<h5 id="leanpub-auto-technologies-for-logging-via-the-network" class="calibre15">Technologies for Logging via the Network</h5>
+
+<p class="calibre3">Microservices can support central logging by sending log data directly
+via the network. Most log libraries support such an approach.  Special
+protocols like <a href="https://www.graylog.org/">GELF</a> (Graylog Extended Log
+Format) can be used for this or long established protocols like syslog
+which is the basis for logging in UNIX systems. Tools like the
+<a href="https://github.com/elastic/logstash-forwarder">logstash-forwarder</a>,
+<a href="https://github.com/josegonzalez/beaver">Beaver</a> or
+<a href="https://github.com/danryan/woodchuck">Woodchuck</a> are meant to send
+local files via the network to a central log server.  They are
+sensible in cases where the log data are supposed to be also locally
+stored in files.</p>
+
+<h5 id="leanpub-auto-elk-for-centralized-logging" class="calibre15">ELK for Centralized Logging</h5>
+
+<p class="calibre3">Logstash, Elasticsearch and Kibana can serve as tools for the
+collection and processing of logs on a central server.</p>
+
+
+<figure id="Fig58" class="image">
+  <img src="../images/00060.jpeg" alt="Fig. 58: ELK infrastructure for log analysis" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 58: ELK infrastructure for log analysis</figcaption>
+</figure>
+
+
+<ul class="calibre16">
+  <li class="calibre14">With the aid of <a href="http://logstash.net/"><strong class="calibre19">Logstash</strong></a> log files can
+be parsed and collected by servers in the network. Logstash is a very
+powerful tool. It can read data from a source, modify or filter data,
+and finally write it into a sink. Apart from importing logs from the
+network and storage in Elasticsearch Logstash supports many other data
+sources and data sinks. For example, data can be read from message
+queues or databases or written into them. Finally, Logstash can also
+parse data and supplement it – for example time stamps can be added to
+each log entry or individual fields can be cut out and further
+processed.</li>
+  <li class="calibre14">
+<a href="https://www.elastic.co/products/elasticsearch"><strong class="calibre19">Elasticsearch</strong></a>
+stores log data and makes them available for analyses. Elasticsearch
+cannot only search the data with full text search, but it can also
+search in individual fields of structured data and permanently store
+the data like a database. Finally, Elasticsearch offers statistical
+functions and can use those to analyze data. As a search engine
+Elasticsearch is optimized for fast response times so that the data
+can be analyzed quasi interactively.</li>
+  <li class="calibre14">
+<a href="https://www.elastic.co/products/kibana"><strong class="calibre19">Kibana</strong></a> is a web user
+interface which allows to analyze data from Elasticsearch. In addition
+to simple queries also statistical evaluations, visualizations and
+diagrams can be created.</li>
+</ul>
+
+<p class="calibre3">These tools form the ELK stack (Elasticsearch, Logstash, Kibana). All
+three are open source projects and are under Apache 2.0 license.</p>
+
+<h5 id="leanpub-auto-scaling-elk" class="calibre15">Scaling ELK</h5>
+
+<p class="calibre3">Especially in case of Microservices log data accumulate often in large
+amounts. Therefore, in Microservice-based architectures the system for the central
+processing of logs should be highly scalable. A good scalability is
+one of the advantages of the ELK stack:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<strong class="calibre19">Elasticsearch</strong> can distribute the indices into shards. Each data set
+is stored in a single shard. As the shards can be located on different
+servers, this allows for load balancing. In addition, shards can be
+replicated across several servers to improve fail safeness. Besides, a
+read access can be directed to an arbitrary replica of the
+data. Thereby replicas can serve to scale read access.</li>
+  <li class="calibre14">
+<strong class="calibre19">Logstash</strong> can write logs into different indices. Without an
+additional configuration Logstash would write the data for each day
+into a different index. Since the current data usually is read more
+frequently, this allows to reduce the amount of data which has to be
+searched for a typical request and therefore improves
+performance. Besides, there are still other possibilities to
+distribute the data to indices – for instance according to the
+geographic origin of the user. This also promotes the optimization of
+the data amounts which have to be searched.</li>
+  <li class="calibre14">Log data can be buffered in a <strong class="calibre19">Broker</strong> prior to processing by
+Logstash. The Broker serves as buffer. It stores the messages when
+there are so many log messages that they cannot be immediately
+processed. <a href="http://redis.io/">Redis</a> is often used as Broker – a fast
+in memory database.</li>
+</ul>
+
+<h5 id="leanpub-auto-graylog" class="calibre15">Graylog</h5>
+
+<p class="calibre3">The ELK stack is not the only solution for the analysis of log
+files. <a href="https://www.graylog.org/">Graylog</a> is also an open source
+solution and likewise utilizes Elasticsearch for storing log
+data. Besides it uses MongoDB for metadata. Graylog defines its own
+format for the log messages: The already mentioned GELF (Graylog
+Extended Log Format) standardizes the data which are transmitted via
+the network. For many log libraries and programming languages there
+are extensions for GELF. Likewise, the respective information can be
+extracted from the log data or surveyed with the UNIX tool
+syslog. Also Logstash supports GELF as in- and output format so that
+Logstash can be combined with Graylog. Graylog has a web interface
+which allows to analyze the information from the logs.</p>
+
+<h5 id="leanpub-auto-splunk" class="calibre15">Splunk</h5>
+
+<p class="calibre3"><a href="http://www.splunk.com/">Splunk</a> is a commercial solution and already
+for a long time on the market. Splunk presents itself as a solution
+which does not only analyze log files, but can generally analyze
+machine data and big data. For processing logs Splunk gathers the data
+via a Forwarder, prepares it via an Indexer for searching, and Search
+Heads take over the processing of search requests. Its intention to serve as
+an enterprise solution is underlined by the security
+concept. Customized analysis, but also alerts in case of certain
+problems are possible. Splunk can be extended by numerous
+plug-ins. Besides there are apps which provide ready-made solutions
+for certain infrastructures such as Microsoft Windows Server. The
+software does not necessarily have to be installed in your own
+computing center, but is also available as Cloud solution.</p>
+
+<h5 id="leanpub-auto-stakeholders-for-logs" class="calibre15">Stakeholders for Logs</h5>
+
+<p class="calibre3">There are different stakeholders for logging. However, the analysis
+options of the log servers are so flexible and the analyses so similar
+that one tool is normally sufficient. The stakeholders can create
+their own dashboards with the information that is relevant to
+them. For specific requirements the log data can be passed on to other
+systems for evaluation.</p>
+
+<h5 id="leanpub-auto-correlation-ids" class="calibre15">Correlation IDs</h5>
+
+<p class="calibre3">Often multiple Microservices work together on a request. The path the
+request takes through the Microservices has to be traceable for
+analysis. For filtering all log entries to a certain customer or to a
+certain request a correlation ID can be used. This ID unambiguously
+identifies a request to the overall system and is passed along during
+all communication between Microservices. In this manner log entries
+for all systems to a single request are easy to find in the central
+log system, and the processing of the requests can be tracked across
+all Microservices.</p>
+
+<p class="calibre3">Such an approach can for instance be implemented by transferring a
+request ID for each message within the headers or within the
+payloads. Many projects implement the transfer in their own code
+without using a framework. For Java there is the library
+<a href="https://github.com/tracee/tracee">tracee</a> which implements the
+transfer of the IDs. Some log frameworks support a context which is
+logged together with each log message. In that case it is only
+necessary to put the correlation ID into the context when receiving
+a message. This obliterates the need to pass the correlation ID on
+from method to method. When the correlation ID is bound to the thread,
+problems can arise when the processing of a request involves several
+threads. Setting the correlation ID in the context ensures that all
+log messages contain the correlation ID. How the correlation ID is
+logged has to be uniform across all Microservices so that the search
+for a request in the logs works for all Microservices.</p>
+
+<h5 id="leanpub-auto-zipkin-distributed-tracing" class="calibre15">Zipkin: Distributed Tracing</h5>
+
+<p class="calibre3">Also in regards to performance evaluations have to be made across
+Microservices. When the complete path of the requests is traceable, it
+can be identified which Microservice represents a bottleneck and
+requires an especially long time for processing requests. With the aid
+of a distributed tracing it can be determined for a request which
+Microservice needs how much time for answering a request and where
+optimization should start. <a href="https://github.com/twitter/zipkin">Zipkin</a>
+enables exactly this
+<a href="https://blog.twitter.com/2012/distributed-systems-tracing-with-zipkin">type of investigations</a>. It
+comprises support for different network protocols so that a request ID
+is automatically passed on via these protocols. In contrast to the
+correlation IDs the objective is not to correlate log entries, but to
+analyze the time behavior of the Microservices. For this purpose
+Zipkin offers suitable analysis tools.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-21" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">Define a technology stack which enables a Microservice-based
+architecture to implement logging:</p>
+
+  <ul class="calibre16">
+    <li class="calibre14">How should the log messages be formatted?</li>
+    <li class="calibre14">Define a logging framework if necessary.</li>
+    <li class="calibre14">Determine a technology for collecting and evaluating logs.</li>
+  </ul>
+
+  <p class="calibre3">This section listed a number of tools for the different areas. Which
+properties are especially important? The objective is not a complete
+product evaluation, but a general weighing of advantages and
+disadvantages.</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3"><a href="part0019.html#chapter-14">Chapter 14</a> shows an example for a Microservice-based
+architecture and in <a href="part0019.html#section14-14">section 14.14</a> there are
+suggestions how the architecture can be supplemented with a log
+analysis.</p>
+
+  <p class="calibre3">How does your current project handle logging? Is it maybe possible to
+implement parts of these approaches and technologies also in your
+project?</p>
+
+</aside>
+
+<h3 id="section12-3" class="calibre2">12.3 Monitoring</h3>
+
+<p class="calibre3">Monitoring surveils the metrics of a Microservice and uses other
+information sources than logging. Monitoring uses mostly numerical
+values which provide information about the current state of the
+application and indicate how this state changes over time. Such values
+can represent the number of processed calls over a certain time, the
+time needed for processing the calls or also system values like the
+CPU or memory utilization. If certain thresholds are surpassed or not
+reached, this indicates a problem and can trigger an alarm so that
+somebody can solve the problem. Or even better: The problem is solved
+automatically. For example, an overload can be addressed by starting
+additional instances.</p>
+
+<p class="calibre3">Monitoring offers feedback from production which is not only
+relevant for operation, but also for developers or the users of
+the system. Based on the information from monitoring they can
+better understand the system and therefore make informed
+decisions about how the system should be developed further.</p>
+
+<h5 id="leanpub-auto-basic-information" class="calibre15">Basic Information</h5>
+
+<p class="calibre3">Basic monitoring information should be mandatory for all
+Microservices. This makes it easier to get an overview of the state of
+the system. All Microservices should deliver the required information
+in the same format. Besides components of the Microservice system can
+likewise use the values. Load balancing for instance can use a health
+check to avoid accessing Microservices which cannot process calls.</p>
+
+<p class="calibre3">The basic values all Microservices should provide can comprise the
+following:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">There should be a value which indicates the availability of the
+Microservice. In this manner the Microservice signals whether it is
+capable of processing calls at all (“alive”).</li>
+  <li class="calibre14">Detailed information regarding the availability of the Microservice
+is another important metric. One relevant information is whether all
+Microservices used by the Microservice are accessible and whether all
+other resources are available (“health”). This information does not
+only indicate whether the Microservice functions, but also provide
+hints which part of a Microservice is currently unavailable and why it
+failed. Importantly, it becomes apparent whether the Microservice is
+unavailable because of the failure of another Microservice or because
+the respective Microservice itself is having a problem.</li>
+  <li class="calibre14">Information about the version of a Microservice and additional meta
+information like the contact partner or used libraries and their
+versions as well as other artifacts can also be provided as
+metrics. This can cover part of the documentation (compare
+<a href="part0012.html#section8-13">section 8.13</a>). Alternatively, it can be checked which
+version of the Microservice is actually currently in production. This
+facilitates the search for errors. Besides, an automated continuous
+inventory of the Microservices and other used software is possible,
+which simply inquires after these values.</li>
+</ul>
+
+<h5 id="leanpub-auto-additional-metrics" class="calibre15">Additional Metrics</h5>
+
+<p class="calibre3">Additional metrics can likewise be recorded by monitoring. Among the
+possible values are for instance response times, the frequency of
+certain errors or the number of calls. These values are usually
+specific for a Microservice so that they do not necessarily have to be
+offered by all Microservices. An alarm can be triggered when certain
+thresholds are reached. Such thresholds are different for each
+Microservice.</p>
+
+<p class="calibre3">Nevertheless, a uniform interface for accessing the values is
+sensible when all Microservices are supposed to use the same
+monitoring tool. Uniformity can tremendously reduce expenditure in
+this area.</p>
+
+<h5 id="leanpub-auto-stakeholders" class="calibre15">Stakeholders</h5>
+
+<p class="calibre3">There are different stakeholders for the information from monitoring:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<strong class="calibre19">Operations</strong> wants timely to be informed about problems to enable a
+smooth operation of the Microservice. In case of acute problems or
+failures it wants to get an alarm – at any day or night time – via
+different means like pager or SMS. Detailed information is only
+necessary when the error has to be analyzed more closely – often
+together with the developers. Operations is not only interested in the
+values from the Microservice itself, but also in monitoring values of
+the operating system, the hardware or the network.</li>
+  <li class="calibre14">
+<strong class="calibre19">Developers</strong> mostly focus on information from the application. They
+want to understand how the application functions in production and how
+it is employed by the users. From this information they deduce
+optimizations, especially at the technical level. Therefore, they need
+very specific information. If the application is for instance too slow
+in responding to a certain type of call, the system has to be
+optimized for this type of call. To do so it is necessary to obtain
+as much information as possible about exactly this type of call. Other
+calls are not as interesting. Developers evaluate this information in
+detail. They might even be interested in analyzing calls of just one
+specific user or a circle of users.</li>
+  <li class="calibre14">The <strong class="calibre19">business stakeholders</strong> are interested in the business success
+and the resulting business numbers. Such information can be provided by
+the application specifically for the business stakeholders. The
+business stakeholders then generate statistics based on this
+information and thereby prepare business decisions. On the other hand,
+they are usually not interested in technical details.</li>
+</ul>
+
+<p class="calibre3">The different stakeholders are not only interested in different
+values, but also analyze them differently. Standardizing the data
+format is sensible to support different tools and nevertheless enable
+all stakeholders to access all data.</p>
+
+
+<figure id="Fig59" class="image">
+  <img src="../images/00061.jpeg" alt="Fig. 59: Stakeholders and their monitoring data" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 59: Stakeholders and their monitoring data</figcaption>
+</figure>
+
+
+<p class="calibre3"><a href="part0016.html#Fig59">Fig. 59</a> shows an overview of a possible monitoring of a
+Microservice-based system. The Microservice offers the data via a
+uniform interface. Operations uses monitoring to surveil for instance
+threshold values. Development utilizes a detailed monitoring to
+understand processes within the application. And the business
+stakeholders look at the business data. The individual stakeholders
+might use more or less similar approaches: The stakeholders can for
+instance use the same monitoring software with different dashboards or
+entirely different software.</p>
+
+<h5 id="leanpub-auto-correlate-with-events" class="calibre15">Correlate with Events</h5>
+
+<p class="calibre3">In addition, it can be sensible to correlate data with an event
+such as a new release. This requires that information about the event
+has to be handed over to monitoring. When a new release creates
+markedly more revenue or causes decisively longer response times, this
+is for sure an interesting realization.</p>
+
+<h5 id="leanpub-auto-monitoring--tests" class="calibre15">Monitoring = Tests?</h5>
+
+<p class="calibre3">In a certain way monitoring is another version of testing (compare
+<a href="part0015.html#section11-4">section 11.4</a>). While tests look at the correct
+functioning of a new release in a test environment, monitoring
+examines the behavior of the application in a production
+environment. The integration tests should also be reflected in
+monitoring. When a problem causes an integration test to fail, there
+can be an associated alarm in monitoring. Besides, monitoring should
+also be activated for test environments to pinpoint problems already
+in the tests. When the risk associated with deployments is reduced by
+suitable measures (compare <a href="part0016.html#section12-4">section 12.4</a>), the
+monitoring can even take over part of the tests.</p>
+
+<h5 id="leanpub-auto-dynamic-environment" class="calibre15">Dynamic Environment</h5>
+
+<p class="calibre3">Another challenge when working with Microservice-based architectures
+is that Microservices come and go. During the deployment of a new
+release an instance can be stopped and started anew with a new
+software version. When servers fail, instances shut down, and new ones
+are started. For this reason monitoring has to occur separated from
+the Microservices. Otherwise the stopping of a Microservice would
+influence the monitoring infrastructure or may even cause it to
+fail. Besides, Microservices are a distributed system. The values of a
+single instance are not telling in themselves. Only by collecting
+values of multiple instances the monitoring information gets relevant.</p>
+
+<h5 id="leanpub-auto-concrete-technologies" class="calibre15">Concrete Technologies</h5>
+
+<p class="calibre3">Different technologies can be used for monitoring Microservices:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<a href="http://graphite.wikidot.com/"><strong class="calibre19">Graphite</strong></a> can store numerical data
+and is optimized for processing time series data. Such data occur
+frequently during monitoring. The data can be analyzed in a
+web application. Graphite stores the data in its own database. After
+some time the data are automatically deleted. Monitoring values are
+accepted by Graphite in a very simple format via a socket interface.</li>
+  <li class="calibre14">
+<a href="http://grafana.org/"><strong class="calibre19">Grafana</strong></a> extends Graphite by alternative
+dashboards and other graphical elements.</li>
+  <li class="calibre14">
+<a href="https://github.com/scobal/seyren"><strong class="calibre19">Seyren</strong></a> extends Graphite by a functionality for triggering
+alarms.</li>
+  <li class="calibre14">
+<a href="http://www.nagios.org/"><strong class="calibre19">Nagios</strong></a> is a comprehensive solution for
+monitoring and can be an alternative to Graphite.</li>
+  <li class="calibre14">
+<a href="https://www.icinga.org/"><strong class="calibre19">Icinga</strong></a> has originally been a fork of
+Nagios and therefore covers a very similar use case.</li>
+  <li class="calibre14">
+<a href="http://riemann.io/"><strong class="calibre19">Riemann</strong></a> focuses on the processing of event
+streams. It uses a functional programming language to define logic for
+the reaction to certain events. For this purpose, a fitting dashboard
+can be configured. Messages can be sent by SMS or e-mail.</li>
+  <li class="calibre14">
+<a href="http://packetbeat.com/"><strong class="calibre19">Packetbeat</strong></a> uses an agent which records
+the network traffic on the computer to be monitored. This allows
+Packetbeat to determine with minimal effort which requests take how long and which nodes
+communicate with each other. It is especially
+interesting that Packetbeat uses Elasticsearch for data storage and
+Kibana for analysis. These tools are also widely used for analyzing
+log data (compare <a href="part0016.html#section12-2">section 12.2</a>). Having only one stack
+for the storage and analysis of logs and monitoring reduces the
+complexity of the environment.</li>
+  <li class="calibre14">In addition, there are different commercial tools. Among those are
+<a href="http://www8.hp.com/us/en/software-solutions/operations-manager-%0Ainfrastructure-monitoring/"><strong class="calibre19">HP’s Operations Manager</strong></a>,
+<a href="http://www-01.ibm.com/software/tivoli/"><strong class="calibre19">IBM Tivoli</strong></a>,
+<a href="http://www.ca.com/us/opscenter.aspx"><strong class="calibre19">CA Opscenter</strong></a> and
+<a href="http://www.bmc.com/it-solutions/remedy-itsm.html"><strong class="calibre19">BMC Remedy</strong></a>. These
+tools are very comprehensive, have been on the market for a long time
+and offer support for many different software and hardware
+products. Such platforms are often used enterprise-wide and
+introducing them into an organization is usually a very complex
+project. Some of these solutions can also analyze and monitor log
+files. Due to their large number and the high dynamics of the
+environment it can be sensible for Microservices to establish their
+own monitoring tools even if an enterprise-wide standard exists
+already. When the established processes and tools require a high
+manual expenditure for administration, this expenditure might not be
+feasible anymore in the face of the large number of Microservices and
+the dynamics of the Microservice environment.</li>
+  <li class="calibre14">Monitoring can be moved to the Cloud. In this manner no extra
+infrastructure has to be installed. This facilitates the introduction
+of tools and monitoring the applications. An example is <a href="http://newrelic.com/">NewRelic</a>.</li>
+</ul>
+
+<p class="calibre3">These tools are first of all useful for operations and for
+developers. Business monitoring can be performed with different
+tools. Such monitoring is not only based on current trends and data,
+but also on historical values. Therefore, the amount of data is
+markedly larger than for operations and development. The data can be
+exported into a separate database or investigated with Big Data
+solutions. In fact, the analysis of data from web servers is one of
+the areas where big data solutions have first been used.</p>
+
+<h5 id="leanpub-auto-enabling-monitoring-in-microservices" class="calibre15">Enabling Monitoring in Microservices</h5>
+
+<p class="calibre3">Microservices have to deliver data which are displayed in the monitoring
+solutions. It is possible to provide the data via a simple interface
+like HTTP with a data format such as JSON. Then the monitoring tools
+can read these data out and import them. For this purpose, adaptors
+can be written as scripts by the developers. This makes it possible to
+provide different tools via the same interface with data.</p>
+
+<h5 id="leanpub-auto-metrics" class="calibre15">Metrics</h5>
+
+<p class="calibre3">In the Java world the <a href="https://github.com/dropwizard/metrics">metrics</a>
+framework can be used. It offers functionalities for recording custom
+values and sending them to a monitoring tool. This makes it possible
+to record metrics in the application and to hand them over to a
+monitoring tool.</p>
+
+<h5 id="leanpub-auto-statsd" class="calibre15">StatsD</h5>
+
+<p class="calibre3"><a href="https://github.com/etsy/statsd">StatsD</a> can collect values from
+different sources, perform calculations and hand over the results to
+monitoring tools. This allows to condense data before they are passed
+on to the monitoring tool in order to reduce the load on the
+monitoring tool. There are also many client libraries for StatsD which
+facilitate the sending of data to StatsD.</p>
+
+<h5 id="leanpub-auto-collectd" class="calibre15">collectd</h5>
+
+<p class="calibre3"><a href="https://collectd.org/">collectd</a> collects statistics about a system –
+like for instance the CPU utilization. These data can be analyzed with
+the frontend or they can be stored in monitoring tools. collectd can collect
+data from a HTTP JSON data source and send them on to the monitoring
+tool. Via different plug-ins collectd can collect data from the
+operating system and the basic processes.</p>
+
+
+<figure id="Fig60" class="image">
+  <img src="../images/00062.jpeg" alt="Fig. 60: Parts of a monitoring system" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 60: Parts of a monitoring system</figcaption>
+</figure>
+
+
+<h5 id="leanpub-auto-technology-stack-for-monitoring" class="calibre15">Technology Stack for Monitoring</h5>
+
+<p class="calibre3">A technology stack for monitoring comprises different components
+(<a href="part0016.html#Fig60">Fig. 60</a>):</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Within the Microservice itself data have to be recorded and
+provided to monitoring. For this purpose, a library can be used which
+directly contacts the monitoring tool. Alternatively, the data can be
+offered via a uniform interface – for example JSON via HTTP –, and
+another tool collects the data and sends them on to the monitoring
+tool.</li>
+  <li class="calibre14">In addition, if necessary, there should be an agent to record the
+data from the operating system and the hardware and pass
+them on to monitoring.</li>
+  <li class="calibre14">The monitoring tool stores and visualizes the data and can, if
+needed, trigger an alarm. Different aspects can be covered by
+different monitoring applications.</li>
+  <li class="calibre14">For analyses of historical data or by complex algorithms a
+solution based on Big Data tools can be created in parallel.</li>
+</ul>
+
+<h5 id="leanpub-auto-effects-on-the-individual-microservice" class="calibre15">Effects on the Individual Microservice</h5>
+
+<p class="calibre3">A Microservice also has to be integrated into the infrastructure. It
+has to hand over monitoring data to the monitoring infrastructure and
+provide some mandatory data. This can be ensured by a suitable
+template for the Microservice and by tests.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-22" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">Define a technology stack which allows to implement monitoring in a
+Microservice-based architecture. To do so define the stakeholders and
+the data that are relevant for them. Each of the stakeholders needs to
+have a tool for analyzing the data that are relevant for
+him/her. Finally, it has to be defined with which tools the data can
+be recorded and how they are stored. This section listed a number of
+tools for the different areas. In conjunction with further research it
+is possible to assemble a technology stack that is well suited for
+individual projects.</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3"><a href="part0019.html#chapter-14">Chapter 14</a> shows an example for a Microservice-based
+architecture, and in <a href="part0019.html#section14-14">section 14.14</a> there is also a
+suggestion how the architecture can be extended by monitoring.</p>
+
+  <p class="calibre3">How does your current project handle monitoring? Can some of the
+technologies presented in this section also be advantageous for your
+project? Which? Why?</p>
+
+</aside>
+
+<h3 id="section12-4" class="calibre2">12.4 Deployment</h3>
+
+<p class="calibre3">Independent deployment is a central aim of Microservices. Besides, the
+deployment has to be automated because manual deployment or even just
+manual corrections are not feasible due to the large number of
+Microservices.</p>
+
+<h5 id="leanpub-auto-deployment-automation" class="calibre15">Deployment Automation</h5>
+
+<p class="calibre3">There are different possibilities for automating deployment:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<strong class="calibre19">Installation scripts</strong> can be used which only install the software
+on the computer. Such scripts can for instance be implemented as shell
+scripts. They can install necessary software packages, generate
+configuration files and create user accounts. Such scripts can be
+problematic when they are called repeatedly. In that case the
+installation finds a computer on which the software is already
+installed. However, an update is different from a fresh
+installation. In such a situation a script can fail for example
+because user accounts or configuration files might already be present
+and cannot easily be overwritten. When the scripts are supposed to
+handle updates, development and testing the scripts get more
+laborious.</li>
+  <li class="calibre14">
+<strong class="calibre19">Immutable Servers</strong> are an option to handle these
+problems. Instead of updating the software on the servers, the server
+are completely deployed anew. This does not only facilitate the
+automation of deployment, but also the exact reproduction of the
+software installed on a server. It is sufficient to consider fresh
+installations. A fresh installation is easier to reproduce than an
+update, that can be started from many different configuration states
+and should lead to the same state from any of those. Approaches like
+<a href="https://www.docker.com/"><strong class="calibre19">Docker</strong></a> make it possible to tremendously
+reduce the expenditure for installing software. Docker is a kind of
+light-weight virtualization. It also optimizes the handling of virtual
+hard drives. If there is already a virtual hard drive with the correct
+data, it is recycled instead of installing the software anew. When
+installing a package like Java, first a virtual hard drive is looked
+for which already has this installation. Only when such a one does not
+exist, the installation is really performed. Should there only be a
+change in a configuration file when going from an old to a new version
+of an Immutable Server, Docker will recycle the old virtual hard
+drives behind the scenes and only supplement the new configuration
+file. This does not only reduce the consumption of hard drive space,
+but also profoundly speeds up the installation of the servers. Docker
+also decreases the time a virtual team needs for booting. These
+optimizations turn Immutable Server in conjunction with Docker into
+an interesting option. The new deployment of the servers is very
+fast with Docker, and the new server can also rapidly be booted.</li>
+  <li class="calibre14">Another possibility are tools like
+<a href="http://puppetlabs.com/"><strong class="calibre19">Puppet</strong></a>,
+<a href="https://www.chef.io/"><strong class="calibre19">Chef</strong></a>,
+<a href="http://www.ansible.com/"><strong class="calibre19">Ansible</strong></a> or
+<a href="http://www.saltstack.com/"><strong class="calibre19">Salt</strong></a>. They are specialized for
+installing software. Scripts for these tools describe what the system
+is supposed to look like after the installation. During an
+installation run the tool will take the necessary steps to transfer
+the system into the desired state. During the first run on a fresh
+system the tool completely installs the software. If the installation
+is run a second time immediately afterwards, it will not change the
+system any further since the system is already in the desired
+state. Besides these tools can uniformly install a large number of
+servers in an automated manner and are also able to roll out changes
+to a large number of servers.</li>
+  <li class="calibre14">Operating systems from the Linux area possess package manager like
+<strong class="calibre19">rpm</strong> (RedHat), <strong class="calibre19">dpkg</strong> (Debian/Ubuntu) or <strong class="calibre19">zypper</strong> (SuSE). They
+make it possible to centrally roll out software onto a large number of
+servers. The used file formats are very simple so that it is very easy
+to generate a package in a fitting format. The configuration of the
+software poses a problem though. Package managers usually support
+scripts which are executed during installation. Such scripts can
+generate the necessary configuration files. However, there can also be
+an extra package with the individual configurations for each host. The
+installation tools mentioned under the last bullet point can also use
+package manager for installing the actual software so that they
+themselves only generate the configuration files.</li>
+</ul>
+
+<h5 id="leanpub-auto-installation-and-configuration" class="calibre15">Installation and Configuration</h5>
+
+<p class="calibre3"><a href="part0012.html#section8-8">Section 8.8</a> already described tools which can be used for configuring
+Microservices. In general, it is hard to separate the installation
+from the software configuration. The installation has to generate a
+configuration. Therefore, many of the tools like for instance Puppet,
+Chef, Ansible or Salt can also create configurations and roll them out
+onto servers. Thus these solutions are an alternative to the
+configuration solutions which are specialized for Microservices.</p>
+
+<h5 id="leanpub-auto-risks-associated-with-microservice-deployments" class="calibre15">Risks Associated with Microservice Deployments</h5>
+
+<p class="calibre3">Microservices are supposed to allow for an easy and independent
+deployment. Nevertheless, it can never be excluded that problems arise
+in production. The Microservice-based architecture by itself will
+already help to reduce the risk. When a Microservice fails as result
+of a problem with a new version, this failure should be limited to the
+functionality of this Microservice. Apart from that the system should
+keep working. This is made possible by stability patterns and
+resilience described in <a href="part0014.html#section10-5">section 10.5</a>. Already for this
+reason the deployment of a Microservice is much less risky than the
+deployment of a monolith. In case of a monolith it is much harder to
+limit a failure to a certain functionality. If a new version of the
+Deployment Monolith has a memory leak, this will cause the entire
+process to break down so that the entire monolith will not be
+available anymore. A memory leak in a Microservice only influences
+this Microservice. There are different challenges for which
+Microservices are not per se helpful: Schema changes in relational
+databases are for instance problematic because they often take very
+long and might fail – especially when the database is
+already containing a lot of data. As Microservices have their own data
+storage, a schema migration is always limited to just one
+Microservice.</p>
+
+<h5 id="leanpub-auto-deployment-strategies" class="calibre15">Deployment Strategies</h5>
+
+<p class="calibre3">To further reduce the risk associated with a Microservice deployment
+there are different strategies:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">A <strong class="calibre19">Rollback</strong> brings the old version of a Microservice back into
+production. Handling the database can be problematic: Often the old
+version of the Microservice does not work anymore with the database
+schema created by the newer version. When there are already data in
+the database which use the new schema, it can get very difficult to
+recreate the old state without losing the new data. Besides the
+rollback is hard to test.</li>
+  <li class="calibre14">A <strong class="calibre19">Roll Forward</strong> brings a new version of a Microservice in
+production,  which does not contain the error anymore. The procedure
+is identical to the procedure for the deployment of any other new
+version of the Microservice so that no special measures are
+necessary. The change is rather small so that deployment and the
+passage through the Continuous Delivery Pipeline should rapidly take
+place.</li>
+  <li class="calibre14">
+<strong class="calibre19">Continuous Deployment</strong> is even more radical: Each change to a
+Microservice is brought into production when the Continuous Delivery
+Pipeline was passed successfully. This further reduces the time necessary for
+the correction of errors. Besides, this entails that there are
+less changes per release which further decreases the risk and makes it
+easier to track which changes to the code caused a problem. Continuous
+Deployment is the logical consequence when the deployment process
+works so well that going into production is just a
+formality. Moreover, the team will pay more attention to the quality
+of their code when each change really goes into production.</li>
+  <li class="calibre14">A <strong class="calibre19">Blue/Green Deployment</strong> builds up a completely new environment
+with the new version of a Microservice. The team can completely test
+the new version and then bring it into production. Should problems
+occur, the old version can be used again which is kept for this
+purpose. Also in this scenario there are challenges in
+case of changes to the database schema. When switching from the one
+version to the other version of the Microservice, also the database has
+to be switched. Data which have been written into the old database
+between the built-up of the new environment and the switch have to be
+transferred into the new database.</li>
+  <li class="calibre14">
+<strong class="calibre19">Canary Releasing</strong> is based on the idea to deploy the new version
+initially just on one server in a cluster. When the new version runs
+without trouble on one server, it can also be deployed on
+the other servers. The database has to support the old and the new
+version of the Microservice in parallel.</li>
+  <li class="calibre14">
+<strong class="calibre19">Microservices</strong> can also run blindly in production. In that case
+they get all requests, but they may not change data, and calls which
+they send out are not passed on. By monitoring, log analyses and
+comparison with the old version it is possible to determine whether
+the new service has been correctly implemented.</li>
+</ul>
+
+<p class="calibre3">Theoretically, such procedures can also be implemented with Deployment
+Monoliths. However, in practise this is very difficult. With
+Microservices it is easier since they are much smaller deployment
+units. Microservices require less comprehensive tests. Installing
+and starting Microservices is much faster. Therefore, Microservices can
+more rapidly pass through the Continuous Delivery Pipeline into
+production. This will have positive effects for Roll Forward or
+Rollback because problems require less time to fix. A Microservice
+needs less resources in operation. This is helpful for Canary
+Releasing or Blue/Green Deployment since new environments have to be
+built up. If this is possible with less resources, these approaches
+are easier to implement. For a Deployment Monolith it is often very
+difficult to build up an environment at all.</p>
+
+<h3 id="leanpub-auto-combined-or-separate-deployment-jrg-mller" class="calibre2">Combined or Separate Deployment? (Jörg Müller)</h3>
+
+<p class="calibre3">by Jörg Müller, Hypoport AG</p>
+
+<p class="calibre3">The question whether different services are rolled out together or
+independently from each other is of greater relevance than sometimes
+suspected. This is an experience we had to make in the context of a
+project which started approximately five years ago.</p>
+
+<p class="calibre3">The term Microservices was not yet important in our industry. However,
+achieving a good modularization was our goal right from the start. The
+entire application consisted initially of a number of web modules
+coming in the shape of typical Java web application archives
+(WAR). These comprised in turn multiple modules which had been split
+based on domain as well as technical criteria. In addition to
+modularization we relied from the start on on Continuous Deployment as
+a method for rolling out the application. Each commit goes straight
+into production.</p>
+
+<p class="calibre3">Initially, it seemed an obvious choice to build an integrated
+deployment pipeline for the entire application. This enabled
+integration tests across all components. A single version for the
+entire application enabled controlled behavior, even if multiple
+components of the applications were changed simultaneously. Finally,
+the pipeline itself was easier to implement. The latter was an
+important reason since there were relatively few tools for continuous
+deployment at the time so that we had to build most ourselves.</p>
+
+<p class="calibre3">However, after some time the disadvantages of our approach became
+obvious. The first consequence was a longer and longer run time of our
+deployment pipeline. The larger the number of components that were
+built, tested and rolled out, the longer the process took. The
+advantages of continuous deployments rapidly diminished when the run
+time of the pipeline became longer. The first counter measure was the
+optimization that only changed  components were built and
+tested. However, this increased the complexity of the deployment
+pipeline tremendously. At the same time other problems like the
+runtime for changes to central components or the size of the artifacts
+could not be improved this way.</p>
+
+<p class="calibre3">But there was also a more subtle problem. A combined rollout with
+integrative tests offered a strong security net. It was easy to
+perform refactorings across multiple modules. However, this often
+changed interfaces between modules just because it was so easy to
+do. This is in principle a good thing. However, it had the consequence
+that it became very frequently necessary to start the entire
+system. Especially when working on the developer machine this turned
+into a burden. The requirements for the hardware got very high and the
+turnaround times lengthened considerably.</p>
+
+<p class="calibre3">The approach got even more complicated when more than one team worked
+with this integrated pipeline. The more components were tested in one
+pipeline, the more frequently errors were uncovered. This blocked the
+pipeline since the errors had to be fixed first. At the time when only
+one team was dependent on the pipeline, it was easy to find somebody
+who took over responsibility and fixed the problem. When there were
+several teams this responsibility was not so clear anymore. This
+entailed that errors in the pipeline persisted for a longer
+time. Simultaneously the variety of technologies increased. Again the
+complexity rose. This pipeline now needed very specialized
+solutions. Therefore, the expenditure for maintenance increased, and
+the stability decreased. The value of continuous deployment got hard
+to put into effect.</p>
+
+<p class="calibre3">At this time point it became obvious that the combined deployment in
+one pipeline could not be continued anymore. All new services,
+regardless whether Microservices or larger modules, now had there own
+pipeline. However, it caused a lot of expenditure to separate the
+previous pipeline which was based on shared deployment into multiple
+pipelines.</p>
+
+<p class="calibre3">In a new project it can be the right decision to start with a combined
+deployment. This especially holds true when the borders between the
+individual services and their interfaces are not yet well known. In
+such a case good integrative tests and simple refactoring can be very
+useful. However, starting at a certain size an independent deployment
+is obligatory. Indications for this are the number of modules or
+services, the run time and stability of the deployment pipeline and
+last, but not least the question how many teams work on the overall
+system. If these indications are overlooked and the right point in
+time to separate the deployment is missed, it can easily happen that
+one builds a monolith which consists of many small Microservices.</p>
+
+<h3 id="section12-5" class="calibre2">12.5 Control</h3>
+
+<p class="calibre3">Interventions in a Microservice might be necessary at run time. For
+instance, a problem with a Microservice might require to restart the
+respective Microservice. Likewise, a start or a stop of a Microservice
+might be necessary. These are ways for operation to intervene in case
+of a problem or for a load balancer to terminate instances which
+cannot process requests anymore.</p>
+
+<p class="calibre3">Different measures can be used for control:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">When a Microservice runs in a <strong class="calibre19">virtual machine</strong>, the virtual
+machine can be shut down or restarted. In that case the Microservice
+itself does not have to make special arrangements.</li>
+  <li class="calibre14">The operating system supports <strong class="calibre19">services</strong> which are started together
+with the operating system. Usually, services can also be stopped,
+started or restarted by means of the operating system. In that case
+the installation only has to register the Microservice as
+service. Working with services is nothing unusual for operation which
+is sufficient for this approach.</li>
+  <li class="calibre14">Finally, an <strong class="calibre19">interface</strong> can be used which allows restarting or shutting down,
+for instance via REST. Such an interface has to be implemented by the
+Microservice itself. This is supported by several libraries in the
+Microservices area – for instance by Spring Boot which is used to
+implement the example in <a href="part0019.html#chapter-14">chapter 14</a>. Such an interface
+can be called with simple HTTP tools like curl.</li>
+</ul>
+
+<p class="calibre3">Technically, the implementation of control mechanisms is not a big
+problem, but they have to be present for operating the
+Microservices. When they are identically implemented for all
+Microservices, this can reduce the expenditure for operating the
+system.</p>
+
+<h3 id="section12-6" class="calibre2">12.6 Infrastructure</h3>
+
+<p class="calibre3">Microservices have to run on a suitable platform. It is best to run
+each Microservice in a separate virtual machine (VM). Otherwise it is
+difficult to assure an independent deployment of the individual
+Microservices.</p>
+
+<p class="calibre3">When multiple Microservices run on a virtual machine, the deployment
+of one Microservice can influence another Microservice. The deployment
+can generate a high load or introduce changes to the virtual machine
+which also concern other Microservices running on the virtual machine.</p>
+
+<p class="calibre3">Besides Microservices should be isolated from each other to achieve a
+better stability and resilience. When multiple Microservices are
+running on one virtual machine, one Microservice can generate so much
+load that the other Microservices fail. However, precisely that should
+be prevented: When one Microservice fails, this failure should be
+limited to this one Microservice and not affect additional
+Microservices. The isolation of virtual machines is helpful for
+limiting the failure or the load to one Microservice.</p>
+
+<p class="calibre3">Scaling Microservices is likewise easier when each Microservice runs
+in an individual virtual machine. When the load is too high, it is
+sufficient to start a new virtual machine and register it with the load
+balancer.</p>
+
+<p class="calibre3">In case of problems it is also easier to analyze the error when all
+processes on a virtual machine belong to one Microservice. Each metric
+on the system then unambiguously belongs to this Microservice.</p>
+
+<p class="calibre3">Finally, the Microservice can be delivered as hard drive image when
+each Microservice runs on its own virtual machine. Such a deployment
+has the advantage that the entire environment of the virtual machine
+is exactly in line with the requirements of the Microservice and that
+the Microservice can bring along its own technology stack up to its
+own operating system.</p>
+
+<h5 id="leanpub-auto-virtualization-or-cloud" class="calibre15">Virtualization or Cloud</h5>
+
+<p class="calibre3">It is hardly possible to install new physical hardware upon the
+deployment of a new Microservice. Besides Microservices profit from
+virtualization or Cloud since this renders the infrastructures much
+more flexibel. New virtual machines for scaling or testing
+environments can easily be provided. In the Continuous Delivery
+Pipeline Microservices are constantly started to perform different
+tests. Moreover, in production new instances have to be started
+depending on the load.</p>
+
+<p class="calibre3">Therefore it should be possible to start a new virtual machine in a
+completely automated manner. Starting new instances with simple API
+calls is exactly what a Cloud offers. A Cloud infrastructure should be
+available in order to really be able to implement a Microservice-based
+architecture. Virtual machines which are provided by operation via
+manual processes are not sufficient. This also demonstrates that
+Microservices can hardly be run without modern infrastructures.</p>
+
+<h5 id="leanpub-auto-docker" class="calibre15">Docker</h5>
+
+<p class="calibre3">When there is an individual virtual machine for each Microservice, it
+is laborious to generate a test environment containing all
+Microservices. Even creating an environment with relatively few
+Microservices can be a challenge for a developer machine. The usage of
+RAM and CPU is very high for such an environment. In fact, it is hardly
+sensible to use an entire virtual machine for one Microservice. In the
+end, the Microservice should just run and integrate in logging and
+monitoring. Therefore solutions like Docker are convenient: Docker
+does not comprise many of the normally common operating system
+features.</p>
+
+<p class="calibre3">Instead <a href="https://www.docker.com/">Docker</a> offers a very light-weight
+virtualization. To this purpose Docker uses different technologies:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">In place of a complete virtualization Docker employs
+<a href="https://linuxcontainers.org/">Linux Containers</a> (LXC – LinuX
+Container). Support for similar mechanisms in Microsoft Windows has been
+announced. This allows to implement a light-weight alternative to
+virtual machines: All containers use the same kernel. There is only
+one instance of the kernel in memory. Processes, networks, data
+systems and users are separate from each other. In comparison to a
+virtual machine with its own kernel and often also many operating system
+services a container has a profoundly lower overhead. It is easily
+possible to run hundreds of Linux containers on a simple
+laptop. Besides a container starts much more rapidly than a virtual
+machine with its own kernel and complete operating system. The container
+does not have to boot an entire operating system; it just starts a new
+process. The container itself does not add a lot of overhead since it
+only requires a custom configuration of the operating system resources.</li>
+  <li class="calibre14">In addition, the file system is optimized: Basic read-only file
+systems can be used. At the same time additional file systems can be
+added to the container which also allow for writing. One file system
+can be put on top of another file system. For instance, a basic file system can
+be generated which contains an operating system. If software is
+installed in the running container or if files are modified, the
+container only has to store these additional files in a small
+container-specific file system. In this way the memory requirement for
+the containers on the hard drive is significantly reduced.</li>
+</ul>
+
+<p class="calibre3">Besides additional interesting possibilities arise: For example, a
+basic file system can be started with an operating system, and
+subsequently software can be installed. As mentioned, only changes to
+the file system are saved which are introduced upon the installation
+of the software. Based on this delta a file system can be
+generated. Then a container can be started which puts a file system
+with this delta on top of the basic file system containing the
+operating system – and afterwards additional software can be installed
+in yet another layer. In this manner each “layer” in the file system
+can contain specific changes. The real file system at run time can be
+composed from numerous such layers. This allows to recycle software
+installations very efficiently.</p>
+
+<p class="calibre3"><a href="part0016.html#Fig61">Fig. 61</a> shows an example for the file system of a running
+container: The lowest level is an Ubuntu Linux
+installation. On top there are changes which have been introduced by
+installing Java. Then there is the application. For the
+running container to be able to write changes into the file system,
+there is a file system on top into which the container writes
+files. When the container wants to read a file, it will move through
+the layers from top to bottom until it finds the respective data.</p>
+
+
+<figure id="Fig61" class="image">
+  <img src="../images/00063.jpeg" alt="Fig. 61: Filesystems in Docker" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 61: Filesystems in Docker</figcaption>
+</figure>
+
+
+<h5 id="leanpub-auto-docker-container-vs-virtualization" class="calibre15">Docker Container vs. Virtualization</h5>
+
+<p class="calibre3">Docker containers offer a very efficient alternative to
+virtualization. However, they are no “real” virtualization since each
+container has separate resources, its own memory, and its own file
+systems, but all share for instance one kernel. Therefore, this
+approach has some disadvantages. A Docker container can only use Linux
+and only the same kernel like the host operating system – consequently
+Windows applications for instance cannot be run on a Linux machine
+this way. The separation of the containers is not as strict as in the
+case of real virtual machines. An error in the kernel would for
+example affect all containers. Moreover, Docker also does not run on
+Mac OS X or Windows. Nevertheless, Docker can directly be installed on
+these platforms. Behind the scenes a virtual machine with Linux is
+being used. Microsoft has announced a version for Windows which
+can run the Windows container.</p>
+
+<h5 id="leanpub-auto-communication-between-docker-containers" class="calibre15">Communication Between Docker Containers</h5>
+
+<p class="calibre3">Docker containers have to communicate with each other. For example, a
+web application communicates with its database. For this purpose,
+containers export network ports which other containers use. Besides
+file systems can be used together. There containers write data which
+can be read by other containers.</p>
+
+<h5 id="leanpub-auto-docker-registry" class="calibre15">Docker Registry</h5>
+
+<p class="calibre3">Docker images comprise the data of a virtual hard drive. Docker
+registries allow to save and download Docker images. This makes it
+possible to save Docker images as result of a build process and
+subsequently to roll them out on servers. Because of the efficient
+storage of images, it is easily possible to distribute even complex
+installations in a performant manner. Besides many Cloud solutions can
+directly run Docker containers.</p>
+
+<h5 id="leanpub-auto-docker-and-microservices" class="calibre15">Docker and Microservices</h5>
+
+<p class="calibre3">Docker constitutes an ideal running environment for Microservices. It
+hardly limits the used technology as every type of Linux software can
+run in a Docker container. Docker registries allow to easily
+distribute Docker containers. At the same time the overhead of a
+Docker container is negligible in comparison to a normal
+process. Since Microservices require a multitude of virtual machines,
+these optimizations are very valuable. On the one hand Docker is very
+efficient, and on the other hand it does not limit the technology
+freedom.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-23" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">At <a href="http://www.docker.com/tryit/">http://www.docker.com/tryit/</a> the
+Docker online tutorial can be found. Complete the tutorial – it
+demonstrates the basics of working with Docker. The tutorial is fast
+to complete.</p>
+
+</aside>
+
+<h5 id="leanpub-auto-docker-and-servers" class="calibre15">Docker and Servers</h5>
+
+<p class="calibre3">There are different possibilities to use Docker for servers:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">On a <strong class="calibre19">Linux server</strong> Docker can be installed, and afterwards one or
+multiple Docker containers can be run. Docker then serves as solution
+for the provisioning of the software. For a cluster new servers are
+started on which again the Docker containers are installed. Docker
+only serves for the installation of the software on the servers.</li>
+  <li class="calibre14">Docker containers are run directly on a <strong class="calibre19">cluster</strong>. On which
+physical computer a certain Docker is located is decided by the
+software for cluster administration. Such an approach is supported by
+the scheduler <a href="http://mesos.apache.org/">Apache Mesos</a>. It
+administrates a cluster of servers and directs jobs to the respective
+servers. <a href="http://mesosphere.com/">Mesosphere</a> allows to run Docker
+containers with the aid of the Mesos scheduler. Besides Mesos supports
+many additional kinds of jobs.</li>
+  <li class="calibre14">
+<a href="http://kubernetes.io/">Kubernetes</a> likewise supports the execution
+of Docker containers in a cluster. However, the approach taken is
+different from Mesos. Kubernetes offers a service which distributes
+pods in the cluster. Pods are interconnected Docker containers which
+are supposed to run on a physical server. As basis Kubernetes requires
+only a simple operating system installation – Kubernetes implements
+the cluster management.</li>
+  <li class="calibre14">
+<a href="http://coreos.com/">CoreOS</a> is a very light-weight server operating
+system. With etcd it supports the cluster-wide distribution of
+configurations. fleetd enables the deployment of services in a cluster
+– up to redundant installation, failure security, dependencies and
+shared deployment on a node. All services have to be deployed as
+Docker containers while the operating system itself remains
+essentially unchanged.</li>
+  <li class="calibre14">
+<a href="https://docs.docker.com/machine/">Docker Machine</a> allows the
+installation of Docker on different virtualization and Cloud
+systems. Besides Docker machine can configure the Docker command line
+tool in such a manner that it communicates with such a
+system. Together with
+<a href="http://docs.docker.com/compose/">Docker Compose</a> multiple Docker
+containers can be combined to an overall system. The example
+application employs this approach, compare
+<a href="part0019.html#section14-6">section 14.6</a> and
+<a href="part0019.html#section14-7">section 14.7</a>. <a href="http://docs.docker.com/swarm/">Docker Swarm</a>
+adds a way to configure and run clusters with this tool stack:
+Individual servers can be installed with Docker Machine and combined
+to a cluster with Docker Swarm. Docker Compose can run each Docker
+container on a specific machine in the cluster.</li>
+</ul>
+
+<p class="calibre3">Kubernetes, CoreOS, Docker Compose, Docker Machine, Docker Swarm and
+Mesos of course influence the running of the software so that the
+solutions require changes in the operation procedures in contrast to
+virtualization. These technologies solve challenges which were
+previously addressed by virtualization solutions, namely to
+administrate a cluster of servers so that containers resp. virtual
+machines can be distributed in the cluster.</p>
+
+<h5 id="leanpub-auto-paas" class="calibre15">PaaS</h5>
+
+<p class="calibre3">PaaS (Platform as a Service) is based on a fundamentally different
+approach. The deployment of an application can be done simply by
+updating the application in version control. The PaaS fetches the
+changes, builds the application and rolls it out on the servers. These
+servers are installed by PaaS and represent a standardized
+environment. The actual infrastructure – i.e. the virtual machines –
+are hidden from the application. PaaS offers a standardized
+environment for the application. The environment takes for instance
+also care of the scaling and can offer services like databases and
+messaging systems. Because of the uniform platform PaaS systems limit
+the technology freedom which is normally an advantage of
+Microservices. Only technologies which are supported by PaaS can be
+used. On the other hand, deployment and scaling are further
+facilitated.</p>
+
+<p class="calibre3">Microservices impose high demands on infrastructure. Automation is an
+essential prerequisite for operating the numerous Microservices. A
+PaaS offers a good basis for this since it profoundly facilitates
+automation. To use a PaaS can be especially sensible when the
+development of a home-grown automation is too laborious and there is
+not enough knowledge about how to build the necessary
+infrastructure. However, the Microservices have to restrict themselves
+to the features which are offered by the PaaS. When the Microservices
+have been developed for the PaaS from the start, this is not very
+laborious. However, if they have to be ported, considerable
+expenditure can ensue.</p>
+
+<p class="calibre3">Nanoservices (<a href="part0020.html#chapter-15">chapter 15</a>) have different operating
+environments, which for example even further restrict the technology
+choice. On the other hand they are often even easier to operate and
+even more efficient in regards to resource usage.</p>
+
+<h3 id="section12-7" class="calibre2">12.7 Conclusion</h3>
+
+<p class="calibre3">Operating a Microservice-based system is one of the central challenges
+when working with Microservices (<a href="part0016.html#section12-1">section 12.1</a>). A Microservice-based system
+contains a tremendous number of Microservices and therefore operating system processes.
+Fifty or one hundred virtual machines are no
+rarity. The responsibility for operation can be delegated to the
+teams. However, this approach creates a higher overall
+expenditure. Standardizing operations is a more sensible
+strategy. Templates are a possibility to achieve uniformity without
+exerting pressure. Templates turn the uniform approach into the
+easiest one.</p>
+
+<p class="calibre3">For logging (<a href="part0016.html#section12-2">section 12.2</a>) a central infrastructure
+has to be provided which collects logs from all Microservices. There
+are different technologies available for this. To trace a call across
+the different Microservices a Correlation ID can be used which
+unambiguously identifies a call.</p>
+
+<p class="calibre3">Monitoring (<a href="part0016.html#section12-3">section 12.3</a>) has to offer at least basic
+information such as the availability of the Microservice. Additional
+metrics can for instance provide an overview of the overall system or can
+be useful for load balancing. Metrics can be individually defined for
+each Microservice. There are different stakeholders for the
+monitoring: Operations, developers and business stakeholders. They are
+interested in different values and use where necessary their own tools
+for evaluating the Microservices data. Each Microservice has to offer
+an interface with which the different tools can fetch values from the
+application. The interface should be identical for all Microservices.</p>
+
+<p class="calibre3">The deployment of Microservices (<a href="part0016.html#section12-4">section 12.4</a>) has to
+be automated. Simple scripts, especially in conjunction with Immutable
+Server, special deployment tools and Package Manager can be used for
+this purpose.</p>
+
+<p class="calibre3">Microservices are small deployment units. They are safeguarded by
+stability and resilience against the failure of other
+Microservices. Therefore, the risk associated with deployments is
+already reduced by the Microservice-based architecture
+itself. Strategies like Rollback, Roll Forward, Continuous Deployment,
+Blue/Green-Deployment or a blind moving along in production can
+further reduce the risk. Such strategies are easy to implement with
+Microservices since the deployment units are small and the consumption
+of resources by Microservices is low. Therefore, deployments are
+faster, and environments for Blue/Green-Deployment or Canary Releasing
+are much easier to provide.</p>
+
+<p class="calibre3">Control (<a href="part0016.html#section12-5">section 12.5</a>) comprises simple intervention options like
+starting, stopping and restarting of Microservices.</p>
+
+<p class="calibre3">Virtualization or Cloud are good options for infrastructures for
+Microservices (<a href="part0016.html#section12-6">section 12.6</a>). On each VM only a single
+Microservice should run to achieve a better isolation, stability and
+scaling. Especially interesting is Docker because the consumption of
+resources by a Docker Container is much lower than the one of a
+VM. This makes it possible to provide each Microservice with its own
+Docker Container even if the number of Microservices is
+large. PaaS are likewise interesting. They allow for a very
+simple automation. However, they also restrict the choice of
+technologies.</p>
+
+<p class="calibre3">This section only focuses on the specifics of Continuous Delivery and
+operation in a Microservices environment. Continuous Delivery is one
+of the most important reasons for the introduction of
+Microservices. At the same time operation poses the biggest
+challenges.</p>
+
+<h5 id="leanpub-auto-essential-points-9" class="calibre15">Essential Points</h5>
+
+<ul class="calibre16">
+  <li class="calibre14">Operation and Continuous Delivery are central challenges for
+Microservices.</li>
+  <li class="calibre14">The Microservices should handle monitoring, logging and deployment
+in a uniform manner. This is the only way to keep the effort reasonable.</li>
+  <li class="calibre14">Virtualization, Cloud, PaaS and Docker are interesting
+infrastructure alternatives for Microservices.</li>
+</ul>
+
+
+</div>
+</body></html>

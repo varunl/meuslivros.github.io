@@ -1,0 +1,1075 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title dir="ltr">11 Testing Microservices and Microservice-based Systems</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body dir="ltr" class="calibre">
+<div class="calibre6">
+<h2 id="chapter-11" class="calibre1">11 Testing Microservices and Microservice-based Systems</h2>
+
+<p class="calibre3">The separation of a system into Microservices has consequences for
+testing. <a href="part0015.html#section11-1">Section 11.1</a> explains the motivation behind software
+tests. <a href="part0015.html#section11-2">Section 11.2</a> discusses fundamental approaches for tests, not
+only in regards to Microservices. <a href="part0015.html#section11-3">Section 11.3</a> illustrates why there
+are special challenges when testing Microservices which are not present in this form in other systems. One example: In a
+Microservice-based system the entire system comprising all
+Microservices has to be tested (<a href="part0015.html#section11-4">section 11.4</a>). This is laborious since
+there can be a multitude of Microservices. <a href="part0015.html#section11-5">Section 11.5</a> describes the
+special case of a legacy application which is supposed to be replaced
+by Microservices. In that case the integration of Microservices and
+legacy application has to be tested. Testing just the Microservices is
+not sufficient. Another possibility to safeguard the interfaces
+between Microservices are consumer-driven contract tests
+(<a href="part0015.html#section11-7">section 11.7</a>). They reduce the expenditure for testing the entire
+system. Of course, the individual Microservices have to be tested as
+well. In this context the question arises how individual Microservices
+can at all be run in isolation without other Microservices
+(<a href="part0015.html#section11-6">section 11.6</a>). Microservices provide technology freedom, nevertheless
+there have to be certain standards. Therefore tests can comprise
+technical standards (<a href="part0015.html#section11-8">section 11.8</a>) which have been defined in the
+architecture.</p>
+
+<h3 id="section11-1" class="calibre2">11.1 Why Tests?</h3>
+
+<p class="calibre3">Testing software is an essential part of every software
+development project. Nevertheless, questions about the goal of the
+testing are hardly asked. In the end tests are risk management. They
+are supposed to minimize the risk that errors appear in production and
+are noticed by users – or that other damage is done.</p>
+
+<p class="calibre3">This answer entails a number of consequences:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Each test has to be evaluated based on the question which risk
+it minimizes. In the end a test is only meaningful when it helps to
+avoid concrete error scenarios which otherwise would occur in
+production.</li>
+  <li class="calibre14">Tests represent only one option to deal with risk. Consequences of
+an error occurring in production can also be minimized in different
+ways. An important point is how long it will take until a certain
+error is corrected in production. The longer an error persists in
+production, the more profound are usually the consequences. How long
+it takes to put a corrected version of the services into production
+depends on the deployment approach. Therefore, there is a
+connection between tests and deployment strategies.</li>
+  <li class="calibre14">Likewise, it is a very important aspect how long it will take until
+an error in production is noticed. This depends on the
+quality of monitoring and logging.</li>
+</ul>
+
+<p class="calibre3">In the end many measures can address errors in production. Just
+focusing on tests is not sufficient in order to be able to offer high
+quality software to customers.</p>
+
+<h5 id="leanpub-auto-tests-minimize-expenditure" class="calibre15">Tests Minimize Expenditure</h5>
+
+<p class="calibre3">Tests can do more than just minimize risk. They can help to minimize
+or avoid expenditure. An error in production can generate a high
+expenditure. The error can influence the customer service and can
+cause extra expenditure there. Identifying and correcting errors in
+production is usually more laborious than during tests. Access to the
+systems is often restricted. Besides the developers will have
+implemented other features meanwhile so that they will first have to
+familiarize themselves again with the erroneous code.</p>
+
+<p class="calibre3">In addition, the approach for tests can help to avoid or reduce
+expenditure. Automating tests only appears laborious at first
+glance. When tests are so well defined that results are reproducible,
+the step to a complete formalization and automation is not huge.
+In that case the costs for the execution of the tests will be
+negligible. This allows to test more frequently, and this will promote
+quality.</p>
+
+<h5 id="leanpub-auto-test--documentation" class="calibre15">Test = Documentation</h5>
+
+<p class="calibre3">A test defines what the code is supposed to do. Thereby it represents
+a kind of documentation. Unit tests define how the productive code is
+supposed to be used and also how it is supposed to behave in
+exceptional and borderline cases. Acceptance tests reflect the
+requirements of the customers. The advantage of tests in comparison to
+documentation is that they are executed. This ensures that the tests
+really reflect the current behavior and not an outdated state or a
+state which will only be reached in the future.</p>
+
+<h5 id="leanpub-auto-test-driven-development" class="calibre15">Test-driven Development</h5>
+
+<p class="calibre3">Test-driven development exploits the fact that tests represent
+requirements: In this approach developers initially write tests and
+subsequently the implementation. This ensures that the entire code is
+safeguarded by tests. Besides, in that case tests are not influenced
+by knowledge about the code since the code does not even exist yet
+when the test is written. If tests are only implemented afterwards,
+developers might not test for certain potential problems due to their
+knowledge about the implementation. In case of test-driven development
+this is very unlikely. Thereby tests turn into a very important basis
+for the development process. They push the development: Prior to each
+change there has to be a test which does not work. Code may only 
+be adjusted when the test was successful. This is true at the level of
+individual classes, which are safeguarded by previously written unit tests,
+but also at the level of requirements which are ensured by previously written
+acceptance tests.</p>
+
+<h3 id="section11-2" class="calibre2">11.2 How to Test?</h3>
+
+<p class="calibre3">There are different types of tests which handle different risks:</p>
+
+<h5 id="leanpub-auto-unit-tests" class="calibre15">Unit Tests</h5>
+
+<p class="calibre3">Unit tests examine the units the system consists of - just like their name suggests. They
+minimize the risk that the individual units contain errors. Unit tests check
+especially small units – individual methods or functions. For this
+purpose, all dependencies have to replaced because otherwise not only
+the individual unit but also the dependent units are tested. To
+replace the dependencies there are two possibilities:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<strong class="calibre19">Mocks</strong> simulate a certain call with a certain result. After the
+call the test can verify whether the expected calls really have
+taken place. A test can for instance define a Mock which will return
+a defined customer for a certain customer number. After the test it
+can evaluate whether the customer has really been readout by the
+code. In another test scenario the Mock can simulate an error if asked
+for a customer. Thereby unit tests can simulate error situations
+which otherwise would be hard to reproduce.</li>
+  <li class="calibre14">
+<strong class="calibre19">Stubs</strong> on the other hand simulate the entire Microservice – however,
+with a limited functionality. For example, the Stub can return a
+constant value. Thereby a test can be performed without the really
+dependent Microservice. For instance, a Stub can be implemented
+which returns test customers for certain customer numbers – each
+with certain properties.</li>
+</ul>
+
+<p class="calibre3">Unit tests are within the responsibility of the developers. There are
+unit test frameworks for all popular programming languages. The tests
+use knowledge about the internal structure of the units. For example
+they replace dependencies by Mocks or Stubs. Besides, the knowledge
+can be employed to run through all code paths for code branches within
+the tests. The tests are White Box Tests because they exploit
+knowledge about the structure of the units. Actually, one would have
+to talk of a transparent box, however, “White Box” is the
+commonly used term.</p>
+
+<p class="calibre3">One advantage of unit tests is their speed: Even for a complex project
+the unit tests can be completed within a few minutes. Thereby
+literally each code change can be safeguarded by unit tests.</p>
+
+<h5 id="leanpub-auto-integration-tests" class="calibre15">Integration Tests</h5>
+
+<p class="calibre3">Integration tests check the interplay of the components. Thereby they
+are supposed to minimize the risk that the integration of the
+components contains errors. They do not use Stubs or Mocks. The
+components can be tested as applications via the UI or via special test
+frameworks. Integration tests evaluate at least whether the individual
+parts are able to communicate with each other. Furthermore, they can for instance
+test the logic based on business processes.</p>
+
+<p class="calibre3">In cases where they test business processes the integration tests are
+similar to acceptance tests which check the requirements of the
+customers. This area is covered by tools for BDD (Behavior-Driven
+Design) and ATDD (Acceptance Test-Driven Design). These tools enable a
+test-driven approach where first the tests are written and afterwards
+the implementation - even for integration and acceptance tests.</p>
+
+<p class="calibre3">Integration tests do not use information about the system which is to
+be tested. They are called Black Box Tests since they do not exploit
+knowledge about the internal structure of the system.</p>
+
+<h5 id="leanpub-auto-ui-tests" class="calibre15">UI Tests</h5>
+
+<p class="calibre3">UI tests check the application via the user interface. In principle,
+they only have to test whether the user interface works
+correctly. There are numerous frameworks and tools for testing the
+user interface. Among those are tools for web UIs, but also for
+desktop or mobile applications. The tests are Blackbox tests. Since
+they test the user interface, the tests are fragile: Changes to the
+user interface can cause problems even if the logic remains
+unchanged. Besides, the tests usually require a complete system setup
+so that they are slow.</p>
+
+<h5 id="leanpub-auto-manual-tests" class="calibre15">Manual Tests</h5>
+
+<p class="calibre3">Finally there can be manual tests. They can either minimize the risk
+of errors in new features or check certain aspects like security,
+performance or features which have previously exposed quality
+problems. They should be explorative: They look at problems in certain
+areas of the applications. Tests which are aimed at detecting whether
+a certain error shows up again (regression tests), should never be
+done manually since automated tests find such errors easier and in a more
+cost-efficient and reproducible manner. Manual testing is
+limited to explorative tests.</p>
+
+<h5 id="leanpub-auto-load-tests" class="calibre15">Load Tests</h5>
+
+<p class="calibre3">Load tests analyze the behavior of the application under
+load. Performance tests on the other hand check the speed, and
+capacity tests examine how many users or requests the system is able
+to process. All of these tests evaluate the efficiency of the
+application. For this purpose, they use similar tools which measure
+response times and generate load. Besides, such tests can also monitor
+the use of resources or check whether errors occur upon a certain
+load. Tests which investigate whether a system is able to cope with a
+high load in the long term are called endurance tests.</p>
+
+<h5 id="leanpub-auto-test-pyramid" class="calibre15">Test Pyramid</h5>
+
+<p class="calibre3">The distribution of tests is illustrated by the Test Pyramid
+((Fig. 50)[#Fig50]): The broad basis of the Pyramid demonstrates that
+there are many unit tests. They can be rapidly performed, and most
+errors can be detected at this level. There are fewer integration
+tests since they are more laborious and run longer. In addition, there
+are usually not too many potential errors upon the integration of the
+parts. The logic itself is also safeguarded by the unit tests. UI tests
+only have to verify the correctness of the graphical user
+interface. They are even more laborious since automating UI is
+complicated, and a complete environment is necessary. Manual tests are
+only required now and then.</p>
+
+<p class="calibre3">Test-driven development usually results in a Test
+Pyramid: For each requirement there is an integration test written and
+for each change to a class a unit test. Thereby automatically many
+integration tests are created and even more unit tests.</p>
+
+
+<figure id="Fig50" class="image">
+  <img src="../images/00052.jpeg" alt="Fig. 50: Test Pyramide: The ideal" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 50: Test Pyramide: The ideal</figcaption>
+</figure>
+
+
+<p class="calibre3">The Test Pyramid achieves high quality with low expenditure. The tests
+are automated as much as possible. Each risk is addressed with a test
+that is as simple as possible: Logic is tested by simple and rapid
+unit tests. More laborious tests are restricted to areas which cannot
+be tested with less effort.</p>
+
+<p class="calibre3">Many projects are very remote from the ideal of the Test
+Pyramid. Unfortunately, in reality tests are often rather like an ice-cream
+cone (<a href="part0015.html#Fig51">Fig. 51</a>. In that case there are the following challenges:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">There are comprehensive manual tests since such tests are very
+easy. Besides, many testers do not have sufficient experience with
+test automation. Especially if the testers are not able to write
+maintainable test code, it is hardly possible to automate tests.</li>
+  <li class="calibre14">Tests via the user interface are the easiest type of automation
+because they are very similar to the manual tests. When there are
+automated tests, it is mostly UI tests. Unfortunately, automated UI
+tests are fragile: Changes to the graphical user interface often
+already lead to problems. Since the tests are testing the entire
+system, they are slow. If the tests are parallelized, there are
+often failures because the system experiences a too high load.</li>
+  <li class="calibre14">There are rather few integration tests. Such tests require a
+comprehensive knowledge about the system and about automation
+techniques, which testers often lack.</li>
+  <li class="calibre14">There can be in fact more unit tests than presented in the
+schema. However, their quality is often bad since developers
+frequently lack experience in writing unit tests.</li>
+</ul>
+
+
+<figure id="Fig51" class="image">
+  <img src="../images/00053.jpeg" alt="Fig. 51: Test Ice-Cream Cone: Far too common" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 51: Test Ice-Cream Cone: Far too common</figcaption>
+</figure>
+
+
+<p class="calibre3">In addition, unnecessarily complex tests are often used for certain
+error sources. UI tests or manual tests are used to test logic. For
+this purpose, however, unit tests would be sufficient and much
+faster. When testing, developers should try to avoid these problems and
+the ice-cream cone and instead attempt to implement a Test Pyramid.</p>
+
+<p class="calibre3">Besides, the test concept has to be adjusted to the risks of the
+respective software and provide tests for the right properties. For
+example, a project which is predominantly evaluated based on
+performance should have automated load or capacity tests. Functional
+tests might not be so important in this scenario.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-18" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">In which places does the approach in your current project not
+correspond to the Test Pyramid, but to the Test Ice-Cream Cone?</p>
+
+  <ul class="calibre16">
+    <li class="calibre14">Where are manual tests used? Are at least the most important tests
+automated?</li>
+    <li class="calibre14">What is the relationship between UI to integration and unit tests?</li>
+    <li class="calibre14">How is the quality of the different tests?</li>
+    <li class="calibre14">Is test-driven development used? For individual classes or also for
+requirements?</li>
+  </ul>
+
+</aside>
+
+<h5 id="leanpub-auto-continuous-delivery-pipeline" class="calibre15">Continuous Delivery Pipeline</h5>
+
+<p class="calibre3">The Continuous Delivery Pipeline (<a href="part0008.html#Fig11">Fig. 11</a>,
+<a href="part0008.html#section5-1">section 5.1</a>) defines the different
+test phases. Therefore, it is interesting for the testing of the
+Microservices and not as much for the deployment. The unit tests from
+the Test Pyramid are executed in the commit phase. UI tests can be
+part of the acceptance tests or can likewise be run in the commit
+phase. The capacity tests use the complete system 
+and therefore can be regarded as integration tests from the
+Test Pyramid. The explorative tests are the manual tests from the Test
+Pyramid.</p>
+
+<p class="calibre3">Automating tests is even more important for Microservices than in
+other software architectures. The main objective of Microservice-based
+architectures is independent and frequent software
+deployment. This can only be implemented when the quality of
+Microservices is safeguarded by tests. Otherwise the deployment into
+production is too
+risky.</p>
+
+<h3 id="section11-3" class="calibre2">11.3 Mitigate Risks at Deployment</h3>
+
+<p class="calibre3">An important advantage of Microservices is their fast deployment due to
+the small size of the deployable units. Besides Resilience avoids that
+the failure of an individual Microservice causes 
+other Microservices or the entire system to fail. Thereby the risk is
+lower if an error occurs in production in spite of the tests.</p>
+
+<p class="calibre3">However, there are additional reasons why Microservices minimize the
+risk of a deployment:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">It is much faster to correct an error since only one Microservice
+has to be deployed anew. This is by far faster and easier than the
+deployment of a Deployment Monolith.</li>
+  <li class="calibre14">Approaches like Blue/Green Deployment or Canary Releasing
+(<a href="part0016.html#section12-4">section 12.4</a>) further reduce the risk associated
+with deployments. Using these techniques a Microservice that
+contains a bug can be removed from production again with little
+expenditure and time loss. These approaches are easier to implement
+with Microservices since it is less effort to provide the
+required environments for a Microservice than for an entire
+Deployment Monolith.</li>
+  <li class="calibre14">The service can participate in production without doing actual
+work. Although it will get the same requests like the version in
+production, all changes to data which the new service would trigger
+are not actually performed on the data but only compared to the
+modifications from the service in production. This can for example
+be achieved by manipulations to the database driver or the database
+itself. The service can also use a copy of the database. The main
+point is that in this phase the Microservice will not change the
+data in production. In addition, messages which the Microservice
+sends to the outside can be compared with the messages of the
+Microservices in production instead of sending them really to the
+recipients. With this approach the Microservice runs already with
+all special cases of the data in production which even the best test
+cannot all cover. Moreover, such a procedure can provide more
+reliable information in regards to performance, although the writes
+of the data do not occur so that the performance is not entirely
+comparable. Such approaches can hardly be implemented for a
+Deployment Monolith since it is hardly possible to have the entire
+Deployment Monolith run in another instance in production. This
+would require a lot of resources and a very complex configuration
+because the Deployment Monolith can introduce changes to data in numerous locations. Even with Microservices this approach is still
+complex since comprehensive support is necessary in software and
+deployment. Extra code has to be written for calling the old and the
+new version and to compare the changes and outgoing messages of both
+versions. However, this approach is at least feasible.</li>
+  <li class="calibre14">Finally, the service can be closely examined via monitoring in order
+to rapidly recognize and solve problems. This shortens the time
+until a problem is noticed and addressed. The monitoring fulfills to
+a certain degree the function of acceptance criteria of load tests. Code
+which fails in a load test should also create an alarm during
+monitoring in production. Therefore a close coordination between
+monitoring and tests is sensible.</li>
+</ul>
+
+<p class="calibre3">In the end the idea behind these approaches is to reduce the risk
+associated with bringing a Microservice into production instead of
+addressing the risk by tests. When the new version of a Microservice
+cannot change any data, its deployment is practically free of
+risk. This is hardly possible for Deployment Monoliths since the
+deployment process is much more laborious and time consuming, and
+requires more resources. Therefore, the deployment cannot be performed
+fast. Accordingly, the deployment cannot easily be rolled back when
+errors occur.</p>
+
+<p class="calibre3">The approach is also interesting because some risks can hardly be
+eliminated by tests. For example, load and performance tests can be an
+indicator for the behavior of the application in production. However,
+these tests cannot be completely reliable since the amount of data is
+different in production, the user behavior is different and the
+hardware is differently sized. It is not feasible to cover all these
+aspects in one test environment. In addition, there can be errors
+which only occur with data sets from production. They are hard to
+simulate with tests. Monitoring and rapid deployment can in fact be an
+alternative to tests in a Microservices environment. It is important
+to think about which risk can be reduced with which type of measure -
+tests or optimizations of the deployment pipeline.</p>
+
+<h3 id="section11-4" class="calibre2">11.4 Testing the Overall System</h3>
+
+<p class="calibre3">In addition to the tests of the individual Microservices also the
+overall system has to be tested. So there are multiple Test Pyramids: one
+for each individual Microservice and one for the system in its
+entirety. For the complete system there are integration tests of the
+Microservices, UI tests of the entire application and manual
+tests. Unit tests at this level are the tests of the Microservices
+since they are the units of the overall system. These tests consist of a
+complete Test Pyramid of the individual Microservices.</p>
+
+
+<figure id="Fig52" class="image">
+  <img src="../images/00054.jpeg" alt="Fig. 52: Test Pyramid for Microservices" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 52: Test Pyramid for Microservices</figcaption>
+</figure>
+
+
+<p class="calibre3">The tests of the overall system are responsible for identifying
+problems which occur in the interplay of the different
+Microservices. Microservices are distributed systems. Calls can
+require the interplay of multiple Microservices to return a result to
+the user. This is a challenge for testing: Distributed systems have
+many more sources of errors. Tests of the overall system have to
+address these risks. However, when testing Microservices another
+approach is chosen: Due to Resilience the individual Microservices
+should still work in case of problems with other
+Microservices. Functional tests can be performed with Stubs or Mocks
+of the other Microservices. In this way Microservices can be tested
+without the need to build up a complex distributed system and examine
+it in regards to all possible error scenarios.</p>
+
+<h5 id="leanpub-auto-shared-integration-tests" class="calibre15">Shared Integration Tests</h5>
+
+<p class="calibre3">Still each Microservice should be tested prior to its deployment in
+production in regards to its integration with the other
+Microservices. This necessitates changes to the Continuous Delivery
+Pipeline as it was described <a href="part0008.html#section5-1">section 5.1</a>: At the end of the deployment
+pipeline each Microservice should be tested together with the other
+Microservices. Each Microservice should run through this step
+on its own. When new versions of multiple Microservices are tested
+together at this step, it will not be clear which Microservice might
+have caused the failure of the test. Only if in case of a failure it
+is still clear which Microservice triggered it, is it possible to test
+multiple Microservices together at this step. But in practice such
+optimizations are hardly feasible.</p>
+
+
+<figure id="Fig53" class="image">
+  <img src="../images/00055.jpeg" alt="Fig. 53: Integration tests at the end of the Continuous Delivery Pipelines" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 53: Integration tests at the end of the Continuous Delivery Pipelines</figcaption>
+</figure>
+
+
+<p class="calibre3">This reasoning leads to the procedure depicted in <a href="part0015.html#Fig53">Fig. 53</a>:
+The Continuous Delivery Pipelines of the Microservices end in a common
+integration test into which each Microservice has to enter
+separately. When a Microservice is in the integration test phase, the
+other Microservices have to wait until the integration test is
+completed. To ensure that indeed only one Microservice at at time runs
+through the integration tests the tests can be performed in an extra
+environment. In that case only one Microservice may be delivered in a
+new version in this environment at a given point in time. The environment
+enforces the serialized processing of the integration tests of the
+Microservices.</p>
+
+<p class="calibre3">Such a synchronization point slows down the deployment and therefore
+the entire process. If the integration test lasts for example one
+hour, it will only be possible to put eight Microservices through the
+integration test and into production per eight hours work day. If
+there are eight teams in the project, each team will be able to deploy
+a Microservice exactly once per day. This is not sufficient to
+achieve a rapid error correction in production. Besides, this weakens
+an essential advantage of Microservices: It should be
+possible to deploy each Microservice independently. Even though this
+is in principle still possible, the deployment takes too
+long. Moreover, the Microservices have now dependencies to each
+other due to the integration tests – not at the code level, but in the
+deployment pipelines. In addition, things are not balanced when the
+Continuous Delivery without the last integration test requires for
+instance only one hour, but it is still not possible to get more than
+one release into production per day.</p>
+
+<h5 id="leanpub-auto-avoiding-integration-tests-of-the-overall-system" class="calibre15">Avoiding Integration Tests of the Overall System</h5>
+
+<p class="calibre3">This problem can be solved by the Test Pyramid. It moves the focus
+from integration tests of the overall system to integration tests of
+the individual Microservices and unit tests. When there are few
+integration tests of the overall system, they will not take as much
+time. In addition, less synchronization is necessary, and the
+deployment in production is faster. The integration tests are only
+meant to test the interplay between Microservices. It is sufficient
+when each Microservices can reach all dependent
+Microservices. All other risks can be taken care of prior to this last
+test. With consumer-driven contract tests
+(<a href="part0015.html#section11-7">section 11.7</a>) it is even possible to exclude errors
+in the communication between the Microservices without having to test
+the Microservices together. All these measure help to reduce the
+number of integration tests and thereby their total duration. In the
+end there is no reduction in overall testing – the testing is just
+moved to other phases: to the tests of the individual
+Microservices and to the unit tests.</p>
+
+<p class="calibre3">The tests for the overall system can be developed by all teams
+together. Consistently, they form part of the macro
+architecture because they concern the system as such and therefore
+cannot be the responsibility of an individual team (compare
+<a href="part0017.html#section13-3">section 13.3</a>).</p>
+
+<p class="calibre3">The complete system can also be tested manually. However, it is not
+feasible that each new version of a Microservice only goes into
+production after a manual test with the other
+Microservices. The delays will just be too large. Manual tests of the
+system as such can for example address features which are not yet
+activated in production. Alternatively, certain aspects like security
+can be tested in this manner if problems occurred in these areas
+previously.</p>
+
+<h3 id="section11-5" class="calibre2">11.5 Testing Legacy Applications and Microservices</h3>
+
+<p class="calibre3">Microservices are often used to replace legacy applications. The
+legacy applications are usually Deployment Monoliths. Therefore the
+Continuous Delivery Pipeline of the legacy application tests many
+functionalities which have to be split into Microservices. Because of
+the many functionalities the test steps of the Continuous Delivery
+Pipeline take very long for Deployment Monoliths. Accordingly, the
+deployment in production is very complex and takes long. Under such
+conditions it is unrealistic that each small code change to the legacy
+application goes into production. Often there are deployments at the
+end of a sprint of 14 days or even only one release per
+quarter. Nightly tests inspect the current state of the system. Tests
+can be transferred from the Continuous Delivery Pipeline into the
+nightly tests. In that case the Continuous Delivery Pipeline will be
+faster but certain errors are only recognized during the night-time
+testing. Then the question arises which of the changes of the past day
+is responsible for the error.</p>
+
+<h5 id="leanpub-auto-relocating-tests-of-the-legacy-application" class="calibre15">Relocating Tests of the Legacy Application</h5>
+
+<p class="calibre3">When migrating from a legacy application to Microservices, tests are
+especially important. If just the tests of the legacy application are
+used, they will test a number of functionalities which meanwhile
+have been moved to Microservices. In that case these tests have to be
+run at each release of a Microservice – which takes much too long. The
+tests have to be relocated. They can turn into integration tests for
+the Microservices (<a href="part0015.html#Fig54">Fig. 54</a>). However, the integration tests of the
+Microservices should run rapidly. In this phase it is not necessary to
+use tests for functionalities, which reside in a single Microservice. Then
+the tests of the legacy application have to turn into integration
+tests of the individual Microservices or even into unit tests. In that
+case they are much faster. And they run as tests for a single Microservice so
+that they do not slow down the shared tests of the Microservices.</p>
+
+<p class="calibre3">Not only the legacy application has to be migrated, but also the
+tests. Otherwise fast deployments will not be possible in spite of the
+migration of the legacy application.</p>
+
+<p class="calibre3">The tests for the functionalities which have been transferred to
+Microservices can be removed from the tests of the legacy
+application. Step by step this will speed up the deployment of the
+legacy application. Consequently, changes to the legacy application
+will also get increasingly easier.</p>
+
+
+<figure id="Fig54" class="image">
+  <img src="../images/00056.jpeg" alt="Fig. 54: Relocating tests of legacy applications" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 54: Relocating tests of legacy applications</figcaption>
+</figure>
+
+
+<h5 id="leanpub-auto-integration-test-legacy-application-and-microservices" class="calibre15">Integration Test: Legacy Application and Microservices</h5>
+
+<p class="calibre3">The legacy application also has to be tested together with the
+Microservices. The Microservices have to be tested together with the
+version of the legacy production which is in production. This ensures
+that the Microservices will also work in production together with the
+legacy application. For this purpose, the version of the legacy
+application running in production can be integrated into the
+integration tests of the Microservices. It is the responsibility of
+each Microservice to pass the tests without any errors with this
+version (<a href="part0015.html#Fig55">Fig. 55</a>).</p>
+
+
+<figure id="Fig55" class="image">
+  <img src="../images/00057.jpeg" alt="Fig. 55: Legacy Application in the Continuous Delivery Pipelines" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 55: Legacy Application in the Continuous Delivery Pipelines</figcaption>
+</figure>
+
+
+<p class="calibre3">When the deployment cycles of the legacy application last days or
+weeks, a new version of the legacy application will be in development
+in parallel. The Microservices also have to be tested with this
+version. This ensures that there will not suddenly be errors occurring
+upon the release of the new legacy application. The version of the
+legacy application which is currently in development runs an
+integration test with the current Microservices as part of its own
+deployment pipeline (<a href="part0015.html#Fig56">Fig. 56</a>). For this the versions of the
+Microservices which are in production have to be used.</p>
+
+<p class="calibre3">The versions of the Microservices change much more frequently than the
+version of the legacy application. A new version of a Microservice can
+break the Continuous Delivery Pipeline of the legacy application. The
+team of the legacy application cannot solve these problems since it
+does not know the code of the Microservices. This version of the Microservice
+is possibly already in production though. In that case a new version
+of the Microservice has to be delivered to eliminate the error –
+although the Continuous Delivery Pipeline of the Microservice ran
+through successfully.</p>
+
+
+<figure id="Fig56" class="image">
+  <img src="../images/00058.jpeg" alt="Fig. 56: Microservices in the Continuous Delivery Pipeline of the legacy application" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 56: Microservices in the Continuous Delivery Pipeline of the legacy application</figcaption>
+</figure>
+
+
+<p class="calibre3">An alternative would be to send the Microservices also through an
+integration test with the version of the legacy application which is
+currently in development. However, this prolongs the overarching
+integration test of the Microservices and therefore renders the
+development of the Microservices more complex.</p>
+
+<p class="calibre3">The problem can be addressed by consumer-driven contract tests
+(<a href="part0015.html#section11-7">section 11.7</a>). The expectations of the legacy
+application to the Microservices and of the Microservices to the
+legacy application can be defined by consumer-driven contract tests so
+that the integration tests can be reduced to a minimum.</p>
+
+<p class="calibre3">In addition, the legacy application can be tested together with a Stub
+of the Microservices. These tests are no integration tests since they
+only test the legacy application. This allows to reduce the number of
+overarching integration tests. This concept is illustrated in
+<a href="part0015.html#section11-6">section 11.6</a> using tests of Microservices as example. However, this
+means that the tests of the legacy application have to be adjusted.</p>
+
+<h3 id="section11-6" class="calibre2">11.6 Testing Individual Microservices</h3>
+
+<p class="calibre3">Tests of the individual Microservices are the duty of the 
+team which is responsible for the respective Microservice. The team has to
+implement the different tests such as unit tests, load tests and
+acceptance tests as part of their own Continuous Delivery Pipeline –
+as would also be the case for systems which are no Microservices.</p>
+
+<p class="calibre3">However, Microservices require for some functionalities access to
+other Microservices. This poses a challenge for the tests: It is not
+sensible to provide a complete environment with all Microservices for
+each test of each Microservice. On the one hand this would use up too
+many resources. On the other hand, it is difficult to supply all these
+environments with the up-to-date software. Technically, light-weight
+virtualization approaches like Docker can at least reduce the
+expenditure in terms of resources. However, for 50 or 100
+Microservices also this approach will not be sufficient anymore.</p>
+
+<h5 id="leanpub-auto-reference-environment" class="calibre15">Reference Environment</h5>
+
+<p class="calibre3">A reference environment in which the Microservices are available
+in their current version is one possible solution. The tests of the
+different Microservices can use the Microservices from this
+environment. However, errors can occur when multiple teams test
+different Microservices in parallel with the Microservices
+from the reference environment. The tests can influence
+each other and thereby create errors. Besides the reference
+environment has to be available. When a part of the reference
+environment breaks down due to a test, in extreme cases tests might be
+impossible for all teams. The Microservices have to be hold available
+in the reference environment in their current version. This generates
+additional expenditure. Therefore a reference environment is not a
+good solution for the isolated testing of Microservices.</p>
+
+<h5 id="leanpub-auto-stubs" class="calibre15">Stubs</h5>
+
+<p class="calibre3">Another possibility is the simulation of the used Microservice. For
+the simulation of parts of a system for testing there are two
+different options as <a href="part0015.html#section11-2">section 11.2</a> presented, namely Stubs and
+Mocks. Stubs are the better choice for the replacement of
+Microservices. They can support different test scenarios. The
+implementation of a single Stubs can support the development of all
+dependent Microservices.</p>
+
+<p class="calibre3">If Stubs are used, the teams have to deliver Stubs for their
+Microservices. This ensures that the Microservices and the Stubs
+really behave largely identically. When consumer-driven contract tests
+also validate the Stubs (compare <a href="part0015.html#section11-7">section 11.7</a>), the
+correct simulation of the Microservices by the Stubs is ensured.</p>
+
+<p class="calibre3">The Stubs should be implemented with a uniform technology. All teams
+which use a Microservice also have to use stubs for
+testing. Handling the stubs is facilitated by a uniform
+technology. Otherwise a team which employs several Microservices has
+to master a plethora of technologies for the tests.</p>
+
+<p class="calibre3">Stubs could be implemented with the same technology as the
+associated Microservices. However, the Stubs should use less resources
+than the Microservices. Therefore, it is better when the Stubs utilize
+a simpler technology stack. The example in
+<a href="part0019.html#section14-13">section 14.13</a> uses for the Stubs the same technology
+as the associated Microservices. However, the Stubs deliver only
+constant values and run in the same process as the Microservices
+which employ the Stub. Thereby the Stubs use up less resources.</p>
+
+<p class="calibre3">There are technologies which specialize on implementing Stubs. Tools
+for client-driven contract tests can often also generate Stubs
+(compare <a href="part0015.html#section11-7">section 11.7</a>).</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<a href="http://www.mbtest.org/">mountebank</a> is written in JavaScript with
+Node.js. It can provide Stubs for TCP, HTTP, HTTPS and SMTP. New
+Stubs can be generated at run time. The definition of the Stubs is
+stored in a JSON file. It defines under which conditions which
+responses are supposed to be returned by the Stub. An extension with
+JavaScript is likewise possible. mountebank can also serve as
+proxy. In that case it forwards requests to a service –
+alternatively, only the first request is forwarded and the response
+is recorded. All subsequent requests will be answered by mountebank
+with the recorded response. In addition to Stubs mountebank also
+supports Mocks.</li>
+  <li class="calibre14">
+<a href="http://wiremock.org/">WireMock</a> is written in Java and is under
+Apache 2 license. This framework makes it very easy to return
+certain data for certain requests. The behavior is determined by
+Java code. WireMock supports HTTP and HTTPS. The Stub can run in an
+separate process, in a servlet container or directly in a JUnit test.</li>
+  <li class="calibre14">
+<a href="https://github.com/dreamhead/moco">Moco</a> is likewise written in
+Java and is under the MIT license. The behavior of the Stubs can be
+expressed with Java code or with a JSON file. It supports HTTP,
+HTTPS and simple socket protocols. The Stubs can be started in a
+Java program or in an independent server.</li>
+  <li class="calibre14">
+<a href="https://github.com/azagniotov/stubby4j">stubby4j</a> is written in
+Java and under MIT license. It utilizes a YAML file for defining the
+behavior of the Stub. HTTPS is supported as protocol in addition to
+HTTP. The definition of the data takes place in YAML or JSON. It is
+also possible to start an interaction with a server or to program
+the behavior of Stubs with Java. Out of the request information can
+be copied into the response.</li>
+</ul>
+
+<h5 id="leanpub-auto-try-and-experiment-19" class="calibre15">Try and Experiment</h5>
+
+<p class="calibre3">Use the example presented in <a href="part0019.html#chapter-14">chapter 14</a> and supplement
+Stubs with a Stub framework of your choice. The example application
+uses the configuration file <strong class="calibre19">application-test.properties</strong>. In this
+configuration it is defined which Stub is used for the tests.</p>
+
+<h3 id="section11-7" class="calibre2">11.7 Consumer-driven Contract Tests</h3>
+
+<p class="calibre3">Each interface of a component is ultimately a contract: The caller
+expects that certain side effects are triggered or that values are
+returned when it uses the interface. The contract is usually not
+formally defined. When a Microservice violates the expectations, this
+manifests itself as error which is either noticed in production or in
+integration tests. When the contract can be made explicit and tested
+independently, the integration tests can be freed from the obligation
+to test the contract without incurring a larger risk for errors during
+production. Besides, then it would get easier to modify the
+Microservices because it would be easier to anticipate which changes
+cause problems with using other Microservices.</p>
+
+<p class="calibre3">Often changes to system components are not performed because it is
+unclear which other components use that specific component and how
+they us it. There is a risk of errors during the interplay with other
+Microservices, and there are fears that the error will be noticed too
+late. When it is clear how a Microservice is used, changes are much
+easier to perform and to safeguard.</p>
+
+<h5 id="leanpub-auto-components-of-the-contract" class="calibre15">Components of the Contract</h5>
+
+<p class="calibre3">These aspects belong to the
+<a href="http://martinfowler.com/articles/consumerDrivenContracts.html">contract</a>
+of a Microservice:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The data formats define in which format information is expected
+by the other Microservices and how they are passed over to a
+Microservice.</li>
+  <li class="calibre14">The interface determines which operations are available.</li>
+  <li class="calibre14">Procedures or protocols define which operations can be performed in
+which sequence with which results.</li>
+  <li class="calibre14">Finally, there is meta information associated with the calls which
+can comprise for example a user authentication.</li>
+  <li class="calibre14">In addition, there can be certain non-functional aspects like the
+latency time or a certain throughput.</li>
+</ul>
+
+<h5 id="leanpub-auto-contracts" class="calibre15">Contracts</h5>
+
+<p class="calibre3">There are different contracts between the consumers and the provider
+of a service:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The <strong class="calibre19">Provider Contract</strong> comprises everything the service provider
+provides. There is one such contract per service provider. It completely
+defines the entire service. It can for instance change
+with the version of the service (compare <a href="part0013.html#section9-6">section 9.6</a>).</li>
+  <li class="calibre14">The <strong class="calibre19">Consumer Contract</strong> comprises all functionalities which a service
+user really utilizes. There are several such contracts per service –
+at least one with each user. The contract comprises only the parts
+of the service which the user really employs. It can change through
+modifications to the service consumer.</li>
+  <li class="calibre14">The <strong class="calibre19">Consumer-driven Contract</strong> (CDC) comprises all user
+contracts. Therefore, it contains all functionalities which any
+service consumer utilizes. There is only one such contract per
+service. Since it depends on the user contracts, it can change when
+the service consumers add new calls to the service provider or when there
+are new requirements for the calls.</li>
+</ul>
+
+
+<figure id="Fig57" class="image">
+  <img src="../images/00059.jpeg" alt="Fig. 57: Differences between Consumer and Provider Contracts" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 57: Differences between Consumer and Provider Contracts</figcaption>
+</figure>
+
+
+<p class="calibre3">The Consumer-driven Contract makes clear which which components of the
+provider contracts are really used. This clarifies also where the
+Microservice can still change its interface and which components of
+the Microservice are not used.</p>
+
+<h5 id="leanpub-auto-implementation-1" class="calibre15">Implementation</h5>
+
+<p class="calibre3">Ideally, a Consumer-driven Contract turns into a consumer-driven
+contract test which the service provider can perform. It has to be
+possible for the service consumer to change these tests. They can be
+stored together in the version control with the Microservice of the
+service provider. In that case the service consumers have to get access to
+the version control of the service provider. Otherwise the tests can
+also be stored in the version control of the service consumers. In that
+case the service provider has to fetch the tests out of the version
+control and execute them with each version of the software. However,
+in that case it is not possible to version the tests together with the
+tested software since tests and tested software are in two separate
+projects within the version control.</p>
+
+<p class="calibre3">The entirety of all tests represents the Consumer-driven Contract. The
+tests of each team correspond to the Consumer Contract of each
+team. The consumer-driven contract tests can be performed as part of
+the tests of the Microservice. If they are successful, all service
+consumers should be able to successfully work together with the
+Microservice. The test precludes that errors will only be noticed
+during the integration test. Besides, modifications to the
+Microservices get easier because requirements for the interfaces are
+known and can be tested without special expenditure. Therefore, the
+risk associated with changes which affect the interface is much
+smaller since problems will be noticed prior to integration tests and
+production.</p>
+
+<h5 id="leanpub-auto-tools-1" class="calibre15">Tools</h5>
+
+<p class="calibre3">To write consumer-driven contract tests a technology has to be
+defined. The technology should be uniform for all projects because a
+Microservice can use several other Microservices. In that case a team
+has to write tests for different other Microservices. This is easier
+when there is a uniform technology. Otherwise the teams have to know
+numerous different technologies. The technology for the tests can
+differ from the technology used for implementation.</p>
+
+<ul class="calibre16">
+  <li class="calibre14">An <strong class="calibre19">arbitrary test framework</strong> is an option for implementing the
+consumer-driven contract tests. For load tests additional tools can
+be defined. In addition to the functional requirements there can
+also be requirements in regards to the load behavior. However, it
+has to be clearly defined how the Microservice is provided for the
+test. For example, it can be available at a certain port on the
+test machine. In this way the test can take place via the interface
+which is also used for access by other Microservices.</li>
+  <li class="calibre14">In the example application (<a href="part0019.html#section14-13">section 14.13</a>) simple
+<strong class="calibre19">JUnit</strong> tests are used for testing the Microservice and for verifying
+whether the required functionalities are supported. When
+incompatible changes to data formats are performed or the interface
+is modified in a incompatible manner, the tests fail.</li>
+  <li class="calibre14">There are tools especially designed for the implementation of
+consumer-driven contract tests. An example is
+<a href="http://thoughtworks.github.io/pacto/"><strong class="calibre19">Pacto</strong></a>. It is written in
+Ruby and under the MIT licence. Pacto supports REST/HTTP and
+supplements such interfaces with a contract. Pacto can be integrated
+into a test structure. In that case Pacto compares the header with
+expected values and the JSON data structures in the body with JSON
+schemas. This information represents the contract. The contract can
+also be generated out of a recorded interaction between a client and
+a server. Based on the contract Pacto can validate the calls and
+responses of a system. In addition, Pacto can create with this
+information simple Stubs. Moreover, Pacto can be used in conjunction
+with RSpec to write tests in Ruby. Also test systems which are
+written in other languages than Ruby can be tested in this
+way. Without RSpec Pacto offers the possibility to run a
+server. Thereby it is possible to use Pacto also outside of a Ruby
+system.</li>
+  <li class="calibre14">
+<a href="https://github.com/realestate-com-au/pact"><strong class="calibre19">Pact</strong></a> is likewise
+written in Ruby and under MIT licence. The service consumer can
+employ Pact to write a Stub for the service and to record the
+interaction with the Stub. This results in a Pact file which
+represents the contract. It can also be used for testing whether the
+actual service correctly implements the contract. Pact is especially
+useful for Ruby, however
+<a href="https://github.com/DiUS/pact-jvm"><strong class="calibre19">pact-jvm</strong></a> supports a similar
+approach for different JVM languages like Scala, Java, Groovy or
+Clojure.</li>
+</ul>
+
+<h5 id="leanpub-auto-try-and-experiment-20" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">Use the example presented in <a href="part0019.html#chapter-14">chapter 14</a> and supplement
+consumer-driven contracts with a framework of your choice. The example
+application has the configuration <strong class="calibre19">application-test.properties</strong>. In
+this configuration it is defined which Stub is used for the
+tests. Verify also the contracts in the production environment.</p>
+
+</aside>
+
+<h3 id="section11-8" class="calibre2">11.8 Testing Technical Standards</h3>
+
+<p class="calibre3">Microservices have to fulfill certain technical requirements. For
+example, Microservices should register themselves in Service Discovery
+and keep functioning even if other Microservices break down. Tests can
+verify these properties. This entails a number of advantages:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The guidelines are unambiguously defined by the test. Therefore,
+there is no discussion how precisely the guidelines are meant.</li>
+  <li class="calibre14">They can be tested in an automated fashion. Thereby it is clear at
+any time whether a Microservice fulfills the rules or not.</li>
+  <li class="calibre14">New teams can test new components as to whether they comply with the
+rules or not.</li>
+  <li class="calibre14">When Microservices do not employ the usual technology stack, it can
+still be ensured that they behave correctly from a technical point
+of view.
+    <p class="calibre3">Among the possible tests are:</p>
+  </li>
+  <li class="calibre14">The Microservices have to register in the Service Discovery
+(<a href="part0012.html#section8-9">section 8.9</a>). The test can verify whether the
+component registers at service registry upon starting.</li>
+  <li class="calibre14">Besides, the shared mechanisms for configuration and coordination
+have to be used (<a href="part0012.html#section8-8">section 8.8</a>). The test can control
+whether certain values from the central configuration are read
+out. For this purpose, an individual test interface can be implemented.</li>
+  <li class="calibre14">A shared security infrastructure can be checked by testing the use
+of the Microservice via a certain token (<a href="part0012.html#section8-12">section 8.12</a>).</li>
+  <li class="calibre14">In regards to documentation and metadata
+(<a href="part0012.html#section8-13">section 8.13</a>) it can be tested whether a test can
+access the documentation via the defined path.</li>
+  <li class="calibre14">In regards to monitoring (<a href="part0016.html#section12-3">section 12.3</a>) and logging
+(<a href="part0016.html#section12-2">section 12.2</a>) it can be examined whether the
+Microservice provides data to the monitoring interfaces upon starting and
+delivers values resp. log entries.</li>
+  <li class="calibre14">In regards to deployment (<a href="part0016.html#section12-4">section 12.4</a>) it is
+sufficient to deploy and start the Microservice on a server. When
+the defined standard is used for this, this aspect is likewise
+correctly implemented.</li>
+  <li class="calibre14">As test for control (<a href="part0016.html#section12-5">section 12.5</a>) the Microservice
+can simply be restarted.</li>
+  <li class="calibre14">To test for Resilience (<a href="part0014.html#section10-5">section 10.5</a>) in the
+simplest scenario it can be checked whether the Microservice at
+least boots also in absence of the dependent Microservices and
+displays errors in monitoring. The correct functioning of the
+Microservice upon availability of the other Microservices is ensured
+by the functional tests. However, a scenario where the Microservice
+cannot reach any other service is not addressed in normal tests.</li>
+</ul>
+
+<p class="calibre3">In the easiest case the technical test can just start and deploy the
+Microservice. Thereby deployment and control are already
+tested. Dependent Microservices do not have to be present for
+that. Starting the Microservice should also be possible without
+dependent Microservices due to Resilience. Subsequently, logging and
+monitoring can be examined which should also work and contain errors
+in this situation. Finally, the integration in the shared technical
+services like Service Discovery, configuration and coordination or
+security can be checked.</p>
+
+<p class="calibre3">Such a test is not hard to write and can render many discussions about
+the precise interpretation of the guidelines superfluous. Therefore,
+this test is very useful. Besides, it tests scenarios which are
+usually not covered by automated tests – for instance the breakdown of
+dependent systems.</p>
+
+<p class="calibre3">This test does not necessarily provide complete security that the
+Microservice complies with all rules. However, it can at least examine
+whether the fundamental mechanisms function.</p>
+
+<p class="calibre3">Technical standards can easily be tested with scripts. The scripts
+should install the Microservice in the defined manner on a virtual
+machine and start it. Afterwards the behavior, for instance in regards
+to logging and monitoring, can be tested. Since technical standards
+are specific for each project, a uniform approach is hardly
+possible. Under certain conditions a tool like
+<a href="http://serverspec.org/">Serverspec</a> can be useful. It serves to
+examine the state of a server. Therefore, it can easily determine
+whether a certain port is used or whether a certain service is active.</p>
+
+<h3 id="section11-9" class="calibre2">11.9 Conclusion</h3>
+
+<p class="calibre3">Reasons for testing are on the one hand the risk that problems are
+only noticed in production and on the other hand that tests serve as
+an exact specification of the system (<a href="part0015.html#section11-1">section 11.1</a>).</p>
+
+<p class="calibre3"><a href="part0015.html#section11-2">Section 11.2</a> illustrated by using the concept of the
+Test Pyramid how tests should be structured: The focus should be on
+fast, easily automatable unit tests. They address the risk that there
+are errors in the logic. Integration tests and UI tests then only
+ensure the integration of the Microservices with each other and the
+correct integration of the Microservices into the UI.</p>
+
+<p class="calibre3">As <a href="part0015.html#section11-3">section 11.3</a> showed, Microservices can additionally
+deal with the risk of errors in production in a different manner:
+Microservice deployments are faster, they influence only a small part
+of the system, and Microservices can even run blindly in
+production. Thereby the risk of deployment decreases. Thus it can be
+sensible instead of comprehensive tests to rather optimize the
+deployment in production to such an extent that it is for all practical
+purposes free of risk. In addition, the section discussed that there
+are two types of Test Pyramids for Microservice-based systems: one per
+Microservice and one for the overall system.</p>
+
+<p class="calibre3">Testing the overall system entails the problem that each change to a
+Microservice necessitates a run through this test. Therefore, this
+test can turn into a bottleneck and should be very fast. Thus, when
+testing Microservices, one objective is to reduce the number of
+integration tests across all Microservices (<a href="part0015.html#section11-4">section 11.4)</a>.</p>
+
+<p class="calibre3">When replacing legacy applications not only their functionality has to
+be transferred into Microservices, but also the tests for the
+functionalities have to be moved into the tests of the Microservices
+(<a href="part0015.html#section11-5">section 11.5</a>). Besides, each modification to a
+Microservice has to be tested in the integration with the version of
+the legacy application used in production. The legacy application
+normally has a much slower release cycle than the
+Microservices. Therefore, the version of the legacy application which
+is at the time in development has to be tested together with the
+Microservices.</p>
+
+<p class="calibre3">For testing individual Microservices the other Microservices have to
+be replaced by Stubs. This allows to uncouple the tests of the
+individual Microservices from each other. <a href="part0015.html#section11-6">Section 11.6</a>
+introduced a number of concrete technologies for creating Stubs.</p>
+
+<p class="calibre3">In <a href="part0015.html#section11-7">section 11.7</a> client-driven contract tests were
+presented. With this approach the contracts between the Microservices
+get explicit. This allows a Microservice to check whether it fulfills
+the requirements of the other Microservices – without the need for an
+integration test. Also for this area a number of tool are available.</p>
+
+<p class="calibre3">Finally, <a href="part0015.html#section11-8">section 11.8</a> demonstrated that technical
+requirements to the Microservices can likewise be tested in an
+automated manner. This allows to unambiguously establish whether a
+Microservice fulfills all technical standards.</p>
+
+<h5 id="leanpub-auto-essential-points-8" class="calibre15">Essential Points</h5>
+
+<ul class="calibre16">
+  <li class="calibre14">Established best practices like the Test Pyramid are also sensible
+for Microservices.</li>
+  <li class="calibre14">Common tests across all Microservices can turn into a bottleneck and
+therefore should be reduced, for example by performing more
+consumer-driven contract tests.</li>
+  <li class="calibre14">With suitable tools Stubs can be created from Microservices.</li>
+</ul>
+
+
+</div>
+</body></html>

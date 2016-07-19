@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title dir="ltr">1 Preface</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body dir="ltr" id="1T140-33594c443d53417aaf8921aacefd13f7" class="calibre">
+<div class="calibre6">
+<h2 id="chapter-1" class="calibre1">1 Preface</h2>
+
+<p class="calibre3">Even though Microservices are a new term, they have haunted me already for a long time. In 2006 Werner Vogels (CTO, Amazon) gave a talk at the JAOO conference presenting the Amazon Cloud and Amazon’s partner model. In his talk he mentioned the CAP theorem, today the basis for NoSQL. In addition he was talking about small teams, which develop and run services with their own databases. This type of organization is nowadays called DevOps, and the architecture is known as Microservices.</p>
+
+<p class="calibre3">Later I was asked to develop a strategy for a client allowing him to integrate modern technologies into his existing application. After a few attempts to integrate the new technologies directly into the Legacy code, we finally built a new application with a completely different modern technology stack alongside the old one. The old and the new application were only coupled via HTML links and via a shared database. Except for the shared database this is in essence a Microservices approach. That happened in 2008.</p>
+
+<p class="calibre3">Already in 2009 another client had divided his complete infrastructure into REST services, which were each developed by individual teams. This is also called Microservices today. Many other companies with a web-based business model had already implemented similar architectures at the time.
+Lately I realized in addition that Continuous Delivery influences the software architecture. Also there Microservices offer many advantages.</p>
+
+<p class="calibre3">This is the reason for writing this book: Microservices constitute an approach a number of people have already been pursuing for a long time, among them many very experienced architects. Like every other approach to architecture Microservices for sure cannot solve every problem, however this concept represents an interesting alternative to existing approaches.</p>
+
+<h3 id="section1-1" class="calibre2">1.1 Overview of Microservice</h3>
+
+<h5 id="leanpub-auto-microservice-preliminary-definition" class="calibre15">Microservice: Preliminary Definition</h5>
+
+<p class="calibre3">The focus of this book are Microservices – an approach for the modularization of software. Modularization in itself is nothing new. For quite some time large systems  have been divided into small modules to facilitate the implementation, understanding and further development of software.</p>
+
+<p class="calibre3">The new aspect is that Microservices use modules, which run as distinct processes. This approach is based on the philosophy of UNIX, which can be reduced to three aspects:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">One program should only fulfill one task, but this it should do really well.</li>
+  <li class="calibre14">Programs should be able to work together.</li>
+  <li class="calibre14">A universal interface should be used. In UNIX this is provided by text streams.</li>
+</ul>
+
+<p class="calibre3">The term Microservice is not firmly defined. <a href="part0007.html#chapter-4">Chapter 4</a> provides a more detailed definition. However, the following criteria can serve as first approximation:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Microservices are a modularization concept. Their purpose is to divide large software systems into smaller parts. Thus they influence the organization and development of software systems.</li>
+  <li class="calibre14">Microservices can be deployed independently of each other. Changes to one Microservice can be taken into production independently of changes to other Microservices.</li>
+  <li class="calibre14">Microservices can be implemented in different technologies. There is no restriction on the programming language or the platform for each Microservice.</li>
+  <li class="calibre14">Microservices possess their own data storage: a private database – or a completely separate schema in a shared database.</li>
+  <li class="calibre14">Microservices can bring their own support services along, for example a search engine or a specific database. Of course, there is a common platform for all Microservices – for example virtual machines.</li>
+  <li class="calibre14">Microservices are self-contained processes – or virtual machines e.g. to bring the supporting services along.</li>
+  <li class="calibre14">Accordingly, Microservices have to communicate via the network. To do so Microservices use protocols, which support loose coupling such as REST or messaging.</li>
+</ul>
+
+<h5 id="leanpub-auto-deployment-monoliths" class="calibre15">Deployment Monoliths</h5>
+
+<p class="calibre3">Microservices are the opposite of Deployment Monoliths. A Deployment Monolith is a large software system, which can only be deployed in one piece. It has to get in its entirety through all phases of the Continuous Delivery pipeline such as deployment, the test stages and release. Due to the size of Deployment Monoliths these processes take longer than for smaller systems. This reduces flexibility and increases process costs. Deployment Monolith can have a modular structure internally – still, all modules have to be brought into production simultaneously.</p>
+
+<h3 id="section1-2" class="calibre2">1.2	Why Microservices</h3>
+
+<p class="calibre3">Microservices allow to divide software into modules and thereby improve the software changeability.</p>
+
+
+<figure id="Fig1" class="image">
+  <img src="../images/00003.jpeg" alt="Fig. 1: Advantages of Microservices" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 1: Advantages of Microservices</figcaption>
+</figure>
+
+
+<p class="calibre3">Microservices offer a number of important advantages:</p>
+
+<h5 id="leanpub-auto-strong-modularization" class="calibre15">Strong Modularization</h5>
+
+<p class="calibre3">Microservices are a strong modularization concept. Whenever a system is built from different software components such as Ruby GEMs, Java JARs, .NET Assemblies or Node.js NPMs, unwished for dependencies can easily creep in. Somebody references a class or function in a place where it is not supposed to be used. After a short while so many dependencies will have accumulated that the system can no longer be serviced or further developed.</p>
+
+<p class="calibre3">Microservices, in contrast, communicate via explicit interfaces, which are realized using mechanisms like messages or REST. Accordingly, the technical hurdles for the use of Microservices are higher. Thus unwanted dependencies can hardly arise. In principle it should be possible to achieve also a high level of modularization in Deployment Monoliths. However, practical experience teaches that the architecture of Deployment Monoliths progressively deteriorates over time.</p>
+
+<h5 id="leanpub-auto-easy-replaceability" class="calibre15">Easy Replaceability</h5>
+
+<p class="calibre3">Microservices can more easily be replaced. Other components utilize a Microservice via an explicit interface. Whenever a service offers the same interface, it can replace the Microservice. The new Microservice does neither need to use a part of the code basis nor the technologies of the old Microservice. Such like restrictions often prevent the modularization of legacy systems.</p>
+
+<p class="calibre3">Small Microservices further facilitate replacements. Such replacements are often neglected during the development of software systems. Who likes to take into consideration how the just built system can be replaced in the future? The easy replaceability of Microservices reduces in addition the costs of incorrect decisions. When the decision for a technology or approach is limited to a Microservice, this Microservice can be completely rewritten if need arises.</p>
+
+<h5 id="leanpub-auto-sustainable-development" class="calibre15">Sustainable Development</h5>
+
+<p class="calibre3">The strong modularization and the easy replaceability allow for sustainable software development. Most of the time working on a new project is quite simple.  Upon longer project run time productivity decreases. One of the reasons is the erosion of architecture. Microservices counteract this erosion due to the strong modularization. Being bound to outdated technologies and the difficulties associated with the removal of old system modules constitute additional problems. Microservices, which are not linked to a specific technology and can by replaced one by one, overcome these problems.</p>
+
+<h5 id="leanpub-auto-further-development-of-legacy-applications" class="calibre15">Further Development of Legacy Applications</h5>
+
+<p class="calibre3">Starting with a Microservices architecture is easy and provides immediate advantages when working with old systems: Instead of having to add to the old and hard to understand code base the system can be enhanced with a Microservice. The Microservice can act on specific requests while leaving all others to the legacy system. It can modify requests prior to their processing by the legacy system. In this manner replacing the complete functionality of the legacy system can be circumvented. In addition, the Microservice is not bound to the technology stack of the legacy system, but can be developed using modern approaches. </p>
+
+<h5 id="leanpub-auto-time-to-market" class="calibre15">Time-to-Market</h5>
+
+<p class="calibre3">Microservices allow for a better time-to-market. As mentioned before, Microservices can be brought into production on a one-by-one basis. If teams working on a large system are responsible for one or several Microservices and if features require only changes to these Microservices, each team can develop and bring features into production without time consuming coordination with other teams. In this manner many teams can work on numerous features in parallel and bring more features into production within a certain time than would have been possible with a Deployment Monolith. Microservices help scaling agile processes to large teams by dividing the large team into small teams each dealing with their own Microservices.</p>
+
+<h5 id="leanpub-auto-independent-scaling" class="calibre15">Independent Scaling</h5>
+
+<p class="calibre3">Each Microservice can be scaled independently of other services. This obliterates the need to scale the whole system when it is only a few functionalities that are used intensely. This will often be a decisive simplification.</p>
+
+<h5 id="leanpub-auto-free-choice-of-technologies" class="calibre15">Free Choice of Technologies</h5>
+
+<p class="calibre3">When developing Microservices there are no restrictions in regards to the usage of technologies. This allows to test a new technology within a single Microservice without affecting other services. Thereby the risk associated with the introduction of new technologies and new versions of already used technologies is decreased as these new technologies are introduced and tested in a confined environment keeping potential costs low. In addition it is possible to use specific technologies for specific functionalities, for example a specific database. The risk is small as the Microservice can easily be replaced or removed. The new technology is confined to one or few Microservices. This reduces the potential risk and enables independent technology decisions for different Microservices. Moreover, it facilitates the decision to try out and evaluate new, highly innovative technologies. This increases the productivity of developers and prevents that the technology platform becomes outdated. In addition, the use of modern technologies will attract qualified developers.</p>
+
+<h5 id="leanpub-auto-continuous-delivery" class="calibre15">Continuous Delivery</h5>
+
+<p class="calibre3">Microservices are advantageous for Continuous Delivery. They are small and can be deployed independently of each other.  Realizing a Continuous Delivery pipeline is simple due to the size of a Microservice. The deployment of a single Microservice is associated with less risk than the deployment of a large monolith. It is also easier to assure the safe deployment of a Microservice, for instance by running different versions in parallel. For many Microservice users Continuous Delivery is the main reason for the introduction of Microservices.</p>
+
+<p class="calibre3">All these reasons argue for the introduction of Microservices. Which of these reasons are the most important will depend on the context. Scaling agile processes and Continuous Delivery are often crucial from a business perspective.  <a href="part0008.html#chapter-5">Chapter 5</a> describes the advantages of Microservices in detail and deals also with prioritization.</p>
+
+<h5 id="leanpub-auto-challenges" class="calibre15">Challenges</h5>
+
+<p class="calibre3">However, there is no light without shadow. Accordingly <a href="part0009.html#chapter-6">Chapter 6</a> will discuss the challenges posed by the introduction of Microservices and how to deal with them. In short, the main challenges are the following:</p>
+
+<h5 id="leanpub-auto-relationships-are-hidden" class="calibre15">Relationships are Hidden.</h5>
+
+<p class="calibre3">The architecture of the system consists of the relationships between the services. However, it is not evident which Microservice calls which other Microservice. This makes working on the architecture challenging.</p>
+
+<h5 id="leanpub-auto-refactoring-is-difficult" class="calibre15">Refactoring is Difficult.</h5>
+
+<p class="calibre3">The strong modularization leads also to disadvantages: Refactorings, which move functionalities between Microservices, are difficult to perform. And, once introduced, it is hard to change the Microservices-based modularization of a system. However, these problems can be lessened by smart approaches.</p>
+
+<h5 id="leanpub-auto-domain-architecture-is-important" class="calibre15">Domain Architecture is Important.</h5>
+
+<p class="calibre3">The modularization into Microservices for the different domains is important as it determines how teams are divided. Problems at this level influence also the organization. Only a solid domain architecture can ensure the independent development of a Microservice. As it is difficult to change the once established modularization, mistakes can be hard to correct later on.</p>
+
+<h5 id="leanpub-auto-running-microservices-is-complex" class="calibre15">Running Microservices is Complex.</h5>
+
+<p class="calibre3">A system comprised of Microservices has many components, which have to be deployed, controlled and run. This increases the complexity for operations and the number of runtime infrastructures used by the system. Microservices necessitate the automatization of operations as operating the platform is otherwise too laborious.</p>
+
+<h5 id="leanpub-auto-distributed-systems-are-complex" class="calibre15">Distributed Systems are Complex.</h5>
+
+<p class="calibre3">The complexity the developers are facing increases: A Microservice-based system is a distributed system. Calls between Microservices can fail due to network problems. Calls via the network are slower and have a smaller bandwidth than calls within a process.</p>
+
+
+</div>
+</body></html>

@@ -1,0 +1,932 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <title dir="ltr">10 Architecture of Individual Microservices</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+  <body dir="ltr" class="calibre">
+<div class="calibre6">
+<h2 id="chapter-10" class="calibre1">10 Architecture of Individual Microservices</h2>
+
+<p class="calibre3">When implementing Microservices a number of points have to be heeded.
+This chapter addresses first the domain architecture of Microservices
+(<a href="part0014.html#section10-1">section 10.1</a>). For implementing a Microservice-based system CQRS
+(<a href="part0014.html#section10-2">section 10.2</a>) can be interesting. This approach
+separates writes to data from reading data. Event Sourcing
+(<a href="part0014.html#section10-3">section 10.3</a>) places events into the center of the
+modeling. The structure of a Microservice can correspond to a
+Hexagonal Architecture (<a href="part0014.html#section10-4">section 10.4</a>) which
+subdivides functionalities into a logic kernel and adaptors.
+<a href="part0014.html#section10-5">Section 10.5</a> focuses on resilience and stability as
+essential requirements for Microservices. Technical possibilities for
+the implementation of Microservices such as Reactive are discussed in
+<a href="part0014.html#section10-6">section 10.6</a>.</p>
+
+<h3 id="section10-1" class="calibre2">10.1 Domain Architecture</h3>
+
+<p class="calibre3">The domain architecture of a Microservice defines how the Microservice
+implements its domain-based functionalities. A Microservice-based
+architecture aims at not predetermining this decision for all
+Microservices. Thereby, the internal structure of Microservices can be
+independently decided. This allows the teams to act largely independently of each other.
+It is for sure sensible to adhere to established rules
+in order to keep the Microservice easy to understand, simple to maintain
+and also replaceable. However, there is no strict need for
+regulations at this level.</p>
+
+<p class="calibre3">This section shows how to identify potential problems with the domain
+architecture of a Microservice. Whether there really is a problem and
+how it can be solved, then has to be answered by the responsible team.</p>
+
+<h5 id="leanpub-auto-cohesion" class="calibre15">Cohesion</h5>
+
+<p class="calibre3">The domain architecture of the overall system influences the domain
+architecture of the individual Microservices. As presented in
+<a href="part0012.html#section8-1">section 8.1</a>, Microservices should be loosely coupled
+to each other. Besides, the Microservices should have a high internal cohesion. A Microservice should have only one responsibility
+in regards to the domain. Consequently, the parts of a Microservice have
+to be loosely coupled, and the Microservice has to have a high
+cohesion. If that is not the case, the Microservice will likely
+have more than one responsibility. If the cohesion within the Microservice is
+not high enough, the Microservice can be split into several
+Microservices. Due to the split the Microservices remain small
+and thus easier to understand, to maintain and to replace.</p>
+
+<h5 id="leanpub-auto-encapsulation" class="calibre15">Encapsulation</h5>
+
+<p class="calibre3">Encapsulation means that a part of the architecture hides
+internal information from the outside – especially all internal data
+structures. Instead, the access is supposed to occur via an interface.
+Thereby the software remains easy to modify: Internal structures can
+be changed without influencing other parts of the system. For this
+reason, Microservices may in no case allow other Microservices access
+to their internal data structures. Otherwise these data structures
+cannot be modified anymore. Besides, in this manner, every
+Microservice needs only to understand the interface of another
+Microservice. This improves the structure and intelligibility of the
+system.</p>
+
+<h5 id="leanpub-auto-domain-driven-design" class="calibre15">Domain-Driven Design</h5>
+
+<p class="calibre3">Domain-driven Design (DDD) is a possibility to internally structure
+Microservices. Each Microservice can have a DDD domain model. The
+necessary patterns from Domain-Driven Design were already introduced
+in <a href="part0007.html#section4-3">section 4.3</a>. Especially when Domain-driven Design
+and Strategic Design define the structure of the overall system
+(<a href="part0012.html#section8-1">section 8.1</a>), the Microservices should also use these
+approaches. During the development of the overall system Strategic
+Design orientates itself to the fact which domain models there are and
+how they are distributed across the Microservices.</p>
+
+<h5 id="leanpub-auto-transactions" class="calibre15">Transactions</h5>
+
+<p class="calibre3">Transactions bundle multiple actions so that they can only be executed
+together or not at all. A transaction can hardly comprise more than
+one Microservice. Only messaging is able to support transactions
+across Microservices (compare <a href="part0013.html#section9-4">section 9.4</a>). The
+domain-based design within a Microservice ensures that each operation
+at the interface corresponds to one transaction. In this way it can
+be avoided that multiple Microservices have to participate in one
+transaction. This would be very hard to implement technically.</p>
+
+<h3 id="section10-2" class="calibre2">10.2 CQRS</h3>
+
+<p class="calibre3">Systems usually save a state. Operations can change data or read
+them. These two types of operations can be separated: Operations that
+change data and therefore have side effects (commands) can be
+distinguished from operations that just read data (queries). An
+operation may not simultaneously change the state and return
+data. This distinction makes the system easier to understand:
+When an operation returns a value, it is a query and does not change
+any values. This entails additional advantages. Queries can for
+example be provided with a cache. If read operations changed also
+data, the addition of a cache would not be so easy since operations
+with side effects still have to be executed in spite of a cache. The
+separation between queries and commands is called CQS (Command Query
+Separation). This principle is not limited to Microservices, but
+can be applied in general. For example, classes in an object-oriented system
+can divide operations in the same manner.</p>
+
+<h5 id="leanpub-auto-cqrs" class="calibre15">CQRS</h5>
+
+<p class="calibre3"><a href="https://speakerdeck.com/owolf/cqrs-for-great-good-2">CQRS (Command Query Responsibility Segregation)</a>
+is more drastic than CQS and completely separates the processing of
+queries and commands.</p>
+
+
+<figure id="Fig45" class="image">
+  <img src="../images/00047.jpeg" alt="Fig. 45: Overview of CQRS" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 45: Overview of CQRS</figcaption>
+</figure>
+
+
+<p class="calibre3"><a href="part0014.html#Fig45">Fig. 45</a> shows the structure of a CQRS system. Each command
+is stored in the Command Store. In addition, there can be Command
+Handlers. The Command Handler in the example uses the commands for
+storing the current state of the data in a database. A Query Handler
+uses this database to process queries. The database can be adjusted to
+the needs of the Query Handler. For example, a database for the
+analysis of order processes can look completely different from a
+database which customers use for displaying their own order
+processes. Entirely different technologies can be employed for the
+query database. It is for instance possible to use an In-Memory-Cache
+which loses the data in case of a server failure. The information
+persistency is ensured by the Command Store. In an emergency the
+content of the cache can be reconstructed by the Command Store.</p>
+
+<h5 id="leanpub-auto-microservices-and-cqrs" class="calibre15">Microservices and CQRS</h5>
+
+<p class="calibre3">CQRS can be implemented with Microservices:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The communication infrastructure can implement the Command Queue
+when a messaging solution is used. In case of approaches like REST a
+Microservice has to forward the commands to all interested Command
+Handlers and implement the Command Queue that way.</li>
+  <li class="calibre14">Each Command Handler can be a separate Microservice. It can handle
+the commands with its own logic. Thereby logic can very easily be
+distributed to multiple Microservices.</li>
+  <li class="calibre14">Likewise, a Query Handler can be a separate Microservice. The changes to
+the data which the Query Handler uses can be introduced by a
+Command Handler in the same Microservice. However, the Command
+Handler can also be a separate Microservice. In that case the Query
+Handler has to offer a suitable interface for accessing the database
+so that the Command Handler can change the data.</li>
+</ul>
+
+<h5 id="leanpub-auto-advantages-3" class="calibre15">Advantages</h5>
+
+<p class="calibre3">CQRS has a number of advantages especially in the interplay with
+Microservices:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Reading and writing of data can be separated into individual
+Microservices. This allows for even smaller Microservices. When the
+writing and reading is that complex that a single Microservice for
+both would get too large and too hard to understand, a split might
+be very sensible.</li>
+  <li class="calibre14">Likewise, another model can be used for writing and
+reading. Microservices can each represent a <em class="calibre20">Bounded Context</em> and
+therefore use different data models. For instance, in an E-commerce
+shop a lot of data can be written for an online purchase while
+statistical evaluations read only few data for each purchase. From a
+technical perspective the data can be optimized for reading
+operations via denormalization or via other means for certain
+queries.</li>
+  <li class="calibre14">Writing and reading can be scaled differently by starting different
+numbers of Query Handler Microservices and Command Handler
+Microservices. This supports the fine granular scalability of
+Microservices.</li>
+  <li class="calibre14">The Command Queue facilitates the handling of load peaks during
+writing. The queue buffers the changes which are then processed
+later on. However, in that case a change to the data will not be
+immediately taken into consideration by the queries.</li>
+  <li class="calibre14">It is easy to run different versions of the Command Handlers in
+parallel. This facilitates the deployment of Microservices in new
+versions.</li>
+</ul>
+
+<p class="calibre3">CQRS can serve to make Microservices even smaller, even when
+operations and data are really very closely connected. Each
+Microservice can independently decide for or against CQRS. There are
+different ways to implement an interface which offers operations for
+changing and reading data. CQRS is only one option. Both aspects
+can also be implemented without CQRS in just one Microservice. The
+freedom to be able to use different approaches is one of the main
+advantages of Microservice-based architectures.</p>
+
+<h5 id="leanpub-auto-challenges-3" class="calibre15">Challenges</h5>
+
+<p class="calibre3">CQRS causes also some challenges:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Transactions which comprise read and write operations are hard
+to implement. The respective operations can be implemented in
+different Microservices. In that case it is hardly possible to
+combine the operations into one transaction since transactions
+across Microservices are usually impossible.</li>
+  <li class="calibre14">It is hard to ensure data consistency across different systems. The
+processing of events is asynchronous so that different nodes can
+finish processing at different points in time.</li>
+  <li class="calibre14">The expenditure for development and infrastructure is higher. More system components and more complex communication technologies are required.</li>
+</ul>
+
+<p class="calibre3">It is not sensible to implement each Microservice with CQRS. However,
+the approach represents in many circumstances a good supplement for
+Microservice-based architectures.</p>
+
+<h3 id="section10-3" class="calibre2">10.3 Event Sourcing</h3>
+
+<p class="calibre3"><a href="http://slideshare.net/mploed/event-sourcing-introduction-challenges">Event Sourcing</a>
+has a similar approach like CQRS. However, the events from Event
+Sourcing differ from the commands from CQRS. Commands are specific:
+They exactly define what is to be changed in an object. Events contain
+information about something that has happened. Both approaches can
+also be combined: A command can change data. This will result in
+events to which other components of the system can react.</p>
+
+<p class="calibre3">Instead of the state itself Event Sourcing stores events which have lead to the current state. While the state itself is not saved, it can be reconstructed from the events.</p>
+
+
+<figure id="Fig46" class="image">
+  <img src="../images/00048.jpeg" alt="Fig. 46: Overview of Event Sourcing" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 46: Overview of Event Sourcing</figcaption>
+</figure>
+
+
+<p class="calibre3"><a href="part0014.html#Fig46">Fig. 46</a> gives an overview of Event Sourcing:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The <strong class="calibre19">Event Queue</strong> sends all events to the different
+recipients. It can for instance be implemented with messaging
+middleware.</li>
+  <li class="calibre14">The <strong class="calibre19">Event Store</strong> saves all events. Therefore, it is always possible
+to reconstruct the chain of events and the events themselves.</li>
+  <li class="calibre14">An <strong class="calibre19">Event Handler</strong> reacts to the events. It can contain business
+logic which reacts to events.</li>
+  <li class="calibre14">In such a system it is only the events which are easy to trace.  The
+current state of the system is not easy to follow up on. Therefore, it
+can be sensible to maintain a <strong class="calibre19">Snapshot</strong> which contains the current
+state. At each event or after a certain time the data in the Snapshot
+will be changed in line with the new events. The Snapshot is
+optional. It is also possible to ad hoc reconstruct the state from the
+events.</li>
+</ul>
+
+<p class="calibre3">Events may not be changed afterwards. Erroneous events have to be
+corrected by new events.</p>
+
+<p class="calibre3">Event Sourcing is based on Domain-Driven Design (compare
+<a href="part0007.html#section4-3">section 4.3</a>). Therefore, in line with <em class="calibre20">Ubiquitous
+Language</em>, the events should have names which are also sensible in
+the business context. In some domains an event-based model is
+especially sensible from a domain perspective. For instance, bookings
+to an account can be considered as events. Requirements like auditing
+are very easy to implement with Event Sourcing: Since the booking is
+modeled as an event, it is very easy to trace who has performed which
+booking. In addition, it is relatively easy to reconstruct a
+historical state of the system and old versions of the data. Event
+Sourcing can be a good option from a domain
+perspective. Generally, approaches like Event Sourcing are sensible in
+complex domains which also profit from Domain-driven Design.</p>
+
+<p class="calibre3">Event Sourcing has similar advantages and disadvantages like CQRS, and
+both approaches can easily be combined. Event Sourcing is especially
+sensible when the overall system works with an Event-driven
+Architecture (<a href="part0012.html#section8-6">section 8.6</a>). In that case the
+Microservices anyhow send already events concerning changes of the
+state and it is sensible to use this approach also in the
+Microservices.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-14" class="calibre15">Try and Experiment</h5>
+
+<p class="calibre3">Choose a project you know.</p>
+
+<aside class="exercise">
+    <p class="calibre3">In which places would Event Sourcing be sensible? Why? Would Event
+Sourcing be useable in an isolated manner at some places or would the
+entire system have to be changed to Events?</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">Where could CQRS be helpful? Why?</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">Do the interfaces adhere to the CQR rule? In that case the read and
+write operations would have to be separate in all interfaces.</p>
+
+</aside>
+
+<h3 id="section10-4" class="calibre2">10.4 Hexagonal Architecture</h3>
+
+<p class="calibre3">A
+<a href="http://alistair.cockburn.us/Hexagonal+architecture">Hexagonal Architecture</a>
+focuses on the logic of the application (<a href="part0014.html#Fig47">Fig. 47</a>). The logic
+contains only the business functionalities. It has different
+interfaces which are each represented by an edge of the hexagon. In
+the example these are the interface for the interaction with users and
+the interface for administrators. Users can utilize these interfaces
+via a web interface which is implemented by HTTP adaptors. For tests
+there are special adaptors. They enable the tests to simulate
+users. Finally, there is an adaptor which makes the logic also
+accessible via REST. This allows other Microservices to call the
+logic.</p>
+
+<p class="calibre3">Interfaces do not only take requests from other systems. In addition,
+also other systems are contacted via such interfaces: the database via
+the DB adaptor which in fact uses a database. The alternative is an
+adaptor for test data. Finally, another application can be contacted
+via a REST adaptor. Instead of these adaptors a test system can be
+used which simulates the used system.</p>
+
+
+<figure id="Fig47" class="image">
+  <img src="../images/00049.jpeg" alt="Fig. 47: Overview of Hexagonal Architecture" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 47: Overview of Hexagonal Architecture</figcaption>
+</figure>
+
+
+<p class="calibre3">Another name for Hexagonal Architectures is “Ports and Adaptors”. Each
+facet of the application like user, admin, data or event is a port.
+The adaptors implement the ports based on technologies like REST or
+web user interfaces. Via the ports on the right side of the hexagon
+the application fetches data, while via the ports on the left side its
+functionalities and data for user and other systems are offered.</p>
+
+<p class="calibre3">The Hexagonal Architecture divides a system into a logic kernel and
+adaptors. Only the adaptors enable the communication to the outside.</p>
+
+<h5 id="leanpub-auto-hexagons-or-layers" class="calibre15">Hexagons or Layers?</h5>
+
+<p class="calibre3">A Hexagonal Architecture is an alternative to a layered architecture. In
+a layered architecture there is a layer in which the UI is implemented
+and a layer in which the persistence is implemented. In a Hexagonal
+Architecture there are adaptors which are connected to the logic via
+ports. A Hexagonal Architecture clearly shows that there can be
+more ports than just persistence and UI. Besides the term “adaptor”
+illustrates that the logic and the ports are supposed to be separate
+from the concrete protocols and implementations of the adaptors.</p>
+
+<h5 id="leanpub-auto-hexagonal-architectures-and-microservices" class="calibre15">Hexagonal Architectures and Microservices</h5>
+
+<p class="calibre3">It is very natural for Hexagonal Architectures to offer logic not only
+for other Microservices via a REST interface, but also for users via
+a web UI. Exactly this idea is also the basis of Microservices. They
+are not only supposed to provide logic for other Microservices, but
+should also support the direct interaction of users via a UI.</p>
+
+<p class="calibre3">Since individual test implementations can be implemented for all
+ports, the isolated testing of a Microservice is easier with a
+Hexagonal Architecture. For this purpose, test adaptors just have
+to be used instead of the actual implementation. Especially the
+independent testing of individual Microservices is an important
+prerequisite for the independent implementation and the independent
+deployment of Microservices.</p>
+
+<p class="calibre3">The necessary logic for resilience and stability (compare
+<a href="part0014.html#section10-5">section 10.5</a>) or Load Balancing
+(<a href="part0012.html#section8-10">section 8.10</a>) can also be implemented in the
+adaptor.</p>
+
+<p class="calibre3">It is likewise imaginable to distribute the adaptors and the actual
+logic into individual Microservices. This will result in more
+distributed communication and therefore into an overhead. However, on
+the other hand the implementation of adaptor and kernel can be
+distributed to different teams. For instance, one team which develops
+a mobile client can implement a specific adaptor which is adapted to
+the bandwidth restrictions of mobile applications (compare also
+<a href="part0013.html#section9-1">section 9.1</a>).</p>
+
+<h5 id="leanpub-auto-an-example" class="calibre15">An Example</h5>
+
+<p class="calibre3">A Microservice for orders shall serve as example for a Hexagonal
+Architecture (<a href="part0014.html#Fig48">Fig. 48</a>). The user can utilize the functionalities
+of the Microservice via the web UI to place orders. Likewise there is
+a REST interface with which other Microservices or external clients
+can use the “user functionalities”. The web UI, the REST interface and
+the test adaptor are three adaptors for the “user functionalities” of
+the Microservice. The implementation with three adaptors emphasizes
+that REST and web UI are just two options to use the same
+functionalities. Besides, in this manner Microservices are implemented
+which integrate UI and REST. Technically the adaptors can still be
+implemented in separate Microservices.</p>
+
+
+<figure id="Fig48" class="image">
+  <img src="../images/00050.jpeg" alt="Fig. 48: The order Microservice as an example for Hexagonal Architecture" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 48: The order Microservice as an example for Hexagonal Architecture</figcaption>
+</figure>
+
+
+<p class="calibre3">Another interface are the order events. They announce to the
+Microservice “Delivery” when new orders have arrived so that the
+orders can be delivered. Via this interface the Microservice “Delivery”
+communicates also when an order has been delivered or when delays
+have occurred. In addition, this interface can be served by an adaptor for
+tests. Therefore, the interface to the Microservice “Delivery” does not
+just simply write data, but can also introduce changes to the
+orders. This means that the interface uses other Microservices, but does
+also itself take changes.</p>
+
+<p class="calibre3">The Hexagonal Architecture has a domain-based distribution into an
+interface for user functionalities and an interface for order
+events. Thereby the architecture underlines the domain-based design.</p>
+
+<p class="calibre3">The state of the orders is saved in a database. Also in this case
+there is an interface where test data can be used for tests instead of
+the database. This interface corresponds to the persistence layer of a
+classical architecture.</p>
+
+<p class="calibre3">Finally, there is an interface which via data replication transmits
+the information regarding the order to reporting. There
+statistics can be generated from the orders. Reporting appears
+to be a persistence interface, but is really more: The data are not
+just stored, but changed to enable quick generation of statistics.</p>
+
+<p class="calibre3">As the example shows, a Hexagonal Architecture creates a good
+domain-based distribution into different domain-based interfaces. Each
+domain-based interface and each adaptor can be implemented as
+a separate Microservice. This allows to divide the application into numerous Microservices, if necessary.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-15" class="calibre15">Try and Experiment</h5>
+
+<p class="calibre3">Choose a project you know.</p>
+
+<aside class="exercise">
+    <p class="calibre3">Which individual hexagons would there be?</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">Which ports and adaptors would the hexagons have?</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">Which advantages would a Hexagonal Architecture offer?</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">What would the implementation look like?</p>
+
+</aside>
+
+<h3 id="section10-5" class="calibre2">10.5 Resilience and Stability</h3>
+
+<p class="calibre3">The failure of a Microservice should affect the availability of other
+Microservices as little as possible. As a Microservice-based system is
+a distributed system, the danger of a failure is fundamentally higher:
+Network and servers are unreliable. As Microservices are distributed
+on multiple servers, the number of servers is higher per system and
+therefore also the probability of a failure. When the failure of one
+Microservice can result in the failure of additional Microservices,
+step by step the entire system can break down. This has to be avoided.</p>
+
+<p class="calibre3">For this reason, Microservices have to be shielded from the failure of
+other Microservices. This property is called resilience. The necessary
+measures to achieve resilience have to be part of the
+Microservice. Stability is a broader term which denotes a high
+software availability. “Release It!” <sup id="fnref-ReleaseIt" class="calibre32"><a rel="footnote" href="part0008.html#fn-ReleaseIt">1</a></sup> lists several patterns to this
+topic:</p>
+
+<h5 id="leanpub-auto-timeout" class="calibre15">Timeout</h5>
+
+<p class="calibre3">Timeouts help to detect unavailability when communicating with another
+system. If no response has been returned after the timeout, the system
+is considered unavailable. Unfortunately, many APIs do not have the
+possibility to define timeouts, and some default timeouts are very
+high. At the level of the operating system default TCP timeouts can be
+e.g. five minutes. During this time the Microservice does not respond
+to callers since the service is waiting for the other
+Microservice. Therefore, also this Microservice seems to have
+failed. Besides the request can block a thread during this time. At
+some point all threads are blocked, and the Microservice cannot
+receive any additional requests anymore. Exactly such a domino effect
+has to be avoided. When the API intends a timeout for accessing
+another system or a database, this timeout should be set. An
+alternative option is to let all requests to external systems or
+databases take place in a extra thread and to terminate this thread
+after a timeout.</p>
+
+<h5 id="leanpub-auto-circuit-breaker" class="calibre15">Circuit Breaker</h5>
+
+<p class="calibre3">A Circuit Breaker is a safety measure in an electricity circuit. In
+case of a short circuit the Circuit Breaker interrupts the flow of
+electricity to avoid dangerous consequences like overheating or
+fire. This idea can be applied to software as well: When another
+system is not available anymore or returns only errors, a Circuit
+Breaker prevents calling the system. Calls are anyhow meaningless in
+this scenario.</p>
+
+<p class="calibre3">Normally, the Circuit Breaker is closed, and calls are forwarded to
+the other system. When an error occurs, depending on the error
+frequency the Circuit Breaker will be opened. In that case calls are
+not send on to the other system, but run directly into an error.</p>
+
+<p class="calibre3">This takes load off the other system. Also there is no need for a
+timeout as the error is instantaneous. After some time the Circuit
+Breaker will close again. Incoming calls will now be forwarded again
+to the other system. If the error persists, the Circuit Breaker will
+open again.</p>
+
+<p class="calibre3">The Circuit Breaker can be combined with a timeout. A timeout can open
+the Circuit Breaker. The state of the Circuit Breakers shows
+operations where currently problems in the system are. An open Circuit
+Breaker indicates that a Microservice is not able to communicate with
+another Microservice anymore. Therefore, the state of the Circuit
+Breakers should be displayed in monitoring for operations.</p>
+
+<p class="calibre3">When the Circuit Breaker is open, an error does not necessarily have
+to be generated. It is also possible to just degrade the
+functionality. Let us assume that a Automated Teller Machine (ATM)
+cannot verify whether an account contains enough money for the desired withdrawal,
+because the responsible system is not reachable. Nevertheless, cash
+withdrawals can be permitted up to a certain limit so that customers
+will not be dissatisfied. In addition, the bank will make less profit
+if all cash withdrawals are prohibited as it will not get the
+withdrawal-associated fees. Whether and up to which limit a cash
+withdrawal is still permitted is a business decision. The possible
+damage has to be balanced against the potential for profit. There can
+also be other rules to be applied in case of the failure of
+another system. Calls can for instance be answered from a cache. More
+important than the technical possibilities is the domain-based
+requirement for deciding on the appropriate handling of a system
+failure.</p>
+
+<h5 id="leanpub-auto-bulkhead" class="calibre15">Bulkhead</h5>
+
+<p class="calibre3">A Bulkhead is a special door on a ship which can be closed in a
+watertight manner. It divides the ship into several areas. When water
+gets in, only a part of the ship is affected, and thus the ship will not
+sink.</p>
+
+<p class="calibre3">Similar approaches are applicable to software: The entire system has
+to be divided into individual areas. A breakdown or a problem in one
+area may not affect the other areas. For example, there can be several
+instances of a Microservice for different clients. When a client
+overloads the Microservices, the other clients will not be negatively
+affected. The same is true for resources like database connections or
+threads. When different parts of a Microservice use different pools
+for these resources, one part cannot block the other parts even if it
+uses up all its resources.</p>
+
+<p class="calibre3">In Microservices-based architectures the Microservices themselves form
+separate areas. This is especially the case when each Microservice
+brings its own virtual machine along. Even if the Microservice causes
+the entire virtual machine to crash or overloads it, the other
+Microservices will hardly be affected. They run on different virtual
+machines and are therefore separate.</p>
+
+<h5 id="leanpub-auto-steady-state" class="calibre15">Steady State</h5>
+
+<p class="calibre3">The term Steady State stands for the fact that systems should be built
+in a manner that allows for their permanent operation. This means for
+instance that systems should not store increasing amounts of data. Otherwise the system will have used up its entire capacity at some point and
+therefore breakdown. Log files for example have to be deleted at some
+point. Usually they are anyhow only interesting during a certain time
+interval. Another example is caching: When a cache always keeps growing,
+it will at some point have filled all storage space. Therefore values also have
+to be deleted again from cache at some point to keep the cache from
+permanently growing.</p>
+
+<h5 id="leanpub-auto-fail-fast" class="calibre15">Fail Fast</h5>
+
+<p class="calibre3">Timeouts are only necessary because another system requires a long
+time to respond. The idea behind Fail Fast is to address the problem
+from the other side: Each system is supposed to recognize errors as
+fast as possible and to indicate them immediately. When a call
+requires a certain service and this service is unavailable for the
+moment, the call can be directly answered with an error message. The
+same is true when other resources are not available at the
+time. Moreover, the call can be validated right at the start. When it
+contains errors, there is anyhow nothing gained by processing
+it. Therefore, an error message can be returned immediately. The
+advantages of Fail Fast are identical with the ones offered by
+timeout: A rapid failure uses up less resources and therefore results
+in a more stabile system.</p>
+
+<h5 id="leanpub-auto-handshaking" class="calibre15">Handshaking</h5>
+
+<p class="calibre3">Handshaking in a protocol serves to initiate communication. Thereby
+protocols allow that a server rejects additional calls in cases of
+overload. This avoids additional overload, a breakdown or too slow
+responses. Unfortunately, protocols like HTTP do not support
+this. Therefore, the application has to mimic the functionality for
+instance with Health Checks. An application can signal in that way
+that it is principally reachable, but has right now so much load that
+it is not sensible to send more calls to it. Protocols which build on
+socket connections can implement such approaches by themselves.</p>
+
+<h5 id="leanpub-auto-test-harness" class="calibre15">Test Harness</h5>
+
+<p class="calibre3">A Test Harness can be used to find out how an application behaves in
+certain error situations. Among those can be problems at the level of
+the TCP/IP or for instance responses of other systems which contain
+HTTP header, but no HTTP body. Something like that should in fact not
+occur since operating system or network stack should deal with
+it. Nevertheless, such errors can occur in practice and can have
+dramatic consequences since applications are not at all prepared for
+handling them. A Test Harness can be an extension of the tests which
+are discussed in <a href="part0015.html#section11-8">section 11.8</a>.</p>
+
+<h5 id="leanpub-auto-uncoupling-via-middleware" class="calibre15">Uncoupling via Middleware</h5>
+
+<p class="calibre3">Calls in one program only function on the same host at the same time
+in the same process. Synchronous distributed communication (e.g. REST)
+allows for communication between different hosts and different
+processes at the same time. Asynchronous communication via messaging
+systems (<a href="part0013.html#section9-4">section 9.4</a>) also allows an uncoupling over
+time. A system should not wait for a response of an asynchronous
+process. The system should continue working on other tasks instead of
+just waiting for a response. Errors which cause one system after
+another to break down like domino stones are much less likely in
+case of asynchronous communication. The systems are forced to deal
+with long response times since asynchronous communication anyhow can
+result in long response times.</p>
+
+<h5 id="leanpub-auto-stability-and-microservices" class="calibre15">Stability and Microservices</h5>
+
+<p class="calibre3">Stability patterns like Bulkhead restrict failures to a
+unit. Microservices are the obvious choice for a unit. They run on
+separate virtual machines and accordingly are already isolated in
+regards to most issues. Thereby the Bulkhead pattern arises very
+naturally in a Microservices-based architecture. <a href="part0014.html#Fig49">Fig. 49</a>
+shows an overview: A Microservice can via Bulkhead, Circuit Breaker
+and timeouts safeguard the use of other Microservices. The used
+Microservice can additionally implement Fail Fast. The safeguarding
+can be implemented via patterns in those parts of a Microservice which
+are responsible for communicating with other Microservices. Thereby
+this aspect is implemented in one area of the code and not distributed
+across the entire code.</p>
+
+
+<figure id="Fig49" class="image">
+  <img src="../images/00051.jpeg" alt="Fig. 49: Stability in the case of Microservices" class="calibre17"/>
+  <figcaption class="calibre18">Fig. 49: Stability in the case of Microservices</figcaption>
+</figure>
+
+
+<p class="calibre3">On a technical level the patterns can be implemented differently. For
+Microservices there are the following options:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">Timeouts are easy to implement: For accessing the other system an
+individual thread is started which is terminated after a timeout.</li>
+  <li class="calibre14">At the first glance Circuit Breakers are not very complex and can be
+developed in your own code. However, the implementation has also to work
+under high load and has to offer an interface for operations to
+allow monitoring. This is not trivial. Therefore a
+home-grown implementation is not very sensible.</li>
+  <li class="calibre14">Bulkheads are brought along by Microservices since a problem is in
+many cases already limited to just one Microservice. For instance, a
+memory leak will only cause one  Microservice to fail.</li>
+  <li class="calibre14">Steady State, Fail Fast, Handshaking and Test Harness have to be
+implemented by each Microservice.</li>
+  <li class="calibre14">Uncoupling via Middleware is an option for the shared communication
+of Microservices.</li>
+</ul>
+
+<h5 id="leanpub-auto-resilience-and-reactive" class="calibre15">Resilience and Reactive</h5>
+
+<p class="calibre3">The <a href="http://www.reactivemanifesto.org/">Reactive Manifesto</a> lists
+Resilience as essential property of a Reactive application. Resilience
+can be implemented in an application by processing calls
+asynchronously. Each part of an application which processes messages
+(“actor”) has to be monitored. When an actor does not react anymore,
+it can be restarted. This allows to handle errors and to make
+applications more resilient.</p>
+
+<h5 id="leanpub-auto-hystrix" class="calibre15">Hystrix</h5>
+
+<p class="calibre3"><a href="https://github.com/Netflix/Hystrix/">Hystrix</a> implements timeout and
+Circuit Breaker. For this purpose, developers have to encapsulate
+calls in commands. Alternatively, Java annotations can be used. The
+calls take place in individual thread pools. Several thread pools can
+be created. If there is one thread pool per called Microservice, the
+calls of the Microservices can be separated from each other in such a
+manner that a problem with one Microservice does not affect the use of
+the other Microservices. This is in line with the Bulkhead
+idea. Hystrix is a Java library which is under Apache license and
+originates from the Netflix stack. The example application uses
+Hystrix together with Spring Cloud (compare
+<a href="part0019.html#section14-10">section 14.10</a>). In combination with a Sidecar Hystrix
+can also be used for applications which are not written in Java
+(compare <a href="part0012.html#section8-7">section 8.7</a>). Hystrix supplies information
+about the state of the thread pools and the Circuit Breaker for
+monitoring and operation. This information can be displayed in a special
+monitoring tool – the Hystrix dashboard. Internally Hystrix uses the
+Reactive Extensions for Java (RxJava). Hystrix is the most widely used
+library in the area of Resilience.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-16" class="calibre15">Try and Experiment</h5>
+
+<aside class="exercise">
+    <p class="calibre3">This chapter introduced eight patterns for stability. Prioritize these
+patterns. Which properties are indispensable? Which are important?
+Which are unimportant?</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">How can be verified whether the Microservices really implement the
+patterns?</p>
+
+</aside>
+
+<h3 id="section10-6" class="calibre2">10.6 Technical Architecture</h3>
+
+<p class="calibre3">The technical architecture of a Microservice can be individually
+designed. Frameworks or programming languages do not have to be
+uniform for all Microservices. Therefore, each Microservice can
+well use different platforms. However, certain technical
+infrastructures fit better to Microservices than others.</p>
+
+<h5 id="leanpub-auto-process-engines" class="calibre15">Process Engines</h5>
+
+<p class="calibre3">Process engines which normally serve to orchestrate services in a SOA
+(<a href="part0010.html#section7-1">section 7.1</a>) can be used in a Microservice to model a
+business process. The important point is that one Microservice
+implements only one domain – for instance one <em class="calibre20">Bounded Context</em>. A
+Microservice should not end up as a pure integration or orchestration
+of other Microservices without its own logic. Otherwise
+changes will require that not only this one Microservice is modified,
+but also the integrated Microservices. However, it is a central aim of
+Microservice-based architectures to limit changes to one Microservice
+if possible. If multiple business processes have to be implemented,
+different Microservices should be used for it. Each of these
+Microservices should implement one business process together with the
+dependent services. Of course, it will not always be possible to avoid
+that other Microservices have to be integrated to implement a business
+process. However, a Microservice which just represents an integration
+is not sensible.</p>
+
+<h5 id="leanpub-auto-statelessness" class="calibre15">Statelessness</h5>
+
+<p class="calibre3">Stateless Microservices are very advantageous. To put it more clearly:
+Microservices should not save any state in their logic
+layer. States in the database or on the client are acceptable. When
+using this approach the failure of an individual instance does not
+have a big impact. The instance can just be replaced by a new
+instance. In addition, the load can be distributed between multiple
+instances – without having to take into consideration which instance
+processed the previous calls of the user. And finally, the deployment
+of a new version is easier since the old version can just be stopped
+and replaced without having to migrate its state.</p>
+
+<h5 id="leanpub-auto-reactive" class="calibre15">Reactive</h5>
+
+<p class="calibre3">Implementing Microservices with
+<a href="http://www.reactivemanifesto.org/">Reactive</a> technologies can be
+especially useful. These approaches are comparable to Erlang (compare
+<a href="part0020.html#section15-7">section 15.7</a>): Applications consist of actors. In
+Erlang they are called processes. Work in each actor is sequential,
+however, different actors can work in parallel on different
+messages. This enables the parallel processing of tasks. Actors can
+send messages to other actors which end up in the mailboxes of these
+actors. I/O operations are not blocking in Reactive applications: A
+request for data is sent out. When the data are there, the actor is
+called and can process the data. In the meantime the actors can work
+on other requests.</p>
+
+<p class="calibre3">Essential properties are according to the Reactive Manifesto:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">
+<strong class="calibre19">Responsive:</strong> The system should react to requests as fast as
+possible. This has among others advantages for Fail Fast and therefore
+for stability (compare <a href="part0014.html#section10-5">section 10.5</a>). Once the mailbox
+is filled to a certain predetermined degree, the actor can for instance
+reject to accept additional messages. Thereby the sender is slowed
+down, and the system as such does not get overloaded. Other requests
+can still be processed. The aim to be responsive is also supported by
+the abdication of blocking I/O operations.</li>
+  <li class="calibre14">
+<strong class="calibre19">Resilience</strong> and its relationship with Reactive applications has
+already been discussed in <a href="part0014.html#section10-5">section 10.5</a>.</li>
+  <li class="calibre14">
+<strong class="calibre19">Elastic</strong> means that new systems can be started at run time which
+share the load. For that purpose the system has to be scalable, and
+at the same time it has to be possible to change the system at run
+time in such a way that the load can be distributed to the different
+nodes.</li>
+  <li class="calibre14">
+<strong class="calibre19">Message Driven</strong> means that the individual components communicate
+with each other via messaging. As described in
+<a href="part0013.html#section9-4">section 9.4</a>, this communication fits well to
+Microservices. Reactive applications use very similar approaches also
+within the application itself.</li>
+</ul>
+
+<p class="calibre3">Reactive can implement Microservices especially easily since the ideas
+from the Reactive area fit very well to Microservices. However, similarly
+good results can also be achieved by the use of classical
+technologies.</p>
+
+<p class="calibre3">Technologies from the area of Reactive are for instance:</p>
+
+<ul class="calibre16">
+  <li class="calibre14">The programming language <a href="http://www.scala-lang.org/">Scala</a> with
+the Reactive framework <a href="http://akka.io/">Akka</a> and web framework
+<a href="https://www.playframework.com/">Play</a> which is based on it. These
+frameworks can also be used with Java.</li>
+  <li class="calibre14">There are <a href="http://reactivex.io/">Reactive extensions</a> for
+practically all popular programming languages. Among those are
+<a href="https://github.com/ReactiveX/RxJava">RxJava</a> for Java or
+<a href="https://github.com/Reactive-Extensions/RxJS">RxJS</a> for JavaScript.</li>
+  <li class="calibre14">Similar approaches are also supported by <a href="http://vertx.io/">Vert.x</a>
+(compare also <a href="part0020.html#section15-6">section 15.6</a>). Even though this
+framework is based on the JVM, it supports many different programming
+languages like Java, Groovy, Scala, JavaScript, Clojure, Ruby or
+Python.</li>
+</ul>
+
+<h5 id="leanpub-auto-microservices-without-reactive" class="calibre15">Microservices without Reactive?</h5>
+
+<p class="calibre3">Reactive is only one option for implementing a system with
+Microservices. The classical programming model with blocking I/O,
+without actors and with synchronous calls is likewise suitable for
+this type of system. As previously discussed, Resilience can be
+implemented via libraries. Elastic can be achieved by starting new
+instances of the Microservices for instance as virtual machines or
+Docker containers. And classical applications can also communicate
+with each other via messages. Reactive applications have advantages
+for Responsive. However, in that case it has to be ensured that
+operations really do not block. For I/O operations the Reactive
+solutions can usually guarantee that. However, a complex calculation
+can block the system. So in that case no messages can be processed
+anymore, and the entire system is blocked. A Microservice does not have
+to be implemented with Reactive technologies, but they are for sure an
+interesting alternative.</p>
+
+<h5 id="leanpub-auto-try-and-experiment-17" class="calibre15">Try and Experiment</h5>
+
+<p class="calibre3">Get more information about Reactive and Microservices.</p>
+
+<aside class="exercise">
+    <p class="calibre3">How exactly are
+the advantages implemented?</p>
+
+</aside>
+
+<aside class="exercise">
+    <p class="calibre3">Is there a Reactive extension for your
+preferred programming language?
+Which features does it offer? How does
+this help with implementing Microservices?</p>
+
+</aside>
+
+<h3 id="section10-7" class="calibre2">10.7 Conclusion</h3>
+
+<p class="calibre3">The team implementing a certain Microservice is also responsible for
+its domain-based architecture. There should be few guidelines
+restricting team decisions so that the independence of the teams is
+ensured.</p>
+
+<p class="calibre3">Low cohesion can be an indication for a problem with the domain-based
+design of a Microservice. Domain-driven Design (DDD) is an interesting
+option for structuring a Microservice. Likewise transactions can
+provide clues for a sensible domain-based division: An operation of a
+Microservice should be a transaction (<a href="part0014.html#section10-1">section 10.1</a>).</p>
+
+<p class="calibre3">CQS (Command Query Separation) divides operations of a Microservice or
+a class into read operations (queries) and write operations
+(commands). CQRS (Command Query Responsibility Segregation)
+(<a href="part0014.html#section10-2">section 10.2</a>) separates data changes via commands
+from Query Handlers which can process requests. Thereby Microservices
+or classes are created which can only implement reading or writing
+access. Event Sourcing (<a href="part0014.html#section10-3">Section 10.3</a>) stores events
+and thereby does not focus on the current state, but on the history of
+all events. These approaches are useful for building up Microservices
+because they allow for the creation of smaller Microservices which can
+implement only read or write operations. This enables an independent
+scaling and optimizations for both types of operations.</p>
+
+<p class="calibre3">Hexagonal Architecture (<a href="part0014.html#section10-4">section 10.4</a>) focuses on a
+kernel which can be called via adaptors for instance by a UI or an
+API, as the center point of each Microservice. Likewise adaptors can
+enable the use of other Microservices or of databases. For
+Microservices this results in an architecture which supports a UI and
+a REST interface in a Microservice.</p>
+
+<p class="calibre3"><a href="part0014.html#section10-5">Section 10.5</a> has presented some patterns for
+Resilience and Stability. The most important of those are Circuit
+Breaker, Timeout and Bulkhead. A popular implementation is Hystrix.</p>
+
+<p class="calibre3"><a href="part0014.html#section10-6">Section 10.6</a> introduced certain technical options for
+Microservices: The use of Process Engines is for instance an option
+for a Microservice. Statelessness is advantageous. And finally,
+Reactive approaches are a good basis for the implementation of
+Microservices.</p>
+
+<p class="calibre3">In summary, the chapter explained essential factors for the
+implementation of individual Microservices.</p>
+
+<h5 id="leanpub-auto-essential-points-7" class="calibre15">Essential Points</h5>
+
+<ul class="calibre16">
+  <li class="calibre14">Microservices within a Microservice-based system can have
+different domain-based architectures.</li>
+  <li class="calibre14">Microservices can internally be implemented with Event Sourcing,
+CQRS or Hexagonal Architectures.</li>
+  <li class="calibre14">Technical properties like stability can only be implemented
+individually by each Microservice.</li>
+</ul>
+
+<div class="calibre6">
+  <ol class="calibre13">
+    <li id="fn-ReleaseIt" value="1" class="calibre14">Michael T. Nygard: Release It!: Design and Deploy Production-Ready Software, Pragmatic Programmers, 2007, ISBN 978-0-97873-921-8<a rel="rev-footnote" href="part0008.html#fnref-ReleaseIt">↩</a>
+</li>
+  </ol>
+</div>
+
+
+
+</div>
+</body></html>
