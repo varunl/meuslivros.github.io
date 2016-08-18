@@ -1,0 +1,700 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html><html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml"><head><title>Introduction to Docker</title><link rel="stylesheet" type="text/css" href="epub.css"/></head><body data-type="book"><section data-type="chapter" epub:type="chapter" class="pagenumrestart" data-pdf-bookmark="Chapter 1. Introduction to Docker"><div class="chapter" id="introduction">
+<h1><span class="label">Chapter 1. </span>Introduction to Docker</h1>
+
+
+<p>This chapter introduces the basic concepts and terminology of Docker. You’ll also learn about different scheduler frameworks.</p>
+
+<p>The main benefit of the Java programming language is Write Once Run Anywhere, or WORA, as shown in <a data-type="xref" href="#Java_WORA">Figure 1-1</a>. This allows Java source code to be compiled to byte code and run on any operating system where a Java virtual machine is available.</p>
+
+<figure><div id="Java_WORA" class="figure">
+<img src="assets/dfjd_0101.png" alt="dfjd 0101"/>
+<h6><span class="label">Figure 1-1. </span>Write Once Run Anywhere using Java</h6>
+</div></figure>
+
+<p>Java provides a common API, runtime, and tooling that works across multiple hosts.</p>
+
+<p>Your Java application typically requires an infrastructure such as a specific version of operating system, an application server, JDK, and a database server. It may need binding to specific ports and requires a certain amount of memory. It may need to tune the configuration files and include multiple other dependencies. The application, its dependencies, and infrastructure together may be referred to as the <em>application operating system</em>.</p>
+
+<p>Typically, building, deploying, and running an application requires a script that will download, install, and configure these dependencies. Docker simplifies this process by allowing you to create an <em>image</em> that contains your application and infrastructure together, managed as one component. These images are then used to create Docker <em>containers</em> that run on the container virtualization platform, which is provided by Docker.</p>
+
+<p>Docker simplifies software delivery by making it easy to build, ship, and run distributed applications. It provides a common runtime API, image format, and toolset for building, shipping, and running containers on Linux. At the time of writing, there is no native support for Docker on Windows and OS X.</p>
+
+<p>Similar to WORA in Java, Docker provides Package Once Deploy Anywhere, or PODA, as shown in <a data-type="xref" href="#Docker_PODA">Figure 1-2</a>. This allows a Docker image to be created once and deployed on a variety of operating systems where Docker virtualization is available.</p>
+
+<figure><div id="Docker_PODA" class="figure">
+<img src="assets/dfjd_0102.png" alt="dfjd 0102"/>
+<h6><span class="label">Figure 1-2. </span>Package Once Deploy Anywhere using Docker</h6>
+</div></figure>
+<div data-type="note" epub:type="note"><h6>Note</h6>
+<p>PODA is not the same as WORA. A container created using Unix cannot run on Windows and vice versa as the base operating system specified in the Docker image relies on the underlying kernel. However, you can always run a Linux virtual machine (VM) on Windows or a Windows VM on Linux and run your containers that way.</p>
+</div>
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Docker Concepts"><div class="sect1" id="idm140499674865376">
+<h1>Docker Concepts</h1>
+
+<p>Docker simplifies software delivery of distributed applications in three ways:</p>
+<dl>
+<dt>Build</dt>
+<dd>
+<p>Provides tools you can use to create containerized applications. Developers package the application, its dependencies and infrastructure, as read-only templates. These are called the <em>Docker image</em>.</p>
+</dd>
+<dt>Ship</dt>
+<dd>
+<p>Allows you to share these applications in a secure and collaborative manner. Docker images are stored, shared, and managed in a <em>Docker registry</em>.</p>
+
+<p><a href="http://hub.docker.com">Docker Hub</a> is a publicly available registry. This is the default registry for all images.</p>
+</dd>
+<dt>Run</dt>
+<dd>
+<p>The ability to deploy, manage, and scale these applications. <em>Docker container</em> is a runtime representation of an image. Containers can be run, started, scaled, stopped, moved, and deleted.</p>
+</dd>
+</dl>
+
+<p>A typical developer workflow involves running Docker Engine on a host machine as shown in <a data-type="xref" href="#Docker_Architecture">Figure 1-3</a>. It does the heavy lifting of building images, and runs, distributes, and scales Docker containers. The client is a Docker binary that accepts commands from the user and communicates back and forth with the Docker Engine.</p>
+
+<figure><div id="Docker_Architecture" class="figure">
+<img src="assets/dfjd_0103.png" alt="dfjd 0103"/>
+<h6><span class="label">Figure 1-3. </span>Docker architecture</h6>
+</div></figure>
+
+<p class="pagebreak-before">These steps are now explained in detail:</p>
+<dl>
+<dt>Docker host</dt>
+<dd>
+<p>A machine, either physical or virtual, is identified to run the Docker Engine.</p>
+</dd>
+<dt>Configure Docker client</dt>
+<dd>
+<p>The Docker client binary is downloaded on a machine and configured to talk to this Docker Engine. For development purposes, the client and Docker Engine typically are located on the same machine. The Docker Engine could be on a different host in the network as well.</p>
+</dd>
+<dt>Client downloads or builds an image</dt>
+<dd>
+<p>The client can pull a prebuilt image from the preconfigured registry using the <code>pull</code> command, create a new image using the <code>build</code> command, or run a container using the <code>run</code> command.</p>
+</dd>
+<dt>Docker host downloads the image from the registry</dt>
+<dd>
+<p>The Docker Engine checks to see if the image already exists on the host. If not, then it downloads the image from the registry. Multiple images can be downloaded from the registry and installed on the host. Each image would represent a different software component. For example, <a href="http://wildfly.org">WildFly</a> and <a href="http://www.couchbase.com">Couchbase</a> are downloaded in this case.</p>
+</dd>
+<dt>Client runs the container</dt>
+<dd>
+<p>The new container can be created using the <code>run</code> command, which runs the container using the image definition. Multiple containers, either of the same image or different images, run on the Docker host.</p>
+</dd>
+</dl>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Docker Images and Containers"><div class="sect1" id="idm140499672903056">
+<h1>Docker Images and Containers</h1>
+
+<p>Docker images are read-only templates from which Docker containers are launched. Each image consists of a series of layers. Docker makes use of a <em>union filesystem</em> to combine these layers into a single image. Union filesystems allow files and directories of separate filesystems, known as branches, to be transparently overlaid, forming a single coherent filesystem.</p>
+
+<p>One of the reasons Docker is so lightweight is because of these layers. When you change a Docker image—for example, update an application to a new version—a new layer gets built. Thus, rather than replacing the whole image or entirely rebuilding, as you may do with a VM, only that layer is added or updated. Now you don’t need to distribute a whole new image, just the update, making distributing Docker images faster and simpler.</p>
+
+<p>Docker images are built on Docker Engine, distributed using the registry, and run as containers.</p>
+
+<p>Multiple versions of an image may be stored in the registry using the format <em>image-name:tag</em>. <em>image-name</em> is the name of the image and <em>tag</em> is a version assigned to the image by the user. By default, the tag value is <code>latest</code> and typically refers to the latest release of the image. For example, <code>jboss/wildfly:latest</code> is the image name for the WildFly’s latest release of the application server. A previous version of the WildFly Docker container can be started with the image <code>jboss/wildfly:9.0.0.Final</code>.</p>
+
+<p>Once the image is downloaded from the registry, multiple instances of the container can be started easily using the <code>run</code> command.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Docker Toolbox"><div class="sect1" id="idm140499674530976">
+<h1>Docker Toolbox</h1>
+
+<p>Docker Toolbox is the fastest way to get up and running with Docker in development. It provides different tools required to get started with Docker.</p>
+
+<p>The complete set of installation instructions are available from the <a href="https://docs.docker.com/engine/installation/">Docker website</a> as well.</p>
+
+<figure><div class="figure">
+<img src="assets/dfjd_0104.png" alt="dfjd 0104"/>
+<h6/>
+</div></figure>
+
+<p class="pagebreak-before">Here is a list of the tools included in the <a href="https://www.docker.com/products/docker-toolbox">Docker Toolbox</a>:</p>
+<ol>
+<li>
+<p>Docker Engine or the <code>docker</code> binary</p>
+</li>
+<li>
+<p>Docker Machine or the <code>docker-machine</code> binary</p>
+</li>
+<li>
+<p>Docker Compose or the <code>docker-compose</code> binary</p>
+</li>
+<li>
+<p>Kitematic, the desktop GUI for Docker</p>
+</li>
+<li>
+<p>A preconfigured shell for invoking Docker commands</p>
+</li>
+<li>
+<p>Oracle VirtualBox</p>
+</li>
+<li>
+<p>Boot2docker ISO</p>
+</li>
+
+</ol>
+
+<p>Docker Engine, Docker Machine, and Docker Compose are explained in detail in the following sections. Kitematic is a simple application for managing Docker containers on Mac, Linux, and Windows. Oracle VirtualBox is a free and open source hypervisor for x86 systems. This is used by Docker Machine to create a VirtualBox VM and to create, use, and manage a Docker host inside it. A default Docker Machine is created as part of the Docker Toolbox installation. The preconfigured shell is just a terminal where the environment is configured to the default Docker Machine. Boot2Docker ISO is a lightweight Linux distribution based on Tiny Core Linux. It is used by VirtualBox to provision the VM.</p>
+
+<p>Get a more native experience with the preview version of <a href="http://beta.docker.com">Docker for Mac or Windows</a>.</p>
+
+<p>Let’s look at some tools from Docker Toolbox in detail now.</p>
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Docker Engine"><div class="sect2" id="idm140499674573648">
+<h2>Docker Engine</h2>
+
+<p><a href="https://docs.docker.com/engine/installation/">Docker Engine</a> is the central piece of Docker. It is a lightweight runtime that builds and runs your Docker containers. The runtime consists of a daemon that communicates with the Docker client and execute commands to build, ship, and run containers.</p>
+
+<p>Docker Engine uses Linux kernel features like cgroups, kernel namespaces, and a union-capable filesystem. These features allow the containers to share a kernel and run in isolation with their own process ID space, filesystem structure, and network interfaces.</p>
+
+<p>Docker Engine is supported on Linux, Windows, and OS X.</p>
+
+<p>On Linux, it can typically be installed using the native package manager. For example, <code>yum install docker-engine</code> will install Docker Engine on CentOS.</p>
+
+<p>On Windows and Mac, it is installed using Docker Machine. This is explained in the section <a data-type="xref" href="#Docker_Machine">“Docker Machine”</a>. Alternatively, Docker for Mac or Windows provides a native experience on these platforms, available in <a href="http://beta.docker.com">beta</a> at time of this writing.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Docker Machine"><div class="sect2" id="Docker_Machine">
+<h2>Docker Machine</h2>
+
+<p>Docker Machine allows you to create Docker hosts on your computer, on cloud providers, and inside your own data center. It creates servers, installs Docker on them, and then configures the Docker client to talk to them. The <code>docker-machine</code> CLI comes with Docker Toolbox and allows you to create and manage machines.</p>
+
+<p>Once your Docker host has been created, it then has a number of commands for managing containers:</p>
+
+<ul>
+<li>
+<p>Start, stop, restart container</p>
+</li>
+<li>
+<p>Upgrade Docker</p>
+</li>
+<li>
+<p>Configure the Docker client to talk to a host</p>
+</li>
+</ul>
+
+<p>Commonly used commands for Docker Machine are listed in <a data-type="xref" href="#Common_commands_for_Docker_Machine">Table 1-1</a>.</p>
+<table id="Common_commands_for_Docker_Machine">
+<caption><span class="label">Table 1-1. </span>Common commands for Docker Machine</caption>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p><code>create</code></p></td>
+<td><p>Create a machine</p></td>
+</tr>
+<tr>
+<td><p><code>ls</code></p></td>
+<td><p>List machines</p></td>
+</tr>
+<tr>
+<td><p><code>env</code></p></td>
+<td><p>Display the commands to set up the environment for the Docker client</p></td>
+</tr>
+<tr>
+<td><p><code>stop</code></p></td>
+<td><p>Stop a machine</p></td>
+</tr>
+<tr>
+<td><p><code>rm</code></p></td>
+<td><p>Remove a machine</p></td>
+</tr>
+<tr>
+<td><p><code>ip</code></p></td>
+<td><p>Get the IP address of the machine</p></td>
+</tr>
+</tbody>
+</table>
+
+<p>The complete set of commands for the <code>docker-machine</code> binary can be found using the command <code>docker-machine --help</code>.</p>
+
+<p>Docker Machine uses a driver to provision the Docker host on a local network or on a cloud. By default, at the time of writing, Docker Machine created on a local machine uses <code>boot2docker</code> as the operating system. Docker Machine created on a remote cloud provider uses "<code>Ubuntu LTS</code>" as the operating system.</p>
+
+<p>Installing Docker Toolbox creates a Docker Machine called <code>default</code>.</p>
+
+<p>Docker Machine can be easily created on a local machine as shown here:</p>
+
+<pre data-type="programlisting" data-code-language="text">docker-machine create -d virtualbox my-machine</pre>
+
+<p>The machine created using this command uses the VirtualBox driver and <code>my-machine</code> as the machine’s name.</p>
+
+<p>The Docker client can be configured to give commands to the Docker host running on this machine as shown in <a data-type="xref" href="#Configure_Docker_client_for_Docker_Machine">Example 1-1</a>.</p>
+<div id="Configure_Docker_client_for_Docker_Machine" data-type="example">
+<h5><span class="label">Example 1-1. </span>Configure Docker client for Docker Machine</h5>
+
+<pre data-type="programlisting" data-code-language="text">eval $(docker-machine env my-machine)</pre></div>
+
+<p>Any commands from the <code>docker</code> CLI will now run on this Docker Machine.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Docker Compose"><div class="sect2" id="Docker_Compose">
+<h2>Docker Compose</h2>
+
+<p>Docker Compose is a tool that allows you to define and run applications with one or more Docker containers. Typically, an application would consist of multiple containers such as one for the web server, another for the application server, and another one for the database. With Compose, a multi-container application can be easily defined in a single file. All the containers required for the application can be then started and managed with a single command.</p>
+
+<p>With Docker Compose, there is no need to write scripts or use any additional tools to start your containers. All the containers are defined in a configuration file using <em>services</em>, and then <code>docker-compose</code> script is used to start, stop, restart, and scale the application and all the services in that application, and all the containers within that service.</p>
+
+<p>Commonly used commands for Docker Compose are listed in <a data-type="xref" href="#Common_commands_for_Docker_Compose">Table 1-2</a>.</p>
+<table id="Common_commands_for_Docker_Compose">
+<caption><span class="label">Table 1-2. </span>Common commands for Docker Compose</caption>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p><code>up</code></p></td>
+<td><p>Create and start containers</p></td>
+</tr>
+<tr>
+<td><p><code>restart</code></p></td>
+<td><p>Restart services</p></td>
+</tr>
+<tr>
+<td><p><code>build</code></p></td>
+<td><p>Build or rebuild services</p></td>
+</tr>
+<tr>
+<td><p><code>scale</code></p></td>
+<td><p>Set number of containers for a service</p></td>
+</tr>
+<tr>
+<td><p><code>stop</code></p></td>
+<td><p>Stop services</p></td>
+</tr>
+<tr>
+<td><p><code>kill</code></p></td>
+<td><p>Kill containers</p></td>
+</tr>
+<tr>
+<td><p><code>logs</code></p></td>
+<td><p>View output from containers</p></td>
+</tr>
+<tr>
+<td><p><code>ps</code></p></td>
+<td><p>List containers</p></td>
+</tr>
+</tbody>
+</table>
+
+<p>The complete set of commands for the <code>docker-compose</code> binary can be found using the command <code>docker-compose --help</code>.</p>
+
+<p>The Docker Compose file is typically called <code>docker-compose.yml</code>. If you decide to use a different filename, it can be specified using the <code>-f</code> option to <code>docker-compose</code> script.</p>
+
+<p>All the services in the Docker Compose file can be started as shown here:</p>
+
+<pre data-type="programlisting" data-code-language="text">docker-compose up -d</pre>
+
+<p>This starts all the containers in the service in a background, or detached mode.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Docker Swarm"><div class="sect2" id="idm140499674137040">
+<h2>Docker Swarm</h2>
+
+<p>An application typically consists of multiple containers. Running all containers on a single Docker host makes that host a single point of failure (SPOF). This is undesirable in any system because the entire system will stop working, and thus your application will not be accessible.</p>
+
+<p>Docker Swarm allows you to run a multi-container application on multiple hosts. It allows you to create and access a pool of Docker hosts using the full suite of Docker tools. Because Docker Swarm serves the standard Docker API, any tool that already communicates with a Docker daemon can use Swarm to transparently scale to multiple hosts. This means an application that consists of multiple containers can now be seamlessly deployed to multiple hosts.</p>
+
+<p><a data-type="xref" href="#Docker_Swarm_Architecture">Figure 1-4</a> shows the main concepts of Docker Swarm.</p>
+
+<figure><div id="Docker_Swarm_Architecture" class="figure">
+<img src="assets/dfjd_0105.png" alt="dfjd 0105"/>
+<h6><span class="label">Figure 1-4. </span>Docker Swarm Architecture</h6>
+</div></figure>
+
+<p>Let’s learn about the key components of Docker Swarm and how they avoid SPOF:</p>
+<dl>
+<dt>Swarm manager</dt>
+<dd>
+<p>Docker Swarm has a manager that is a predefined Docker host in the cluster and manages the resources in the cluster. It orchestrates and schedules containers in the entire cluster.</p>
+
+<p>The Swarm manager can be configured with a <em>primary</em> instance and multiple secondary instances for high availability.</p>
+</dd>
+<dt>Discovery service</dt>
+<dd>
+<p>The Swarm manager talks to a hosted discovery service. This service maintains a list of IPs in the Swarm cluster. Docker Hub hosts a discovery service that can be used during development. In production, this is replaced by other services such as <code>etcd</code>, <code>consul</code>, or <code>zookeeper</code>. You can even use a static file. This is particularly useful if there is no Internet access or you are running in a closed network.</p>
+</dd>
+<dt>Swarm worker</dt>
+<dd>
+<p>The containers are deployed on nodes that are additional Docker hosts. Each node must be accessible by the manager. Each node runs a Docker Swarm agent that registers the referenced Docker daemon, monitors it, and updates the discovery services with the node’s status.</p>
+</dd>
+<dt>Scheduler strategy</dt>
+<dd>
+<p>Different scheduler strategies (<code>spread</code> (default), <code>binpack</code>, and <code>random</code>) can be applied to pick the best node to run your container. The default strategy optimizes the node for the least number of running containers. There are multiple kinds of filters, such as <em>constraints</em> and <em>affinity</em>. A combination of different filters allow for creating your own scheduling algorithm.</p>
+</dd>
+<dt>Standard Docker API</dt>
+<dd>
+<p>Docker Swarm serves the standard Docker API and thus any tool that talks to a single Docker host will seamlessly scale to multiple hosts. This means that a multi-container application can now be easily deployed on multiple hosts configured through Docker Swarm cluster.</p>
+</dd>
+</dl>
+
+<p>Docker Machine and Docker Compose are integrated with Docker Swarm. Docker Machine can participate in the Docker Swarm cluster using <code>--swarm</code>, <code>--swarm-master</code>, <code>--swarm-strategy</code>, <code>--swarm-host</code>, and other similar options. This allows you to easily create a Docker Swarm sandbox on your local machine using VirtualBox.</p>
+
+<p>An application created using Docker Compose can be targeted to a Docker Swarm cluster. This allows multiple containers in the application to be distributed across multiple hosts, thus avoiding SPOF.</p>
+
+<p>Multiple containers talk to each other using an <em>overlay</em> network. This type of network is created by Docker and supports multihost networking natively out-of-the-box. It allows containers to talk across hosts.</p>
+
+<p>If the containers are targeted to a single host then a <em>bridge</em> network is created, which only allows the containers on that host to talk to each other.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Kubernetes"><div class="sect1" id="Kubernetes">
+<h1>Kubernetes</h1>
+
+<p><a href="http://kubernetes.io">Kubernetes</a> is an open source orchestration system for managing containerized applications. These can be deployed across multiple hosts. Kubernetes provides basic mechanisms for deployment, maintenance, and scaling of applications. An application’s desired state, such as “3 instances of WildFly” or “2 instances of Couchbase,” can be specified declaratively. And Kubernetes ensures that the state is maintained.</p>
+
+<p>Kubernetes is a container-agnostic system and Docker is one of the container formats supported.</p>
+
+<p>The main application concepts in Kubernetes are explained below:</p>
+<dl>
+<dt>Pod</dt>
+<dd>
+<p>The smallest deployable units that can be created, scheduled, and managed. It’s a logical collection of containers that belong to an application. An application would typically consist of multiple pods.</p>
+
+<p>Each resource in Kubernetes is defined using a configuration file. For example, a Couchbase pod can be defined as shown here:</p>
+
+<pre data-type="programlisting" data-code-language="yaml"><code class="l-Scalar-Plain">apiVersion</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">v1</code>
+<code class="l-Scalar-Plain">kind</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">Pod</code>
+<code class="c1"># labels attached to this pod</code>
+<code class="l-Scalar-Plain">metadata</code><code class="p-Indicator">:</code>
+<code class="l-Scalar-Plain">labels</code><code class="p-Indicator">:</code>
+  <code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">couchbase-pod</code>
+<code class="l-Scalar-Plain">spec</code><code class="p-Indicator">:</code>
+  <code class="l-Scalar-Plain">containers</code><code class="p-Indicator">:</code>
+  <code class="p-Indicator">-</code> <code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">couchbase</code>
+    <code class="c1"># Docker image that will run in this pod</code>
+    <code class="l-Scalar-Plain">image</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">couchbase</code>
+    <code class="l-Scalar-Plain">ports</code><code class="p-Indicator">:</code>
+    <code class="p-Indicator">-</code> <code class="l-Scalar-Plain">containerPort</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">8091</code></pre>
+
+<p>Each pod is assigned a unique IP address in the cluster. The <code>image</code> attribute defines the Docker image that will be included in this pod.</p>
+</dd>
+<dt>Labels</dt>
+<dd>
+<p>A label is a key/value pair that is attached to objects, such as pods. Multiple labels can be attached to a resource. Labels can be used to organize and to select subsets of objects. Labels defined identifying for the object and is only meaningful and relevant to the user.</p>
+
+<p>In the previous example, <code>metadata.labels</code> define the labels attached to the pod.</p>
+</dd>
+<dt>Replication controller</dt>
+<dd>
+<p>A replication controller ensures that a specified number of pod replicas are running on worker nodes at all times. It allows both up- and down-scaling of the number of replicas. Pods inside a replication controller are re-created when the worker node reboots or otherwise fails.</p>
+
+<p>A replication controller creates two instances of a Couchbase pod can be defined as shown here:</p>
+
+<pre data-type="programlisting" data-code-language="yaml"><code class="l-Scalar-Plain">apiVersion</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">v1</code>
+<code class="l-Scalar-Plain">kind</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">ReplicationController</code>
+<code class="l-Scalar-Plain">metadata</code><code class="p-Indicator">:</code>
+  <code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">couchbase-controller</code>
+<code class="l-Scalar-Plain">spec</code><code class="p-Indicator">:</code>
+  <code class="c1"># Two replicas of the pod to be created</code>
+  <code class="l-Scalar-Plain">replicas</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">2</code>
+  <code class="c1"># Identifies the label key and value on the Pod</code>
+  <code class="c1"># that this replication controller is responsible</code>
+  <code class="c1"># for managing</code>
+  <code class="l-Scalar-Plain">selector</code><code class="p-Indicator">:</code>
+    <code class="l-Scalar-Plain">app</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">couchbase-rc-pod</code>
+  <code class="c1"># "cookie cutter" used for creating new pods when</code>
+  <code class="c1"># necessary</code>
+  <code class="l-Scalar-Plain">template</code><code class="p-Indicator">:</code>
+    <code class="l-Scalar-Plain">metadata</code><code class="p-Indicator">:</code>
+      <code class="l-Scalar-Plain">labels</code><code class="p-Indicator">:</code>
+        <code class="c1"># label key and value on the pod.</code>
+        <code class="c1"># These must match the selector above.</code>
+        <code class="l-Scalar-Plain">app</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">couchbase-rc-pod</code>
+    <code class="l-Scalar-Plain">spec</code><code class="p-Indicator">:</code>
+      <code class="l-Scalar-Plain">containers</code><code class="p-Indicator">:</code>
+      <code class="p-Indicator">-</code> <code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">couchbase</code>
+        <code class="l-Scalar-Plain">image</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">couchbase</code>
+        <code class="l-Scalar-Plain">ports</code><code class="p-Indicator">:</code>
+        <code class="p-Indicator">-</code> <code class="l-Scalar-Plain">containerPort</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">8091</code></pre>
+</dd>
+<dt>Service</dt>
+<dd>
+<p>Each pod is assigned a unique IP address. If the pod is inside a replication controller, then it is re-created but may be given a different IP address. This makes it difficult for an application server such as WildFly to access a database such as Couchbase using its IP address.</p>
+
+<p>A service defines a logical set of pods and a policy by which to access them. The IP address assigned to a service does not change over time, and thus can be relied upon by other pods. Typically the pods belonging to a service are defined by a label <code>selector</code>.</p>
+
+<p>For example, a Couchbase service might be defined as shown here:</p>
+
+<pre data-type="programlisting" data-code-language="yaml"><code class="l-Scalar-Plain">apiVersion</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">v1</code>
+<code class="l-Scalar-Plain">kind</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">Service</code>
+<code class="l-Scalar-Plain">metadata</code><code class="p-Indicator">:</code>
+  <code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">couchbase-service</code>
+  <code class="l-Scalar-Plain">labels</code><code class="p-Indicator">:</code>
+    <code class="l-Scalar-Plain">app</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">couchbase-service-pod</code>
+<code class="l-Scalar-Plain">spec</code><code class="p-Indicator">:</code>
+  <code class="l-Scalar-Plain">ports</code><code class="p-Indicator">:</code>
+    <code class="p-Indicator">-</code> <code class="l-Scalar-Plain">port</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">8091</code>
+  <code class="c1"># label keys and values of the pod started elsewhere</code>
+  <code class="l-Scalar-Plain">selector</code><code class="p-Indicator">:</code>
+    <code class="l-Scalar-Plain">app</code><code class="p-Indicator">:</code> <code class="l-Scalar-Plain">couchbase-rc-pod</code></pre>
+
+<p>Note that the labels used in <code>selector</code> must match the metadata used for the pods created by the replication controller.</p>
+</dd>
+</dl>
+
+<p>So far, we have learned the application concepts of Kubernetes. Let’s look at some of the system concepts of Kubernetes, as shown in <a data-type="xref" href="#Kubernetes_Architecture">Figure 1-5</a>.</p>
+
+<figure><div id="Kubernetes_Architecture" class="figure">
+<img src="assets/dfjd_0106.png" alt="dfjd 0106"/>
+<h6><span class="label">Figure 1-5. </span>Kubernetes architecture</h6>
+</div></figure>
+
+<p>Let’s break down the pieces of Kubernetes architecture:</p>
+<dl>
+<dt>Cluster</dt>
+<dd>
+<p>A Kubernetes cluster is a set of physical or virtual machines and other infrastructure resources that are used to run your applications. The machines that manage the cluster are called <em>masters</em> and the machines that run the containers are called <em>workers</em>.</p>
+</dd>
+<dt>Node</dt>
+<dd>
+<p>A node is a physical or virtual machine. It has the necessary services to run application containers.</p>
+
+<p>A master node is the central control point that provides a unified view of the cluster. Multiple masters can be set up to create a high-availability cluster.</p>
+
+<p>A worker node runs tasks as delegated by the master; it can run one or more pods.</p>
+</dd>
+<dt>Kubelet</dt>
+<dd>
+<p>This is a service running on each node that allows you to run containers and be managed from the master. This service reads container manifests as YAML or JSON files that describe the application. A typical way to provide this manifest is using the configuration file.</p>
+</dd>
+</dl>
+
+<p>A Kubernetes cluster can be started easily on a local machine for development purposes. It can also be started on hosted solutions, turn-key cloud solutions, or custom solutions.</p>
+
+<p><a href="http://kubernetes.io/docs/getting-started-guides/">Kubernetes</a> can be easily started on Google Cloud using the following command:</p>
+
+<pre data-type="programlisting" data-code-language="text">curl -sS https://get.k8s.io | bash</pre>
+
+<p>The same command can be used to start Kubernetes on Amazon Web Services, Azure, and other cloud providers; the only difference is that the environment variable <code>KUBERNETES_PROVIDER</code> needs to be set to <code>aws</code>.</p>
+
+<p>The <a href="http://kubernetes.io/docs/getting-started-guides/gce/">Kubernetes Getting Started Guides</a> provide more details on setup.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Other Platforms"><div class="sect1" id="idm140499674484640">
+<h1>Other Platforms</h1>
+
+<p>Docker Swarm allows multiple containers to run on multiple hosts. Kubernetes provides an alternative to running multi-container applications on multiple hosts. This section lists some other platforms allow you to run multiple containers on multiple hosts.</p>
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Apache Mesos"><div class="sect2" id="idm140499670386736">
+<h2>Apache Mesos</h2>
+
+<p><a href="http://mesos.apache.org">Apache Mesos</a> provides high-level building blocks by abstracting CPU, memory, storage, and other resources from machines (physical or virtual). <a href="http://mesos.apache.org/documentation/latest/frameworks/">Multiple applications</a> that use these blocks to provide resource isolation and sharing across distributed applications can run on Mesos.</p>
+
+<p>Marathon is one such framework that provides container orchestration. Docker containers can be easily managed in Marathon. Kubernetes can also be started as a framework on Mesos.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Amazon EC2 Container Service"><div class="sect2" id="idm140499670522832">
+<h2>Amazon EC2 Container Service</h2>
+
+<p>Amazon EC2 Container Service (ECS) is a highly scalable and high-performance container management service that supports Docker containers. It allows you to easily run applications on a managed cluster of Amazon EC2 instances.</p>
+
+<p>Amazon ECS lets you launch and stop container-enabled applications with simple API calls, allows you to get the state of your cluster from a centralized service, and gives you access to many familiar Amazon EC2 features such as security groups, elastic load balancing, and EBS volumes.</p>
+
+<p>Docker containers run on AMIs hosted on EC2. This eliminates the need to operate your own cluster management systems or worry about scaling your management infrastructure.</p>
+
+<p>More details about ECS are available from <a href="https://aws.amazon.com/ecs/">Amazon’s ECS site</a>.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Rancher Labs"><div class="sect2" id="idm140499670518480">
+<h2>Rancher Labs</h2>
+
+<p>Rancher Labs develops software that makes it easy to deploy and manage containers in production. They have two main offerings—Rancher and RancherOS.</p>
+
+<p><a href="http://rancher.com">Rancher</a> is a container management platform that natively supports and manages your Docker Swarm and Kubernetes clusters. Rancher takes a Linux host, either a physical machine or virtual machine, and makes its CPU, memory, local disk storage, and network connectivity available on the platform. Users can now choose between Kubernetes and Swarm when they deploy environments. Rancher automatically stands up the cluster, enforces access control policies, and provides a complete UI for managing the cluster.</p>
+
+<p>RancherOS is a barebones operating system built for running containers. Everything else is pulled dynamically through Docker.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Joyent Triton"><div class="sect2" id="idm140499670514768">
+<h2>Joyent Triton</h2>
+
+<p><a href="https://www.joyent.com">Triton by Joyent</a> virtualizes the entire data center as a single, elastic Docker host. The Triton data center is built using Solaris Zones but offers an endpoint that serves the Docker remote API. This allows Docker CLI and other tools that can talk to this API to run containers easily.</p>
+
+<p>Triton can be used as a service from Joyent or installed as on-premise from Joyent. You can also download the open source version and run it yourself.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Red Hat OpenShift"><div class="sect2" id="idm140499670511760">
+<h2>Red Hat OpenShift</h2>
+
+<p><a href="https://www.openshift.com">OpenShift</a> is Red Hat’s open source PaaS platform. OpenShift 3 uses Docker and Kubernetes for container orchestration. It provides a holistic and simplistic experience of provisioning, building, and deploying your applications in a self-service fashion.</p>
+
+<p>It provides automated workflows, such as source-to-image (S2I), that takes the source code from version control systems and converts them into ready-to-run, Docker-formatted images. It also integrates with continuous integration and delivery tools, making it an ideal solution for any development team.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+</div></section></body></html>

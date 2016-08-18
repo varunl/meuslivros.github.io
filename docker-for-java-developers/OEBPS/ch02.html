@@ -1,0 +1,902 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html><html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml"><head><title>Docker and Your First Application</title><link rel="stylesheet" type="text/css" href="epub.css"/></head><body data-type="book"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 2. Docker and Your First Application"><div class="chapter" id="Docker_And_Your_First_Application">
+<h1><span class="label">Chapter 2. </span>Docker and Your First Application</h1>
+
+
+<p>This chapter explains how to build and run your first Docker container using Java.</p>
+
+<p>You’ll learn the syntax needed to create Docker images using Dockerfiles and run them as a containers. Sharing these images using Docker Hub is explained. Deploying a sample Java EE application using prebuilt Docker images is then covered. This application will consist of an application server and a database container on a single host. The application will be deployed using Docker Compose and Docker Swarm. The same application will also be deployed using Kubernetes.</p>
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Dockerfile"><div class="sect1" id="idm140499670505872">
+<h1>Dockerfile</h1>
+
+<p>Docker builds images by reading instructions from a text document, usually called a <em>Dockerfile</em>. This file contains all the commands a user can usually call on the command line to assemble an image. The <code>docker build</code> command uses this file and executes all the instructions in this file to create an image.</p>
+
+<p>The <code>build</code> command is also passed a context that is used during image creation. This context can be a path on your local filesystem or a URL to a Git repository. The context is processed recursively, which means any subdirectories on the local filesystem path and any submodules of the repository are included.</p>
+
+<p>It’s recommended to start with an empty directory in order to keep the build process simple. Any directories or files that need to be included in the image can be added to the context.</p>
+
+<p>A file named <code>.dockerignore</code> may be included in the root directory of the context. This file has a newline-separated list of patterns for the files and directories to be excluded from the context.</p>
+
+<p>Docker CLI will send the context to Docker Engine to build the image.</p>
+
+<p>Take a look at the <a href="https://docs.docker.com/reference/builder/">complete list of commands that can be specified in the Dockerfile</a>. The common commands are listed in <a data-type="xref" href="#Common_commands_for_Dockerfile">Table 2-1</a>.</p>
+<table id="Common_commands_for_Dockerfile" style="width: 100%">
+<caption><span class="label">Table 2-1. </span>Common commands for Dockerfiles</caption>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p><code>FROM</code></p></td>
+<td><p>First noncomment instruction in the Dockerfile</p></td>
+<td><p><code>FROM ubuntu</code></p></td>
+</tr>
+<tr>
+<td><p><code>COPY</code></p></td>
+<td><p>Copies multiple source files from the context to the filesystem of the container at the specified path</p></td>
+<td><p><code>COPY .bash_profile /home</code></p></td>
+</tr>
+<tr>
+<td><p><code>ENV</code></p></td>
+<td><p>Sets the environment variable</p></td>
+<td><p><code>ENV HOSTNAME=test</code></p></td>
+</tr>
+<tr>
+<td><p><code>RUN</code></p></td>
+<td><p>Executes a command</p></td>
+<td><p><code>RUN apt-get update</code></p></td>
+</tr>
+<tr>
+<td><p><code>CMD</code></p></td>
+<td><p>Default for an executing container</p></td>
+<td><p><code>CMD ["/bin/echo", "hello world"]</code></p></td>
+</tr>
+<tr>
+<td><p><code>EXPOSE</code></p></td>
+<td><p>Informs the network ports that the container will listen on</p></td>
+<td><p><code>EXPOSE 8093</code></p></td>
+</tr>
+</tbody>
+</table>
+
+<p>Any line starting with <code>#</code> in the Dockerfile is treated as a comment and not processed.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Build Your First Docker Image"><div class="sect1" id="idm140499670478160">
+<h1>Build Your First Docker Image</h1>
+
+<p>Any valid Dockerfile must have <code>FROM</code> as the first non-comment instruction. The argument to <code>FROM</code> defines the base image upon which subsequent instructions in the Dockerfile are executed, such as add packages or install JDK. This base image could be for an operating system such as <code>ubuntu</code> for the Ubuntu operating system, or <code>centos</code> for the CentOS operating system. There are base images available for different operating systems at the <a href="http://hub.docker.com">Docker website</a>. Additional packages and software can then be installed on these images.</p>
+
+<p>Other images can use this new image in the <code>FROM</code> command. It allows you to create a chain where multipurpose base images are used and additional software is installed—for example, the <a href="https://hub.docker.com/r/jboss/wildfly/~/dockerfile/">Dockerfile for WildFly</a>. The complete chain for this image is shown here:</p>
+
+<pre data-type="programlisting" data-code-language="text">jboss/wildfly -&gt; jboss/base-jdk:7 -&gt; jboss/base-jdk -&gt;
+jboss/base -&gt; centos</pre>
+
+<p>Often the base image for your application will be a base image that already has some software included in it—for example, the base image for <a href="https://hub.docker.com/_/java/">Java</a>. So your application’s Dockerfile will have an instruction as shown here:</p>
+
+<pre data-type="programlisting" data-code-language="text">FROM java</pre>
+
+<p>Each image has a tag associated with it that defines multiple versions of the image. For example, <code>java:8</code> is the JDK that has OpenJDK 8 already included in it. Similarly, the <code>java:9-jre</code> image has the OpenJDK 9 Java runtime environment (JRE) included in it.</p>
+
+<p>The Dockerfile can also contain <code>CMD</code> instruction. <code>CMD</code> provides defaults for executing the container. If multiple <code>CMD</code> instructions are listed then only the last <code>CMD</code> will take effect. This ensures that the Docker container can run one command, and only one.</p>
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Our First Dockerfile"><div class="sect2" id="idm140499670466080">
+<h2>Our First Dockerfile</h2>
+
+<p>Let’s create our first Dockerfile:</p>
+<ol>
+<li>
+<p>Create a new directory.</p>
+
+<p>This directory will contain the Dockerfile and any other artifacts that need to be included in the image.</p>
+</li>
+<li>
+<p>In this directory, create a new text file and name it <em>Dockerfile</em>. In this file, enter the following code:</p>
+
+<pre data-type="programlisting" data-code-language="text">FROM java
+
+CMD ["java", "-version"]</pre>
+
+<p>Here’s a breakdown of the image definition:</p>
+
+<ul>
+<li>
+<p>This Dockerfile uses <code>java</code> as the base image. This is a prebuilt image on Docker Hub and can generally be used as the base image for all images that need Java runtime.</p>
+</li>
+<li>
+<p>This <code>java</code> image is built on the Debian Jessie release and uses OpenJDK. By default, the <a href="https://hub.docker.com/_/java/">OpenJDK 8</a> release is used. For example, the OpenJDK 8 JRE may be specified using <code>8-jre</code> as the base image.</p>
+</li>
+<li>
+<p>The <code>CMD</code> instruction defines the command that needs to run. The command in this case is simply printing the version of Java interpreter.</p>
+
+<p>Any other dependencies or libraries, such as JAR files, can be included in this image using the <code>COPY</code> instruction. Then a Java command using that JAR file can be invoked by setting the appropriate classpath.</p>
+</li>
+</ul>
+</li>
+
+</ol>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Build Your First Docker Image"><div class="sect2" id="idm140499670303328">
+<h2>Build Your First Docker Image</h2>
+
+<p>Build the image as shown in <a data-type="xref" href="#first-docker-image">Example 2-1</a>.</p>
+<div id="first-docker-image" data-type="example">
+<h5><span class="label">Example 2-1. </span>Build your first Docker image</h5>
+
+<pre data-type="programlisting" data-code-language="text"><code>docker build -t hello-java . </code><a class="co" id="co_docker_and_your_first_application_CO1-1" href="#callout_docker_and_your_first_application_CO1-1"><img src="assets/1.png" alt="1"/></a><code>
+Sending build context to Docker daemon 2.048 kB
+Step 1 : FROM java </code><a class="co" id="co_docker_and_your_first_application_CO1-2" href="#callout_docker_and_your_first_application_CO1-2"><img src="assets/2.png" alt="2"/></a><code>
+latest: Pulling from library/java
+fdd5d7827f33: Pull complete
+a3ed95caeb02: Pull complete
+0f35d0fe50cc: Pull complete
+627b6479c8f7: Pull complete
+14d29245dd71: Pull complete
+11cf859bb16c: Pull complete
+8edb70946005: Pull complete
+a3da659e0c5a: Pull complete
+3d9bebe7e5d6: Pull complete
+Digest: sha256:95fb9831614813371265eb43da7c7f10fa33e46db006d68 \
+fb5acb13fd4ddb1e7
+Status: Downloaded newer image for java:latest
+ ---&gt; f298aed75633
+Step 2 : CMD java -version </code><a class="co" id="co_docker_and_your_first_application_CO1-3" href="#callout_docker_and_your_first_application_CO1-3"><img src="assets/3.png" alt="3"/></a><code>
+ ---&gt; Running in 60b49b2e20a5
+ ---&gt; aae0104e1169
+Removing intermediate container 60b49b2e20a5
+Successfully built aae0104e1169</code></pre></div>
+
+<p>The output shows:</p>
+<dl class="calloutlist">
+<dt><a class="co" id="callout_docker_and_your_first_application_CO1-1" href="#co_docker_and_your_first_application_CO1-1"><img src="assets/1.png" alt="1"/></a></dt>
+<dd><p>The <code>docker build</code> command builds the image. <code>-t</code> provides a name for the image. <code>hello-java</code> is the name of the image. <code>.</code> is the context for the command. This context is used as the base directory for copying any files to the image. No files are copied in this case.</p></dd>
+<dt><a class="co" id="callout_docker_and_your_first_application_CO1-2" href="#co_docker_and_your_first_application_CO1-2"><img src="assets/2.png" alt="2"/></a></dt>
+<dd><p>The <code>java</code> image is downloaded from Docker Hub. It also downloads the complete chain of base images.</p></dd>
+<dt><a class="co" id="callout_docker_and_your_first_application_CO1-3" href="#co_docker_and_your_first_application_CO1-3"><img src="assets/3.png" alt="3"/></a></dt>
+<dd><p>The <code>CMD</code> instruction added as a new layer to the image.</p></dd>
+</dl>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="List the Docker Image"><div class="sect2" id="idm140499670352688">
+<h2>List the Docker Image</h2>
+
+<p>List the images available using the <code>docker images</code> command as shown in <a data-type="xref" href="#List_of_Docker_images">Example 2-2</a>.</p>
+<div id="List_of_Docker_images" data-type="example">
+<h5><span class="label">Example 2-2. </span>List of Docker images</h5>
+
+<pre data-type="programlisting" data-code-language="text">REPOSITORY    TAG       IMAGE ID        CREATED          SIZE
+hello-java    latest    2547fe6782bd    3 minutes ago    642.9 MB
+java          latest    97d87da6866e    9 days ago       642.9 MB</pre></div>
+
+<p>Our image <code>hello-java</code> and the base image <code>java</code> are both shown in this list.</p>
+
+<p>Each image can optionally be tagged using the <code>name:tag</code> format. This allows multiple versions of the image to be created. By default, an image is assigned the <code>latest</code> tag. The total size of the image is shown in the last column.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Run Your First Docker Container"><div class="sect1" id="idm140499670477536">
+<h1>Run Your First Docker Container</h1>
+
+<p>You can run a Docker container using the <code>docker run</code> command and specify the image name. Let’s run our image as shown here:</p>
+
+<pre data-type="programlisting" data-code-language="text">docker run hello-java</pre>
+
+<p>This shows the following output:</p>
+
+<pre data-type="programlisting" data-code-language="text">openjdk version "1.8.0_72-internal"
+OpenJDK Runtime Environment (build 1.8.0_72-internal-b15)
+OpenJDK 64-Bit Server VM (build 25.72-b15, mixed mode)</pre>
+
+<p>The <code>docker run</code> command has multiple options that can be specified to customize the container. Multiple options can be combined together. Some of the common options are listed in <a data-type="xref" href="#Common_options_for_docker_run_command">Table 2-2</a>.</p>
+<table id="Common_options_for_docker_run_command" style="width: 100%">
+<caption><span class="label">Table 2-2. </span>Common options for the docker run command</caption>
+<thead>
+<tr>
+<th>Option</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p><code>-i</code></p></td>
+<td><p>Keep STDIN open even if not attached</p></td>
+</tr>
+<tr>
+<td><p><code>-t</code></p></td>
+<td><p>Allocate a pseudo-TTY</p></td>
+</tr>
+<tr>
+<td><p><code>-d</code></p></td>
+<td><p>Run container in background and print container ID</p></td>
+</tr>
+<tr>
+<td><p><code>--name</code></p></td>
+<td><p>Assign a name to the container</p></td>
+</tr>
+<tr>
+<td><p><code>--rm</code></p></td>
+<td><p>Automatically remove the container when it exits</p></td>
+</tr>
+<tr>
+<td><p><code>-e</code></p></td>
+<td><p>Set environment variable</p></td>
+</tr>
+<tr>
+<td><p><code>-P</code></p></td>
+<td><p>Publish all exposed ports to random ports on the host</p></td>
+</tr>
+<tr>
+<td><p><code>-p</code></p></td>
+<td><p>Publish a container’s port(s) to the specified host port</p></td>
+</tr>
+<tr>
+<td><p><code>-m</code></p></td>
+<td><p>Limit the memory</p></td>
+</tr>
+</tbody>
+</table>
+
+<p>The following command runs the container in the background, gives it a name, and automatically removes it when it exits:</p>
+
+<pre data-type="programlisting" data-code-language="text">docker run --name hello -d --rm hello-java</pre>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Push Image to Docker hub"><div class="sect1" id="idm140499670177408">
+<h1>Push Image to Docker hub</h1>
+
+<p><a href="http://hub.docker.com">Docker Hub</a> is a software-as-a-service (SaaS) registry service. You can search, manage, push, and pull images to this registry. The images can be manually pushed to the registry using the <code>docker push</code> command. Alternatively, they can be built when changes are pushed to a GitHub or Bitbucket repository. User and team collaboration can be facilitated by creating public and private registries.</p>
+
+<p><a data-type="xref" href="#Common_Docker_hub_commands">Table 2-3</a> lists some of the common Docker CLI commands used to interact with Docker Hub.</p>
+<table id="Common_Docker_hub_commands" style="width: 100%">
+<caption><span class="label">Table 2-3. </span>Common Docker Hub commands</caption>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p><code>login</code></p></td>
+<td><p>Register or log in to a Docker registry</p></td>
+</tr>
+<tr>
+<td><p><code>search</code></p></td>
+<td><p>Search the Docker Hub for images</p></td>
+</tr>
+<tr>
+<td><p><code>pull</code></p></td>
+<td><p>Pull an image or a repository from a registry</p></td>
+</tr>
+<tr>
+<td><p><code>push</code></p></td>
+<td><p>Push an image or a repository to a registry</p></td>
+</tr>
+<tr>
+<td><p><code>logout</code></p></td>
+<td><p>Log out from a Docker registry</p></td>
+</tr>
+<tr>
+<td><p><code>tag</code></p></td>
+<td><p>Tag an image into a repository</p></td>
+</tr>
+</tbody>
+</table>
+
+<p>The <code>search</code> and <code>pull</code> commands can be invoked without having an account on Docker Hub. However, the <code>push</code> command requires you to have an account on Docker Hub, which can be created using the <code>docker login</code> command or at the <a href="http://hub.docker.com">Docker Hub website</a>.</p>
+
+<p>The list of Docker images already downloaded on your Docker host is shown in <a data-type="xref" href="#List_of_Docker_images">Example 2-2</a>.</p>
+
+<p>The image <code>hello-java</code> does not have a Docker Hub username associated with it, which is needed to push the image to Docker Hub.</p>
+
+<p>The <code>IMAGE ID</code> column in the following code block shows a unique identifier assigned to this image. A Docker Hub username can be associated with this image using the <code>docker tag</code> and the image ID as shown here:</p>
+
+<pre data-type="programlisting" data-code-language="text">docker tag aae0104e1169 arungupta/hello-java:latest</pre>
+
+<p>The Docker Hub username here is <code>arungupta</code>. Make sure to change this to your Docker Hub username. By default, the <code>latest</code> tag is assigned to the image. In this case, an explicit <code>latest</code> tag is assigned.</p>
+
+<p>Listing the images using the <code>docker images</code> command shows the updated output as shown in <a data-type="xref" href="#List_of_Docker_images_with_tags">Example 2-3</a>.</p>
+<div id="List_of_Docker_images_with_tags" data-type="example">
+<h5><span class="label">Example 2-3. </span>List of Docker images with tags</h5>
+
+<pre data-type="programlisting" data-code-language="text">REPOSITORY           TAG     IMAGE ID      CREATED        SIZE
+arungupta/hello-java latest  2547fe6782bd  4 minutes ago  642.9 MB
+hello-java           latest  2547fe6782bd  4 minutes ago  642.9 MB
+java                 latest  97d87da6866e  9 days ago     642.9 MB</pre></div>
+
+<p>The newly tagged image now shows up correctly.</p>
+
+<p>Now push this image to Docker Hub:</p>
+
+<pre data-type="programlisting" data-code-language="text">docker push arungupta/hello-java:latest</pre>
+
+<p>It shows the output as:</p>
+
+<pre data-type="programlisting" data-code-language="text">The push refers to a repository [docker.io/arungupta/hello-java]
+6d9adc4dcda7: Pushed
+d099a5b1211c: Pushed
+5f70bf18a086: Pushed
+3f647195edaf: Pushed
+4e69899d6e22: Pushed
+bb966b50623d: Pushed
+fb49515ec5d8: Pushed
+bd750002938c: Pushed
+917c0fc99b35: Pushed
+latest: digest: sha256:3155410e3950ebec18ecf5fcda3e1caf7c68fd \
+29ab4a34bc19fb56841a630924 size: 9334</pre>
+
+<p>Anyone can download this image using the <code>docker pull</code> command. Alternatively, a container using this image can be started using the <code>docker run</code> command. This command downloads the image as well, if it does not already exist on your Docker Host.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Multi-Container and Multi-Host Application"><div class="sect1" id="idm140499670176816">
+<h1>Multi-Container and Multi-Host Application</h1>
+
+<p>A typical application consists of multiple components, such as an application server, a web server, and a database server. A Docker container does one thing only, and does it well. Each component from the application thus would be a Docker container. And your application would consist of multiple Docker containers.</p>
+
+<p>These containers need to communicate with each other. For example, the application deployed on the application server will need to know the host address and port on which the database server is running. This can be achieved by using a framework that allows Docker containers to be scheduled. These containers need to be distributed over multiple hosts to avoid SPOF.</p>
+
+<p>The following sections explain how to deploy a simple Java EE application on an application server and access a NoSQL database. <a href="http://wildfly.org">WildFly</a> is used as the application server and <a href="http://developer.couchbase.com">Couchbase</a> is used as the NoSQL database. The Java EE application will use Java API for RESTful services (JAX-RS) to publish REST endpoints. You’ll learn how the application can be deployed using the following orchestration frameworks:</p>
+
+<ul>
+<li>
+<p><a href="https://docs.docker.com/compose/">Docker Compose</a> and <a href="https://docs.docker.com/swarm/">Docker Swarm</a></p>
+</li>
+<li>
+<p><a href="http://kubernetes.io">Kubernetes</a></p>
+</li>
+</ul>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Deploying Application Using Docker Compose and Swarm"><div class="sect1" id="idm140499670045424">
+<h1>Deploying Application Using Docker Compose and Swarm</h1>
+
+<p>To deploy an application we need to define the application using a Compose file, set up the Docker Swarm cluster, and then run our application on the Swarm cluster. Let’s look at these steps in more detail.</p>
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Defining the Application Using the Compose File"><div class="sect2" id="idm140499670043536">
+<h2>Defining the Application Using the Compose File</h2>
+
+<p>The section on <a href="https://docs.docker.com/compose">Docker Compose</a> (<a data-type="xref" href="ch01.html#Docker_Compose">“Docker Compose”</a>) explained how an application consisting of multiple containers can be defined using a Compose file. The Compose file definition for our Java EE application is defined here:</p>
+<div id="Compose_file_definition_for_Java_EE_application" data-type="example">
+
+<pre data-type="programlisting" data-code-language="yaml"><code class="l-Scalar-Plain">version</code><code class="p-Indicator">:</code><code> </code><code class="s">'</code><code class="s">2</code><code class="s">'</code><code>
+</code><code class="l-Scalar-Plain">services</code><code class="p-Indicator">:</code><code>
+</code><code>  </code><code class="l-Scalar-Plain">db</code><code class="p-Indicator">:</code><code> </code><a class="co" id="static_co_docker_and_your_first_application_CO2-1" href="#static_callout_docker_and_your_first_application_CO2-1"><img src="assets/1.png" alt="1"/></a><code>
+</code><code>    </code><code class="l-Scalar-Plain">container_name</code><code class="p-Indicator">:</code><code> </code><code class="s">"</code><code class="s">db</code><code class="s">"</code><code> </code><a class="co" id="static_co_docker_and_your_first_application_CO2-2" href="#static_callout_docker_and_your_first_application_CO2-6"><img src="assets/6.png" alt="6"/></a><code>
+</code><code>    </code><code class="l-Scalar-Plain">image</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">arungupta/oreilly-couchbase</code><code> </code><a class="co" id="static_co_docker_and_your_first_application_CO2-3" href="#static_callout_docker_and_your_first_application_CO2-2"><img src="assets/2.png" alt="2"/></a><code> </code><a class="co" id="static_co_docker_and_your_first_application_CO2-4" href="#static_callout_docker_and_your_first_application_CO2-4"><img src="assets/4.png" alt="4"/></a><code>
+</code><code>    </code><code class="l-Scalar-Plain">ports</code><code class="p-Indicator">:</code><code> </code><a class="co" id="static_co_docker_and_your_first_application_CO2-5" href="#static_callout_docker_and_your_first_application_CO2-3"><img src="assets/3.png" alt="3"/></a><code>
+</code><code>      </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">8091:8091</code><code>
+</code><code>      </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">8092:8092</code><code>
+</code><code>      </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">8093:8093</code><code>
+</code><code>      </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">11210:11210</code><code>
+</code><code>  </code><code class="l-Scalar-Plain">web</code><code class="p-Indicator">:</code><code> </code><a class="co" id="static_co_docker_and_your_first_application_CO2-6" href="#static_callout_docker_and_your_first_application_CO2-1"><img src="assets/1.png" alt="1"/></a><code>
+</code><code>    </code><code class="l-Scalar-Plain">image</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">arungupta/oreilly-wildfly</code><code> </code><a class="co" id="static_co_docker_and_your_first_application_CO2-7" href="#static_callout_docker_and_your_first_application_CO2-2"><img src="assets/2.png" alt="2"/></a><code> </code><a class="co" id="static_co_docker_and_your_first_application_CO2-8" href="#static_callout_docker_and_your_first_application_CO2-5"><img src="assets/5.png" alt="5"/></a><code>
+</code><code>    </code><code class="l-Scalar-Plain">depends_on</code><code class="p-Indicator">:</code><code> </code><a class="co" id="static_co_docker_and_your_first_application_CO2-9" href="#static_callout_docker_and_your_first_application_CO2-7"><img src="assets/7.png" alt="7"/></a><code>
+</code><code>      </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">db</code><code>
+</code><code>    </code><code class="l-Scalar-Plain">environment</code><code class="p-Indicator">:</code><code> </code><a class="co" id="static_co_docker_and_your_first_application_CO2-10" href="#static_callout_docker_and_your_first_application_CO2-8"><img src="assets/8.png" alt="8"/></a><code>
+</code><code>      </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">COUCHBASE_URI=db</code><code>
+</code><code>    </code><code class="l-Scalar-Plain">ports</code><code class="p-Indicator">:</code><code> </code><a class="co" id="static_co_docker_and_your_first_application_CO2-11" href="#static_callout_docker_and_your_first_application_CO2-3"><img src="assets/3.png" alt="3"/></a><code>
+</code><code>      </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">8080:8080</code></pre></div>
+
+<p>This file is available on <a href="http://bit.ly/1Xgje4l">GitHub</a>. This Compose file has:</p>
+<dl class="calloutlist">
+<dt><a class="co" id="static_callout_docker_and_your_first_application_CO2-1" href="#static_co_docker_and_your_first_application_CO2-1"><img src="assets/1.png" alt="1"/></a></dt>
+<dd><p>Two services named <code>db</code> and <code>web</code>.</p></dd>
+<dt><a class="co" id="static_callout_docker_and_your_first_application_CO2-2" href="#static_co_docker_and_your_first_application_CO2-3"><img src="assets/2.png" alt="2"/></a></dt>
+<dd><p>An image name for each service defined using the <code>image</code> attribute.</p></dd>
+<dt><a class="co" id="static_callout_docker_and_your_first_application_CO2-3" href="#static_co_docker_and_your_first_application_CO2-5"><img src="assets/3.png" alt="3"/></a></dt>
+<dd><p>Port forwarding from host to container defined using the <code>ports</code> attribute.</p></dd>
+<dt><a class="co" id="static_callout_docker_and_your_first_application_CO2-4" href="#static_co_docker_and_your_first_application_CO2-4"><img src="assets/4.png" alt="4"/></a></dt>
+<dd><p>The <code>arungupta/oreilly-couchbase</code> image, which starts the Couchbase server and configures it using <a href="http://bit.ly/1Xgvq58">Couchbase REST API</a>. The image is built using <a href="http://bit.ly/1XgvYrt">this Dockerfile</a>.</p></dd>
+<dt><a class="co" id="static_callout_docker_and_your_first_application_CO2-5" href="#static_co_docker_and_your_first_application_CO2-8"><img src="assets/5.png" alt="5"/></a></dt>
+<dd><p>The <code>arungupta/oreilly-wildfly</code> image, which starts the WildFly application server and deploys the WAR file built from <a href="http://bit.ly/1XgjBf7">GitHub</a>. The image is built using <a href="http://bit.ly/1XgjSPl">this Dockerfile</a>.</p>
+
+<p>This Java EE application uses JAX-RS to publish REST endpoints over JSON documents stored in the Couchbase server.</p></dd>
+<dt><a class="co" id="static_callout_docker_and_your_first_application_CO2-6" href="#static_co_docker_and_your_first_application_CO2-2"><img src="assets/6.png" alt="6"/></a></dt>
+<dd><p>The Couchbase container is given the name <code>db</code> using <code>container_name</code> attribute.</p></dd>
+<dt><a class="co" id="static_callout_docker_and_your_first_application_CO2-7" href="#static_co_docker_and_your_first_application_CO2-9"><img src="assets/7.png" alt="7"/></a></dt>
+<dd><p><code>depends_on</code> requires the <code>web</code> service to start before the <code>db</code> service. This will create a dependency between the containers but the application-level health check is still up to the user. For example, the Couchbase database may not be completely ready before the application is deployed in WildFly. In this case, the <code>web</code> service needs to be restarted as <code>docker-compose restart web</code>.</p></dd>
+<dt><a class="co" id="static_callout_docker_and_your_first_application_CO2-8" href="#static_co_docker_and_your_first_application_CO2-10"><img src="assets/8.png" alt="8"/></a></dt>
+<dd><p><code>COUCHBASE_URI</code> environment variable identifies the database container to be used by this <code>web</code> container. This environment variable is then used in the application to connect to the Couchbase server using the <a href="http://docs.couchbase.com/sdk-api/couchbase-java-client-2.2.5/">Couchbase Java SDK API</a>.</p></dd>
+</dl>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Set Up the Docker Swarm Cluster"><div class="sect2" id="idm140499669915264">
+<h2>Set Up the Docker Swarm Cluster</h2>
+
+<p>This application can be targeted to a single host. But as mentioned earlier, this will be a SPOF. Let’s set up a <a href="https://docs.docker.com/swarm/">Docker Swarm</a> cluster to avoid that.</p>
+
+<p><a href="https://docs.docker.com/swarm/install-w-machine/">Setting up a Docker Swarm cluster using Docker Machine</a> and running an application on it typically involves the following steps:</p>
+<ol>
+<li>
+<p>Define discovery service.</p>
+
+<p>All nodes in Docker Swarm cluster need to register with a discovery service. By default, Docker Hub has a hosted service that returns a token. This token can be used to register a Docker Machine as part of the cluster.</p>
+
+<p>Optionally, a new Docker Machine may be created. This machine can run a discovery service, e.g., using Consul. This machine does not need to be part of the Docker Swarm cluster.</p>
+</li>
+<li>
+<p>Create Swarm manager and Worker nodes.</p>
+
+<p>Create at least one Docker Swarm manager node and one Docker Swarm worker node. Make sure to use <code>--swarm-discovery</code> to point to the discovery service. All machines need to use <code>--swarm</code> and other related options to ensure they are part of the cluster. Swarm manager node is identified by the <code>--swarm-master</code> option.</p>
+</li>
+<li>
+<p>Configure Docker CLI. Docker CLI is configured to talk to the Docker Swarm cluster using the code shown here:</p>
+
+<pre data-type="programlisting" data-code-language="text">eval $(docker-machine env --swarm &lt;SWARM-MASTER-NAME&gt;)</pre>
+
+<p><code>&lt;SWARM-MASTER-NAME&gt;</code> is the name of the Docker Machine, which was identified to be the Swarm master. Use <code>docker info</code> to check the number of nodes in the cluster.</p>
+</li>
+<li>
+<p>Run application.</p>
+
+<p>Use the Docker Compose file to start the multi-container application on the Docker Swarm cluster.</p>
+</li>
+
+</ol>
+
+<p>A sample script to create a three-node Docker Swarm cluster is in <a data-type="xref" href="#swarm-cluster-ex">Example 2-5</a>.</p>
+<div id="swarm-cluster-ex" data-type="example">
+<h5><span class="label">Example 2-5. </span>Three-node Swarm cluster</h5>
+
+<pre data-type="programlisting">echo "Creating Docker Machine for Consul ..."
+docker-machine \
+   create \
+   -d virtualbox \
+   consul-machine
+
+echo "Starting Consul ..."
+docker $(docker-machine config consul-machine) run -d \
+         --restart=always \
+         -p "8500:8500" \
+         -h "consul" \
+         progrium/consul -server -bootstrap
+
+echo "Creating Docker Swarm master ..."
+docker-machine \
+  create \
+  -d virtualbox \
+  --swarm \
+  --swarm-master \
+  --swarm-discovery="consul://$(docker-machine ip \
+  consul-machine):8500" \
+  --engine-opt="cluster-store=consul://$(docker-machine ip \
+  consul-machine):8500" \
+  --engine-opt="cluster-advertise=eth1:2376" \
+  swarm-master
+
+echo "Creating Docker Swarm worker node 1 ..."
+docker-machine \
+  create \
+  -d virtualbox \
+  --swarm \
+  --swarm-discovery="consul://$(docker-machine ip \
+  consul-machine):8500" \
+  --engine-opt="cluster-store=consul://$(docker-machine ip \
+  consul-machine):8500" \
+  --engine-opt="cluster-advertise=eth1:2376" \
+  swarm-node-01
+
+echo "Creating Docker Swarm worker node 2 ..."
+docker-machine \
+  create \
+  -d virtualbox \
+  --virtualbox-disk-size "5000" \
+  --swarm \
+  --swarm-discovery="consul://$(docker-machine ip \
+  consul-machine):8500" \
+  --engine-opt="cluster-store=consul://$(docker-machine ip \
+  consul-machine):8500" \
+  --engine-opt="cluster-advertise=eth1:2376" \
+  swarm-node-02
+
+echo "Configure to use Docker Swarm cluster ..."
+eval "$(docker-machine env --swarm swarm-master)"</pre></div>
+
+<p>This script is available on <a href="http://bit.ly/1XglaJZ">GitHub</a>.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Run Application on Docker Swarm Cluster"><div class="sect2" id="idm140499669845088">
+<h2>Run Application on Docker Swarm Cluster</h2>
+
+<p>After you’ve configured the Docker CLI for the Docker Swarm cluster, start the services using the Compose file from <a data-type="xref" href="#Compose_file_definition_for_Java_EE_application">Example 2-4</a> and using the command <code>docker-compose up -d</code>.</p>
+
+<p>Check the services using <code>docker-compose ps</code>. Alternatively, the containers can be seen using <code>docker ps</code>. This shows the worker node on which WildFly and Couchbase containers are running. The relevant output is shown in <a data-type="xref" href="#image-names-example">Example 2-6</a>.</p>
+<div id="image-names-example" data-type="example">
+<h5><span class="label">Example 2-6. </span>WildFly and Couchbase containers on Docker Swarm nodes</h5>
+
+<pre data-type="programlisting" data-code-language="text">IMAGE                              NAMES
+arungupta/oreilly-wildfly:latest   swarm-node-02/hellojavaee_web_1
+arungupta/oreilly-couchbase:latest swarm-node-01/db</pre></div>
+
+<p>The output shows that WildFly is running on <code>swarm-node-02</code> and Couchbase is running on <code>swarm-node-01</code>.</p>
+
+<p>Check the logs using <code>docker-compose logs</code>. You may have to restart the <code>web</code> service as previously explained.</p>
+
+<p>The application expects a JSON document that represents a book entity as input, which can be added as shown in <a data-type="xref" href="#Add_new_entity_using_REST">Example 2-7</a>.</p>
+<div id="Add_new_entity_using_REST" data-type="example">
+<h5><span class="label">Example 2-7. </span>Add new entity using REST</h5>
+
+<pre data-type="programlisting" data-code-language="text">curl -v \
+-H "Content-Type: application/json" \
+-X POST -d '{
+  "isbn": "978-1-4919-1889-0",
+  "name": "Minecraft Modding with Forge",
+  "cost": 29.99
+}' \
+http://$(docker-machine ip swarm-node-02):
+8080/books/resources/book</pre></div>
+
+<p>Make sure to change the node to where WildFly is running, which is <code>swarm-node-02</code> in this case.</p>
+
+<p>This will display the output in <a data-type="xref" href="#Result_from_creating_a_new_entity_using_REST">Example 2-8</a>.</p>
+<div id="Result_from_creating_a_new_entity_using_REST" data-type="example">
+<h5><span class="label">Example 2-8. </span>Result from creating a new entity using REST</h5>
+
+<pre data-type="programlisting" data-code-language="text">{"name":"Minecraft Modding with Forge","cost":29.99,"id":"1",
+"isbn":"978-1-4919-1889-0"}</pre></div>
+
+<p>The complete list of entities can be queried, as shown in <a data-type="xref" href="#Query_entities_using_REST">Example 2-9</a>.</p>
+<div id="Query_entities_using_REST" data-type="example">
+<h5><span class="label">Example 2-9. </span>Query entities using REST</h5>
+
+<pre data-type="programlisting" data-code-language="text">curl http://$(docker-machine ip swarm-node-02):
+8080/books/resources/book</pre></div>
+
+<p>If the Docker Compose application is started on a Docker Swarm cluster then a default, application-specific overlay network is created. A user-defined overlay network can be created as shown in the following code and assigned to the application using the <code>networks</code> attribute in the Docker Compose file:</p>
+
+<pre data-type="programlisting" data-code-language="text">docker network create --driver overlay my-network</pre>
+
+<p>More details about using Docker Compose with Docker Swarm are available on the <a href="https://docs.docker.com/compose/swarm/">Docker website</a>.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Deploying an Application Using Kubernetes"><div class="sect1" id="idm140499669844432">
+<h1>Deploying an Application Using Kubernetes</h1>
+
+<p>To deploy an application using Kubernetes, we need to define the application using a Kubernetes configuration as explained in <a data-type="xref" href="ch01.html#Kubernetes">“Kubernetes”</a> and then run our application on the Kubernetes cluster. Let’s look at these steps in more detail.</p>
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Defining an Application Using a Kubernetes Configuration File"><div class="sect2" id="idm140499669783200">
+<h2>Defining an Application Using a Kubernetes Configuration File</h2>
+
+<p><a data-type="xref" href="ch01.html#Kubernetes">“Kubernetes”</a> explained how an application can be defined using a configuration file. This section will use the Java EE application used in the previous section and deploy it using Kubernetes.</p>
+
+<p>Kubernetes configuration for the application is defined in <a data-type="xref" href="#kubernetes-config-app">Example 2-10</a>.</p>
+<div id="kubernetes-config-app" data-type="example">
+<h5><span class="label">Example 2-10. </span>Kubernetes configuration for the application</h5>
+
+<pre data-type="programlisting" data-code-language="yaml"><code class="l-Scalar-Plain">apiVersion</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">v1</code><code>
+</code><code class="l-Scalar-Plain">kind</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">Service</code><code> </code><a class="co" id="co_docker_and_your_first_application_CO2-1" href="#callout_docker_and_your_first_application_CO2-1"><img src="assets/1.png" alt="1"/></a><code>
+</code><code class="l-Scalar-Plain">metadata</code><code class="p-Indicator">:</code><code>
+</code><code>  </code><code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">couchbase-service</code><code>
+</code><code>  </code><code class="l-Scalar-Plain">labels</code><code class="p-Indicator">:</code><code>
+</code><code>    </code><code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">couchbase-service-pod</code><code>
+</code><code>    </code><code class="l-Scalar-Plain">context</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">oreilly-docker-book</code><code>
+</code><code class="l-Scalar-Plain">spec</code><code class="p-Indicator">:</code><code>
+</code><code>  </code><code class="l-Scalar-Plain">ports</code><code class="p-Indicator">:</code><code>
+</code><code>    </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">admin</code><code>
+</code><code>      </code><code class="l-Scalar-Plain">port</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">8091</code><code>
+</code><code>    </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">api</code><code>
+</code><code>      </code><code class="l-Scalar-Plain">port</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">8092</code><code>
+</code><code>    </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">query</code><code>
+</code><code>      </code><code class="l-Scalar-Plain">port</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">8093</code><code>
+</code><code>    </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">bucket</code><code>
+</code><code>      </code><code class="l-Scalar-Plain">port</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">11210</code><code>
+</code><code>  </code><code class="c1"># label keys and values that must match in order to</code><code>
+</code><code>  </code><code class="c1"># receive traffic for this service</code><code>
+</code><code>  </code><code class="l-Scalar-Plain">selector</code><code class="p-Indicator">:</code><code> </code><a class="co" id="co_docker_and_your_first_application_CO2-2" href="#callout_docker_and_your_first_application_CO2-2"><img src="assets/2.png" alt="2"/></a><code>
+</code><code>    </code><code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">couchbase-rc-pod</code><code>
+</code><code>    </code><code class="l-Scalar-Plain">context</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">oreilly-docker-book</code><code>
+</code><code class="l-Scalar-Plain">----</code><code>
+</code><code class="l-Scalar-Plain">apiVersion</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">v1</code><code>
+</code><code class="l-Scalar-Plain">kind</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">ReplicationController</code><code> </code><a class="co" id="co_docker_and_your_first_application_CO2-3" href="#callout_docker_and_your_first_application_CO2-1"><img src="assets/1.png" alt="1"/></a><code>
+</code><code class="l-Scalar-Plain">metadata</code><code class="p-Indicator">:</code><code>
+</code><code>  </code><code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">couchbase-rc</code><code>
+</code><code>  </code><code class="l-Scalar-Plain">labels</code><code class="p-Indicator">:</code><code>
+</code><code>    </code><code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">couchbase-rc</code><code>
+</code><code>    </code><code class="l-Scalar-Plain">context</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">oreilly-docker-book</code><code>
+</code><code class="l-Scalar-Plain">spec</code><code class="p-Indicator">:</code><code>
+</code><code>  </code><code class="l-Scalar-Plain">replicas</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">1</code><code>
+</code><code>  </code><code class="l-Scalar-Plain">template</code><code class="p-Indicator">:</code><code>
+</code><code>    </code><code class="l-Scalar-Plain">metadata</code><code class="p-Indicator">:</code><code>
+</code><code>      </code><code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">couchbase-rc-pod</code><code>
+</code><code>      </code><code class="l-Scalar-Plain">labels</code><code class="p-Indicator">:</code><code> </code><a class="co" id="co_docker_and_your_first_application_CO2-4" href="#callout_docker_and_your_first_application_CO2-2"><img src="assets/2.png" alt="2"/></a><code>
+</code><code>        </code><code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">couchbase-rc-pod</code><code>
+</code><code>        </code><code class="l-Scalar-Plain">context</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">oreilly-docker-book</code><code>
+</code><code>    </code><code class="l-Scalar-Plain">spec</code><code class="p-Indicator">:</code><code>
+</code><code>      </code><code class="l-Scalar-Plain">containers</code><code class="p-Indicator">:</code><code>
+</code><code>      </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">couchbase-rc-pod</code><code>
+</code><code>        </code><code class="l-Scalar-Plain">image</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">arungupta/oreilly-couchbase:latest</code><code> </code><a class="co" id="co_docker_and_your_first_application_CO2-5" href="#callout_docker_and_your_first_application_CO2-3"><img src="assets/3.png" alt="3"/></a><code> </code><a class="co" id="co_docker_and_your_first_application_CO2-6" href="#callout_docker_and_your_first_application_CO2-4"><img src="assets/4.png" alt="4"/></a><code>
+</code><code>        </code><code class="l-Scalar-Plain">ports</code><code class="p-Indicator">:</code><code>
+</code><code>        </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">containerPort</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">8091</code><code>
+</code><code>        </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">containerPort</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">8092</code><code>
+</code><code>        </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">containerPort</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">8093</code><code>
+</code><code>        </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">containerPort</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">11210</code><code>
+</code><code class="l-Scalar-Plain">----</code><code>
+</code><code class="l-Scalar-Plain">apiVersion</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">v1</code><code>
+</code><code class="l-Scalar-Plain">kind</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">ReplicationController</code><code> </code><a class="co" id="co_docker_and_your_first_application_CO2-7" href="#callout_docker_and_your_first_application_CO2-1"><img src="assets/1.png" alt="1"/></a><code>
+</code><code class="l-Scalar-Plain">metadata</code><code class="p-Indicator">:</code><code>
+</code><code>  </code><code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">wildfly-rc</code><code>
+</code><code>  </code><code class="l-Scalar-Plain">labels</code><code class="p-Indicator">:</code><code>
+</code><code>    </code><code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">wildfly-rc</code><code>
+</code><code>    </code><code class="l-Scalar-Plain">context</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">oreilly-docker-book</code><code>
+</code><code class="l-Scalar-Plain">spec</code><code class="p-Indicator">:</code><code>
+</code><code>  </code><code class="l-Scalar-Plain">replicas</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">1</code><code>
+</code><code>  </code><code class="l-Scalar-Plain">template</code><code class="p-Indicator">:</code><code>
+</code><code>    </code><code class="l-Scalar-Plain">metadata</code><code class="p-Indicator">:</code><code>
+</code><code>      </code><code class="l-Scalar-Plain">labels</code><code class="p-Indicator">:</code><code>
+</code><code>        </code><code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">wildfly</code><code>
+</code><code>        </code><code class="l-Scalar-Plain">context</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">oreilly-docker-book</code><code>
+</code><code>    </code><code class="l-Scalar-Plain">spec</code><code class="p-Indicator">:</code><code>
+</code><code>      </code><code class="l-Scalar-Plain">containers</code><code class="p-Indicator">:</code><code>
+</code><code>      </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">name</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">wildfly-rc-pod</code><code>
+</code><code>        </code><code class="l-Scalar-Plain">image</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">arungupta/oreilly-wildfly:latest</code><code> </code><a class="co" id="co_docker_and_your_first_application_CO2-8" href="#callout_docker_and_your_first_application_CO2-3"><img src="assets/3.png" alt="3"/></a><code> </code><a class="co" id="co_docker_and_your_first_application_CO2-9" href="#callout_docker_and_your_first_application_CO2-5"><img src="assets/5.png" alt="5"/></a><code>
+</code><code>        </code><code class="l-Scalar-Plain">ports</code><code class="p-Indicator">:</code><code>
+</code><code>        </code><code class="p-Indicator">-</code><code> </code><code class="l-Scalar-Plain">containerPort</code><code class="p-Indicator">:</code><code> </code><code class="l-Scalar-Plain">8080</code></pre></div>
+
+<p>This <a href="http://bit.ly/1Xgvul9">configuration file</a> has:</p>
+<dl class="calloutlist">
+<dt><a class="co" id="callout_docker_and_your_first_application_CO2-1" href="#co_docker_and_your_first_application_CO2-1"><img src="assets/1.png" alt="1"/></a></dt>
+<dd><p>One service and two replication controllers. The service is for Couchbase and the replication controllers are for WildFly and Couchbase. A service is required for Couchbase only as this provides a reliable IP address on which the application deployed in WildFly can rely.</p></dd>
+<dt><a class="co" id="callout_docker_and_your_first_application_CO2-2" href="#co_docker_and_your_first_application_CO2-2"><img src="assets/2.png" alt="2"/></a></dt>
+<dd><p>The service, which uses the metadata <code>name: couchbase-rc-pod</code> and <code>context: oreilly-docker-book</code> in the <code>selector</code> attribute. This matches the metadata for the pod specified in the <code>spec.template.metadata.labels</code> attribute of the Couchbase replication controller.</p></dd>
+<dt><a class="co" id="callout_docker_and_your_first_application_CO2-3" href="#co_docker_and_your_first_application_CO2-5"><img src="assets/3.png" alt="3"/></a></dt>
+<dd><p>The image specified using the <code>image</code> attribute in the <code>spec.template.spec.containers.image</code> attribute.</p></dd>
+<dt><a class="co" id="callout_docker_and_your_first_application_CO2-4" href="#co_docker_and_your_first_application_CO2-6"><img src="assets/4.png" alt="4"/></a></dt>
+<dd><p>The <code>arungupta/oreilly-couchbase:latest</code> image, which starts the Couchbase server and configures it using the  <a href="http://bit.ly/1Xgvq58">Couchbase REST API</a>. The image is built using <a href="http://bit.ly/1XgvYrt">this Dockerfile</a>.</p></dd>
+<dt><a class="co" id="callout_docker_and_your_first_application_CO2-5" href="#co_docker_and_your_first_application_CO2-9"><img src="assets/5.png" alt="5"/></a></dt>
+<dd><p>The <code>arungupta/oreilly-wildfly:latest</code> image, which starts the WildFly application server and deploys the WAR file built from <a href="http://bit.ly/1XgjBf7">Java EE NoSQL sample</a>. The image is built using <a href="http://bit.ly/1XgjSPl">this Dockerfile</a>.</p>
+
+<p>This Java EE application deployed in WildFly uses JAX-RS to publish REST endpoints over the JSON documents stored in the Couchbase server.</p></dd>
+</dl>
+
+<p>Kubernetes provides two primary means of service discovery.</p>
+
+<p>The Java EE application uses <a href="http://bit.ly/1XgwuWq">Kubernetes Service-style environment variables</a> to talk to the database. This environment variable is then used in the application to connect to the Couchbase server using the <a href="http://docs.couchbase.com/sdk-api/couchbase-java-client-2.2.5/">Couchbase Java SDK API</a>. Using environment variables for service discovery also means that any service a pod wants to access must be created before the pod itself, or the environment variables will not be populated.</p>
+
+<p>An alternative, and strongly recommended, way to discover a service is by using <a href="http://kubernetes.io/docs/user-guide/services/#dns">DNS server</a>. There is no ordering restriction between a service and a pod when using the DNS server. The DNS server watches the Kubernetes API for new services and creates a set of DNS records for each.</p>
+
+<p>The Couchbase database may not be completely ready before the application is deployed in WildFly. In this case, the WildFly pod needs to be removed, and another one will automatically be created. This ensures the database has started before the application is deployed.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect2" data-pdf-bookmark="Run the Application on Kubernetes Cluster"><div class="sect2" id="idm140499669782608">
+<h2>Run the Application on Kubernetes Cluster</h2>
+
+<p>This application can be started as shown here:</p>
+
+<pre data-type="programlisting" data-code-language="text">kubectl create -f app.yml</pre>
+
+<p>The list of created replication controllers can be seen using the command <code>kubectl get rc</code>, which gives the output shown here:</p>
+
+<pre data-type="programlisting" data-code-language="text">NAME           DESIRED   CURRENT   AGE
+couchbase-rc   1         1         6m
+wildfly-rc     1         1         6m</pre>
+
+<p>The list of services can be seen using the command <code>kubectl get svc</code>, which gives this output:</p>
+
+<pre data-type="programlisting" data-code-language="text">NAME                CLUSTER-IP    EXTERNAL-IP   PORT(S)     AGE
+couchbase-service   10.0.54.170   &lt;none&gt;       8091/TCP,... 6m
+kubernetes          10.0.0.1      &lt;none&gt;        443/TCP     2h</pre>
+
+<p>The list of ports is truncated here, but the command will show a complete output. Similarly, the list of pods can be seen using the command <code>kubectl get po</code>.</p>
+
+<p>Replication controllers, pods, and services are accessible within the Kubernetes cluster. The WildFly replication controller needs to be exposed as an external service outside the Kubernetes cluster as shown in the following code. This allows us to perform the CRUD operation on the application deployed in WildFly:</p>
+
+<pre data-type="programlisting" data-code-language="text">kubectl expose rc wildfly-rc --target-port=8080 --port=8080
+--type=LoadBalancer</pre>
+
+<p>The complete service description can now be seen using the command <code>kubectl describe svc wildfly-rc</code>, which produces this output:</p>
+
+<pre data-type="programlisting" data-code-language="text">Name:     wildfly-rc
+Namespace:    default
+Labels:     context=oreilly-docker-book,name=wildfly-rc
+Selector:   context=oreilly-docker-book,name=wildfly
+Type:     LoadBalancer
+IP:     10.0.242.62
+LoadBalancer Ingress: aca5ae155f86011e5aa71025a2ab0be1-658723113
+.us-west-2.elb.amazonaws.com
+Port:     &lt;unset&gt; 8080/TCP
+NodePort:   &lt;unset&gt; 30591/TCP
+Endpoints:    10.244.2.3:8080
+Session Affinity: None
+Events:
+  FirstSeen LastSeen  Count From      SubobjectPath Type...
+  --------- --------  ----- ----      ------------- ----...
+  1m    1m    1 {service-controller }     Normal    Crea...
+  1m    1m    1 {service-controller }     Normal    Crea...</pre>
+
+<p>The output is truncated, but executing the command will show the complete output. Wait about three minutes for the load balancer to settle. The value of attribute <code>LoadBalancer Ingress</code> shows the externally accessible address of the service. The application is now fully deployed and ready to be accessed.</p>
+
+<p>The application expects a JSON document as input that defines a book entity, which can be added as shown in <a data-type="xref" href="#Add_new_entity_using_REST">Example 2-7</a>. Make sure to change the IP address obtained from the previous step. Executing this command will display the exactly output shown in <a data-type="xref" href="#Result_from_creating_a_new_entity_using_REST">Example 2-8</a>.</p>
+
+<p>The complete list of entities can be queried as shown in <a data-type="xref" href="#Query_entities_using_REST">Example 2-9</a>. Make sure to change the IP address obtained in the previous step. Executing the command will display the output shown in <a data-type="xref" href="#Query_entities_using_REST">Example 2-9</a>.</p>
+
+<p>For more information, check out the <a href="http://kubernetes.io/docs/">Kubernetes documentation</a>.</p>
+</div></section>
+
+
+
+
+
+</div></section>
+
+
+
+
+
+
+
+</div></section></body></html>

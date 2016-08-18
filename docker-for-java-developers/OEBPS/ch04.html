@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html><html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml"><head><title>Conclusion</title><link rel="stylesheet" type="text/css" href="epub.css"/></head><body data-type="book"><section data-type="chapter" epub:type="chapter" data-pdf-bookmark="Chapter 4. Conclusion"><div class="chapter" id="Conclusion">
+<h1><span class="label">Chapter 4. </span>Conclusion</h1>
+
+
+<p>Containers are changing the way Java applications are deployed.</p>
+
+<p>The predominant and classical way to deploy an application is to install a JDK, application server, web server, database, and other required components in your data center, whether on-premises or on the public cloud. The application archive (e.g., <em>.war</em>) is then deployed to the application server. This application will then talk to the database and be exposed using the web server. Typically each component of the application can be scaled independently, which allows for optimum resource utilization.</p>
+
+<p>During installation, the exact version of the JAR, the number of threads in the operating system, the correct parameters for Java runtime, and many other similar parameters must be configured. There are a variety of tools available to get these right, and they’ve worked well, but each tool come with its own APIs and workflows.</p>
+
+<p>Docker provides a common runtime API, image format, and toolset for building, shipping, and running containers on both Windows and Linux. This allows you to package your application as Docker containers in an easy and portable way, and to resolve dependencies between them. These applications can run in your on-prem data center or on public clouds. The applications can be packaged using your usual Java toolchain such as NetBeans and Maven. There are Docker images available for JDK, application servers, databases, web servers, and other components.</p>
+
+<p>Big players like Google (Kubernetes, Container Engine), Microsoft (Azure), Red Hat (OpenShift), and Amazon (Container Service) have been continually evolving their container story. Companies that have been doing Linux containers for quite some time such as Mesosphere and Joyent are aligning with Docker. New frameworks and platforms such as Rancher that provide support for both Docker Swarm and Kubernetes are beginning to grow. The <a href="https://www.opencontainers.org">Open Container Initiative</a> is working on creating an open industry standards around container formats and runtime.</p>
+
+<p>Even though not a strict requirement, containers simplify microservices deployment. There are some common principles behind both: single responsibility principle, isolation, explicitly published interface, and ability to scale.</p>
+
+<p>There is a lot of excitement and an equal amount of work happening. This is not just hype—Docker provides real and credible benefits of simplicity and portability.</p>
+
+<p>By no means is the work done; this is only a start and the landscape is evolving rapidly. Docker doesn’t just simplify packaging your Java application; once you buy into the vision, the concepts and tools can be applied to other languages and projects as well.</p>
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Getting Started with Java and Docker"><div class="sect1" id="idm140499668794912">
+<h1>Getting Started with Java and Docker</h1>
+
+<p><a href="https://github.com/docker/labs/tree/master/java">Docker Labs</a> is a self-paced hands-on introduction to packaging and deploying your Java applications using Docker.</p>
+
+<p>You can take the blue pill and continue to deploy applications in the classical way. Or you can take the red pill and get ready to explore the world of containers!</p>
+</div></section>
+
+
+
+
+
+
+
+</div></section></body></html>
