@@ -1,0 +1,789 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ncx version="2005-1" xml:lang="por" xmlns="http://www.daisy.org/z3986/2005/ncx/">
+  <head>
+    <meta content="a722bfa4-30f4-47d6-9bc5-d10cfcb41948" name="dtb:uid"/>
+    <meta content="6" name="dtb:depth"/>
+    <meta content="calibre (2.17.0)" name="dtb:generator"/>
+    <meta content="0" name="dtb:totalPageCount"/>
+    <meta content="0" name="dtb:maxPageNumber"/>
+  </head>
+  <docTitle>
+    <text>Aprenda a Operar no Mercado de Ações</text>
+  </docTitle>
+  <navMap>
+    <navPoint class="chapter" id="num_1" playOrder="1">
+      <navLabel>
+        <text>Folha de Rosto</text>
+      </navLabel>
+      <content src="Text/part0000.html"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_2" playOrder="2">
+      <navLabel>
+        <text>Cadastro</text>
+      </navLabel>
+      <content src="Text/part0001.html"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_3" playOrder="3">
+      <navLabel>
+        <text>Copyright</text>
+      </navLabel>
+      <content src="Text/part0002.html"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_4" playOrder="4">
+      <navLabel>
+        <text>Dedicatória</text>
+      </navLabel>
+      <content src="Text/part0003.html"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_5" playOrder="5">
+      <navLabel>
+        <text>Sumário</text>
+      </navLabel>
+      <content src="Text/part0004.html"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_6" playOrder="6">
+      <navLabel>
+        <text>Sobre o Autor</text>
+      </navLabel>
+      <content src="Text/part0005.html"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_7" playOrder="7">
+      <navLabel>
+        <text>Agradecimentos</text>
+      </navLabel>
+      <content src="Text/part0006.html"/>
+    </navPoint>
+    <navPoint class="chapter" id="num_8" playOrder="8">
+      <navLabel>
+        <text>Introdução</text>
+      </navLabel>
+      <content src="Text/part0007.html"/>
+      <navPoint class="chapter" id="num_9" playOrder="9">
+        <navLabel>
+          <text>Como este Livro está Organizado</text>
+        </navLabel>
+        <content src="Text/part0007.html#sigil_toc_id_1"/>
+      </navPoint>
+      <navPoint class="chapter" id="num_10" playOrder="10">
+        <navLabel>
+          <text>Macho ou Fêmea?</text>
+        </navLabel>
+        <content src="Text/part0007.html#sigil_toc_id_2"/>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_11" playOrder="11">
+      <navLabel>
+        <text>Parte Um. Operações de Mercado para Calouros Indefesos</text>
+      </navLabel>
+      <content src="Text/part0008_split_000.html"/>
+      <navPoint class="chapter" id="num_12" playOrder="12">
+        <navLabel>
+          <text>Capítulo 1. Investir? Operar? Jogar?</text>
+        </navLabel>
+        <content src="Text/part0009_split_000.html"/>
+        <navPoint class="chapter" id="num_13" playOrder="13">
+          <navLabel>
+            <text>Investidor Inteligente</text>
+          </navLabel>
+          <content src="Text/part0009_split_001.html#sigil_toc_id_3"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_14" playOrder="14">
+          <navLabel>
+            <text>Operador Inteligente</text>
+          </navLabel>
+          <content src="Text/part0009_split_001.html#sigil_toc_id_4"/>
+          <navPoint class="chapter" id="num_15" playOrder="15">
+            <navLabel>
+              <text>A Teoria dos Mercados Eficientes</text>
+            </navLabel>
+            <content src="Text/part0009_split_001.html#sigil_toc_id_5"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_16" playOrder="16">
+            <navLabel>
+              <text>O que é Preço</text>
+            </navLabel>
+            <content src="Text/part0009_split_001.html#sigil_toc_id_6"/>
+          </navPoint>
+        </navPoint>
+        <navPoint class="chapter" id="num_17" playOrder="17">
+          <navLabel>
+            <text>Jogador Inteligente?</text>
+          </navLabel>
+          <content src="Text/part0009_split_001.html#sigil_toc_id_7"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_18" playOrder="18">
+        <navLabel>
+          <text>Capítulo 2. Em que Mercados Operar</text>
+        </navLabel>
+        <content src="Text/part0010_split_000.html"/>
+        <navPoint class="chapter" id="num_19" playOrder="19">
+          <navLabel>
+            <text>Ações</text>
+          </navLabel>
+          <content src="Text/part0010_split_001.html#sigil_toc_id_8"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_20" playOrder="20">
+          <navLabel>
+            <text>Mercados Futuros</text>
+          </navLabel>
+          <content src="Text/part0010_split_001.html#sigil_toc_id_9"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_21" playOrder="21">
+          <navLabel>
+            <text>Opções</text>
+          </navLabel>
+          <content src="Text/part0010_split_001.html#sigil_toc_id_10"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_22" playOrder="22">
+        <navLabel>
+          <text>Capítulo 3. Os Primeiros Passos</text>
+        </navLabel>
+        <content src="Text/part0011_split_000.html"/>
+        <navPoint class="chapter" id="num_23" playOrder="23">
+          <navLabel>
+            <text>Barreiras Externas ao Sucesso</text>
+          </navLabel>
+          <content src="Text/part0011_split_001.html#sigil_toc_id_11"/>
+          <navPoint class="chapter" id="num_24" playOrder="24">
+            <navLabel>
+              <text>Comissões</text>
+            </navLabel>
+            <content src="Text/part0011_split_001.html#sigil_toc_id_12"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_25" playOrder="25">
+            <navLabel>
+              <text>Slippage</text>
+            </navLabel>
+            <content src="Text/part0011_split_001.html#sigil_toc_id_13"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_26" playOrder="26">
+            <navLabel>
+              <text>Despesas</text>
+            </navLabel>
+            <content src="Text/part0011_split_001.html#sigil_toc_id_14"/>
+          </navPoint>
+        </navPoint>
+        <navPoint class="chapter" id="num_27" playOrder="27">
+          <navLabel>
+            <text>Engate a Marcha</text>
+          </navLabel>
+          <content src="Text/part0011_split_001.html#sigil_toc_id_15"/>
+          <navPoint class="chapter" id="num_28" playOrder="28">
+            <navLabel>
+              <text>Questões de Tamanho</text>
+            </navLabel>
+            <content src="Text/part0011_split_001.html#sigil_toc_id_16"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_29" playOrder="29">
+            <navLabel>
+              <text>Hardware e Software</text>
+            </navLabel>
+            <content src="Text/part0011_split_001.html#sigil_toc_id_17"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_30" playOrder="30">
+            <navLabel>
+              <text>Dados</text>
+            </navLabel>
+            <content src="Text/part0011_split_001.html#sigil_toc_id_18"/>
+          </navPoint>
+        </navPoint>
+        <navPoint class="chapter" id="num_31" playOrder="31">
+          <navLabel>
+            <text>Análise e Operações de Mercado</text>
+          </navLabel>
+          <content src="Text/part0011_split_001.html#sigil_toc_id_19"/>
+          <navPoint class="chapter" id="num_32" playOrder="32">
+            <navLabel>
+              <text>Análise Fundamentalista</text>
+            </navLabel>
+            <content src="Text/part0011_split_001.html#sigil_toc_id_20"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_33" playOrder="33">
+            <navLabel>
+              <text>Análise Técnica</text>
+            </navLabel>
+            <content src="Text/part0011_split_001.html#sigil_toc_id_21"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_34" playOrder="34">
+            <navLabel>
+              <text>Quando Comprar e Vender</text>
+            </navLabel>
+            <content src="Text/part0011_split_001.html#sigil_toc_id_22"/>
+          </navPoint>
+        </navPoint>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_35" playOrder="35">
+      <navLabel>
+        <text>Parte Dois. Os Três Ms das Operações de Mercado Bem-Sucedidas</text>
+      </navLabel>
+      <content src="Text/part0012_split_000.html"/>
+      <navPoint class="chapter" id="num_36" playOrder="36">
+        <navLabel>
+          <text>Capítulo 4. Mente: O Operador Disciplinado</text>
+        </navLabel>
+        <content src="Text/part0013_split_000.html"/>
+        <navPoint class="chapter" id="num_37" playOrder="37">
+          <navLabel>
+            <text>Sonambulando pelo Mercado</text>
+          </navLabel>
+          <content src="Text/part0013_split_001.html#sigil_toc_id_23"/>
+          <navPoint class="chapter" id="num_38" playOrder="38">
+            <navLabel>
+              <text>Culpe o Corretor</text>
+            </navLabel>
+            <content src="Text/part0013_split_001.html#sigil_toc_id_24"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_39" playOrder="39">
+            <navLabel>
+              <text>Culpe o Guru</text>
+            </navLabel>
+            <content src="Text/part0013_split_001.html#sigil_toc_id_25"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_40" playOrder="40">
+            <navLabel>
+              <text>Culpe as Notícias Inesperadas</text>
+            </navLabel>
+            <content src="Text/part0013_split_001.html#sigil_toc_id_26"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_41" playOrder="41">
+            <navLabel>
+              <text>Wishful Thinking</text>
+            </navLabel>
+            <content src="Text/part0013_split_001.html#sigil_toc_id_27"/>
+          </navPoint>
+        </navPoint>
+        <navPoint class="chapter" id="num_42" playOrder="42">
+          <navLabel>
+            <text>Remédio para a Autodestrutividade</text>
+          </navLabel>
+          <content src="Text/part0013_split_001.html#sigil_toc_id_28"/>
+          <navPoint class="chapter" id="num_43" playOrder="43">
+            <navLabel>
+              <text>Perdedores Anônimos</text>
+            </navLabel>
+            <content src="Text/part0013_split_001.html#sigil_toc_id_29"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_44" playOrder="44">
+            <navLabel>
+              <text>Risco do Negócio versus Prejuízo</text>
+            </navLabel>
+            <content src="Text/part0013_split_001.html#sigil_toc_id_30"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_45" playOrder="45">
+            <navLabel>
+              <text>Sóbrio na Batalha</text>
+            </navLabel>
+            <content src="Text/part0013_split_001.html#sigil_toc_id_31"/>
+          </navPoint>
+        </navPoint>
+        <navPoint class="chapter" id="num_46" playOrder="46">
+          <navLabel>
+            <text>O Operador Maduro</text>
+          </navLabel>
+          <content src="Text/part0013_split_001.html#sigil_toc_id_32"/>
+          <navPoint class="chapter" id="num_47" playOrder="47">
+            <navLabel>
+              <text>Disciplina</text>
+            </navLabel>
+            <content src="Text/part0013_split_001.html#sigil_toc_id_33"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_48" playOrder="48">
+            <navLabel>
+              <text>Escrituração</text>
+            </navLabel>
+            <content src="Text/part0013_split_001.html#sigil_toc_id_34"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_49" playOrder="49">
+            <navLabel>
+              <text>Treinando para a Batalha</text>
+            </navLabel>
+            <content src="Text/part0013_split_001.html#sigil_toc_id_35"/>
+          </navPoint>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_50" playOrder="50">
+        <navLabel>
+          <text>Capítulo 5. Método – Análise Técnica</text>
+        </navLabel>
+        <content src="Text/part0014_split_000.html"/>
+        <navPoint class="chapter" id="num_51" playOrder="51">
+          <navLabel>
+            <text>Gráficos Básicos</text>
+          </navLabel>
+          <content src="Text/part0014_split_001.html#sigil_toc_id_36"/>
+          <navPoint class="chapter" id="num_52" playOrder="52">
+            <navLabel>
+              <text>O Significado dos Preços</text>
+            </navLabel>
+            <content src="Text/part0014_split_001.html#sigil_toc_id_37"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_53" playOrder="53">
+            <navLabel>
+              <text>A Realidade dos Gráficos</text>
+            </navLabel>
+            <content src="Text/part0014_split_001.html#sigil_toc_id_38"/>
+          </navPoint>
+        </navPoint>
+        <navPoint class="chapter" id="num_54" playOrder="54">
+          <navLabel>
+            <text>Indicadores – Cinco Balas no Tambor</text>
+          </navLabel>
+          <content src="Text/part0014_split_001.html#sigil_toc_id_39"/>
+          <navPoint class="chapter" id="num_55" playOrder="55">
+            <navLabel>
+              <text>Escolha de Ferramentas</text>
+            </navLabel>
+            <content src="Text/part0014_split_001.html#sigil_toc_id_40"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_56" playOrder="56">
+            <navLabel>
+              <text>Médias Móveis</text>
+            </navLabel>
+            <content src="Text/part0014_split_001.html#sigil_toc_id_41"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_57" playOrder="57">
+            <navLabel>
+              <text>Canais</text>
+            </navLabel>
+            <content src="Text/part0014_split_001.html#sigil_toc_id_42"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_58" playOrder="58">
+            <navLabel>
+              <text>Histograma MACD</text>
+            </navLabel>
+            <content src="Text/part0014_split_001.html#sigil_toc_id_43"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_59" playOrder="59">
+            <navLabel>
+              <text>Índice de Força</text>
+            </navLabel>
+            <content src="Text/part0014_split_001.html#sigil_toc_id_44"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_60" playOrder="60">
+            <navLabel>
+              <text>A Quinta Bala</text>
+            </navLabel>
+            <content src="Text/part0014_split_001.html#sigil_toc_id_45"/>
+          </navPoint>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_61" playOrder="61">
+        <navLabel>
+          <text>Capítulo 6. Operações de Mercado</text>
+        </navLabel>
+        <content src="Text/part0015_split_000.html"/>
+        <navPoint class="chapter" id="num_62" playOrder="62">
+          <navLabel>
+            <text>Teste de Sistemas</text>
+          </navLabel>
+          <content src="Text/part0015_split_001.html#sigil_toc_id_46"/>
+          <navPoint class="chapter" id="num_63" playOrder="63">
+            <navLabel>
+              <text>Negociações no Papel</text>
+            </navLabel>
+            <content src="Text/part0015_split_001.html#sigil_toc_id_47"/>
+          </navPoint>
+        </navPoint>
+        <navPoint class="chapter" id="num_64" playOrder="64">
+          <navLabel>
+            <text>Atualização sobre Triple Screen</text>
+          </navLabel>
+          <content src="Text/part0015_split_001.html#sigil_toc_id_48"/>
+          <navPoint class="chapter" id="num_65" playOrder="65">
+            <navLabel>
+              <text>Indicadores Conflitantes</text>
+            </navLabel>
+            <content src="Text/part0015_split_001.html#sigil_toc_id_49"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_66" playOrder="66">
+            <navLabel>
+              <text>Escalas Temporais Conflitantes</text>
+            </navLabel>
+            <content src="Text/part0015_split_001.html#sigil_toc_id_50"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_67" playOrder="67">
+            <navLabel>
+              <text>Os Princípios do Triple Screen</text>
+            </navLabel>
+            <content src="Text/part0015_split_001.html#sigil_toc_id_51"/>
+            <navPoint class="chapter" id="num_68" playOrder="68">
+              <navLabel>
+                <text>Tela Um</text>
+              </navLabel>
+              <content src="Text/part0015_split_001.html#sigil_toc_id_52"/>
+            </navPoint>
+            <navPoint class="chapter" id="num_69" playOrder="69">
+              <navLabel>
+                <text>Tela Dois</text>
+              </navLabel>
+              <content src="Text/part0015_split_001.html#sigil_toc_id_53"/>
+            </navPoint>
+            <navPoint class="chapter" id="num_70" playOrder="70">
+              <navLabel>
+                <text>Tela Três</text>
+              </navLabel>
+              <content src="Text/part0015_split_001.html#sigil_toc_id_54"/>
+            </navPoint>
+          </navPoint>
+        </navPoint>
+        <navPoint class="chapter" id="num_71" playOrder="71">
+          <navLabel>
+            <text>Day-Trading</text>
+          </navLabel>
+          <content src="Text/part0015_split_001.html#sigil_toc_id_55"/>
+          <navPoint class="chapter" id="num_72" playOrder="72">
+            <navLabel>
+              <text>Lições dos Operadores Especiais (ou da Sala de Operações)</text>
+            </navLabel>
+            <content src="Text/part0015_split_001.html#sigil_toc_id_56"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_73" playOrder="73">
+            <navLabel>
+              <text>Lições dos Operadores Institucionais</text>
+            </navLabel>
+            <content src="Text/part0015_split_001.html#sigil_toc_id_57"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_74" playOrder="74">
+            <navLabel>
+              <text>Obtenção dos Dados</text>
+            </navLabel>
+            <content src="Text/part0015_split_001.html#sigil_toc_id_58"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_75" playOrder="75">
+            <navLabel>
+              <text>Psicologia</text>
+            </navLabel>
+            <content src="Text/part0015_split_001.html#sigil_toc_id_59"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_76" playOrder="76">
+            <navLabel>
+              <text>Escolhendo o Mercado</text>
+            </navLabel>
+            <content src="Text/part0015_split_001.html#sigil_toc_id_60"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_77" playOrder="77">
+            <navLabel>
+              <text>Análise e Decisão</text>
+            </navLabel>
+            <content src="Text/part0015_split_001.html#sigil_toc_id_61"/>
+            <navPoint class="chapter" id="num_78" playOrder="78">
+              <navLabel>
+                <text>Tela Um</text>
+              </navLabel>
+              <content src="Text/part0015_split_001.html#sigil_toc_id_62"/>
+            </navPoint>
+            <navPoint class="chapter" id="num_79" playOrder="79">
+              <navLabel>
+                <text>Tela Dois</text>
+              </navLabel>
+              <content src="Text/part0015_split_002.html"/>
+            </navPoint>
+            <navPoint class="chapter" id="num_80" playOrder="80">
+              <navLabel>
+                <text>Tela Três</text>
+              </navLabel>
+              <content src="Text/part0015_split_002.html#sigil_toc_id_64"/>
+            </navPoint>
+          </navPoint>
+          <navPoint class="chapter" id="num_81" playOrder="81">
+            <navLabel>
+              <text>Manter Day-trades Durante a Noite</text>
+            </navLabel>
+            <content src="Text/part0015_split_002.html#sigil_toc_id_65"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_82" playOrder="82">
+            <navLabel>
+              <text>Rompimentos da Faixa de Abertura</text>
+            </navLabel>
+            <content src="Text/part0015_split_002.html#sigil_toc_id_66"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_83" playOrder="83">
+            <navLabel>
+              <text>O Plano Diário</text>
+            </navLabel>
+            <content src="Text/part0015_split_002.html#sigil_toc_id_67"/>
+          </navPoint>
+        </navPoint>
+        <navPoint class="chapter" id="num_84" playOrder="84">
+          <navLabel>
+            <text>Impulse System</text>
+          </navLabel>
+          <content src="Text/part0015_split_002.html#sigil_toc_id_68"/>
+          <navPoint class="chapter" id="num_85" playOrder="85">
+            <navLabel>
+              <text>Entradas</text>
+            </navLabel>
+            <content src="Text/part0015_split_002.html#sigil_toc_id_69"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_86" playOrder="86">
+            <navLabel>
+              <text>Saídas</text>
+            </navLabel>
+            <content src="Text/part0015_split_002.html#sigil_toc_id_70"/>
+          </navPoint>
+        </navPoint>
+        <navPoint class="chapter" id="num_87" playOrder="87">
+          <navLabel>
+            <text>Termômetro do Mercado</text>
+          </navLabel>
+          <content src="Text/part0015_split_002.html#sigil_toc_id_71"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_88" playOrder="88">
+          <navLabel>
+            <text>Operações de Saída</text>
+          </navLabel>
+          <content src="Text/part0015_split_002.html#sigil_toc_id_72"/>
+          <navPoint class="chapter" id="num_89" playOrder="89">
+            <navLabel>
+              <text>Metas de Canal</text>
+            </navLabel>
+            <content src="Text/part0015_split_002.html#sigil_toc_id_73"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_90" playOrder="90">
+            <navLabel>
+              <text>Stops de Proteção</text>
+            </navLabel>
+            <content src="Text/part0015_split_002.html#sigil_toc_id_74"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_91" playOrder="91">
+            <navLabel>
+              <text>O Stop SafeZone</text>
+            </navLabel>
+            <content src="Text/part0015_split_002.html#sigil_toc_id_75"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_92" playOrder="92">
+            <navLabel>
+              <text>A Saída Candelabro</text>
+            </navLabel>
+            <content src="Text/part0015_split_002.html#sigil_toc_id_76"/>
+          </navPoint>
+        </navPoint>
+        <navPoint class="chapter" id="num_93" playOrder="93">
+          <navLabel>
+            <text>Escolhendo em que Operar</text>
+          </navLabel>
+          <content src="Text/part0015_split_002.html#sigil_toc_id_77"/>
+          <navPoint class="chapter" id="num_94" playOrder="94">
+            <navLabel>
+              <text>Ações</text>
+            </navLabel>
+            <content src="Text/part0015_split_002.html#sigil_toc_id_78"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_95" playOrder="95">
+            <navLabel>
+              <text>Opções</text>
+            </navLabel>
+            <content src="Text/part0015_split_002.html#sigil_toc_id_79"/>
+          </navPoint>
+          <navPoint class="chapter" id="num_96" playOrder="96">
+            <navLabel>
+              <text>Futuros</text>
+            </navLabel>
+            <content src="Text/part0015_split_002.html#sigil_toc_id_80"/>
+          </navPoint>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_97" playOrder="97">
+        <navLabel>
+          <text>Capítulo 7. Fórmulas de Gestão do Dinheiro</text>
+        </navLabel>
+        <content src="Text/part0016_split_000.html"/>
+        <navPoint class="chapter" id="num_98" playOrder="98">
+          <navLabel>
+            <text>Fora os Analfabetos em Matemática</text>
+          </navLabel>
+          <content src="Text/part0016_split_001.html#sigil_toc_id_81"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_99" playOrder="99">
+          <navLabel>
+            <text>Risco Versus Perda em Negócios</text>
+          </navLabel>
+          <content src="Text/part0016_split_001.html#sigil_toc_id_82"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_100" playOrder="100">
+          <navLabel>
+            <text>A Solução dos 2% – Proteção contra Tubarões</text>
+          </navLabel>
+          <content src="Text/part0016_split_001.html#sigil_toc_id_83"/>
+          <navPoint class="chapter" id="num_101" playOrder="101">
+            <navLabel>
+              <text>Futuros - Planilha “Bom para Operar”</text>
+            </navLabel>
+            <content src="Text/part0016_split_001.html#sigil_toc_id_84"/>
+          </navPoint>
+        </navPoint>
+        <navPoint class="chapter" id="num_102" playOrder="102">
+          <navLabel>
+            <text>Regra dos 6% – Proteção contra as Piranhas</text>
+          </navLabel>
+          <content src="Text/part0016_split_001.html#sigil_toc_id_85"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_103" playOrder="103">
+          <navLabel>
+            <text>Tamanho das Posições</text>
+          </navLabel>
+          <content src="Text/part0016_split_001.html#sigil_toc_id_86"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_104" playOrder="104">
+          <navLabel>
+            <text>Passos em Gestão do Dinheiro</text>
+          </navLabel>
+          <content src="Text/part0016_split_001.html#sigil_toc_id_87"/>
+        </navPoint>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_105" playOrder="105">
+      <navLabel>
+        <text>Parte Três. Entre em Minha Sala de Operações</text>
+      </navLabel>
+      <content src="Text/part0017_split_000.html"/>
+      <navPoint class="chapter" id="num_106" playOrder="106">
+        <navLabel>
+          <text>Capítulo 8. O Operador Organizado</text>
+        </navLabel>
+        <content src="Text/part0018_split_000.html"/>
+        <navPoint class="chapter" id="num_107" playOrder="107">
+          <navLabel>
+            <text>Planilha do Operador</text>
+          </navLabel>
+          <content src="Text/part0018_split_001.html#sigil_toc_id_88"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_108" playOrder="108">
+          <navLabel>
+            <text>Curva do Patrimônio</text>
+          </navLabel>
+          <content src="Text/part0018_split_001.html#sigil_toc_id_89"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_109" playOrder="109">
+          <navLabel>
+            <text>Diário de Operações</text>
+          </navLabel>
+          <content src="Text/part0018_split_001.html#sigil_toc_id_90"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_110" playOrder="110">
+          <navLabel>
+            <text>Plano de Ação</text>
+          </navLabel>
+          <content src="Text/part0018_split_001.html#sigil_toc_id_91"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_111" playOrder="111">
+        <navLabel>
+          <text>Capítulo 9. Operar nos Mercados como Meio de Vida</text>
+        </navLabel>
+        <content src="Text/part0019_split_000.html"/>
+        <navPoint class="chapter" id="num_112" playOrder="112">
+          <navLabel>
+            <text>Disciplina e Humildade</text>
+          </navLabel>
+          <content src="Text/part0019_split_001.html#sigil_toc_id_92"/>
+          <navPoint class="chapter" id="num_113" playOrder="113">
+            <navLabel>
+              <text>Dez Pontos</text>
+            </navLabel>
+            <content src="Text/part0019_split_001.html#sigil_toc_id_93"/>
+          </navPoint>
+        </navPoint>
+        <navPoint class="chapter" id="num_114" playOrder="114">
+          <navLabel>
+            <text>Você tem Tempo?</text>
+          </navLabel>
+          <content src="Text/part0019_split_001.html#sigil_toc_id_94"/>
+          <navPoint class="chapter" id="num_115" playOrder="115">
+            <navLabel>
+              <text>Gestão do Tempo com o Sistema de Avaliação ABC</text>
+            </navLabel>
+            <content src="Text/part0019_split_001.html#sigil_toc_id_95"/>
+          </navPoint>
+        </navPoint>
+        <navPoint class="chapter" id="num_116" playOrder="116">
+          <navLabel>
+            <text>Árvore de Decisões</text>
+          </navLabel>
+          <content src="Text/part0019_split_001.html#sigil_toc_id_96"/>
+          <navPoint class="chapter" id="num_117" playOrder="117">
+            <navLabel>
+              <text>Desenvolvimento do Plano de Operações</text>
+            </navLabel>
+            <content src="Text/part0019_split_001.html#sigil_toc_id_97"/>
+            <navPoint class="chapter" id="num_118" playOrder="118">
+              <navLabel>
+                <text>Pesquisa</text>
+              </navLabel>
+              <content src="Text/part0019_split_001.html#sigil_toc_id_98"/>
+            </navPoint>
+            <navPoint class="chapter" id="num_119" playOrder="119">
+              <navLabel>
+                <text>Atividades Semanais</text>
+              </navLabel>
+              <content src="Text/part0019_split_001.html#sigil_toc_id_99"/>
+            </navPoint>
+            <navPoint class="chapter" id="num_120" playOrder="120">
+              <navLabel>
+                <text>Atividades Diárias</text>
+              </navLabel>
+              <content src="Text/part0019_split_001.html#sigil_toc_id_100"/>
+            </navPoint>
+            <navPoint class="chapter" id="num_121" playOrder="121">
+              <navLabel>
+                <text>Pesquisa</text>
+              </navLabel>
+              <content src="Text/part0019_split_001.html#sigil_toc_id_101"/>
+            </navPoint>
+            <navPoint class="chapter" id="num_122" playOrder="122">
+              <navLabel>
+                <text>Atividades Semanais</text>
+              </navLabel>
+              <content src="Text/part0019_split_001.html#sigil_toc_id_102"/>
+            </navPoint>
+            <navPoint class="chapter" id="num_123" playOrder="123">
+              <navLabel>
+                <text>Atividades Diárias</text>
+              </navLabel>
+              <content src="Text/part0019_split_001.html#sigil_toc_id_103"/>
+            </navPoint>
+          </navPoint>
+        </navPoint>
+        <navPoint class="chapter" id="num_124" playOrder="124">
+          <navLabel>
+            <text>Principiante, Semiprofissional e Profissional</text>
+          </navLabel>
+          <content src="Text/part0019_split_001.html#sigil_toc_id_104"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_125" playOrder="125">
+          <navLabel>
+            <text>Tornando-se Profissional</text>
+          </navLabel>
+          <content src="Text/part0019_split_001.html#sigil_toc_id_105"/>
+        </navPoint>
+      </navPoint>
+      <navPoint class="chapter" id="num_126" playOrder="126">
+        <navLabel>
+          <text>Capítulo 10. Entre em Minha Sala de Operações</text>
+        </navLabel>
+        <content src="Text/part0020_split_000.html"/>
+        <navPoint class="chapter" id="num_127" playOrder="127">
+          <navLabel>
+            <text>Trechos do Diário</text>
+          </navLabel>
+          <content src="Text/part0020_split_001.html#sigil_toc_id_106"/>
+        </navPoint>
+        <navPoint class="chapter" id="num_128" playOrder="128">
+          <navLabel>
+            <text>Sua Próxima Operação</text>
+          </navLabel>
+          <content src="Text/part0020_split_001.html#sigil_toc_id_107"/>
+        </navPoint>
+      </navPoint>
+    </navPoint>
+    <navPoint class="chapter" id="num_129" playOrder="129">
+      <navLabel>
+        <text>Fontes</text>
+      </navLabel>
+      <content src="Text/part0021.html"/>
+    </navPoint>
+  </navMap>
+</ncx>

@@ -1,0 +1,886 @@
+.autor {
+    display: block;
+    font-size: 1.66667em;
+    font-weight: normal;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: left;
+    text-indent: 0;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0.5em 0 0.2em 100px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.autor1 {
+    display: block;
+    font-size: 0.75em;
+    font-weight: normal;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: left;
+    text-indent: 0;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0 0 2em 100px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.b {
+    display: block;
+    font-size: 1em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: -22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0.5em 0 0 22px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.b1 {
+    display: block;
+    font-size: 1em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: -22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0 0 0 22px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.b2 {
+    display: block;
+    font-size: 1em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: -22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0 0 1.5em 22px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.bibli {
+    display: block;
+    font-size: 1em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: -22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0 0 0.3em 22px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.body-center {
+    display: block;
+    font-size: 1em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: center;
+    text-indent: 0;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 1em 0;
+    padding: 0;
+    border: currentColor none 0
+    }
+.body-no-indent {
+    display: block;
+    font-size: 1em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: 0;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0;
+    padding: 0;
+    border: currentColor none 0
+    }
+.body-no-indent-esp {
+    display: block;
+    font-size: 1em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: -22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 1.5em 0 0 44px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.body-no-indent-esp1 {
+    display: block;
+    font-size: 1em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: -22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0 0 0 44px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.body-no-indent-esp2 {
+    display: block;
+    font-size: 1em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: -22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0 0 1.5em 44px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.body-no-indent-recuo {
+    display: block;
+    font-size: 1em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: 0;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 1.5em 0 0;
+    padding: 0;
+    border: currentColor none 0
+    }
+.calibre {
+    -epub-ruby-position: over;
+    -moz-hyphens: none;
+    -webkit-hyphens: none;
+    adobe-hyphenate: none;
+    display: block;
+    font-size: 1em;
+    hyphens: none;
+    vertical-align: baseline;
+    margin: 0 5pt;
+    padding: 0.75em 0;
+    border: currentColor none 0
+    }
+.calibre1 {
+    font-size: 1em;
+    font-weight: bold;
+    margin-right: 0;
+    vertical-align: baseline;
+    padding: 0;
+    border: currentColor none 0
+    }
+.calibre2 {
+    font-size: 1em;
+    font-style: italic;
+    margin-right: 0;
+    vertical-align: baseline;
+    padding: 0;
+    border: currentColor none 0
+    }
+.calibre3 {
+    font-size: 0.66667em;
+    line-height: normal;
+    margin-right: 0;
+    vertical-align: 0.4em;
+    padding: 0;
+    border: currentColor none 0
+    }
+.calibre4 {
+    display: block
+    }
+.calibre5 {
+    font-size: 1em;
+    height: auto;
+    margin-right: 0;
+    vertical-align: baseline;
+    width: 100%;
+    padding: 0;
+    border: currentColor none 0
+    }
+.calibre6 {
+    display: table-row-group;
+    font-size: 1em;
+    margin-right: 0;
+    vertical-align: baseline;
+    padding: 0;
+    border: currentColor none 0
+    }
+.calibre7 {
+    display: table-row;
+    font-size: 1em;
+    margin-right: 0;
+    vertical-align: baseline;
+    padding: 0;
+    border: currentColor none 0
+    }
+.calibre8 {
+    font-size: 1em;
+    margin-right: 0;
+    vertical-align: baseline;
+    padding: 0;
+    border: currentColor none 0
+    }
+.calibre9 {
+    -adobe-float-keep: column;
+    float: left;
+    font-size: 2.8em;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: -0.25em;
+    margin-right: 0.05em;
+    margin-top: -0.045em;
+    vertical-align: baseline;
+    padding: 0;
+    border: currentColor none 0
+    }
+.calibre10 {
+    -adobe-float-keep: column;
+    float: left;
+    font-size: 2em;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: -0.25em;
+    margin-right: 0.05em;
+    margin-top: -0.045em;
+    vertical-align: baseline;
+    padding: 0;
+    border: currentColor none 0
+    }
+.calibre11 {
+    font-size: 0.70833em;
+    line-height: normal;
+    margin-right: 0;
+    vertical-align: 0.4em;
+    padding: 0;
+    border: currentColor none 0
+    }
+.calibre12 {
+    font-size: 1em;
+    font-style: italic;
+    line-height: 1.2;
+    margin-right: 0;
+    vertical-align: baseline;
+    padding: 0;
+    border: currentColor none 0
+    }
+.calibre13 {
+    color: gray;
+    display: block;
+    height: 2px;
+    margin: 0.5em auto 1.5em;
+    border: currentColor inset 1px
+    }
+.calibre14 {
+    font-size: 0.58333em;
+    line-height: normal;
+    margin-right: 0;
+    vertical-align: -0.4em;
+    padding: 0;
+    border: currentColor none 0
+    }
+.calibre15 {
+    display: table-cell;
+    font-size: 1em;
+    margin-right: 0;
+    text-align: inherit;
+    vertical-align: baseline;
+    padding: 0;
+    border: currentColor none 0
+    }
+.calibre16 {
+    display: block;
+    list-style-type: disc;
+    margin-bottom: 1em;
+    margin-right: 0;
+    margin-top: 1em
+    }
+.calibre17 {
+    display: list-item;
+    font-size: 1em;
+    line-height: 1.2em;
+    list-style-type: none;
+    orphans: 2;
+    text-align: justify;
+    text-indent: -13px;
+    widows: 2;
+    margin: 0
+    }
+.calibre18 {
+    display: table-cell;
+    font-size: 1em;
+    margin-right: 0;
+    text-align: inherit;
+    vertical-align: baseline;
+    padding: 0.1em;
+    border: currentColor none 0
+    }
+.calibre19 {
+    font-size: 0.71429em;
+    line-height: 1.2;
+    margin-right: 0;
+    vertical-align: 0.4em;
+    padding: 0;
+    border: currentColor none 0
+    }
+.calibre20 {
+    font-size: 0.75em;
+    margin-right: 0;
+    vertical-align: baseline;
+    padding: 0;
+    border: currentColor none 0
+    }
+.calibre21 {
+    display: inline;
+    font-size: 1em;
+    line-height: 1.2em;
+    list-style-image: none;
+    list-style-position: outside;
+    list-style-type: none;
+    orphans: 2;
+    text-align: justify;
+    text-indent: -13px;
+    widows: 2;
+    margin: 0
+    }
+.calibre22 {
+    font-size: 0.58333em;
+    line-height: normal;
+    margin-right: 0;
+    vertical-align: 0.4em;
+    padding: 0;
+    border: currentColor none 0
+    }
+.calibre23 {
+    display: block;
+    font-size: 1em;
+    margin-right: 0;
+    vertical-align: baseline;
+    padding: 0;
+    border: currentColor none 0
+    }
+.cell {
+    display: table-cell;
+    font-size: 1em;
+    margin-right: 0;
+    text-align: inherit;
+    vertical-align: baseline;
+    padding: 6px;
+    border: currentColor none 0
+    }
+.dedicatoria {
+    display: block;
+    font-size: 1.125em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: center;
+    text-indent: 22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 170px 0 0;
+    padding: 0;
+    border: currentColor none 0
+    }
+.fd {
+    display: block;
+    font-size: 1em;
+    margin-right: 0;
+    vertical-align: baseline;
+    padding: 0.05em 0 0;
+    border-top: black solid 0.125em;
+    border-right: currentColor none 0;
+    border-bottom: currentColor none 0;
+    border-left: currentColor none 0
+    }
+.first {
+    display: block;
+    font-size: 1em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: 22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 1.5em 0 0;
+    padding: 0;
+    border: currentColor none 0
+    }
+.fr {
+    display: inline-block;
+    font-size: 1em;
+    margin-right: 0;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0;
+    border: currentColor none 0
+    }
+.image {
+    display: block;
+    font-size: 1em;
+    vertical-align: baseline;
+    width: 90%;
+    margin: 1em 5%;
+    padding: 0;
+    border: currentColor none 0
+    }
+.last {
+    display: block;
+    font-size: 1em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: 22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0 0 1.5em;
+    padding: 0;
+    border: currentColor none 0
+    }
+.legenda-esp {
+    display: block;
+    font-size: 0.75em;
+    line-height: 1.3em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: 0;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 1em 0 0;
+    padding: 0;
+    border: currentColor none 0
+    }
+.legenda-indent {
+    display: block;
+    font-size: 0.75em;
+    line-height: 1.3em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: 22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0;
+    padding: 0;
+    border: currentColor none 0
+    }
+.line {
+    display: table-cell;
+    font-size: 1em;
+    margin-right: 0;
+    text-align: inherit;
+    vertical-align: baseline;
+    padding: 0.1em;
+    border: #000 solid 1px
+    }
+.logo {
+    display: block;
+    font-size: 1em;
+    margin-left: 30%;
+    margin-right: 30%;
+    vertical-align: baseline;
+    width: 40%;
+    padding: 0;
+    border: currentColor none 0
+    }
+.no-line {
+    display: table-cell;
+    font-size: 1em;
+    margin-right: 0;
+    text-align: inherit;
+    vertical-align: baseline;
+    padding: 0.4em;
+    border: #fff solid 1px
+    }
+.parte {
+    display: block;
+    font-size: 1.41667em;
+    font-weight: normal;
+    line-height: 1.4em;
+    orphans: 2;
+    text-align: left;
+    text-indent: 0;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0 0 2em;
+    padding: 0;
+    border: currentColor none 0
+    }
+.quote {
+    display: block;
+    font-size: 0.75em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: 22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 1.5em 0 0 22px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.quote1 {
+    display: block;
+    font-size: 0.75em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: 22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0 0 1.5em 22px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.quote2 {
+    display: block;
+    font-size: 0.75em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: 22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 1.5em 0 1.5em 22px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.rec-cent {
+    display: block;
+    font-size: 1em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: 22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 1.5em 0 0 22px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.right {
+    display: block;
+    font-size: 1em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: right;
+    text-indent: 22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 1.5em 0 0;
+    padding: 0;
+    border: currentColor none 0
+    }
+.rodape {
+    display: block;
+    font-size: 0.75em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: 0;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0;
+    padding: 0;
+    border: currentColor none 0
+    }
+.sgc-toc-level {
+    display: block;
+    font-size: 1em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: 22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0;
+    padding: 0;
+    border: currentColor none 0
+    }
+.sgc-toc-level1 {
+    display: block;
+    font-size: 1em;
+    margin-right: 0;
+    vertical-align: baseline;
+    padding: 0;
+    border: currentColor none 0
+    }
+.sub {
+    display: block;
+    font-size: 1.41667em;
+    font-weight: normal;
+    line-height: 1.2;
+    text-align: center;
+    vertical-align: baseline;
+    margin: 1.8em 0 0.7em;
+    padding: 0;
+    border: currentColor none 0
+    }
+.sub1 {
+    display: block;
+    font-size: 1.41667em;
+    font-weight: normal;
+    line-height: 1.2;
+    text-align: left;
+    vertical-align: baseline;
+    margin: 1.8em 0 0.7em;
+    padding: 0;
+    border: currentColor none 0
+    }
+.sub2 {
+    display: block;
+    font-size: 1.125em;
+    font-weight: normal;
+    line-height: 1.2;
+    text-align: left;
+    vertical-align: baseline;
+    margin: 1.8em 0 0.7em;
+    padding: 0;
+    border: currentColor none 0
+    }
+.subtit {
+    display: block;
+    font-size: 1.125em;
+    font-weight: normal;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: left;
+    text-indent: 0;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0.5em 0 0.7em 100px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.tab-center {
+    display: block;
+    font-size: 0.75em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: center;
+    text-indent: 0;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0;
+    padding: 0;
+    border: currentColor none 0
+    }
+.tab-center1 {
+    display: block;
+    font-size: 0.58333em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: center;
+    text-indent: 0;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0;
+    padding: 0;
+    border: currentColor none 0
+    }
+.tab-left {
+    display: block;
+    font-size: 0.75em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: left;
+    text-indent: 0;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0;
+    padding: 0;
+    border: currentColor none 0
+    }
+.tabelas {
+    border-collapse: collapse;
+    border-spacing: 2px;
+    display: table;
+    font-size: 1em;
+    margin-bottom: 1.5em;
+    margin-right: 0;
+    margin-top: 1.5em;
+    text-indent: 0;
+    vertical-align: baseline;
+    width: 100%;
+    padding: 0;
+    border: currentColor none 0
+    }
+.tabesp {
+    border-collapse: collapse;
+    border-spacing: 2px;
+    display: table;
+    font-size: 1em;
+    text-indent: 0;
+    vertical-align: baseline;
+    width: 100%;
+    margin: 1.5em 0 1.5em 22px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.table {
+    border-collapse: collapse;
+    border-spacing: 2px;
+    display: table;
+    font-size: 1em;
+    margin-bottom: 9px;
+    margin-right: 0;
+    margin-top: 128px;
+    text-indent: 0;
+    vertical-align: baseline;
+    padding: 0;
+    border: currentColor solid 1px
+    }
+.tiragem {
+    display: block;
+    font-size: 1.125em;
+    font-weight: normal;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: left;
+    text-indent: 0;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0.5em 0 2em 100px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.title {
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+    line-height: 1.4em;
+    text-align: left;
+    vertical-align: baseline;
+    margin: 0 0 5em;
+    padding: 0;
+    border: currentColor none 0
+    }
+.titulo {
+    display: block;
+    font-size: 2em;
+    font-weight: normal;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: center;
+    text-indent: 22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 2em 0 0;
+    padding: 0;
+    border: currentColor none 0
+    }
+.titulo1 {
+    display: block;
+    font-size: 2em;
+    font-weight: normal;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: center;
+    text-indent: 22px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0;
+    padding: 0;
+    border: currentColor none 0
+    }
+.tok1-creditos {
+    display: block;
+    font-size: 0.75em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: left;
+    text-indent: 0;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0 0 0 23px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.tok2-creditos {
+    display: block;
+    font-size: 0.75em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: left;
+    text-indent: 0;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0 0 11px 23px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.tok3-creditos {
+    display: block;
+    font-size: 0.75em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: 17px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0 28px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.tok4-creditos {
+    display: block;
+    font-size: 0.75em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: center;
+    text-indent: 0;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 17px 28px 0;
+    padding: 0;
+    border: currentColor none 0
+    }
+.tok5-creditos {
+    display: block;
+    font-size: 0.75em;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: justify;
+    text-indent: 17px;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 0 28px 0 57px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.topebot {
+    display: table-cell;
+    font-size: 1em;
+    margin-right: 0;
+    text-align: inherit;
+    vertical-align: baseline;
+    padding: 0.4em 0;
+    border-top: #000 solid 1px;
+    border-right: currentColor none 0;
+    border-bottom: #000 solid 1px;
+    border-left: currentColor none 0
+    }
+.traducao {
+    display: block;
+    font-size: 0.75em;
+    font-weight: normal;
+    line-height: 1.2em;
+    orphans: 2;
+    text-align: left;
+    text-indent: 0;
+    vertical-align: baseline;
+    widows: 2;
+    margin: 2.5em 0 7em 100px;
+    padding: 0;
+    border: currentColor none 0
+    }
+.pcalibre:link {
+    text-decoration: none
+    }
