@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><title>Lumen Programming Guide</title><link href="springer_epub.css" type="text/css" rel="styleSheet"/></head><body><div class="BookFrontmatter"><div class="BookTitlePage"><div class="BookAuthors"><span class="Author"><span class="AuthorName">Paul Redmond</span></span></div><div class="MainTitleSection"><span class="BookTitle" xml:lang="en">Lumen Programming Guide</span><span class="BookSubTitle" xml:lang="en">Writing PHP Microservices, REST and Web Service APIs</span></div><div class="PublisherLogo"><div class="Figure" id="Figa"><div class="MediaObject"><img src="A395120_1_En_BookFrontmatter_Figa_HTML.png" alt="A395120_1_En_BookFrontmatter_Figa_HTML.png"/></div></div></div></div><div class="CopyrightPage"><div class="CopyrightPageOriginators"><div class="AuthorGroup"><div class="Author"><span class="AuthorName">Paul Redmond</span><div class="Affiliation" id="Aff1"><div class="AffiliationText">Phoenix, Arizona, USA</div></div></div></div></div><div class="ArticleNote ArticleNoteESMHint BookFrontmatterArticleNote"><div class="SimplePara">
+            Any source code or other supplementary materials referenced by the author in this text are available to readers at
+            <span class="ExternalRef"><a href="http://www.apress.com/9781484221860"><span class="RefSource">
+                <span class="EmphasisFontCategoryNonProportional">www.apress.com/9781484221860</span>
+              </span></a></span>
+            . For detailed information about how to locate your book’s source code, go to
+            <span class="ExternalRef"><a href="http://www.apress.com/source-code/"><span class="RefSource">
+                <span class="EmphasisFontCategoryNonProportional">www.apress.com/source-code/</span>
+              </span></a></span>
+            . Readers can also access source code at SpringerLink in the Supplementary Material section for each chapter.
+          </div></div><div class="CopyrightPageISBNs"><span class="CopyrightPagePrintISBN">
+					ISBN 978-1-4842-2186-0</span><span class="CopyrightPageElectronicISBN">e-ISBN 978-1-4842-2187-7</span></div><div class="BookDOI">DOI 10.1007/978-1-4842-2187-7</div><div class="CatalogingInformation">Library of Congress Control Number: 2016953766</div><div class="CopyrightLine">© Paul Redmond 2016</div><div class="CopyrightComment">
+          <div class="SimplePara">
+            <span class="EmphasisTypeBoldItalic">Lumen Programming Guide: Writing PHP Microservices, REST and Web Service APIs</span>
+          </div>
+          <div class="SimplePara">Managing Director: Welmoed Spahr</div>
+          <div class="SimplePara">Lead Editor: Steve Anglin</div>
+          <div class="SimplePara">Technical Reviewer: Jacob Jensen</div>
+          <div class="SimplePara">Editorial Board: Steve Anglin, Pramila Balan, Laura Berendson, Aaron Black, Louise Corrigan, Jonathan Gennick, Robert Hutchinson, Celestin Suresh John, Nikhil Karkal, James Markham, Susan McDermott, Matthew Moodie, Natalie Pao, Gwenan Spearing</div>
+          <div class="SimplePara">Coordinating Editor: Mark Powers</div>
+          <div class="SimplePara">Copy Editor: Mary Behr</div>
+          <div class="SimplePara">Compositor: SPi Global</div>
+          <div class="SimplePara">Indexer: SPi Global</div>
+          <div class="SimplePara">Artist: SPi Global</div>
+          <div class="SimplePara">Cover image designed by Freepik</div>
+          <div class="SimplePara">
+            For information on translations, please e-mail
+            <span class="EmphasisFontCategoryNonProportional">rights@apress.com</span>
+            , or visit
+            <span class="ExternalRef"><a href="http://www.apress.com"><span class="RefSource">
+                <span class="EmphasisFontCategoryNonProportional">www.apress.com</span>
+              </span></a></span>
+            .
+          </div>
+          <div class="SimplePara">
+            Apress and friends of ED books may be purchased in bulk for academic, corporate, or promotional use. eBook versions and licenses are also available for most titles. For more information, reference our Special Bulk Sales–eBook Licensing web page at
+            <span class="ExternalRef"><a href="http://www.apress.com/bulk-sales"><span class="RefSource">
+                <span class="EmphasisFontCategoryNonProportional">www.apress.com/bulk-sales</span>
+              </span></a></span>
+            .
+          </div>
+        </div><div class="CopyrightStandardText" xml:lang="en">This work is subject to copyright. All rights are reserved by the Publisher, whether the whole or part of the material is concerned, specifically the rights of translation, reprinting, reuse of illustrations, recitation, broadcasting, reproduction on microfilms or in any other physical way, and transmission or information storage and retrieval, electronic adaptation, computer software, or by similar or dissimilar methodology now known or hereafter developed.</div><div class="TrademarkQualifierText" xml:lang="en">Trademarked names, logos, and images may appear in this book. Rather than use a trademark symbol with every occurrence of a trademarked name, logo, or image we use the names, logos, and images only in an editorial fashion and to the benefit of the trademark owner, with no intention of infringement of the trademark. The use in this publication of trade names, trademarks, service marks, and similar terms, even if they are not identified as such, is not to be taken as an expression of opinion as to whether or not they are subject to proprietary rights.</div><div class="ProductLiability" xml:lang="en">While the advice and information in this book are believed to be true and accurate at the date of publication, neither the authors nor the editors nor the publisher can accept any legal responsibility for any errors or omissions that may be made. The publisher makes no warranty, express or implied, with respect to the material contained herein.</div><div class="PaperInfo" xml:lang="en">Printed on acid-free paper</div><div class="SpringerReferenceLine" xml:lang="en">Distributed to the book trade worldwide by Springer Science+Business Media New York, 233 Spring Street, 6th Floor, New York, NY 10013. Phone 1-800-SPRINGER, fax (201) 348-4505, e-mail orders-ny@springer-sbm.com, or visit www.springeronline.com. Apress Media, LLC is a California LLC and the sole member (owner) is Springer Science + Business Media Finance Inc (SSBM Finance Inc). SSBM Finance Inc is a Delaware corporation.</div></div><div class="Dedication"><div class="SimplePara">
+            <span class="EmphasisTypeItalic">To Bernadette</span>
+          </div></div><div id="Preface1" class="Preface"><div class="PrefaceTitle" xml:lang="en">Introduction</div><div class="PrefaceBody"><div id="Par1" class="Para">
+              Lumen is a framework that is designed to write APIs. With the rising popularity of
+              <span class="ExternalRef"><a href="http://microservices.io/patterns/microservices.html"><span class="RefSource">microservices</span></a></span>
+              (
+              <span class="ExternalRef"><a href="http://microservices.io/patterns/microservices.html"><span class="RefSource">
+                  <span class="EmphasisFontCategoryNonProportional">http://microservices.io/patterns/microservices.html</span>
+                </span></a></span>
+              ), existing patterns like service-oriented architecture (
+              <span class="ExternalRef"><a href="https://en.wikipedia.org/wiki/Service-oriented_architecture"><span class="RefSource">
+                  <span class="EmphasisFontCategoryNonProportional">https://en.wikipedia.org/wiki/Service-oriented_architecture</span>
+                </span></a></span>
+              ), and increased demand for public APIs, Lumen is a perfect fit for writing the service layer in the same language as the web applications you write.
+            </div><div id="Par2" class="Para">
+              In my experience, it’s not uncommon for PHP shops to write web applications with PHP and API services with something like
+              <span class="ExternalRef"><a href="https://nodejs.org/en/"><span class="RefSource">Node.​js</span></a></span>
+              (
+              <span class="ExternalRef"><a href="https://nodejs.org/en/"><span class="RefSource">
+                  <span class="EmphasisFontCategoryNonProportional">https://nodejs.org/en/</span>
+                </span></a></span>
+              ). I am not suggesting that this is a
+              <span class="EmphasisTypeItalic">bad</span>
+              idea, but I see Lumen as a chance to improve development workflows for PHP developers and for companies to standardize around a powerful set of complimentary frameworks: Laravel and Lumen.
+            </div><div id="Par3" class="Para">You can write APIs quickly with Lumen using the built-in packages provided, but Lumen can also get out of your way and be as minimalist as you want it to be. Set aside framework benchmarks and open your mind to increased developer productivity. Lumen is fast, but more importantly, it helps me be more productive.</div><div id="Sec1" class="Section1 RenderAsSection1"><h2 class="Heading">The Same Tools to Write APIs and Web Applications</h2><div id="Par4" class="Para">
+                Lumen is a minimal framework that uses a subset of the same components from
+                <span class="ExternalRef"><a href="https://laravel.com/"><span class="RefSource">Laravel</span></a></span>
+                (
+                <span class="ExternalRef"><a href="https://laravel.com/"><span class="RefSource">
+                    <span class="EmphasisFontCategoryNonProportional">https://laravel.com/</span>
+                  </span></a></span>
+                <span class="EmphasisFontCategoryNonProportional">).</span>
+                Together Laravel and Lumen give developers a powerful combination of tools: a lightweight framework for writing APIs and a full-fledged web framework for web applications. Lumen also has a subset of console tools available from Laravel. Other powerful features from Laravel are included like database migrations, Eloquent Models (ORM Package), job queues, scheduled jobs, and a test suite focused on testing APIs.
+              </div><div id="Par5" class="Para">The development experience between Lumen and Laravel is relatively the same, which means developers will see a productivity boost by adopting both frameworks. Together they provide a consistent workflow and can simplify the software stack for developers, release engineers, and operations teams.</div></div><div id="Sec2" class="Section1 RenderAsSection1"><h2 class="Heading">Who This Book Is For</h2><div id="Par6" class="Para">This book is for programmers that want to write APIs in PHP. Familiarity with the HTTP spec, Composer, PHPUnit, and the command line will help, but this book walks you through each step of building an API. You don’t need to be an expert on these subjects, and more experienced developers can skip things they understand to focus on the specific code needed to write APIs in Lumen. This book does not cover every detail of using Lumen, but focuses on the most important concepts needed to write testable APIs with Lumen.</div></div><div id="Sec3" class="Section1 RenderAsSection1"><h2 class="Heading">Conventions Used in This Book</h2><div id="Par7" class="Para">The book is a hands-on guide to building a working API, so you will see tons of code samples throughout the book. I will point out a few conventions used so that you can understand the console commands and code. The code is meant to provide a fully working API; you can follow along or copy and paste code samples.</div><div id="Sec4" class="Section2 RenderAsSection2"><h3 class="Heading">Code Examples</h3><div id="Par8" class="Para">A typical PHP code snippet looks like this:</div><div id="Par9" class="Para ParaOneEmphasisChild">
+                  <span class="EmphasisTypeItalic">Example PHP Code Snippet</span>
+                </div><div id="Par10" class="Para">
+                  <div class="ProgramCode" id="PC1"><div class="FixedLine">/**</div><div class="FixedLine"> * A Hello World Example</div><div class="FixedLine"> */</div><div class="FixedLine">$app-&gt;get('/', function () {</div><div class="FixedLine">    return 'Hello World';</div><div class="FixedLine">});</div></div>
+                </div><div id="Par11" class="Para">To guide readers, approximate line numbers are used when you will be adding a block of code to an existing class or test file:</div><div id="Par12" class="Para ParaOneEmphasisChild">
+                  <span class="EmphasisTypeItalic">Example PHP Code Snippet</span>
+                </div><div id="Par13" class="Para">
+                  <div class="ProgramCode" id="PC2"><div class="FixedLine">10  /**</div><div class="FixedLine">11   * A Foobar Example</div><div class="FixedLine">12   */</div><div class="FixedLine">13  $app-&gt;get('/foo', function () {</div><div class="FixedLine">14      return 'bar';</div><div class="FixedLine">15  });</div></div>
+                </div><div id="Par14" class="Para">Longer lines end in a backslash (\) and continue to the next line:</div><div id="Par15" class="Para ParaOneEmphasisChild">
+                  <span class="EmphasisTypeItalic">Example of Long Line in PHP</span>
+                </div><div id="Par16" class="Para">
+                  <div class="ProgramCode" id="PC3"><div class="FixedLine">
+                      <span class="EmphasisFontCategoryNonProportional">$thisIsALongLine = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qu\</span>
+                    </div><div class="FixedLine">
+                      <span class="EmphasisFontCategoryNonProportional">os unde deserunt eos?'</span>
+                    </div></div>
+                </div><div id="Par17" class="Para">When you need to run console commands to execute the test suite or create files, the snippet appears as plain text without line numbers. Lines start with $, which represents the terminal prompt.</div><div id="Par18" class="Para ParaOneEmphasisChild">
+                  <span class="EmphasisTypeItalic">Example Console Command</span>
+                </div><div id="Par19" class="Para">
+                  <div class="ProgramCode" id="PC4"><div class="FixedLine">$ touch the/file.php</div></div>
+                </div><div id="Par20" class="Para">
+                  Console commands that should be executed in the recommended
+                  <span class="ExternalRef"><a href="https://laravel.com/docs/homestead"><span class="RefSource">Homestead</span></a></span>
+                  <a href="#Fn1" id="Fn1_source"><sup>1</sup></a>
+                  environment will be indicated like the following example. The book removes extra output from PHPUnit tests to make examples less verbose.
+                </div><div id="Par22" class="Para">
+                  <span class="EmphasisTypeItalic">Console Command in the Homestead Virtual Machine</span>
+                  <div class="ProgramCode" id="PC5"><div class="LineGroup"><div class="FixedLine"># vagrant@homestead:∼/Code/bookr$</div><div class="FixedLine">$ phpunit</div></div><div class="LineGroup"><div class="FixedLine">OK (1 test, 4 assertions)</div></div></div>
+                </div></div><div id="Sec5" class="Section2 RenderAsSection2"><h3 class="Heading">Code Errata and Feedback</h3><div id="Par23" class="Para">
+                  Submit errata to
+                  <span class="EmphasisFontCategoryNonProportional">lumenapibook@gmail.com</span>
+                  , or via the book’s
+                  <span class="EmphasisFontCategoryNonProportional">apress.com</span>
+                  product page, located at
+                  <span class="ExternalRef"><a href="http://www.apress.com/9781484221860"><span class="RefSource">
+                      <span class="EmphasisFontCategoryNonProportional">www.apress.com/9781484221860</span>
+                    </span></a></span>
+                  . Feel free to send in typos, inaccurate descriptions, code issues, praise, feedback, and code suggestions on better ways of doing something. Please don’t be shy; these things make my book better!
+                </div></div><div id="Sec6" class="Section2 RenderAsSection2"><h3 class="Heading">Tips, Notes, and Warnings</h3><div id="FPar1" class="FormalPara FormalParaRenderingStyle3 ParaTypeOverview"><div class="Heading">Your Aside Title</div><div id="Par24" class="Para">This is an aside</div></div><div id="FPar2" class="FormalPara FormalParaRenderingStyle1 ParaTypeImportant"><div class="Heading">
+                    <img src="A395120_1_En_BookFrontmatter_Figd_HTML.jpg" alt="A395120_1_En_BookFrontmatter_Figd_HTML.jpg"/>
+                    Hey, Listen!
+                  </div><div id="Par25" class="Para">Tips give you pointers related to concepts in the book.</div></div><div id="FPar3" class="FormalPara FormalParaRenderingStyle1 ParaTypeImportant"><div class="Heading">
+                    <img src="A395120_1_En_BookFrontmatter_Fige_HTML.jpg" alt="A395120_1_En_BookFrontmatter_Fige_HTML.jpg"/>
+                    Danger!
+                  </div><div id="Par26" class="Para">Warnings point out potential issues and security concerns.</div></div><div id="FPar4" class="FormalPara FormalParaRenderingStyle1 ParaTypeImportant"><div class="Heading">
+                    <img src="A395120_1_En_BookFrontmatter_Figf_HTML.jpg" alt="A395120_1_En_BookFrontmatter_Figf_HTML.jpg"/>
+                    Need the Info
+                  </div><div id="Par27" class="Para">This aside provides additional info related to code and concepts.</div></div><div id="FPar5" class="FormalPara FormalParaRenderingStyle1 ParaTypeImportant"><div class="Heading">
+                    <img src="A395120_1_En_BookFrontmatter_Figg_HTML.jpg" alt="A395120_1_En_BookFrontmatter_Figg_HTML.jpg"/>
+                    Git Commit: Amazing Refactor!
+                  </div><div id="Par28" class="Para">
+                    <span class="ExternalRef"><a href="http://example.com/changeset/rm3dwe2f"><span class="RefSource">rm3dwe2f</span></a></span>
+                  </div><div id="Par29" class="Para">
+                    This is an example of a code commit if you are following along and using
+                    <span class="ExternalRef"><a href="https://git-scm.com/"><span class="RefSource">git</span></a></span>
+                    to commit your work.
+                  </div></div><div id="FPar6" class="FormalPara FormalParaRenderingStyle1 ParaTypeImportant"><div class="Heading">
+                    <img src="A395120_1_En_BookFrontmatter_Figh_HTML.jpg" alt="A395120_1_En_BookFrontmatter_Figh_HTML.jpg"/>
+                    Discussions
+                  </div><div id="Par30" class="Para">This tip includes deeper discussions around topics in the book. Advanced users can generally skip these.</div></div></div></div><div id="Sec7" class="Section1 RenderAsSection1"><h2 class="Heading">Tools You Will Need</h2><div id="Par31" class="Para">All tools are recommended, but if you know what you’re doing, you can set up your own coding environment and skip the recommended tools. You might even have these tools already; just make sure they are relatively up-to-date. All tools listed are free unless otherwise noted.</div><div id="Sec8" class="Section2 RenderAsSection2"><h3 class="Heading">VirtualBox</h3><div id="Par32" class="Para">
+                  This book uses a virtual machine to run the API application. You will need to download
+                  <span class="ExternalRef"><a href="https://www.virtualbox.org/wiki/Downloads"><span class="RefSource">VirtualBox</span></a></span>
+                  if you plan on using the recommended
+                  <span class="ExternalRef"><a href="https://laravel.com/docs/homestead"><span class="RefSource">Homestead</span></a></span>
+                  environment. VirtualBox works on Windows, Mac, and Linux (
+                  <span class="ExternalRef"><a href="http://www.virtualbox.org"><span class="RefSource">
+                      <span class="EmphasisFontCategoryNonProportional">www.virtualbox.org</span>
+                    </span></a></span>
+                  ).
+                </div></div><div id="Sec9" class="Section2 RenderAsSection2"><h3 class="Heading">Vagrant</h3><div id="Par33" class="Para">
+                  Homestead also requires Vagrant (
+                  <span class="ExternalRef"><a href="http://www.vagrantup.com/"><span class="RefSource">
+                      <span class="EmphasisFontCategoryNonProportional">www.vagrantup.com/</span>
+                    </span></a></span>
+                  ) to manage and provision virtual machines. Vagrant works on Windows, Mac, and Linux (Debian and CentOS).
+                </div></div><div id="Sec10" class="Section2 RenderAsSection2"><h3 class="Heading">Version Control</h3><div id="Par34" class="Para">If you want to work along in the book and commit your code as you go (recommended), you need to install a version control system. I recommend git, but anything you want will do.</div></div><div id="Sec11" class="Section2 RenderAsSection2"><h3 class="Heading">Editor/IDE</h3><div id="Par35" class="Para">
+                  Most readers will already have a go-to editor. I highly recommend PhpStorm (
+                  <span class="ExternalRef"><a href="http://www.jetbrains.com/phpstorm/"><span class="RefSource">
+                      <span class="EmphasisFontCategoryNonProportional">www.jetbrains.com/phpstorm/</span>
+                    </span></a></span>
+                  ), which is not free, but it pays for itself. Other common IDE options are Eclipse PDT and NetBeans.
+                </div><div id="Par36" class="Para">
+                  If you don’t like IDEs, I recommend Sublime Text (
+                  <span class="ExternalRef"><a href="http://www.sublimetext.com/"><span class="RefSource">
+                      <span class="EmphasisFontCategoryNonProportional">www.sublimetext.com/</span>
+                    </span></a></span>
+                  ) or Atom (
+                  <span class="ExternalRef"><a href="https://atom.io/"><span class="RefSource">
+                      <span class="EmphasisFontCategoryNonProportional">https://atom.io/</span>
+                    </span></a></span>
+                  ). If you are on Mac, TextMate (
+                  <span class="ExternalRef"><a href="https://macromates.com/"><span class="RefSource">
+                      <span class="EmphasisFontCategoryNonProportional">https://macromates.com/</span>
+                    </span></a></span>
+                  ) is another great choice. TextMate 2 is marked as “beta” but is reliable.
+                </div></div></div></div></div><div class="BookAcknowledgments"><div class="BookAcknowledgmentsTitle" xml:lang="en">Acknowledgments</div><div class="BookAcknowledgmentsBody"><div id="Par37" class="Para">Writing a book is challenging. Editing a book more so.</div><div id="Par38" class="Para">Writing a book takes patience, persistence, time, and an abundance of help from others. When I first envisioned this title, its humble beginnings were in the form of an eBook. I conceptualized, wrote, edited, technically edited, designed, and marketed the concepts herein.</div><div id="Par39" class="Para">
+              The Laravel (
+              <span class="ExternalRef"><a href="https://laravel.com/"><span class="RefSource">
+                  <span class="EmphasisFontCategoryNonProportional">https://laravel.com/</span>
+                </span></a></span>
+              ) framework and the Lumen micro framework have been inspiring in my day-to-day work. They provide a pleasant and productive development experience that rekindled my love for PHP and inspired me to share what I’ve learned with others. Additionally, the positive feedback and word-of-mouth about this book within the PHP and Laravel communities—specifically Taylor Otwell (
+              <span class="ExternalRef"><a href="https://twitter.com/taylorotwell"><span class="RefSource">
+                  <span class="EmphasisFontCategoryNonProportional">https://twitter.com/taylorotwell</span>
+                </span></a></span>
+              ), Michael Dyrynda (
+              <span class="ExternalRef"><a href="https://dyrynda.com.au/"><span class="RefSource">
+                  <span class="EmphasisFontCategoryNonProportional">https://dyrynda.com.au/</span>
+                </span></a></span>
+              ), and Amanda Folson (
+              <span class="ExternalRef"><a href="http://amandafolson.net/"><span class="RefSource">
+                  <span class="EmphasisFontCategoryNonProportional">http://amandafolson.net/</span>
+                </span></a></span>
+              )—was unexpected and huge motivation to keep pressing forward and making the book better.
+            </div><div id="Par40" class="Para">My early readers provided constructive feedback, small amounts of errata and grammar issues, and insight into what they liked about the manuscript. Early reader feedback showed that people were actually interested in my work, and found tips and tricks that helped them.</div><div id="Par41" class="Para">I would like to thank Steve Anglin and Mark Powers at Apress for guiding me through the writing process. They have made a dream of mine come true: to author a technical book. I am thankful for their help, and the help of everyone else at Apress who assisted me throughout the process.</div><div id="Par42" class="Para">Within my professional circle, the direct and indirect mentoring I’ve received from my colleague Justin Rainbow has helped shape me as a developer and I am much, much better off for it. Thank you. My colleague Jacob Jensen, the technical editor of this book, has been invaluable for motivating me, letting me bounce ideas off of him, and providing great feedback on a technical and peer level.</div><div id="Par43" class="Para">Writing a book is a big commitment, involving many late nights, and I owe my wife, Bernadette, and my children, Hayden, Masen, and Lincoln, the biggest thanks of all. Life is short. I am so fortunate to have a wonderful family that supports me. I love you guys!</div></div></div><div class="Toc" id="Toc"><div class="Headings"><div class="Heading">Contents</div></div><div class="TocBody"><div class="TocChapter"><div class="TocEntry"><span class="TocItem">
+              <span class="ExternalRef"><a href="A395120_1_En_1_Chapter.html"><span class="RefSource">Chapter 1:​ Installing Lumen</span></a></span>
+            </span><span class="TocPageNumber">1</span></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_1_Chapter.html#Sec1"><span class="RefSource">Homestead</span></a></span>
+              </span><span class="TocPageNumber">1</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_1_Chapter.html#Sec2"><span class="RefSource">Mac OSX</span></a></span>
+              </span><span class="TocPageNumber">2</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_1_Chapter.html#Sec3"><span class="RefSource">Linux</span></a></span>
+              </span><span class="TocPageNumber">3</span></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_1_Chapter.html#Sec4"><span class="RefSource">Red Hat/​CentOS</span></a></span>
+                </span><span class="TocPageNumber">4</span></div></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_1_Chapter.html#Sec5"><span class="RefSource">Debian/​Ubuntu</span></a></span>
+                </span><span class="TocPageNumber">5</span></div></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_1_Chapter.html#Sec6"><span class="RefSource">Windows</span></a></span>
+              </span><span class="TocPageNumber">6</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_1_Chapter.html#Sec7"><span class="RefSource">Conclusion</span></a></span>
+              </span><span class="TocPageNumber">6</span></div></div></div><div class="TocChapter"><div class="TocEntry"><span class="TocItem">
+              <span class="ExternalRef"><a href="A395120_1_En_2_Chapter.html"><span class="RefSource">Chapter 2:​ Hello Lumen</span></a></span>
+            </span><span class="TocPageNumber">7</span></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_2_Chapter.html#Sec1"><span class="RefSource">Setting Up a New Project</span></a></span>
+              </span><span class="TocPageNumber">7</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_2_Chapter.html#Sec2"><span class="RefSource">Routes</span></a></span>
+              </span><span class="TocPageNumber">9</span></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_2_Chapter.html#Sec3"><span class="RefSource">The Hello World Route</span></a></span>
+                </span><span class="TocPageNumber">10</span></div></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_2_Chapter.html#Sec4"><span class="RefSource">Route Parameters</span></a></span>
+                </span><span class="TocPageNumber">10</span></div></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_2_Chapter.html#Sec5"><span class="RefSource">Middleware and Responses</span></a></span>
+              </span><span class="TocPageNumber">11</span></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_2_Chapter.html#Sec6"><span class="RefSource">Global Middleware</span></a></span>
+                </span><span class="TocPageNumber">11</span></div></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_2_Chapter.html#Sec7"><span class="RefSource">Route Middleware</span></a></span>
+                </span><span class="TocPageNumber">13</span></div></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_2_Chapter.html#Sec8"><span class="RefSource">The Request and Response Objects</span></a></span>
+              </span><span class="TocPageNumber">14</span></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_2_Chapter.html#Sec9"><span class="RefSource">The Request</span></a></span>
+                </span><span class="TocPageNumber">15</span></div></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_2_Chapter.html#Sec10"><span class="RefSource">The Response</span></a></span>
+                </span><span class="TocPageNumber">15</span></div></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_2_Chapter.html#Sec11"><span class="RefSource">Onward</span></a></span>
+              </span><span class="TocPageNumber">16</span></div></div></div><div class="TocChapter"><div class="TocEntry"><span class="TocItem">
+              <span class="ExternalRef"><a href="A395120_1_En_3_Chapter.html"><span class="RefSource">Chapter 3:​ Creating the Book Application</span></a></span>
+            </span><span class="TocPageNumber">17</span></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_3_Chapter.html#Sec1"><span class="RefSource">Building Something Amazing</span></a></span>
+              </span><span class="TocPageNumber">17</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_3_Chapter.html#Sec2"><span class="RefSource">Environment Setup</span></a></span>
+              </span><span class="TocPageNumber">19</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_3_Chapter.html#Sec3"><span class="RefSource">Checking Unit Tests</span></a></span>
+              </span><span class="TocPageNumber">21</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_3_Chapter.html#Sec4"><span class="RefSource">Setup Complete</span></a></span>
+              </span><span class="TocPageNumber">22</span></div></div></div><div class="TocChapter"><div class="TocEntry"><span class="TocItem">
+              <span class="ExternalRef"><a href="A395120_1_En_4_Chapter.html"><span class="RefSource">Chapter 4:​ Starting the Books API</span></a></span>
+            </span><span class="TocPageNumber">23</span></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_4_Chapter.html#Sec1"><span class="RefSource">Creating the First Endpoint</span></a></span>
+              </span><span class="TocPageNumber">23</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_4_Chapter.html#Sec2"><span class="RefSource">Setting Up Models and Seed Data</span></a></span>
+              </span><span class="TocPageNumber">26</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_4_Chapter.html#Sec3"><span class="RefSource">Eloquent Books</span></a></span>
+              </span><span class="TocPageNumber">30</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_4_Chapter.html#Sec4"><span class="RefSource">Success</span></a></span>
+              </span><span class="TocPageNumber">32</span></div></div></div><div class="TocChapter"><div class="TocEntry"><span class="TocItem">
+              <span class="ExternalRef"><a href="A395120_1_En_5_Chapter.html"><span class="RefSource">Chapter 5:​ Creating, Reading, Updating, and Deleting Books</span></a></span>
+            </span><span class="TocPageNumber">33</span></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_5_Chapter.html#Sec1"><span class="RefSource">Requesting an Individual Book</span></a></span>
+              </span><span class="TocPageNumber">33</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_5_Chapter.html#Sec2"><span class="RefSource">Creating a New Book</span></a></span>
+              </span><span class="TocPageNumber">41</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_5_Chapter.html#Sec3"><span class="RefSource">Updating an Existing Book</span></a></span>
+              </span><span class="TocPageNumber">49</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_5_Chapter.html#Sec4"><span class="RefSource">Deleting Books</span></a></span>
+              </span><span class="TocPageNumber">53</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_5_Chapter.html#Sec5"><span class="RefSource">Conclusion</span></a></span>
+              </span><span class="TocPageNumber">63</span></div></div></div><div class="TocChapter"><div class="TocEntry"><span class="TocItem">
+              <span class="ExternalRef"><a href="A395120_1_En_6_Chapter.html"><span class="RefSource">Chapter 6:​ Responding to Errors</span></a></span>
+            </span><span class="TocPageNumber">65</span></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_6_Chapter.html#Sec1"><span class="RefSource">Test Database</span></a></span>
+              </span><span class="TocPageNumber">65</span></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_6_Chapter.html#Sec2"><span class="RefSource">Model Factories</span></a></span>
+                </span><span class="TocPageNumber">66</span></div></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_6_Chapter.html#Sec3"><span class="RefSource">Factories in Tests</span></a></span>
+                </span><span class="TocPageNumber">66</span></div></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_6_Chapter.html#Sec4"><span class="RefSource">Better Error Responses</span></a></span>
+              </span><span class="TocPageNumber">69</span></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_6_Chapter.html#Sec5"><span class="RefSource">Framework Exception Handling</span></a></span>
+                </span><span class="TocPageNumber">70</span></div></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_6_Chapter.html#Sec6"><span class="RefSource">JSON Exceptions</span></a></span>
+                </span><span class="TocPageNumber">72</span></div></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_6_Chapter.html#Sec7"><span class="RefSource">Testing the Exception Handler</span></a></span>
+              </span><span class="TocPageNumber">74</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_6_Chapter.html#Sec8"><span class="RefSource">Conclusion</span></a></span>
+              </span><span class="TocPageNumber">88</span></div></div></div><div class="TocChapter"><div class="TocEntry"><span class="TocItem">
+              <span class="ExternalRef"><a href="A395120_1_En_7_Chapter.html"><span class="RefSource">Chapter 7:​ Leveling Up Responses</span></a></span>
+            </span><span class="TocPageNumber">89</span></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_7_Chapter.html#Sec1"><span class="RefSource">Introducing Fractal</span></a></span>
+              </span><span class="TocPageNumber">89</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_7_Chapter.html#Sec2"><span class="RefSource">First Version of API Response Formatting</span></a></span>
+              </span><span class="TocPageNumber">90</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_7_Chapter.html#Sec3"><span class="RefSource">The Fractal Response Class</span></a></span>
+              </span><span class="TocPageNumber">97</span></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_7_Chapter.html#Sec4"><span class="RefSource">The Book Transformer</span></a></span>
+                </span><span class="TocPageNumber">97</span></div></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_7_Chapter.html#Sec5"><span class="RefSource">The Fractal Response Class</span></a></span>
+                </span><span class="TocPageNumber">101</span></div></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_7_Chapter.html#Sec6"><span class="RefSource">Fractal Response Service</span></a></span>
+              </span><span class="TocPageNumber">111</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_7_Chapter.html#Sec7"><span class="RefSource">Integrating the Fractal Response Service</span></a></span>
+              </span><span class="TocPageNumber">114</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_7_Chapter.html#Sec8"><span class="RefSource">Conclusion</span></a></span>
+              </span><span class="TocPageNumber">124</span></div></div></div><div class="TocChapter"><div class="TocEntry"><span class="TocItem">
+              <span class="ExternalRef"><a href="A395120_1_En_8_Chapter.html"><span class="RefSource">Chapter 8:​ Validation</span></a></span>
+            </span><span class="TocPageNumber">125</span></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_8_Chapter.html#Sec1"><span class="RefSource">First Attempt at Validation</span></a></span>
+              </span><span class="TocPageNumber">125</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_8_Chapter.html#Sec2"><span class="RefSource">More Validation Constraints</span></a></span>
+              </span><span class="TocPageNumber">129</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_8_Chapter.html#Sec3"><span class="RefSource">Custom Validation Messages</span></a></span>
+              </span><span class="TocPageNumber">132</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_8_Chapter.html#Sec4"><span class="RefSource">Other Approaches</span></a></span>
+              </span><span class="TocPageNumber">134</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_8_Chapter.html#Sec5"><span class="RefSource">Conclusion</span></a></span>
+              </span><span class="TocPageNumber">135</span></div></div></div><div class="TocChapter"><div class="TocEntry"><span class="TocItem">
+              <span class="ExternalRef"><a href="A395120_1_En_9_Chapter.html"><span class="RefSource">Chapter 9:​ Authors</span></a></span>
+            </span><span class="TocPageNumber">137</span></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_9_Chapter.html#Sec1"><span class="RefSource">The Authors Database Schema</span></a></span>
+              </span><span class="TocPageNumber">137</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_9_Chapter.html#Sec2"><span class="RefSource">Fixing Broken Tests</span></a></span>
+              </span><span class="TocPageNumber">145</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_9_Chapter.html#Sec3"><span class="RefSource">Conclusion</span></a></span>
+              </span><span class="TocPageNumber">163</span></div></div></div><div class="TocChapter"><div class="TocEntry"><span class="TocItem">
+              <span class="ExternalRef"><a href="A395120_1_En_10_Chapter.html"><span class="RefSource">Chapter 10:​ The /​authors API Resource</span></a></span>
+            </span><span class="TocPageNumber">165</span></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_10_Chapter.html#Sec1"><span class="RefSource">The GET /​authors Endpoint</span></a></span>
+              </span><span class="TocPageNumber">166</span></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_10_Chapter.html#Sec2"><span class="RefSource">The AuthorsTransform​er</span></a></span>
+                </span><span class="TocPageNumber">166</span></div></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_10_Chapter.html#Sec3"><span class="RefSource">The Author Controller</span></a></span>
+                </span><span class="TocPageNumber">168</span></div></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_10_Chapter.html#Sec4"><span class="RefSource">The GET /​authors/​{id} Endpoint</span></a></span>
+              </span><span class="TocPageNumber">170</span></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_10_Chapter.html#Sec5"><span class="RefSource">A Basic Response</span></a></span>
+                </span><span class="TocPageNumber">170</span></div></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_10_Chapter.html#Sec6"><span class="RefSource">Including Other Models in the Response</span></a></span>
+                </span><span class="TocPageNumber">171</span></div></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_10_Chapter.html#Sec7"><span class="RefSource">The POST /​authors Endpoint</span></a></span>
+              </span><span class="TocPageNumber">181</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_10_Chapter.html#Sec8"><span class="RefSource">The PUT /​authors/​{id} Endpoint</span></a></span>
+              </span><span class="TocPageNumber">188</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_10_Chapter.html#Sec9"><span class="RefSource">The DELETE /​authors/​{id} Endpoint</span></a></span>
+              </span><span class="TocPageNumber">197</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_10_Chapter.html#Sec10"><span class="RefSource">Conclusion</span></a></span>
+              </span><span class="TocPageNumber">199</span></div></div></div><div class="TocChapter"><div class="TocEntry"><span class="TocItem">
+              <span class="ExternalRef"><a href="A395120_1_En_11_Chapter.html"><span class="RefSource">Chapter 11:​ Book Bundles</span></a></span>
+            </span><span class="TocPageNumber">201</span></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_11_Chapter.html#Sec1"><span class="RefSource">Defining the Relationship Between Books and Bundles</span></a></span>
+              </span><span class="TocPageNumber">201</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_11_Chapter.html#Sec2"><span class="RefSource">The GET /​bundles/​{id} Endpoint</span></a></span>
+              </span><span class="TocPageNumber">206</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_11_Chapter.html#Sec3"><span class="RefSource">Adding a Book to a Bundle</span></a></span>
+              </span><span class="TocPageNumber">214</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_11_Chapter.html#Sec4"><span class="RefSource">Remove a Book from a Bundle</span></a></span>
+              </span><span class="TocPageNumber">215</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_11_Chapter.html#Sec5"><span class="RefSource">Conclusion</span></a></span>
+              </span><span class="TocPageNumber">217</span></div></div></div><div class="TocChapter"><div class="TocEntry"><span class="TocItem">
+              <span class="ExternalRef"><a href="A395120_1_En_12_Chapter.html"><span class="RefSource">Chapter 12:​ Ratings</span></a></span>
+            </span><span class="TocPageNumber">219</span></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_12_Chapter.html#Sec1"><span class="RefSource">Database Design</span></a></span>
+              </span><span class="TocPageNumber">219</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_12_Chapter.html#Sec2"><span class="RefSource">Rating an Author</span></a></span>
+              </span><span class="TocPageNumber">223</span></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_12_Chapter.html#Sec3"><span class="RefSource">Adding an Author Rating</span></a></span>
+                </span><span class="TocPageNumber">223</span></div></div><div class="TocSection2"><div class="TocEntry"><span class="TocItem">
+                  <span class="ExternalRef"><a href="A395120_1_En_12_Chapter.html#Sec4"><span class="RefSource">Deleting an Author Rating</span></a></span>
+                </span><span class="TocPageNumber">233</span></div></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_12_Chapter.html#Sec5"><span class="RefSource">Ratings in the Author API</span></a></span>
+              </span><span class="TocPageNumber">236</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_12_Chapter.html#Sec6"><span class="RefSource">Eager Loading Ratings</span></a></span>
+              </span><span class="TocPageNumber">240</span></div></div><div class="TocSection1"><div class="TocEntry"><span class="TocItem">
+                <span class="ExternalRef"><a href="A395120_1_En_12_Chapter.html#Sec7"><span class="RefSource">Conclusion</span></a></span>
+              </span><span class="TocPageNumber">242</span></div></div></div><div class="TocBack"><span class="TocItem">Appendix: Where to Go From Here</span><span class="TocPageNumber">243</span></div><div class="TocBack"><span class="TocItem">Laravel</span><span class="TocPageNumber">243</span></div><div class="TocBack"><span class="TocItem">Laracasts</span><span class="TocPageNumber">243</span></div><div class="TocBack"><span class="TocItem">Mockery</span><span class="TocPageNumber">244</span></div><div class="TocBack"><span class="TocItem">Guzzle</span><span class="TocPageNumber">244</span></div><div class="TocBack"><span class="TocItem">Index</span><span class="TocPageNumber">245</span></div></div></div><div id="Loh1" class="Loh"><div class="Headings"><div class="Heading">Contents at a Glance</div></div><div class="LohBody"><div class="LohEntry"><span class="LohItem">About the Author</span><span class="LohPageNumber">xi</span></div><div class="ClearBoth"> </div><div class="LohEntry"><span class="LohItem">About the Technical Reviewer</span><span class="LohPageNumber">xiii</span></div><div class="ClearBoth"> </div><div class="LohEntry"><span class="LohItem">Acknowledgments</span><span class="LohPageNumber">xv</span></div><div class="ClearBoth"> </div><div class="LohEntry"><span class="LohItem">Introduction</span><span class="LohPageNumber">xvii</span></div><div class="ClearBoth"> </div><div class="LohEntry"><span class="LohItem">
+            <span class="ExternalRef"><a href="A395120_1_En_1_Chapter.html"><span class="RefSource">Chapter 1:​ Installing Lumen</span></a></span>
+          </span><span class="LohPageNumber">1</span></div><div class="ClearBoth"> </div><div class="LohEntry"><span class="LohItem">
+            <span class="ExternalRef"><a href="A395120_1_En_2_Chapter.html"><span class="RefSource">Chapter 2:​ Hello Lumen</span></a></span>
+          </span><span class="LohPageNumber">7</span></div><div class="ClearBoth"> </div><div class="LohEntry"><span class="LohItem">
+            <span class="ExternalRef"><a href="A395120_1_En_3_Chapter.html"><span class="RefSource">Chapter 3:​ Creating the Book Application</span></a></span>
+          </span><span class="LohPageNumber">17</span></div><div class="ClearBoth"> </div><div class="LohEntry"><span class="LohItem">
+            <span class="ExternalRef"><a href="A395120_1_En_4_Chapter.html"><span class="RefSource">Chapter 4:​ Starting the Books API</span></a></span>
+          </span><span class="LohPageNumber">23</span></div><div class="ClearBoth"> </div><div class="LohEntry"><span class="LohItem">
+            <span class="ExternalRef"><a href="A395120_1_En_5_Chapter.html"><span class="RefSource">Chapter 5:​ Creating, Reading, Updating, and Deleting Books</span></a></span>
+          </span><span class="LohPageNumber">33</span></div><div class="ClearBoth"> </div><div class="LohEntry"><span class="LohItem">
+            <span class="ExternalRef"><a href="A395120_1_En_6_Chapter.html"><span class="RefSource">Chapter 6:​ Responding to Errors</span></a></span>
+          </span><span class="LohPageNumber">65</span></div><div class="ClearBoth"> </div><div class="LohEntry"><span class="LohItem">
+            <span class="ExternalRef"><a href="A395120_1_En_7_Chapter.html"><span class="RefSource">Chapter 7:​ Leveling Up Responses</span></a></span>
+          </span><span class="LohPageNumber">89</span></div><div class="ClearBoth"> </div><div class="LohEntry"><span class="LohItem">
+            <span class="ExternalRef"><a href="A395120_1_En_8_Chapter.html"><span class="RefSource">Chapter 8:​ Validation</span></a></span>
+          </span><span class="LohPageNumber">125</span></div><div class="ClearBoth"> </div><div class="LohEntry"><span class="LohItem">
+            <span class="ExternalRef"><a href="A395120_1_En_9_Chapter.html"><span class="RefSource">Chapter 9:​ Authors</span></a></span>
+          </span><span class="LohPageNumber">137</span></div><div class="ClearBoth"> </div><div class="LohEntry"><span class="LohItem">
+            <span class="ExternalRef"><a href="A395120_1_En_10_Chapter.html"><span class="RefSource">Chapter 10:​ The /​authors API Resource</span></a></span>
+          </span><span class="LohPageNumber">165</span></div><div class="ClearBoth"> </div><div class="LohEntry"><span class="LohItem">
+            <span class="ExternalRef"><a href="A395120_1_En_11_Chapter.html"><span class="RefSource">Chapter 11:​ Book Bundles</span></a></span>
+          </span><span class="LohPageNumber">201</span></div><div class="ClearBoth"> </div><div class="LohEntry"><span class="LohItem">
+            <span class="ExternalRef"><a href="A395120_1_En_12_Chapter.html"><span class="RefSource">Chapter 12:​ Ratings</span></a></span>
+          </span><span class="LohPageNumber">219</span></div><div class="ClearBoth"> </div><div class="LohEntry"><span class="LohItem">Appendix: Where to Go From Here</span><span class="LohPageNumber">243</span></div><div class="ClearBoth"> </div><div class="LohEntry"><span class="LohItem">Index</span><span class="LohPageNumber">245</span></div><div class="ClearBoth"> </div></div></div><div class="Loc"><div class="Headings"><div class="Heading">About the Author and About the Technical Reviewer</div></div><div class="LocBody"><div class="LocDiv"><div class="Headings"><div class="Heading">About the Author</div></div><div class="AuthorGroup"><span class="Author"><span class="AuthorName">Paul Redmond</span></span><div class="Biography"><div class="BiographyFigure"><div class="Figure" id="Figb"><div class="MediaObject" id="MO2"><img src="A395120_1_En_BookFrontmatter_Figb_HTML.jpg" alt="A395120_1_En_BookFrontmatter_Figb_HTML.jpg"/></div></div></div><div id="Par44" class="Para">has worked as a web developer, entrepreneur, and mentor in software development for over a decade. He has built web applications within startups, agencies, and enterprise customers with open-source technologies. Paul is passionate about writing highly available applications with PHP, JavaScript, and RESTful APIs.</div><div id="Par45" class="Para">Paul lives in Scottsdale, Arizona with his wife, Bernadette, three boys, and one cat. He is usually wrangling code, kittens, and children, but finds time to enjoy reading fantasy/fiction, writing, and watching sports.</div></div><div class="ClearBoth"> </div></div></div><div class="LocDiv"><div class="Headings"><div class="Heading">About the Technical Reviewer</div></div><div class="AuthorGroup"><span class="Author"><span class="AuthorName">Jacob Jensen</span></span><div class="Biography"><div class="BiographyFigure"><div class="Figure" id="Figc"><div class="MediaObject" id="MO3"><img src="A395120_1_En_BookFrontmatter_Figc_HTML.jpg" alt="A395120_1_En_BookFrontmatter_Figc_HTML.jpg"/></div></div></div><div id="Par47" class="Para">is a software engineer who loves testing, automating, and clean code; he has a passion for teaching and learning, and has deep experience in web development, design patterns, object-oriented design, and a multitude of programming languages and platforms.</div></div><div class="ClearBoth"> </div></div></div></div></div><div class="FootnoteSection BookFrontmatterFootnoteSection"><div class="Heading">Footnotes</div><div class="Footnote" id="Fn1"><span class="FootnoteNumber"><a href="#Fn1_source">1</a></span><div class="FootnoteParas"><div id="Par21" class="Para">
+                      <span class="ExternalRef"><a href="https://laravel.com/docs/homestead"><span class="RefSource">
+                          <span class="EmphasisFontCategoryNonProportional">https://laravel.com/docs/homestead</span>
+                        </span></a></span>
+                    </div></div><div class="ClearBoth"> </div></div></div></div></body></html>
